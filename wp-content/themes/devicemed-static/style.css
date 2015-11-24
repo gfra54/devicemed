@@ -1,0 +1,55 @@
+/*
+Theme Name: DeviceMed Static
+Theme URI: http://www.devicemed.fr/
+Author: Romain Rytter <romain@keepcom.fr>
+Author URI: http://www.keepcom.fr
+Description: DeviceMed.fr WordPress Theme
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: devicemed
+Text Domain: devicemed
+*/
+#viewport {display:block;width:980px;margin:auto;background:#f6f6f6;background:white;font-family:'Open Sans', 'Arial', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;font-size:13px;overflow:auto;}
+#header {display:block;background:white;overflow:auto;height:125px;}
+#header .logo {float:left;width:250px;height:60px;margin:25px;}
+#header .sidebar {float:right;overflow:hidden;margin-top:35px;margin-right:35px;}
+#header .sidebar .links {float:left;height:30px;line-height:2.4em;margin-right:10px;}
+#header .sidebar .links a {color:black;margin-left:10px;}
+#header .sidebar .search {float:left;margin-left:0px;background:#ddd;width:250px;height:30px;overflow:hidden;}
+#header .sidebar .search input {float:left;border:none;background:#ddd;padding:0;margin:0;width:220px;height:30px;line-height:2.3em;padding-left:10px;}
+#header .sidebar .search img {float:right;margin:5px;}
+#header .sidebar .language {float:left;}
+#header .sidebar .social {float:left;overflow:hidden;}
+#header .sidebar .social a {color:black;margin-left:10px;float:left;}
+/*.ad-728-90 {display:block;width:728px;height:90px;margin:auto;margin-bottom:10px;margin-top:-20px;}*/
+.ad-728-90 {display:block;width:728px;height:90px;margin:auto;margin-bottom:10px;margin-top:10px;}
+#menu {background:white;background:#f6f7f8;font-size:12px;font-weight:bold;}
+#menu ul {list-style:none;margin:0;overflow:auto;}
+#menu ul > li {float:left;}
+#menu ul > li > a {display:block;padding:5px 10px 5px 10px;text-transform:uppercase;text-align:center;}
+#menu ul > li > a > span {font-family:'Arial';}
+#menu .primary {border-top:solid 2px darkblue;}
+#menu .primary ul > li > a {color:darkblue;}
+#menu .primary ul > li > a:hover {background:darkblue;color:white;}
+#menu .secondary {border-bottom:solid 1px #d0d1d5;}
+#menu .secondary ul > li > a {color:#454545;}
+#menu .secondary ul > li > a:hover {background:#454545;color:white;}
+
+#last-posts-featured {position:relative;height:350px;overflow:hidden;}
+#last-posts-featured .bx-controls {position:absolute;left:0px;bottom:20px;width:340px;z-index:999;}
+#last-posts-featured .bx-controls .bx-pager {overflow:hidden;float:right;}
+#last-posts-featured .bx-controls .bx-pager .bx-pager-item {float:left;}
+#last-posts-featured .bx-controls .bx-pager .bx-pager-item a {display:block;line-height:999em;width:10px;height:10px;background:silver;float:left;margin:5px;overflow:hidden;}
+#last-posts-featured .bx-controls .bx-pager .bx-pager-item a.active {background:darkblue;}
+#last-posts-featured article {overflow:auto;}
+#last-posts-featured article .left-side {float:left;padding:25px;width:300px;height:300px;background:#fff;}
+#last-posts-featured article .right-side {float:right;width:620px;height:350px;overflow:hidden;position:relative;}
+#last-posts-featured article header {}
+#last-posts-featured article .title {text-transform:uppercase;font-size:18px;margin:0;padding:0;color:darkblue;font-family:'opensans-condbold';line-height:1em;}
+.title-divider {display:block;background:darkblue;width:100px;height:2px;margin:10px 0 10px 0;width:auto;}
+.title-divider-small {display:block;background:darkblue;width:75px;height:1px;margin:5px 0 5px 0;width:auto;}
+#last-posts-featured article .excerpt {font-size:13px;line-height:1.25em;}
+#last-posts-featured article .more {font-size:12px;color:white;background:darkblue;padding:5px 10px 5px 10px;float:left;text-transform:uppercase;}
+#last-posts-featured article figure {background:silver;position:relative;overflow:hidden;width:101%;/*padding glitch chrome */height:350px;background-size:cover;background-position:50% 50%;background-repeat:no-repeat;}
+#last-posts-featured article figure img {display:block;opacity:0;position:absolute;top:0;left:0;}

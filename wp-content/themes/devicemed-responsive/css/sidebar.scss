@@ -1,0 +1,90 @@
+.column-sidebar {
+	section {
+		/*@include section-shadow;*/
+		padding:15px; background:#F6F7F8; background:#ddd; margin-left:15px; overflow:hidden; margin-bottom:15px;
+		/*& + section { margin-top:15px; }*/
+		@include screen(xs) { margin:auto; max-width:280px; }
+	}
+}
+
+#sidebar-annual-guide {
+	@include section-shadow;
+	.left-side {
+		width:33%;float:left;padding-right:10px;
+		img {width:100%;}
+	}
+	.right-side {width:66%;float:right;}
+	.title {@include title;}
+	.download {display:block;margin-top:10px;color:$primary-color;}
+}
+
+#sidebar-issues {
+	header {
+		overflow:hidden;margin-bottom:15px;
+		.left-side {
+			width:33%;float:left;padding-right:10px;
+			img {width:100%;}
+		}
+		.right-side {width:66%;float:right;}
+		.title {@include title;}
+	}
+	article {
+		overflow:hidden;margin-bottom:10px;float:left;width:33%;
+		.left-side {
+			width:100%;float:left;padding-right:10px;
+			img {width:100%;}
+		}
+		.right-side {width:66%;float:right;}
+		.right-side {display:none;}
+		.issue {font-weight:bold;}
+		.download {display:block;margin-top:10px;color:$primary-color;}
+	}
+	.more {
+		display:block;color:$primary-color;text-align:center;padding:5px;
+		&:hover {background:$primary-color;color:white;}
+	}
+}
+
+#sidebar-supplier-registration {
+	header {
+		overflow:hidden;margin-bottom:15px;
+		.left-side {
+			float:left;width:33%;float:left;padding-right:10px;
+			img {width:100%;}
+		}
+		.right-side {width:66%;float:right;}
+		.title {@include title;font-size:22px;line-height:1em;}
+	}
+	.supplier-registration-form {
+		input[type=text] {width:100%;padding:5px;margin-bottom:5px;background:#eee;color:gray;border:none;}
+		input[type=submit] {width:100%;padding:5px;background:$primary-color;color:white;border:none;}
+	}
+}
+
+#sidebar-video {
+	header {
+		overflow:hidden;margin-bottom:15px;
+		.title {@include title;}
+	}
+	.video-wrapper {
+		img { width:100%; }
+	}
+}
+
+#sidebar-agenda {
+	header {
+		overflow:hidden;margin-bottom:15px;
+		.left-side {
+			float:left;width:33%;float:left;padding-right:10px;
+			img {width:100%;}
+		}
+		.right-side {width:66%;float:right;}
+		.title {@include title;font-size:22px;line-height:1em;}
+	}
+	.events {}
+}
+
+.sidebar-ad {
+	padding:0 !important;
+	img { width:100%; }
+}

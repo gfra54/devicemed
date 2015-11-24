@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Des silicones &laquo;&nbsp;purement&nbsp;&raquo; médicaux  –  DeviceMed.fr</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+	<link href="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/favicon.ico" rel="SHORTCUT ICON">
+	<link rel="pingback" href="http://www.devicemed.fr/xmlrpc.php">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<!-- Bootstrap -->
+	<link href="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/css/bootstrap.min.css" rel="stylesheet">
+	<link href="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/css/default.css" rel="stylesheet">
+	<link href="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/js/colorbox/example1/colorbox.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/js/jquery.bxslider.min.js"></script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-55916994-1', 'auto');
+	  ga('send', 'pageview');
+	  $(document).ready(function() {
+		$(".archive_notConnected").click(function() {
+			$(".bloc_cachepopup").show();
+			$(".notConnected").show();
+			// $(window).scrollTop(280);
+		});
+		
+		$("#click_video").click(function() {
+			$.ajax({
+				url: 'http://www.devicemed.fr/wp-content/themes/devicemed-responsive/ajout_clic_video.php?banniere_id=50',
+				dataType: 'json',
+				success: function(json) {
+					if(json != 'false') {
+						$(".bloc_cachepopup").show();
+						$("#infos_video").attr("src","https://www.youtube.com/embed/8J6pTmegit0");
+						$(".popup_video_home").show();
+					}
+				}
+			});
+			// $(window).scrollTop(280);
+		});
+		
+		$(".bloc_cachepopup").click(function() {
+			$(".bloc_cachepopup").hide();
+			$(".notConnected").hide();
+			$(".bloc_cachepopup").hide();
+			$("#close_popup_video_home").click();
+		});
+		
+		$("#close_popup").click(function() {
+			$(".bloc_cachepopup").hide();
+			$(".notConnected").hide();
+		});
+		
+		$("#close_popup_video_home").click(function() {
+			$(".bloc_cachepopup").hide();
+			$(".popup_video_home").hide();
+			$("#infos_video").attr("src","");
+		});
+		
+		$("#bloc_guide_acheteur").click(function() {
+			$(".bloc_cachepopup").show();
+			$(".notConnected").show();
+		});
+		
+		$("#bloc_guide_acheteur2").click(function() {
+			$(".bloc_cachepopup").show();
+			$(".notConnected").show();
+		});
+		
+		/*var widthWindow = $(window).width();
+		
+		if(widthWindow < 650) {
+			$(".menu-item-has-children a").attr("href","#");
+		}*/
+		
+		$("#menu_mobile").click(function() {
+			if($("#menu").is(':hidden')) {
+				$("#menu").slideDown();
+			}else {
+				$("#menu").slideUp();
+			}
+		});
+	  });
+	</script>
+	<link rel="alternate" type="application/rss+xml" title="DeviceMed.fr &raquo; Des silicones &laquo;&nbsp;purement&nbsp;&raquo; médicaux Flux des commentaires" href="http://www.devicemed.fr/dossiers/materiaux/materiaux-plastiques/des-silicones-purement-medicaux/4233/feed" />
+<link rel='stylesheet' id='yarppWidgetCss-css'  href='http://www.devicemed.fr/wp-content/plugins/yarpp/style/widget.css?ver=4.1.8' type='text/css' media='all' />
+<link rel='stylesheet' id='contact-form-7-css'  href='http://www.devicemed.fr/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=4.1.2' type='text/css' media='all' />
+<script type='text/javascript' src='http://www.devicemed.fr/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://www.devicemed.fr/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.devicemed.fr/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.devicemed.fr/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='La e-santé au premier plan des projets financés par Bpifrance en matière de medtech' href='http://www.devicemed.fr/dossiers/actualites/conjoncture/la-e-sante-au-premier-plan-des-projets-finances-par-bpifrance-en-matiere-de-medtech/4253' />
+<link rel='next' title='De la conception à la fabrication de ballonnets médicaux personnalisés' href='http://www.devicemed.fr/dossiers/composants-oem/accessoires-in-vitro/de-la-conception-a-la-fabrication-de-ballonnets-medicaux-personnalises/4310' />
+<meta name="generator" content="WordPress 4.1.8" />
+<link rel='canonical' href='http://www.devicemed.fr/dossiers/materiaux/materiaux-plastiques/des-silicones-purement-medicaux/4233' />
+<link rel='shortlink' href='http://www.devicemed.fr/?p=4233' />
+</head>
+<div class='notConnected'>
+	Vous devez être connecté pour accéder à cette archive.
+	<br /><br />
+	<div id='lien_notConnected_connecter'>
+		<a href='http://www.devicemed.fr/members/login'>Se connecter</a>
+	</div>
+	<div id='close_popup'>X</div>
+</div>
+<div class='popup_video_home'>
+	<iframe id='infos_video' width="670" height="320" src="" frameborder="0" allowfullscreen></iframe>
+	<div id='close_popup_video_home'>X</div>
+</div>
+<body>
+<div class='bloc_cachepopup'></div>
+<div class="container">
+<div class="bloc_top_header">
+	<div class='vogel_logo'><img src='http://www.devicemed.fr/wp-content/uploads/vogel_logo.png' /></div>
+	<div class='contenu_droit'>
+			<div class="links">
+				<a href="/">Accueil</a>
+			</div>
+			<div class="links">
+				<a href="/feed/">RSS</a>
+			</div>
+					<div class="links">
+				<a href="http://www.devicemed.fr/members/login">Se connecter</a>
+			</div>
+				<div class='links'>
+			<a href='http://www.devicemed.fr/newsletter/inscription'>Recevoir la newsletter</a>
+		</div>
+		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='http://www.devicemed.fr/wp-content/uploads/devicemed_allemand.png' /></a></div>
+	</div>
+</div>
+<header id="header">
+	<div class="logo"><a href="http://www.devicemed.fr" title="DeviceMed.fr - Le magazine des fabricants de dispositifs médicaux"><img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/logo.png" alt="DeviceMed.fr - Le magazine des fabricants de dispositifs médicaux" /></a></div>
+	<div class="sidebar">
+		<div class="search">
+			<form role="search" method="get" action="http://www.devicemed.fr">
+				<input type="text" name="s" placeholder="Rechercher dans les articles" value="" />
+				<input type="submit" value="Rechercher" />
+			</form>
+		</div>
+		<div class="language"></div>
+		<div class="social">
+		<!--
+			<a href="#"><img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/header-icon-facebook.png" /></a>
+			<a href="#"><img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/header-icon-twitter.png" /></a>
+		-->
+		</div>
+	</div><!-- #sidebar -->
+	<li id="menu_mobile"><span>MENU</span></li>
+	<nav id="menu">
+		<div class="menu-menu-principal-container"><ul id="menu-menu-principal" class="menu"><li id="menu-item-1063" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor menu-item-has-children menu-item-1063"><a href="http://www.devicemed.fr/category/dossiers/materiaux"><span>Matériaux</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1747" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1747"><a href="http://www.devicemed.fr/category/dossiers/materiaux/adhesifs"><span>Adhésifs</span></a></li>
+	<li id="menu-item-1748" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1748"><a href="http://www.devicemed.fr/category/dossiers/materiaux/ceramiques"><span>Céramiques</span></a></li>
+	<li id="menu-item-1749" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1749"><a href="http://www.devicemed.fr/category/dossiers/materiaux/metaux"><span>Métaux</span></a></li>
+	<li id="menu-item-1750" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-1750"><a href="http://www.devicemed.fr/category/dossiers/materiaux/materiaux-plastiques"><span>Plastiques et silicones</span></a></li>
+</ul>
+</li>
+<li id="menu-item-1062" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1062"><a href="http://www.devicemed.fr/category/dossiers/composants-oem"><span>Composants OEM</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1751" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1751"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/accessoires-in-vitro"><span>Accessoires in vitro</span></a></li>
+	<li id="menu-item-1752" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1752"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/electriques_electroniques"><span>Electronique</span></a></li>
+	<li id="menu-item-1753" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1753"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/filtres"><span>Filtres</span></a></li>
+	<li id="menu-item-1754" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1754"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/mecaniques"><span>Mécaniques</span></a></li>
+	<li id="menu-item-1755" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1755"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/moteurs-et-entrainements"><span>Moteurs et entrainements</span></a></li>
+	<li id="menu-item-1756" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1756"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/pompes_electrovannes"><span>Pompes et électrovannes</span></a></li>
+	<li id="menu-item-1757" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1757"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/tubes"><span>Tubes</span></a></li>
+</ul>
+</li>
+<li id="menu-item-1477" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1477"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication"><span>Equipements</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1758" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1758"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/assemblage"><span>Assemblage</span></a></li>
+	<li id="menu-item-1759" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1759"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/emballage_conditionnement"><span>Emballage et conditionnement</span></a></li>
+	<li id="menu-item-1760" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1760"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/impression-3d-equipements-de-production-et-techniques-de-fabrication"><span>Impression 3D</span></a></li>
+	<li id="menu-item-1761" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1761"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/logiciels"><span>Logiciels</span></a></li>
+	<li id="menu-item-1762" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1762"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/marquage-et-tracabilite"><span>Marquage et traçabilité</span></a></li>
+	<li id="menu-item-1763" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1763"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle"><span>Métrologie et contrôle</span></a></li>
+	<li id="menu-item-1764" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1764"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/nettoyage"><span>Nettoyage</span></a></li>
+	<li id="menu-item-1765" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1765"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/plasturgie"><span>Plasturgie</span></a></li>
+	<li id="menu-item-1766" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1766"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/salles_blanches"><span>Salles blanches</span></a></li>
+	<li id="menu-item-1767" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1767"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/sterilisation"><span>Stérilisation</span></a></li>
+	<li id="menu-item-1768" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1768"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/travail_metaux"><span>Travail des métaux</span></a></li>
+</ul>
+</li>
+<li id="menu-item-1060" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1060"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services"><span>Sous-traitance</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1769" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1769"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/assemblage-sous-traitance-et-services"><span>Assemblage</span></a></li>
+	<li id="menu-item-1770" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1770"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/electronique"><span>Electronique</span></a></li>
+	<li id="menu-item-1771" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1771"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/emballage_conditionnement-sous-traitance-et-services"><span>Emballage et conditionnement</span></a></li>
+	<li id="menu-item-1772" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1772"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/metrologie_controle-sous-traitance-et-services"><span>Métrologie et contrôle</span></a></li>
+	<li id="menu-item-1773" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1773"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/nettoyage-sous-traitance-et-services"><span>Nettoyage</span></a></li>
+	<li id="menu-item-1774" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1774"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/plasturgie-sous-traitance-et-services"><span>Plasturgie</span></a></li>
+	<li id="menu-item-1775" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1775"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/sterilisation-sous-traitance-et-services"><span>Stérilisation</span></a></li>
+	<li id="menu-item-1776" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1776"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/traitement_surface"><span>Traitement de surface</span></a></li>
+	<li id="menu-item-1777" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1777"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/travail_metaux-sous-traitance-et-services"><span>Travail des métaux</span></a></li>
+</ul>
+</li>
+<li id="menu-item-1064" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1064"><a href="http://www.devicemed.fr/category/dossiers/reglementation"><span>Réglementation</span></a></li>
+<li id="menu-item-1065" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1065"><a href="http://www.devicemed.fr/category/dossiers/management"><span>Management</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-2635" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2635"><a href="http://www.devicemed.fr/category/dossiers/management/conseil"><span>Conseil</span></a></li>
+	<li id="menu-item-2636" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2636"><a href="http://www.devicemed.fr/category/dossiers/management/etudes-cliniques"><span>Etudes cliniques</span></a></li>
+</ul>
+</li>
+<li id="menu-item-1476" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1476"><a href="http://www.devicemed.fr/category/dossiers/actualites"><span>Actualités de la profession</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1778" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1778"><a href="http://www.devicemed.fr/category/dossiers/actualites/associations_professionnelles"><span>Associations professionnelles</span></a></li>
+	<li id="menu-item-1779" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1779"><a href="http://www.devicemed.fr/category/dossiers/actualites/conjoncture"><span>Conjoncture</span></a></li>
+	<li id="menu-item-1780" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1780"><a href="http://www.devicemed.fr/category/dossiers/actualites/evenements"><span>Evénements</span></a></li>
+	<li id="menu-item-1781" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1781"><a href="http://www.devicemed.fr/category/dossiers/actualites/vie-des-entreprises"><span>Vie des entreprises</span></a></li>
+</ul>
+</li>
+<li id="menu-item-1039" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1039"><a href="http://www.devicemed.fr/suppliers/"><span>Répertoire des fournisseurs</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-2100" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2100"><a href="http://www.devicemed.fr/fournisseurs_partenaires"><span>Fournisseurs partenaires</span></a></li>
+	<li id="menu-item-2101" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2101"><a href="http://www.devicemed.fr/suppliers/"><span>Tous les fournisseurs</span></a></li>
+</ul>
+</li>
+</ul></div>	</nav><!-- #menu -->
+</header><!-- #header -->
+<section class="ad header-ad">
+	<a href='http://www.device-med.fr/?url=http://www.ni.com/gate/gb/GB_SEMINARSLIDES103/F?cid=Advertising-701i0000001KXrJAAW-France-none-devicemedoct&id=66' id='66' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/medical_728x90.gif' /></a></section><div class="row column-content page-single">
+	<div class="col-md-9 col-sm-8 column-main">
+
+<section class="article">
+	<article>
+		<!--<div class="export">
+			<ul>
+				<li class="printer"><a href="?export_printer" title="Version imprimable">Imprimer</a></li>
+				<li class="printer"><a href="?export_printer" title="Version PDF">PDF</a></li>
+				<li class="printer"><a href="?export_printer" title="Partager">Partager</a></li>
+			</ul>
+		</div>-->
+						<div class="categories">
+			<span class="category_principal">Matériaux &gt; </span><span class="category">Plastiques et silicones</span>		</div>
+						<h1 class="title">Des silicones &laquo;&nbsp;purement&nbsp;&raquo; médicaux</h1>
+					<div class="metas">
+				<span class="date-wrapper">Publié le <span class="date">12 août 2015</span></span>
+				<span class="author-wrapper">par <span class="author">Patrick RENARD </span></span>
+			</div>
+							<div class='image_clicable'><a href="http://www.devicemed.fr/wp-content/uploads/2015/08/Wacker-Chemie-AG.jpg" class="cboxElement"><figure style="background-image:url('http://www.devicemed.fr/wp-content/uploads/2015/08/Wacker-Chemie-AG.jpg')">
+				<img src="http://www.devicemed.fr/wp-content/uploads/2015/08/Wacker-Chemie-AG.jpg" title="Wacker Chemie AG" />
+			</figure></a></div>
+			<div class='source_photo'>Source : Wacker Chemie AG</div>
+							<div class="content">
+			<p><strong>Wacker a développé une gamme de silicones haute pureté dédiée au secteur médical. Les propriétés de ses différentes formulations ont été optimisées pour répondre chacune à des applications spécifiques. Le chimiste a également su exploiter les performances diélectriques des silicones.</strong></p>
+<p>En médecine moderne, les exigences imposées au matériel utilisé ne cessent d&rsquo;augmenter, à tel point que seuls quelques matériaux satisfont encore aux normes de qualité en vigueur. Les silicones en font partie. Ils présentent non seulement d&rsquo;excellentes propriétés mécaniques mais sont également extrêmement résistants et robustes. Ils supportent sans problème les influences de l&rsquo;environnement, les produits chimiques, les rayons UV et les températures élevées. Leurs propriétés de mise en œuvre sont tout aussi excellentes. Le moulage par injection de silicone permet en effet d&rsquo;obtenir des pièces de grande qualité, tout en limitant les coûts.</p>
+<h6>Un niveau de sécurité élevé pour l&rsquo;utilisateur final</h6>
+<p>Acteur clé du marché international de la chimie avec un chiffre d&rsquo;affaires de 4,83 milliards d&rsquo;euros en 2014 et 25 sites de production à travers le monde, l&rsquo;Allemand Wacker propose sous la marque Silpuran des silicones dédiés au dispositif médical. L&rsquo;éventail des applications va des prothèses orthopédiques aux gels pour pansements, en passant par les joints pour seringues à usage unique, sans oublier les appareils de dialyse, les tuyaux médicaux pour respirateurs artificiels, les bouchons pour flacons d&rsquo;injection, les masques d&rsquo;anesthésie ou encore les ballonnets de cathéter. Le fabricant assure à cette gamme de matériaux un niveau de pureté très élevé grâce à des mesures particulières prises au niveau de la production et du conditionnement. Il procède notamment à une filtration nettement plus fine que dans le processus de production traditionnel. Tous les caoutchoucs de silicone à haute consistance de la gamme sont soumis à un contrôle visuel et conditionnés de manière antistatique en salle blanche. Des démarches similaires sont appliquées aux  caoutchoucs de silicone liquide (LSR) et aux caoutchoucs de silicone réticulant à température ambiante (RTV), ce qui garantit un haut niveau de sécurité au transformateur et à l&rsquo;utilisateur final.</p>
+<h6>A chaque application son Silpuran&#8230;</h6>
+<p>Biocompatibles, les silicones Silpuran sont dépourvus de plastifiants organiques, résistent aux rayonnements et peuvent être stérilisés suivant les méthodes conventionnelles. Tous les produits sont conformes à la norme ISO 10993 et à l&rsquo;USP (United States Pharmacopeia) classe VI.</p>
+<p>La gamme comprend des grades de silicone aux propriétés les plus diverses. A titre d&rsquo;exemple, le caoutchouc de silicone liquide Silpuran 6600 présente, sous forme vulcanisée, un très faible coefficient de frottement sans exsuder d&rsquo;huile à la surface de la pièce. Cette propriété de surface facilite la tâche du transformateur lors de l&rsquo;assemblage d&rsquo;appareils médicaux complexes.</p>
+<p>Les silicones auto-adhérents comme les Silpuran 6700 et 6701 répondent aux critères de coût et de sécurité de plus en plus importants dans le secteur médical. Ils garantissent, sans avoir besoin d&rsquo;agents d’adhérisation, une liaison fiable avec des matériaux thermoplastiques comme le polytéréphtalate de butylène (PBT) ou le polycarbonate. Ces matériaux permettent ainsi une production entièrement automatisée et économique de pièces composites médicales par surmoulage.</p>
+<p>Autre propriété non négligeable, tous ces silicones se distinguent par leur bonne respirabilité, imputable à la perméabilité du matériau à l&rsquo;oxygène et à la vapeur. Ils sont ainsi tout indiqués pour les supports adhésifs et les pansements siliconés.</p>
+<p>Dans le même temps, la blessure est protégée efficacement contre les influences extérieures telles que l&rsquo;eau et les bactéries. Le retrait des pansements est d&rsquo;ailleurs facile et atraumatique, ce qui contribue activement au processus de guérison.</p>
+<h6>Un matériau qui évite l&rsquo;obstruction des valves</h6>
+<p>Les valves en élastomères de silicone sont souvent utilisées en technique médicale pour le dosage d&rsquo;agents liquides. Le problème : en cas de stérilisation UV, la géométrie de la fente et donc le comportement de fermeture et le débit peuvent être modifiés. Le caoutchouc de silicone liquide Silpuran 6610/40 apporte une solution à ce problème. Le silicone résistant aux rayonnements a pour effet que les valves ne s&rsquo;obstruent plus, même en cas de doses de rayonnements largement supérieures aux valeurs habituellement utilisées pour la stérilisation. Cet effet non cicatrisant, qui évite l&rsquo;obstruction de la fente, est obtenu par une formulation spéciale du caoutchouc de silicone liquide.</p>
+<p>Les fentes des soupapes peuvent être réalisées soit directement lors du moulage par injection avec un outil de moulage adapté, soit après le démoulage avec un outil de poinçonnage.</p>
+<h6>Des films ultra-fins pour de nouvelles prothèses</h6>
+<p>Les silicones ont également des propriétés diélectriques et peuvent donc aussi être utilisés sous forme de films ultrafins comme polymères électroactifs (EAP). Le Silpuran permet de réaliser des films plus fins qu&rsquo;un cheveu et constitués à 100 % de silicone. Ceux-ci offrent une résistance électrique constante sur une large plage de températures et une bonne résistance au cheminement. Des caractéristiques diélectriques très prisées dans l&rsquo;industrie médicale.</p>
+<p><a href="http://www.devicemed.fr/wp-content/uploads/2015/08/Film.jpg"><img class="aligncenter size-medium wp-image-4235" src="http://www.devicemed.fr/wp-content/uploads/2015/08/Film-300x200.jpg" alt="Base-Coater im Reinraum" width="300" height="200" /></a><br />
+Les EAP changent de forme dans certaines conditions dès lors qu&rsquo;ils sont soumis à une tension électrique. Sur la base de ce principe, il est possible de mettre au point des capteurs et des actionneurs au fonctionnement efficace et très précis. Utilisés comme constituants d&rsquo;actionneurs, ces films de silicone permettent le développement de nouvelles prothèses dont les muscles artificiels peuvent reproduire non seulement des mouvements linéaires, mais aussi des mouvements naturels.</p>
+<hr />
+<p><strong>Wacker Chemie AG</strong>, D-81737 Munich, <a href="http://www.wacker.com" target="_blank"><span style="color: #3366ff;">www.wacker.com</span></a></p>
+<div class='yarpp-related yarpp-related-none'>
+<p>No related posts.</p>
+</div>
+		</div>
+
+						<!--<div class="images">
+			<ul>
+						<li><a href="http://www.devicemed.fr/wp-content/uploads/2015/08/Film.jpg"><img width="150" height="150" src="http://www.devicemed.fr/wp-content/uploads/2015/08/Film-150x150.jpg" class="attachment-thumbnail" alt="Base-Coater im Reinraum" /></a></li>
+					</ul>
+		</div>-->
+<script type="text/javascript">
+$(function() {
+	$('.image_clicable a').colorbox();
+});
+</script>
+		
+	</article>
+</section>
+
+<!--<section class="related-articles">
+	<h2 class="title">Articles en relation</h2>
+	Aucun article en relation.
+</section>-->
+
+<!--<section class="related-category-articles">
+	<h2 class="title">Dans la même catégorie</h2>
+	<ul>
+		<li><a href="http://www.devicemed.fr/dossiers/equipements-de-production-et-techniques-de-fabrication/plasturgie/12-secondes-pour-linjection-de-pieces-complexes/4670" title="12 secondes pour l&rsquo;injection de pièces complexes">12 secondes pour l&rsquo;injection de pièces complexes</a></li>
+		<li><a href="http://www.devicemed.fr/dossiers/materiaux/materiaux-plastiques/parylene-22-une-protection-qui-setend-aux-infections/4658" title="Parylène (2/2) : une protection qui s’étend aux infections">Parylène (2/2) : une protection qui s’étend aux infections</a></li>
+		<li><a href="http://www.devicemed.fr/dossiers/actualites/evenements/3000-visiteurs-et-80-exposants-a-3d-print-2015/4628" title="3000 visiteurs et 80 exposants à 3D Print 2015">3000 visiteurs et 80 exposants à 3D Print 2015</a></li>
+		<li><a href="http://www.devicemed.fr/dossiers/equipements-de-production-et-techniques-de-fabrication/travail_metaux/la-precision-robotique-au-service-des-procedes-de-finition/4638" title="La précision robotique au service des procédés de finition d&rsquo;implants">La précision robotique au service des procédés de finition d&rsquo;implants</a></li>
+		<li><a href="http://www.devicemed.fr/dossiers/composants-oem/moteurs-et-entrainements/mini-broche-pour-les-taches-de-positionnement-lineaire/4631" title="Mini-broche pour les tâches de positionnement linéaire">Mini-broche pour les tâches de positionnement linéaire</a></li>
+	</ul>
+</section>-->
+	<section class='tags_posts'>
+	<div class="titre_mot_cle">Mots-clés :</div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/actionneur" target="_blank">actionneur</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/ballonnet" target="_blank">ballonnet</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/caoutchouc" target="_blank">caoutchouc</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/capteur" target="_blank">capteur</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/catheter" target="_blank">cathéter</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/dielectrique" target="_blank">diélectrique</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/elastomere" target="_blank">élastomère</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/gel" target="_blank">gel</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/injection-plastique" target="_blank">injection plastique</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/iso-10993" target="_blank">ISO 10993</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/joint" target="_blank">joint</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/lsr" target="_blank">LSR</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/moulage" target="_blank">moulage</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/muscle-artificiel" target="_blank">muscle artificiel</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/pansement" target="_blank">pansement</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/prothese" target="_blank">prothèse</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/rtv" target="_blank">RTV</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/silicone" target="_blank">silicone</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/surmoulage" target="_blank">surmoulage</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/tuyau" target="_blank">tuyau</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/usp-classe-vi" target="_blank">USP classe VI</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/wacker-chemie-ag" target="_blank">Wacker Chemie AG</a></div>	</section>
+	<section class='tags_posts'>
+		<!-- Encart afficher titres articles de la même catégorie -->
+				 
+		  <h2 class="title">Articles similaires :</h2>
+		<ul class="widget-container">
+		<a href="http://www.devicemed.fr/dossiers/materiaux/materiaux-plastiques/parylene-22-une-protection-qui-setend-aux-infections/4658" target="_blank"><div class="article_similaire1"><div class="image_article_similaire"><img src="http://www.devicemed.fr/wp-content/uploads/2015/10/Devices_3inchesWide_cmyk.jpg" /></div><div class="legende_article_similaire">Parylène (2/2) : une protection qui s’étend aux infections</div></div></a><a href="http://www.devicemed.fr/dossiers/materiaux/materiaux-plastiques/parylene-pour-des-dm-sous-tres-haute-protection-12/4643" target="_blank"><div class="article_similaire"><div class="image_article_similaire"><img src="http://www.devicemed.fr/wp-content/uploads/2015/10/Parylene-vs-Liquid-Coating-Image-en-Francais-7-15-Final.jpg" /></div><div class="legende_article_similaire">Parylène (1/2) : pour des dispositifs médicaux sous très haute protection</div></div></a><a href="http://www.devicemed.fr/dossiers/materiaux/materiaux-plastiques/resine-polyphenylsulfone-autoclavable-pour-les-instruments-de-diagnostic-in-vitro/2797" target="_blank"><div class="article_similaire"><div class="image_article_similaire"><img src="http://www.devicemed.fr/wp-content/uploads/2015/03/Solvay.jpg" /></div><div class="legende_article_similaire">Résine polyphénylsulfone autoclavable pour les instruments de diagnostic in vitro</div></div></a><a href="http://www.devicemed.fr/dossiers/materiaux/la-fibre-de-carbone-tombe-a-peek-pour-reparer-les-fractures/2702" target="_blank"><div class="article_similaire"><div class="image_article_similaire"><img src="http://www.devicemed.fr/wp-content/uploads/2015/03/Invibio.jpg" /></div><div class="legende_article_similaire">La fibre de carbone tombe à PEEK pour réparer les fractures</div></div></a>		</ul>
+		<!-- fin encart afficher titres articles de la même catégorie en cours -->
+	</section>
+<!--<section class="comments">
+	<h2 class="title">Commentaires</h2>
+	Les commentaires sont fermés pour cet article.
+</section>-->
+	</div><!-- .column-main -->
+<div id="sidebar" class="column col-md-3 col-sm-4 column-sidebar">
+	<!--<section id="sidebar-annual-guide">
+		<div class="right-side">
+			<h1 class="title">Guide annuel</h1>
+			<span class="download">Télécharger</span>
+		</div>
+		<div class="left-side">
+			<img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/devicemed-issue-sample.png" />
+		</div>
+	</section>-->
+			<section id='sidebar-banniere'>
+		<a href='http://www.device-med.fr/?url=http://www.palexpo.ch/fr/agenda/ephj-epmt-smt&id=69' id='69' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/160x600.jpg' /></a>		</section>
+		<!--<section id='sidebar-banniere'>
+		</section>-->
+	<section id="sidebar-issues">
+	<header>
+		<div class="right-side">
+			<h1 class="title"><a href='http://www.devicemed.fr/salons'>Salons et manifestations</a></h1>
+		</div>
+	</header>	
+	<article>
+		
+		<h3 class='title2'><a href='http://www.midest.com/' target='_blank'>MIDEST<br />17-20 novembre 2015/ Paris</a></h3><br />
+		<h3 class='title2'><a href='http://www.sofcot-congres.fr/fr' target='_blank'>SOFCOT<br />10-13 novembre 2015/ Paris</a></h3><br />
+		<h3 class='title2'><a href='http://www.compamed-tradefair.com/' target='_blank'>COMPAMED <br />16-19 novembre 2015/ Düsseldorf</a></h3>
+	</article>
+</section>	<!--<section id="sidebar-issues">
+		<header>
+			<div class="right-side">
+				<h1 class="title"><a href='http://www.devicemed.fr/salons'>Salons et manifestations</a></h1>
+			</div>
+		</header>	
+		<article>
+			<h3 class='title2'><a href='http://www.ephj.ch/' target='_blank'>SMT<br />2-5 juin 2015/ Genève</a></h3><br />
+			<h3 class='title2'><a href='http://www.parts2clean.de/' target='_blank'>PARTS2 CLEAN<br />9-11 juin 2015/ Stuttgart</a></h3><br />
+			<h3 class='title2'><a href='http://www.medteceurope.com/france' target='_blank'>Medtec France<br />10-11 juin 2015/ Besançon</a></h3>
+		</article>
+	</section>-->
+	<!--<section id="sidebar-supplier-registration">
+		<header>
+			<div class="left-side">
+				<img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/sidebar-supplier-registration-icon.png"" />
+			</div>
+			<div class="right-side">
+				<h1 class="title">S'inscrire comme fournisseur</h1>
+			</div>
+		</header>
+		<div class="supplier-registration-form">
+			<form method='GET' action="http://www.device-med.fr/">
+				<input type="text" name="supplier_user_e-mail" value="" placeholder="email" />
+				<div></div>
+				<input type="password" name="supplier_user_password" value="" placeholder="Mot de passe" />
+				<div></div>
+				<div></div>
+				<input type="submit" value="Valider" />
+			</form>
+		</div>
+	</section>-->
+		<section id="sidebar-issues">
+		<header>
+			<div class="right-side">
+				<h1 class="title"><a href='http://www.devicemed.fr/archives'>Dernier numéro</a></h1>
+			</div>
+		</header>	
+		<a href='http://www.devicemed.fr/wp-content/uploads/archives/pdf/Septembre - Octobre 2015.pdf' target='_blank'><article class='article_numero'><div class='right-side'><span class='issue'>Septembre / Octobre 2015</span><span class='download'>Consulter ce numéro</span></div><img src='http://www.devicemed.fr/wp-content/uploads/archives/apercu/Sept-Oct 2015.png' width=100%/></article></a>		<a href="http://www.devicemed.fr/archives" class="more">Consulter d'autres numéros</a>
+	</section>
+	<!--<section id="sidebar-issues">
+		<header>
+			<div class="right-side">
+				<h1 class="title">Guide de l'acheteur</h1>
+			</div>
+		</header>	
+		<article id='bloc_guide_acheteur'><div class='right-side'><span class='issue'>Guide de l'acheteur</span><span class='download'>Consulter le guide</span></div><div class='left-side' style="background-image:url('http://www.devicemed.fr/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');"></div></article>	</section>-->
+	<!--<section id="sidebar-video">
+		<header>
+			<h1 class="title">Vidéo</h1>
+		</header>
+		<div class="video-wrapper">
+			<img src="http://placehold.it/350x250" alt="" />
+		</div>
+	</section>-->
+	<!--<section id="sidebar-agenda">
+		<header>
+			<div class="left-side">
+				<img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/sidebar-supplier-registration-icon.png"" />
+			</div>
+			<div class="right-side">
+				<h1 class="title">Agenda</h1>
+			</div>
+		</header>
+		<div class="events">Aucun événement à venir</div>
+	</section>-->
+	<section id="sidebar-fiches">
+		<header>
+			<div class="right-side">
+				<h1 class="title">Fournisseurs partenaires</h1>
+			</div>
+		</header>	
+		<article>
+			<h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Qosina/6?premiere_visite=1" target='_blank'>Qosina</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Usiplast-Composites/72?premiere_visite=1" target='_blank'>Usiplast Composites</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Oerlikon-Balzers-France/128?premiere_visite=1" target='_blank'>Oerlikon Balzers France</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Fpsa/199?premiere_visite=1" target='_blank'>FPSA</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Realmeca/221?premiere_visite=1" target='_blank'>Realmeca</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Ogp-France/226?premiere_visite=1" target='_blank'>OGP France</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Préiso/249?premiere_visite=1" target='_blank'>Préiso</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Teleflex-Medical-Oem/253?premiere_visite=1" target='_blank'>Teleflex Medical OEM</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Keol/260?premiere_visite=1" target='_blank'>Keol</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Heptal/306?premiere_visite=1" target='_blank'>Heptal</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Pierre-Fabre-Médicament-Supercritical-Fluids-Division/329?premiere_visite=1" target='_blank'>Pierre Fabre Médicament - Supercritical Fluids Division</a></h3>		</article>
+	</section>
+	<section id="sidebar-tag">
+		<header>
+			<div class="right-side">
+				<h1 class="title">On en parle</h1>
+			</div>
+		</header>	
+		<article>
+			<h3 class='title2'><a href="http://www.devicemed.fr/tag/implant" target='_blank'>Implants</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/moulage" target='_blank'>Moulage</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/medtec" target='_blank'>Medtec</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/impression-3d" target='_blank'>Impression 3D</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/iso-13485" target='_blank'>ISO 13485</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/usinage" target='_blank'>Usinage</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/pharmapack" target='_blank'>Pharmapack</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/salle-blanche" target='_blank'>Salle blanche</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/instrument-chirurgical" target='_blank'>Instruments chirurgicaux</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/mesure-3d" target='_blank'>Mesure 3D</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/tracabilite" target='_blank'>Traçabilité</a></h3><br />		</article>
+	</section>
+	<!--<section id="sidebar-tag">
+		<a href='http://www.devicemed.fr/tag/assemblage-2' class='tag-link-311' title='67 sujets' style='font-size: 11.5pt;'>assemblage</a>
+<a href='http://www.devicemed.fr/tag/capteur' class='tag-link-111' title='57 sujets' style='font-size: 8pt;'>capteur</a>
+<a href='http://www.devicemed.fr/tag/conference' class='tag-link-696' title='57 sujets' style='font-size: 8pt;'>conférence</a>
+<a href='http://www.devicemed.fr/tag/implant' class='tag-link-236' title='108 sujets' style='font-size: 22pt;'>implant</a>
+<a href='http://www.devicemed.fr/tag/laboratoire' class='tag-link-166' title='102 sujets' style='font-size: 20.5pt;'>laboratoire</a>
+<a href='http://www.devicemed.fr/tag/laser' class='tag-link-638' title='64 sujets' style='font-size: 10.5pt;'>laser</a>
+<a href='http://www.devicemed.fr/tag/plastique' class='tag-link-284' title='75 sujets' style='font-size: 14pt;'>plastique</a>
+<a href='http://www.devicemed.fr/tag/salle-blanche' class='tag-link-40' title='56 sujets' style='font-size: 8pt;'>salle blanche</a>
+<a href='http://www.devicemed.fr/tag/salon' class='tag-link-56' title='85 sujets' style='font-size: 16.5pt;'>salon</a>
+<a href='http://www.devicemed.fr/tag/usinage' class='tag-link-406' title='60 sujets' style='font-size: 9.5pt;'>usinage</a>	</section>-->
+</div>	</div><!-- .column-content -->
+
+<footer id="footer">
+	<div class="copyright">DeviceMed.fr est une marque de Vogel Business Media. <a href='http://www.devicemed.de/' target='_blank'>Cliquer ici pour découvrir le site de DeviceMed Allemagne</a>.</div>
+	<div class="pages"><div class="menu-bas-de-page-premiere-ligne-container"><ul id="menu-bas-de-page-premiere-ligne" class="menu"><li id="menu-item-1093" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1093"><a href="http://www.devicemed.fr/qui-sommes-nous">Qui sommes-nous ?</a></li>
+<li id="menu-item-1092" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1092"><a href="http://www.devicemed.fr/publicite">Publicité et kit média</a></li>
+<li id="menu-item-1091" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1091"><a href="http://www.devicemed.fr/nous-contacter">Nous contacter</a></li>
+<li id="menu-item-3673" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3673"><a href="http://www.devicemed.fr/uncategorized/support-technique/3671">Signaler une erreur</a></li>
+<li id="menu-item-1090" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1090"><a href="http://www.devicemed.fr/nos-partenaires">Nos partenaires</a></li>
+</ul></div></div>
+	<div class="credits"><div class="menu-bas-de-page-deuxieme-ligne-container"><ul id="menu-bas-de-page-deuxieme-ligne" class="menu"><li id="menu-item-1087" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1087"><a href="http://www.devicemed.fr/conditions-generales">Conditions générales</a></li>
+<li id="menu-item-1088" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1088"><a href="http://www.devicemed.fr/mentions-legales-2">Mentions légales</a></li>
+</ul></div></div>
+</footer>
+
+</div><!-- .container -->
+<link rel='stylesheet' id='yarppRelatedCss-css'  href='http://www.devicemed.fr/wp-content/plugins/yarpp/style/related.css?ver=4.1.8' type='text/css' media='all' />
+<script type='text/javascript' src='http://www.devicemed.fr/wp-content/plugins/contact-form-7/includes/js/jquery.form.min.js?ver=3.51.0-2014.06.20'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var _wpcf7 = {"loaderUrl":"http:\/\/www.devicemed.fr\/wp-content\/plugins\/contact-form-7\/images\/ajax-loader.gif","sending":"Envoi en cours ..."};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.devicemed.fr/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=4.1.2'></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/js/bootstrap.min.js"></script>
+<script src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/js/jquery.bxslider.min.js"></script>
+<script src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/js/colorbox/jquery.colorbox-min.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+footer#footer {
+	margin-bottom:15px; background:white; @include section-shadow; padding:10px 20px 10px 20px;
+	.copyright { text-align:center; font-weight:bold; padding:5px; }
+	.pages, .credits {
+		text-align:center; border-top:solid 1px #eee; padding:5px; color:gray; text-transform:capitalize;
+		ul {
+			list-style:none; padding:0; margin:0;
+			li {
+				display:inline;
+				a:hover { text-decoration:underline; }
+			}
+			li + li::before { content: ' - '; }
+		}
+	}
+	.credits { color:silver; }
+}

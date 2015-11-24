@@ -1,0 +1,100 @@
+/* compiled by scssphp v0.0.9 on Wed, 23 Jul 2014 18:04:12 +0200 (0.025s) */
+
+.page-suppliers-posts-edit .editable, .page-suppliers-products-edit .editable, .page-suppliers-galleries-edit .editable, .page-suppliers-videos-edit .editable {
+  height: 350px;
+  width: 50%;
+}
+.page-suppliers-posts-edit .mce-tinymce, .page-suppliers-products-edit .mce-tinymce, .page-suppliers-galleries-edit .mce-tinymce, .page-suppliers-videos-edit .mce-tinymce {
+  width: 50%;
+}
+.page-suppliers-posts-edit #files, .page-suppliers-products-edit #files, .page-suppliers-galleries-edit #files, .page-suppliers-videos-edit #files {
+  overflow: hidden;
+}
+.page-suppliers-posts-edit #files .uploaded-file, .page-suppliers-products-edit #files .uploaded-file, .page-suppliers-galleries-edit #files .uploaded-file, .page-suppliers-videos-edit #files .uploaded-file {
+  position: relative;
+  display: block;
+  width: 150px;
+  height: 150px;
+  border: solid 3px transparent;
+  cursor: pointer;
+  float: left;
+}
+.page-suppliers-posts-edit #files .uploaded-file img, .page-suppliers-products-edit #files .uploaded-file img, .page-suppliers-galleries-edit #files .uploaded-file img, .page-suppliers-videos-edit #files .uploaded-file img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+.page-suppliers-posts-edit #files .uploaded-file p, .page-suppliers-products-edit #files .uploaded-file p, .page-suppliers-galleries-edit #files .uploaded-file p, .page-suppliers-videos-edit #files .uploaded-file p {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  margin: 0;
+  background: rgba(0, 0, 0, .5);
+  color: white;
+  width: 100%;
+  text-align: center;
+  z-index: 0;
+  font-size: 12px;
+}
+.page-suppliers-posts-edit #files .uploaded-file button, .page-suppliers-products-edit #files .uploaded-file button, .page-suppliers-galleries-edit #files .uploaded-file button, .page-suppliers-videos-edit #files .uploaded-file button {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  width: 25px;
+  height: 25px;
+  background: gray;
+  z-index: 1;
+}
+.page-suppliers-posts-edit #files .uploaded-file.selected, .page-suppliers-products-edit #files .uploaded-file.selected, .page-suppliers-galleries-edit #files .uploaded-file.selected, .page-suppliers-videos-edit #files .uploaded-file.selected {
+  border: solid 3px ;
+}
+.page-suppliers-posts-edit #files .uploaded-file:hover button, .page-suppliers-products-edit #files .uploaded-file:hover button, .page-suppliers-galleries-edit #files .uploaded-file:hover button, .page-suppliers-videos-edit #files .uploaded-file:hover button {
+  display: block;
+}
+.page-suppliers-posts-edit .fileupload-wrapper, .page-suppliers-products-edit .fileupload-wrapper, .page-suppliers-galleries-edit .fileupload-wrapper, .page-suppliers-videos-edit .fileupload-wrapper {
+  margin-top: 10px;
+  overflow: hidden;
+}
+.page-suppliers-posts-edit .fileupload-wrapper label, .page-suppliers-products-edit .fileupload-wrapper label, .page-suppliers-galleries-edit .fileupload-wrapper label, .page-suppliers-videos-edit .fileupload-wrapper label {
+  float: left;
+  display: block;
+  font-weight: bold;
+  margin-right: 15px;
+}
+.page-suppliers-posts-edit .fileupload-wrapper input, .page-suppliers-products-edit .fileupload-wrapper input, .page-suppliers-galleries-edit .fileupload-wrapper input, .page-suppliers-videos-edit .fileupload-wrapper input {
+  float: left;
+  display: block;
+}
+.page-suppliers-posts-edit .note, .page-suppliers-products-edit .note, .page-suppliers-galleries-edit .note, .page-suppliers-videos-edit .note {
+  display: block;
+  margin-top: 10px;
+  font-style: italic;
+}
+.page-suppliers-posts-edit .form-message .form-error, .page-suppliers-products-edit .form-message .form-error, .page-suppliers-galleries-edit .form-message .form-error, .page-suppliers-videos-edit .form-message .form-error {
+  background: #ffeaea;
+  color: red;
+  padding: 6px;
+  line-height: 1em;
+  width: 100%;
+  font-size: 1em;
+}
+.page-suppliers-posts-edit .form-submit, .page-suppliers-products-edit .form-submit, .page-suppliers-galleries-edit .form-submit, .page-suppliers-videos-edit .form-submit {
+  overflow: hidden;
+}
+.page-suppliers-posts-edit .form-submit input[type=submit], .page-suppliers-products-edit .form-submit input[type=submit], .page-suppliers-galleries-edit .form-submit input[type=submit], .page-suppliers-videos-edit .form-submit input[type=submit] {
+  border: none;
+  background: ;
+  color: white;
+  padding: 15px;
+  float: right;
+}
+.page-suppliers-posts-edit .form-field-video-content textarea, .page-suppliers-products-edit .form-field-video-content textarea, .page-suppliers-galleries-edit .form-field-video-content textarea, .page-suppliers-videos-edit .form-field-video-content textarea {
+  width: 100%;
+}

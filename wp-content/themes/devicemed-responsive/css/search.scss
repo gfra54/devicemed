@@ -1,0 +1,28 @@
+.page-search {
+	.column-main {
+		section { @include section-shadow; background:white; padding:25px; margin-bottom:15px; }
+		section.results {
+			& > .title { @include title; margin-bottom:25px; }
+			article {
+				overflow:hidden;
+				.left { display:block; float:left; width:33%; }
+				.right { display:block; float:right; width:67%; padding-left:15px; }
+				figure {
+					width:100%; height:175px; overflow:hidden; background-position:50% 50%; background-size:cover;
+					img { display:none; }
+				}
+				.categories {
+					display:block;
+					.category { @include title; font-size:1em; }
+				}
+				.title { @include title; font-size:1.5em; margin-bottom:15px; }
+				.excerpt { padding:0; margin:0; }
+				.metas {
+					display:block; margin-top:10px; color:gray;
+					.date { text-transform:lowercase; }
+				}
+			}
+			article + article { margin-top:15px; padding-top:15px; border-top:solid 1px #eee; }
+		}
+	}
+}

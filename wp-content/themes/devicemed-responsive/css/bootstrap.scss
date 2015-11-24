@@ -1,0 +1,54 @@
+$ld-viewport: 1200px;
+$ld-width: 1170px;
+$md-viewport: 992px;
+$md-width: 970px;
+$sd-viewport: 768px;
+$sd-width: 750px;
+$xs-viewport: 0;
+$xs-width: 0;
+$grid-size: 12;
+
+@mixin screen-min-width($width) {
+	@media screen and (min-width: $width) { & { @content; } }
+}
+@mixin screen-max-width($width) {
+	@media screen and (max-width: $width) { & { @content; } }
+}
+@mixin screen-width($min-width, $max-width) {
+	@media screen and (min-width: $min-width) and (max-width: $max-width) { & { @content; } }
+}
+@mixin screen-min-height($height) {
+	@media screen and (min-height: $height) { & { @content; } }
+}
+@mixin screen-max-height($height) {
+	@media screen and (max-height: $height) { & { @content; } }
+}
+@mixin screen-height($min-height, $max-height) {
+	@media screen and (min-height: $min-height) and (max-height: $max-height) { & { @content; } }
+}
+
+@function bootstrap-device-width($device) {
+	@if $device == ld { @return $ld-viewport; }
+	@if $device == md { @return $md-viewport; }
+	@if $device == sd { @return $sd-viewport; }
+	@if $device == xs { @return $xs-viewport; }
+}
+
+@mixin screen($device) {
+	@if $device == ld { @include screen-min-width($ld-viewport); }
+	@else if $device == md { @include screen-width($md-viewport, $ld-viewport); }
+	@else if $device == sd { @include screen-width($sd-viewport, $md-viewport); }
+	@else if $device == xs { @include screen-max-width($sd-viewport); }	
+}
+
+@mixin screen-min($device) {
+	@include screen-min-width(bootstrap-device-width($device));
+}
+
+@mixin screen-max($device) {
+	@include screen-max-width(bootstrap-device-width($device));
+}
+
+@mixin screen-min-max($small-device, $large-device) {
+	@include screen-width(bootstrap-device-width($small-device), bootstrap-device-width($large-device));
+}

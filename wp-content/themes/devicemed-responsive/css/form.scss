@@ -1,0 +1,36 @@
+table.form-table {
+	border:none;
+	tr { border:none; }
+	th {
+		border:none; border-bottom:solid 1px #eee; padding:5px 0 5px 0; width:33%; vertical-align:center;
+		.description { font-style:italic; font-weight:normal; }
+	}
+	td {
+		border:none; border-bottom:solid 1px #eee; padding:5px 0 5px 0;
+		.error { color:#ff8977; display:block; width:100%; font-style:italic; line-height:2.5em; }
+	}
+	td input[type=text], td input[type=password], td select {
+		border:none; width:100%; background:#eee;
+		padding:10px;
+		&:disabled {
+			background:#fff;
+			color:gray;
+		}
+	}
+	tr.error {
+		td input[type=text], td input[type=password], td select {
+			background:#ffe0dd;
+		}
+	}
+	tr.valid {
+		td input[type=text], td input[type=password], td select {
+			background:green;
+		}
+	}
+}
+input[type=submit].button {
+	border:none;
+	background:$primary-color;
+	color:#fff;
+	padding:10px 15px 10px 15px;
+}

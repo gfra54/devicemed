@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Solution innovante d&rsquo;étalonnage des microscopes à fluorescence  –  DeviceMed.fr</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+	<link href="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/favicon.ico" rel="SHORTCUT ICON">
+	<link rel="pingback" href="http://www.devicemed.fr/xmlrpc.php">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<!-- Bootstrap -->
+	<link href="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/css/bootstrap.min.css" rel="stylesheet">
+	<link href="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/css/default.css" rel="stylesheet">
+	<link href="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/js/colorbox/example1/colorbox.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/js/jquery.bxslider.min.js"></script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-55916994-1', 'auto');
+	  ga('send', 'pageview');
+	  $(document).ready(function() {
+		$(".archive_notConnected").click(function() {
+			$(".bloc_cachepopup").show();
+			$(".notConnected").show();
+			// $(window).scrollTop(280);
+		});
+		
+		$("#click_video").click(function() {
+			$.ajax({
+				url: 'http://www.devicemed.fr/wp-content/themes/devicemed-responsive/ajout_clic_video.php?banniere_id=50',
+				dataType: 'json',
+				success: function(json) {
+					if(json != 'false') {
+						$(".bloc_cachepopup").show();
+						$("#infos_video").attr("src","https://www.youtube.com/embed/8J6pTmegit0");
+						$(".popup_video_home").show();
+					}
+				}
+			});
+			// $(window).scrollTop(280);
+		});
+		
+		$(".bloc_cachepopup").click(function() {
+			$(".bloc_cachepopup").hide();
+			$(".notConnected").hide();
+			$(".bloc_cachepopup").hide();
+			$("#close_popup_video_home").click();
+		});
+		
+		$("#close_popup").click(function() {
+			$(".bloc_cachepopup").hide();
+			$(".notConnected").hide();
+		});
+		
+		$("#close_popup_video_home").click(function() {
+			$(".bloc_cachepopup").hide();
+			$(".popup_video_home").hide();
+			$("#infos_video").attr("src","");
+		});
+		
+		$("#bloc_guide_acheteur").click(function() {
+			$(".bloc_cachepopup").show();
+			$(".notConnected").show();
+		});
+		
+		$("#bloc_guide_acheteur2").click(function() {
+			$(".bloc_cachepopup").show();
+			$(".notConnected").show();
+		});
+		
+		/*var widthWindow = $(window).width();
+		
+		if(widthWindow < 650) {
+			$(".menu-item-has-children a").attr("href","#");
+		}*/
+		
+		$("#menu_mobile").click(function() {
+			if($("#menu").is(':hidden')) {
+				$("#menu").slideDown();
+			}else {
+				$("#menu").slideUp();
+			}
+		});
+	  });
+	</script>
+	<link rel="alternate" type="application/rss+xml" title="DeviceMed.fr &raquo; Solution innovante d&rsquo;étalonnage des microscopes à fluorescence Flux des commentaires" href="http://www.devicemed.fr/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle/solution-innovante-detalonnage-des-microscopes-a-fluorescence/4388/feed" />
+<link rel='stylesheet' id='yarppWidgetCss-css'  href='http://www.devicemed.fr/wp-content/plugins/yarpp/style/widget.css?ver=4.1.8' type='text/css' media='all' />
+<link rel='stylesheet' id='contact-form-7-css'  href='http://www.devicemed.fr/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=4.1.2' type='text/css' media='all' />
+<script type='text/javascript' src='http://www.devicemed.fr/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://www.devicemed.fr/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.devicemed.fr/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.devicemed.fr/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Microscope sans oculaire, stéréoscopique, ergonomique et modulaire' href='http://www.devicemed.fr/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle/microscope-sans-oculaire-stereoscopique-ergonomique-et-modulaire/4384' />
+<link rel='next' title='Formation diplômante en métrologie des salles propres' href='http://www.devicemed.fr/dossiers/actualites/associations_professionnelles/formation-diplomante-en-metrologie-des-salles-propres/4376' />
+<meta name="generator" content="WordPress 4.1.8" />
+<link rel='canonical' href='http://www.devicemed.fr/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle/solution-innovante-detalonnage-des-microscopes-a-fluorescence/4388' />
+<link rel='shortlink' href='http://www.devicemed.fr/?p=4388' />
+</head>
+<div class='notConnected'>
+	Vous devez être connecté pour accéder à cette archive.
+	<br /><br />
+	<div id='lien_notConnected_connecter'>
+		<a href='http://www.devicemed.fr/members/login'>Se connecter</a>
+	</div>
+	<div id='close_popup'>X</div>
+</div>
+<div class='popup_video_home'>
+	<iframe id='infos_video' width="670" height="320" src="" frameborder="0" allowfullscreen></iframe>
+	<div id='close_popup_video_home'>X</div>
+</div>
+<body>
+<div class='bloc_cachepopup'></div>
+<div class="container">
+<div class="bloc_top_header">
+	<div class='vogel_logo'><img src='http://www.devicemed.fr/wp-content/uploads/vogel_logo.png' /></div>
+	<div class='contenu_droit'>
+			<div class="links">
+				<a href="/">Accueil</a>
+			</div>
+			<div class="links">
+				<a href="/feed/">RSS</a>
+			</div>
+					<div class="links">
+				<a href="http://www.devicemed.fr/members/login">Se connecter</a>
+			</div>
+				<div class='links'>
+			<a href='http://www.devicemed.fr/newsletter/inscription'>Recevoir la newsletter</a>
+		</div>
+		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='http://www.devicemed.fr/wp-content/uploads/devicemed_allemand.png' /></a></div>
+	</div>
+</div>
+<header id="header">
+	<div class="logo"><a href="http://www.devicemed.fr" title="DeviceMed.fr - Le magazine des fabricants de dispositifs médicaux"><img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/logo.png" alt="DeviceMed.fr - Le magazine des fabricants de dispositifs médicaux" /></a></div>
+	<div class="sidebar">
+		<div class="search">
+			<form role="search" method="get" action="http://www.devicemed.fr">
+				<input type="text" name="s" placeholder="Rechercher dans les articles" value="" />
+				<input type="submit" value="Rechercher" />
+			</form>
+		</div>
+		<div class="language"></div>
+		<div class="social">
+		<!--
+			<a href="#"><img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/header-icon-facebook.png" /></a>
+			<a href="#"><img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/header-icon-twitter.png" /></a>
+		-->
+		</div>
+	</div><!-- #sidebar -->
+	<li id="menu_mobile"><span>MENU</span></li>
+	<nav id="menu">
+		<div class="menu-menu-principal-container"><ul id="menu-menu-principal" class="menu"><li id="menu-item-1063" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1063"><a href="http://www.devicemed.fr/category/dossiers/materiaux"><span>Matériaux</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1747" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1747"><a href="http://www.devicemed.fr/category/dossiers/materiaux/adhesifs"><span>Adhésifs</span></a></li>
+	<li id="menu-item-1748" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1748"><a href="http://www.devicemed.fr/category/dossiers/materiaux/ceramiques"><span>Céramiques</span></a></li>
+	<li id="menu-item-1749" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1749"><a href="http://www.devicemed.fr/category/dossiers/materiaux/metaux"><span>Métaux</span></a></li>
+	<li id="menu-item-1750" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1750"><a href="http://www.devicemed.fr/category/dossiers/materiaux/materiaux-plastiques"><span>Plastiques et silicones</span></a></li>
+</ul>
+</li>
+<li id="menu-item-1062" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1062"><a href="http://www.devicemed.fr/category/dossiers/composants-oem"><span>Composants OEM</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1751" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1751"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/accessoires-in-vitro"><span>Accessoires in vitro</span></a></li>
+	<li id="menu-item-1752" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1752"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/electriques_electroniques"><span>Electronique</span></a></li>
+	<li id="menu-item-1753" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1753"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/filtres"><span>Filtres</span></a></li>
+	<li id="menu-item-1754" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1754"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/mecaniques"><span>Mécaniques</span></a></li>
+	<li id="menu-item-1755" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1755"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/moteurs-et-entrainements"><span>Moteurs et entrainements</span></a></li>
+	<li id="menu-item-1756" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1756"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/pompes_electrovannes"><span>Pompes et électrovannes</span></a></li>
+	<li id="menu-item-1757" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1757"><a href="http://www.devicemed.fr/category/dossiers/composants-oem/tubes"><span>Tubes</span></a></li>
+</ul>
+</li>
+<li id="menu-item-1477" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor menu-item-has-children menu-item-1477"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication"><span>Equipements</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1758" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1758"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/assemblage"><span>Assemblage</span></a></li>
+	<li id="menu-item-1759" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1759"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/emballage_conditionnement"><span>Emballage et conditionnement</span></a></li>
+	<li id="menu-item-1760" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1760"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/impression-3d-equipements-de-production-et-techniques-de-fabrication"><span>Impression 3D</span></a></li>
+	<li id="menu-item-1761" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1761"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/logiciels"><span>Logiciels</span></a></li>
+	<li id="menu-item-1762" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1762"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/marquage-et-tracabilite"><span>Marquage et traçabilité</span></a></li>
+	<li id="menu-item-1763" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-1763"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle"><span>Métrologie et contrôle</span></a></li>
+	<li id="menu-item-1764" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1764"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/nettoyage"><span>Nettoyage</span></a></li>
+	<li id="menu-item-1765" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1765"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/plasturgie"><span>Plasturgie</span></a></li>
+	<li id="menu-item-1766" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1766"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/salles_blanches"><span>Salles blanches</span></a></li>
+	<li id="menu-item-1767" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1767"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/sterilisation"><span>Stérilisation</span></a></li>
+	<li id="menu-item-1768" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1768"><a href="http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/travail_metaux"><span>Travail des métaux</span></a></li>
+</ul>
+</li>
+<li id="menu-item-1060" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1060"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services"><span>Sous-traitance</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1769" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1769"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/assemblage-sous-traitance-et-services"><span>Assemblage</span></a></li>
+	<li id="menu-item-1770" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1770"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/electronique"><span>Electronique</span></a></li>
+	<li id="menu-item-1771" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1771"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/emballage_conditionnement-sous-traitance-et-services"><span>Emballage et conditionnement</span></a></li>
+	<li id="menu-item-1772" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1772"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/metrologie_controle-sous-traitance-et-services"><span>Métrologie et contrôle</span></a></li>
+	<li id="menu-item-1773" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1773"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/nettoyage-sous-traitance-et-services"><span>Nettoyage</span></a></li>
+	<li id="menu-item-1774" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1774"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/plasturgie-sous-traitance-et-services"><span>Plasturgie</span></a></li>
+	<li id="menu-item-1775" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1775"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/sterilisation-sous-traitance-et-services"><span>Stérilisation</span></a></li>
+	<li id="menu-item-1776" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1776"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/traitement_surface"><span>Traitement de surface</span></a></li>
+	<li id="menu-item-1777" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1777"><a href="http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/travail_metaux-sous-traitance-et-services"><span>Travail des métaux</span></a></li>
+</ul>
+</li>
+<li id="menu-item-1064" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1064"><a href="http://www.devicemed.fr/category/dossiers/reglementation"><span>Réglementation</span></a></li>
+<li id="menu-item-1065" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1065"><a href="http://www.devicemed.fr/category/dossiers/management"><span>Management</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-2635" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2635"><a href="http://www.devicemed.fr/category/dossiers/management/conseil"><span>Conseil</span></a></li>
+	<li id="menu-item-2636" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2636"><a href="http://www.devicemed.fr/category/dossiers/management/etudes-cliniques"><span>Etudes cliniques</span></a></li>
+</ul>
+</li>
+<li id="menu-item-1476" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1476"><a href="http://www.devicemed.fr/category/dossiers/actualites"><span>Actualités de la profession</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1778" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1778"><a href="http://www.devicemed.fr/category/dossiers/actualites/associations_professionnelles"><span>Associations professionnelles</span></a></li>
+	<li id="menu-item-1779" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1779"><a href="http://www.devicemed.fr/category/dossiers/actualites/conjoncture"><span>Conjoncture</span></a></li>
+	<li id="menu-item-1780" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1780"><a href="http://www.devicemed.fr/category/dossiers/actualites/evenements"><span>Evénements</span></a></li>
+	<li id="menu-item-1781" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1781"><a href="http://www.devicemed.fr/category/dossiers/actualites/vie-des-entreprises"><span>Vie des entreprises</span></a></li>
+</ul>
+</li>
+<li id="menu-item-1039" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1039"><a href="http://www.devicemed.fr/suppliers/"><span>Répertoire des fournisseurs</span></a>
+<ul class="sub-menu">
+	<li id="menu-item-2100" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2100"><a href="http://www.devicemed.fr/fournisseurs_partenaires"><span>Fournisseurs partenaires</span></a></li>
+	<li id="menu-item-2101" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2101"><a href="http://www.devicemed.fr/suppliers/"><span>Tous les fournisseurs</span></a></li>
+</ul>
+</li>
+</ul></div>	</nav><!-- #menu -->
+</header><!-- #header -->
+<section class="ad header-ad">
+	<a href='http://www.device-med.fr/?url=http://www.watson-marlow.com/us-en/range/flexicon-highly-accurate-flexible-and-complete-single-use-systems-for-aseptic-liquid-filling/&id=65' id='65' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/banner Flexicon 728x90.gif' /></a></section><div class="row column-content page-single">
+	<div class="col-md-9 col-sm-8 column-main">
+
+<section class="article">
+	<article>
+		<!--<div class="export">
+			<ul>
+				<li class="printer"><a href="?export_printer" title="Version imprimable">Imprimer</a></li>
+				<li class="printer"><a href="?export_printer" title="Version PDF">PDF</a></li>
+				<li class="printer"><a href="?export_printer" title="Partager">Partager</a></li>
+			</ul>
+		</div>-->
+						<div class="categories">
+			<span class="category_principal">Equipements de production &amp; Techniques de fabrication &gt; </span><span class="category">Métrologie et contrôle</span>		</div>
+						<h1 class="title">Solution innovante d&rsquo;étalonnage des microscopes à fluorescence</h1>
+					<div class="metas">
+				<span class="date-wrapper">Publié le <span class="date">18 septembre 2015</span></span>
+				<span class="author-wrapper">par <span class="author">Patrick RENARD </span></span>
+			</div>
+							<div class='image_clicable'><a href="http://www.devicemed.fr/wp-content/uploads/2015/09/DMF_2_2015_OPT_Argolight.jpg" class="cboxElement"><figure style="background-image:url('http://www.devicemed.fr/wp-content/uploads/2015/09/DMF_2_2015_OPT_Argolight.jpg')">
+				<img src="http://www.devicemed.fr/wp-content/uploads/2015/09/DMF_2_2015_OPT_Argolight.jpg" title="Argolight" />
+			</figure></a></div>
+			<div class='source_photo'>Source : Argolight</div>
+							<div class="content">
+			<p><strong>La technologie d&rsquo;étalonnage Argo-M de la start-up Argolight intéresse vivement le secteur de l&rsquo;imagerie de fluorescence. Carl Zeiss France s&rsquo;apprête à l&rsquo;intégrer à son offre de maintenance tandis que le NIST va la tester dans le cadre de la normalisation des microscopes à fluorescence.</strong></p>
+<p>L’imagerie de fluorescence est communément utilisée dans les domaines de la recherche pharmaceutique et médicale. Son marché représente environ 280 millions d’euros par an. En parallèle des applications de recherche, la fluorescence est maintenant utilisée dans de nombreux diagnostics et techniques de dépistage dans les domaines de la biologie et de la pharmaceutique, notamment les dépistages génétiques (FISH) ou viraux (ELISA). D&rsquo;où l&rsquo;importance de pouvoir en extraire des résultats fiables et comparables.</p>
+<p>Créée fin 2012 par deux jeunes docteurs en physique de l&rsquo;université de Bordeaux, la société Argolight propose une technologie innovante permettant pour la première fois de qualifier entièrement la qualité d’imagerie des systèmes de fluorescence et de suivre leur évolution sur de longues périodes de temps. L’étalonnage et le suivi dans le temps des performances d&rsquo;un microscope augmentent la fiabilité et la reproductibilité des mesures qu’il produit. Ceci permet de réduire le coût de l&rsquo;analyse si le système est utilisé dans le cadre d&rsquo;un diagnostic médical, ou le coût de développement dans le cadre d’une action de R&amp;D.</p>
+<div id="attachment_4389" style="width: 310px" class="wp-caption aligncenter"><a href="http://www.devicemed.fr/wp-content/uploads/2015/09/Argolight-Arnaud-Royon-et-Gautier-Papon_Actu.jpg"><img class="wp-image-4389 size-medium" src="http://www.devicemed.fr/wp-content/uploads/2015/09/Argolight-Arnaud-Royon-et-Gautier-Papon_Actu-300x213.jpg" alt="Solution innovante d'étalonnage des microscopes à fluorescence" width="300" height="213" /></a><p class="wp-caption-text">Arnaud ROYON et Gautier PAPON, fondateurs d&rsquo;Argolight.</p></div>
+<p>L&rsquo;innovation d&rsquo;Argolight se concentre dans une lame d&rsquo;étalonnage (Argo-M) dotée de motifs fluorescents ultra-stables à des échelles allant jusqu&rsquo;à 100 nm. Cette lame permet de disposer d&rsquo;une solution automatisable de détection des dérives éventuelles des instruments à base de fluorescence. Une application sur tablette, qui inclut des algorithmes de traitement d&rsquo;images, vient se brancher aux systèmes à qualifier et analyse les données issues de l&rsquo;observation des motifs de la lame. Une application web centralise les données pour faciliter la gestion d&rsquo;un parc de machines et la génération automatique de rapports qualité.</p>
+<p>Carl Zeiss, acteur majeur du marché de la microscopie, n&rsquo;est pas restée insensible à cette innovation. Sa filiale française vient en effet d&rsquo;annoncer qu&rsquo;elle proposera à ses clients, dès le mois d&rsquo;octobre 2015, de leur fournir une ou plusieurs lames Argo-M dans le cadre de ses contrats de maintenance concernant les microscopes à fluorescence.</p>
+<p>Cette annonce vient s&rsquo;ajouter à celle du NIST (National Institute of Standards and Technology). L’agence nationale de métrologie américaine a engagé le 24 août dernier une collaboration avec Argolight, en acquérant plusieurs échantillons de la technologie de fluorescence stable brevetée par Argolight. Le but est de tester diverses applications de systèmes biologiques critiques pour vérifier que la technologie d&rsquo;Argolight peut répondre aux problématiques actuelles de normalisation des systèmes de microscopie exploitant la fluorescence.</p>
+<p>Ce partenariat fait suite à plus d’un an d’échanges entre le NIST et Argolight, et arrive après plusieurs contrats de vente signés avec l’agence de santé américaine, le National Institutes of Health (NIH). Il accompagne la volonté de développement aux Etats-Unis de la jeune TPE française, actuellement en phase de levée de fonds.</p>
+<hr />
+<p><strong>Argolight</strong>, F-33400 Talence, <a href="http://www.argolight.com" target="_blank"><span style="color: #3366ff;">www.argolight.com</span></a></p>
+<p><strong>Carl Zeiss France</strong>, F-78161 Marly-le-Roi, <span style="color: #3366ff;"><a style="color: #3366ff;" href="http://www.zeiss.fr" target="_blank">www.zeiss.fr</a></span></p>
+<div class='yarpp-related yarpp-related-none'>
+<p>No related posts.</p>
+</div>
+		</div>
+
+						<!--<div class="images">
+			<ul>
+						<li><a href="http://www.devicemed.fr/wp-content/uploads/2015/09/Argolight-Arnaud-Royon-et-Gautier-Papon_Actu.jpg"><img width="150" height="150" src="http://www.devicemed.fr/wp-content/uploads/2015/09/Argolight-Arnaud-Royon-et-Gautier-Papon_Actu-150x150.jpg" class="attachment-thumbnail" alt="Solution innovante d&#039;étalonnage des microscopes à fluorescence" /></a></li>
+					</ul>
+		</div>-->
+<script type="text/javascript">
+$(function() {
+	$('.image_clicable a').colorbox();
+});
+</script>
+		
+	</article>
+</section>
+
+<!--<section class="related-articles">
+	<h2 class="title">Articles en relation</h2>
+	Aucun article en relation.
+</section>-->
+
+<!--<section class="related-category-articles">
+	<h2 class="title">Dans la même catégorie</h2>
+	<ul>
+		<li><a href="http://www.devicemed.fr/dossiers/equipements-de-production-et-techniques-de-fabrication/plasturgie/12-secondes-pour-linjection-de-pieces-complexes/4670" title="12 secondes pour l&rsquo;injection de pièces complexes">12 secondes pour l&rsquo;injection de pièces complexes</a></li>
+		<li><a href="http://www.devicemed.fr/dossiers/materiaux/materiaux-plastiques/parylene-22-une-protection-qui-setend-aux-infections/4658" title="Parylène (2/2) : une protection qui s’étend aux infections">Parylène (2/2) : une protection qui s’étend aux infections</a></li>
+		<li><a href="http://www.devicemed.fr/dossiers/actualites/evenements/3000-visiteurs-et-80-exposants-a-3d-print-2015/4628" title="3000 visiteurs et 80 exposants à 3D Print 2015">3000 visiteurs et 80 exposants à 3D Print 2015</a></li>
+		<li><a href="http://www.devicemed.fr/dossiers/equipements-de-production-et-techniques-de-fabrication/travail_metaux/la-precision-robotique-au-service-des-procedes-de-finition/4638" title="La précision robotique au service des procédés de finition d&rsquo;implants">La précision robotique au service des procédés de finition d&rsquo;implants</a></li>
+		<li><a href="http://www.devicemed.fr/dossiers/composants-oem/moteurs-et-entrainements/mini-broche-pour-les-taches-de-positionnement-lineaire/4631" title="Mini-broche pour les tâches de positionnement linéaire">Mini-broche pour les tâches de positionnement linéaire</a></li>
+	</ul>
+</section>-->
+	<section class='tags_posts'>
+	<div class="titre_mot_cle">Mots-clés :</div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/argolight" target="_blank">Argolight</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/carl-zeiss" target="_blank">Carl Zeiss</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/diagnostic" target="_blank">diagnostic</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/etalonnage" target="_blank">étalonnage</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/fluorescence" target="_blank">fluorescence</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/imagerie" target="_blank">imagerie</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/microscopie" target="_blank">microscopie</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/nih" target="_blank">NIH</a></div> <div class="mot_cle"><a href="http://www.devicemed.fr/tag/nist" target="_blank">NIST</a></div>	</section>
+	<section class='tags_posts'>
+		<!-- Encart afficher titres articles de la même catégorie -->
+				 
+		  <h2 class="title">Articles similaires :</h2>
+		<ul class="widget-container">
+		<a href="http://www.devicemed.fr/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle/capteurs-compacts-pour-des-mesures-de-distance-submicroniques/4567" target="_blank"><div class="article_similaire1"><div class="image_article_similaire"><img src="http://www.devicemed.fr/wp-content/uploads/2015/10/PR337-confocalDT.jpg" /></div><div class="legende_article_similaire">Capteurs compacts pour des mesures de distance submicroniques</div></div></a><a href="http://www.devicemed.fr/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle/microscope-sans-oculaire-stereoscopique-ergonomique-et-modulaire/4384" target="_blank"><div class="article_similaire"><div class="image_article_similaire"><img src="http://www.devicemed.fr/wp-content/uploads/2015/09/Lynx-EVO.jpg" /></div><div class="legende_article_similaire">Microscope sans oculaire, stéréoscopique, ergonomique et modulaire</div></div></a><a href="http://www.devicemed.fr/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle/analyse-dimages-et-mesure-de-pression-pour-dm-dinjection/4105" target="_blank"><div class="article_similaire"><div class="image_article_similaire"><img src="http://www.devicemed.fr/wp-content/uploads/2015/07/National-Instruments-755.jpg" /></div><div class="legende_article_similaire">Analyse d&rsquo;images et mesure de pression pour DM d’injection</div></div></a><a href="http://www.devicemed.fr/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle/une-solution-de-vision-pour-mieux-controler-le-conditionnement-de-cartouches-injectables/3404" target="_blank"><div class="article_similaire"><div class="image_article_similaire"><img src="http://www.devicemed.fr/wp-content/uploads/2015/05/Keyence.jpg" /></div><div class="legende_article_similaire">Une solution de vision pour mieux contrôler le conditionnement de cartouches injectables</div></div></a>		</ul>
+		<!-- fin encart afficher titres articles de la même catégorie en cours -->
+	</section>
+<!--<section class="comments">
+	<h2 class="title">Commentaires</h2>
+	Les commentaires sont fermés pour cet article.
+</section>-->
+	</div><!-- .column-main -->
+<div id="sidebar" class="column col-md-3 col-sm-4 column-sidebar">
+	<!--<section id="sidebar-annual-guide">
+		<div class="right-side">
+			<h1 class="title">Guide annuel</h1>
+			<span class="download">Télécharger</span>
+		</div>
+		<div class="left-side">
+			<img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/devicemed-issue-sample.png" />
+		</div>
+	</section>-->
+			<section id='sidebar-banniere'>
+		<a href='http://www.device-med.fr/?url=http://www.palexpo.ch/fr/agenda/ephj-epmt-smt&id=69' id='69' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/160x600.jpg' /></a>		</section>
+		<!--<section id='sidebar-banniere'>
+		</section>-->
+	<section id="sidebar-issues">
+	<header>
+		<div class="right-side">
+			<h1 class="title"><a href='http://www.devicemed.fr/salons'>Salons et manifestations</a></h1>
+		</div>
+	</header>	
+	<article>
+		
+		<h3 class='title2'><a href='http://www.midest.com/' target='_blank'>MIDEST<br />17-20 novembre 2015/ Paris</a></h3><br />
+		<h3 class='title2'><a href='http://www.sofcot-congres.fr/fr' target='_blank'>SOFCOT<br />10-13 novembre 2015/ Paris</a></h3><br />
+		<h3 class='title2'><a href='http://www.compamed-tradefair.com/' target='_blank'>COMPAMED <br />16-19 novembre 2015/ Düsseldorf</a></h3>
+	</article>
+</section>	<!--<section id="sidebar-issues">
+		<header>
+			<div class="right-side">
+				<h1 class="title"><a href='http://www.devicemed.fr/salons'>Salons et manifestations</a></h1>
+			</div>
+		</header>	
+		<article>
+			<h3 class='title2'><a href='http://www.ephj.ch/' target='_blank'>SMT<br />2-5 juin 2015/ Genève</a></h3><br />
+			<h3 class='title2'><a href='http://www.parts2clean.de/' target='_blank'>PARTS2 CLEAN<br />9-11 juin 2015/ Stuttgart</a></h3><br />
+			<h3 class='title2'><a href='http://www.medteceurope.com/france' target='_blank'>Medtec France<br />10-11 juin 2015/ Besançon</a></h3>
+		</article>
+	</section>-->
+	<!--<section id="sidebar-supplier-registration">
+		<header>
+			<div class="left-side">
+				<img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/sidebar-supplier-registration-icon.png"" />
+			</div>
+			<div class="right-side">
+				<h1 class="title">S'inscrire comme fournisseur</h1>
+			</div>
+		</header>
+		<div class="supplier-registration-form">
+			<form method='GET' action="http://www.device-med.fr/">
+				<input type="text" name="supplier_user_e-mail" value="" placeholder="email" />
+				<div></div>
+				<input type="password" name="supplier_user_password" value="" placeholder="Mot de passe" />
+				<div></div>
+				<div></div>
+				<input type="submit" value="Valider" />
+			</form>
+		</div>
+	</section>-->
+		<section id="sidebar-issues">
+		<header>
+			<div class="right-side">
+				<h1 class="title"><a href='http://www.devicemed.fr/archives'>Dernier numéro</a></h1>
+			</div>
+		</header>	
+		<a href='http://www.devicemed.fr/wp-content/uploads/archives/pdf/Septembre - Octobre 2015.pdf' target='_blank'><article class='article_numero'><div class='right-side'><span class='issue'>Septembre / Octobre 2015</span><span class='download'>Consulter ce numéro</span></div><img src='http://www.devicemed.fr/wp-content/uploads/archives/apercu/Sept-Oct 2015.png' width=100%/></article></a>		<a href="http://www.devicemed.fr/archives" class="more">Consulter d'autres numéros</a>
+	</section>
+	<!--<section id="sidebar-issues">
+		<header>
+			<div class="right-side">
+				<h1 class="title">Guide de l'acheteur</h1>
+			</div>
+		</header>	
+		<article id='bloc_guide_acheteur'><div class='right-side'><span class='issue'>Guide de l'acheteur</span><span class='download'>Consulter le guide</span></div><div class='left-side' style="background-image:url('http://www.devicemed.fr/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');"></div></article>	</section>-->
+	<!--<section id="sidebar-video">
+		<header>
+			<h1 class="title">Vidéo</h1>
+		</header>
+		<div class="video-wrapper">
+			<img src="http://placehold.it/350x250" alt="" />
+		</div>
+	</section>-->
+	<!--<section id="sidebar-agenda">
+		<header>
+			<div class="left-side">
+				<img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/sidebar-supplier-registration-icon.png"" />
+			</div>
+			<div class="right-side">
+				<h1 class="title">Agenda</h1>
+			</div>
+		</header>
+		<div class="events">Aucun événement à venir</div>
+	</section>-->
+	<section id="sidebar-fiches">
+		<header>
+			<div class="right-side">
+				<h1 class="title">Fournisseurs partenaires</h1>
+			</div>
+		</header>	
+		<article>
+			<h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Qosina/6?premiere_visite=1" target='_blank'>Qosina</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Usiplast-Composites/72?premiere_visite=1" target='_blank'>Usiplast Composites</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Oerlikon-Balzers-France/128?premiere_visite=1" target='_blank'>Oerlikon Balzers France</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Fpsa/199?premiere_visite=1" target='_blank'>FPSA</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Realmeca/221?premiere_visite=1" target='_blank'>Realmeca</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Ogp-France/226?premiere_visite=1" target='_blank'>OGP France</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Préiso/249?premiere_visite=1" target='_blank'>Préiso</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Teleflex-Medical-Oem/253?premiere_visite=1" target='_blank'>Teleflex Medical OEM</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Keol/260?premiere_visite=1" target='_blank'>Keol</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Heptal/306?premiere_visite=1" target='_blank'>Heptal</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/suppliers/Pierre-Fabre-Médicament-Supercritical-Fluids-Division/329?premiere_visite=1" target='_blank'>Pierre Fabre Médicament - Supercritical Fluids Division</a></h3>		</article>
+	</section>
+	<section id="sidebar-tag">
+		<header>
+			<div class="right-side">
+				<h1 class="title">On en parle</h1>
+			</div>
+		</header>	
+		<article>
+			<h3 class='title2'><a href="http://www.devicemed.fr/tag/implant" target='_blank'>Implants</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/moulage" target='_blank'>Moulage</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/medtec" target='_blank'>Medtec</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/impression-3d" target='_blank'>Impression 3D</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/iso-13485" target='_blank'>ISO 13485</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/usinage" target='_blank'>Usinage</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/pharmapack" target='_blank'>Pharmapack</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/salle-blanche" target='_blank'>Salle blanche</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/instrument-chirurgical" target='_blank'>Instruments chirurgicaux</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/mesure-3d" target='_blank'>Mesure 3D</a></h3><br /><h3 class='title2'><a href="http://www.devicemed.fr/tag/tracabilite" target='_blank'>Traçabilité</a></h3><br />		</article>
+	</section>
+	<!--<section id="sidebar-tag">
+		<a href='http://www.devicemed.fr/tag/assemblage-2' class='tag-link-311' title='67 sujets' style='font-size: 11.5pt;'>assemblage</a>
+<a href='http://www.devicemed.fr/tag/capteur' class='tag-link-111' title='57 sujets' style='font-size: 8pt;'>capteur</a>
+<a href='http://www.devicemed.fr/tag/conference' class='tag-link-696' title='57 sujets' style='font-size: 8pt;'>conférence</a>
+<a href='http://www.devicemed.fr/tag/implant' class='tag-link-236' title='108 sujets' style='font-size: 22pt;'>implant</a>
+<a href='http://www.devicemed.fr/tag/laboratoire' class='tag-link-166' title='102 sujets' style='font-size: 20.5pt;'>laboratoire</a>
+<a href='http://www.devicemed.fr/tag/laser' class='tag-link-638' title='64 sujets' style='font-size: 10.5pt;'>laser</a>
+<a href='http://www.devicemed.fr/tag/plastique' class='tag-link-284' title='75 sujets' style='font-size: 14pt;'>plastique</a>
+<a href='http://www.devicemed.fr/tag/salle-blanche' class='tag-link-40' title='56 sujets' style='font-size: 8pt;'>salle blanche</a>
+<a href='http://www.devicemed.fr/tag/salon' class='tag-link-56' title='85 sujets' style='font-size: 16.5pt;'>salon</a>
+<a href='http://www.devicemed.fr/tag/usinage' class='tag-link-406' title='60 sujets' style='font-size: 9.5pt;'>usinage</a>	</section>-->
+</div>	</div><!-- .column-content -->
+
+<footer id="footer">
+	<div class="copyright">DeviceMed.fr est une marque de Vogel Business Media. <a href='http://www.devicemed.de/' target='_blank'>Cliquer ici pour découvrir le site de DeviceMed Allemagne</a>.</div>
+	<div class="pages"><div class="menu-bas-de-page-premiere-ligne-container"><ul id="menu-bas-de-page-premiere-ligne" class="menu"><li id="menu-item-1093" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1093"><a href="http://www.devicemed.fr/qui-sommes-nous">Qui sommes-nous ?</a></li>
+<li id="menu-item-1092" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1092"><a href="http://www.devicemed.fr/publicite">Publicité et kit média</a></li>
+<li id="menu-item-1091" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1091"><a href="http://www.devicemed.fr/nous-contacter">Nous contacter</a></li>
+<li id="menu-item-3673" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3673"><a href="http://www.devicemed.fr/uncategorized/support-technique/3671">Signaler une erreur</a></li>
+<li id="menu-item-1090" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1090"><a href="http://www.devicemed.fr/nos-partenaires">Nos partenaires</a></li>
+</ul></div></div>
+	<div class="credits"><div class="menu-bas-de-page-deuxieme-ligne-container"><ul id="menu-bas-de-page-deuxieme-ligne" class="menu"><li id="menu-item-1087" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1087"><a href="http://www.devicemed.fr/conditions-generales">Conditions générales</a></li>
+<li id="menu-item-1088" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1088"><a href="http://www.devicemed.fr/mentions-legales-2">Mentions légales</a></li>
+</ul></div></div>
+</footer>
+
+</div><!-- .container -->
+<link rel='stylesheet' id='yarppRelatedCss-css'  href='http://www.devicemed.fr/wp-content/plugins/yarpp/style/related.css?ver=4.1.8' type='text/css' media='all' />
+<script type='text/javascript' src='http://www.devicemed.fr/wp-content/plugins/contact-form-7/includes/js/jquery.form.min.js?ver=3.51.0-2014.06.20'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var _wpcf7 = {"loaderUrl":"http:\/\/www.devicemed.fr\/wp-content\/plugins\/contact-form-7\/images\/ajax-loader.gif","sending":"Envoi en cours ..."};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.devicemed.fr/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=4.1.2'></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/js/bootstrap.min.js"></script>
+<script src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/js/jquery.bxslider.min.js"></script>
+<script src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/js/colorbox/jquery.colorbox-min.js"></script>
+</body>
+</html>

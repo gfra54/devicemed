@@ -1,0 +1,32 @@
+.page-members {
+	.column-main {
+		section { @include section-shadow; background:white; padding:25px; margin-bottom:15px; }
+		section .title { @include title; margin-bottom:25px; }
+		section h3.title { margin-bottom:10px; }
+		.form-fieldset {
+			.form-row {
+				overflow:hidden;
+				.form-label { float:left; width:25%; @include title; padding-top:5px; }
+				.form-field {
+					float:left; width:35%;
+					input[type=text], input[type=password] { width:100%; border:none; background:#eee; margin:0; padding:5px; }
+				}
+				.form-message {
+					float:left; width:40%; padding-left:5px;
+					.form-error { background:#ffeaea; color:red; padding:6px; line-height:1em; width:100%; font-size:1em; }
+				}
+				.form-submit {
+					margin-left:25%; margin-right:40%;
+					input[type=submit] {
+						width:100%; border:none; background:$primary-color; margin:0; padding:5px; color:white; opacity:0.8;
+						&:hover { opacity:1; }
+					}
+				}
+			}
+			.form-row + .form-row { margin-top:5px; }
+		}
+		section.login {
+			.form-fieldset { width:100%; }
+		}
+	}
+}

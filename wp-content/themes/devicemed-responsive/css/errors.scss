@@ -1,0 +1,8 @@
+.page-errors {
+	.column-main {
+		section {
+			@include section-shadow; background:white; padding:25px; margin-bottom:15px;
+			.title { @include title; margin-bottom:25px; }
+		}
+	}
+}

@@ -1,0 +1,127 @@
+.page-suppliers-posts-edit,
+.page-suppliers-products-edit,
+.page-suppliers-galleries-edit,
+.page-suppliers-videos-edit {
+	.column-main {
+		section {
+			@include section-shadow; background:white; padding:25px; margin-bottom:15px;
+			.title { @include title; margin-bottom:25px; }
+			.form-fieldset {
+				width:100%;
+				.form-row { overflow:hidden; margin-bottom:25px; }
+				.form-label { @include title; font-size:1.5em; }
+				.form-field {
+					margin-top:5px;
+					input[type=text], input[type=password] { width:100%; border:none; background:#eee; margin:0; padding:10px; }
+				}
+				.mce-panel { border:solid 1px #eee; border-radius:0; }
+				.mce-toolbar-grp { margin:0; background:none; padding:0; }
+				.mce-toolbar { background:#eee; padding:0; border:none; }
+				.mce-btn-group { margin:0; }
+				.mce-btn {
+					border:none; background:#eee; margin:0; border-radius:0;
+					&:hover { background:#ddd; }
+				}
+				.mce-statusbar { background:#efefef; }
+				.editable { height:250px; }
+				#files {
+					overflow:hidden;
+					.uploaded-file {
+						position:relative; display:block; width:150px; height:150px; border:solid 3px transparent; cursor:pointer; float:left;
+						img { width:100%; height:100%; position:absolute; top:0; left:0; z-index:0; }
+						p { display:block; position:absolute; bottom:0; left:0; padding:0; margin:0; background:rgba(0,0,0,.5); color:white; width:100%; text-align:center; z-index:0; }
+						button { display:none; position:absolute; top:0; right:0; border:none; width:25px; height:25px; background:gray; z-index:1; }
+						&.selected { border:solid 3px $primary-color; }
+						&:hover {
+							button { display:block; }
+						}
+					}
+				}
+				.fileupload-wrapper {
+					margin-top:10px; overflow:hidden;
+					label { float:left; display:block; font-weight:bold; margin-right:15px; }
+					input { float:left; display:block; }
+				}
+				.note { display:block; margin-top:10px; font-style:italic; }
+				.form-message {
+					.form-error { background:#ffeaea; color:red; padding:6px; line-height:1em; width:100%; font-size:1em; }
+				}
+				.form-submit {
+					overflow:hidden;
+					input[type=submit] { border:none; background:$primary-color; color:white; padding:15px; float:right; }
+				}
+				.form-field-video-content {
+					textarea { width:100%; }
+				}
+			}
+		}
+	}
+}
+.page-supplier {
+	.column-main {
+		section {
+			@include section-shadow; background:white; padding:25px; margin-bottom:15px;
+			.title { @include title; }
+			> header {
+				overflow:hidden; /*border-bottom:solid 2px $primary-color;*/ margin:0 -25px 0 -25px; padding:0 25px 20px 25px;
+				.title { float:left; font-size:26px; }
+				.buttons {
+					float:right;
+					a {
+						display:inline-block; background:$primary-color; padding:5px 10px 5px 10px; color:white;
+					}
+				}
+			}
+		}
+		section.actions {
+			overflow:hidden;
+			a {
+				display:block; float:left; background:$primary-color; padding:10px 15px 10px 15px; color:white;
+				&+a { margin-left:5px; }
+			}
+			
+		}
+		section.posts {
+			overflow:hidden;
+			article {
+				overflow:hidden; 
+				.left { display:block; float:left; width:33%; position:relative; }
+				.right { display:block; float:right; width:67%; padding-left:15px; }
+				figure {
+					width:100%; height:125px; overflow:hidden; background-position:50% 50%; background-size:cover; background-color:#eee;
+					img { display:none; }
+				}
+				.title { @include title; font-size:1.5em; margin-bottom:15px; }
+				.excerpt { padding:0; margin:0; }
+				.metas {
+					display:block; margin-top:10px; color:gray;
+					.date { text-transform:lowercase; }
+				}
+			}
+			article + article { margin-top:15px; padding-top:15px; border-top:solid 1px #eee; }
+		}
+		section.products {
+			overflow:hidden;
+			.articles-wrapper { overflow:hidden; margin:-1.5%; }
+			article {
+				overflow:hidden; position:relative; width:30.333%; float:left; height:125px; margin:1.5%; @include box-shadow;
+				figure {
+					width:100%; height:125px; overflow:hidden; background-position:50% 50%; background-size:cover; background-color:#eee; position:absolute; top:0; left:0;
+					img { display:none; }
+				}
+				.title { position:absolute; bottom:0; left:0; background:rgba(0,0,0,.75); color:white; width:100%; margin:0; padding:5px; font-size:12px; }
+			}
+		}
+		section.medias > .galleries-wrapper {
+			overflow:hidden; margin:-1.5%;
+			article {
+				overflow:hidden; position:relative; width:30.333%; float:left; height:125px; margin:1.5%; @include box-shadow;
+				figure {
+					width:100%; height:125px; overflow:hidden; background-position:50% 50%; background-size:cover; background-color:#eee; position:absolute; top:0; left:0;
+					img { display:none; }
+				}
+				.title { position:absolute; bottom:0; left:0; background:rgba(0,0,0,.75); color:white; width:100%; margin:0; padding:5px; font-size:12px; }
+			}
+		}
+	}
+}

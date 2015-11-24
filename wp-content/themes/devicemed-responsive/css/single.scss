@@ -1,0 +1,73 @@
+.page-single {
+	.column-main {
+		section { @include section-shadow; background:white; padding:25px; margin-bottom:15px; }
+		section.article {
+			article {
+				figure {
+					width:100%;height:200px;background-size:cover;background-position:50% 50%;margin:15px 0 15px 0;
+					img {width:100%;display:none;}
+				}
+				.title {text-transform:uppercase;font-size:30px;margin:0;padding:0;color:$primary-color;font-family:'opensans-condbold';line-height:1em;margin-bottom:15px;}
+				.date-wrapper .date { text-transform:lowercase; }
+				.author-wrapper .author { font-weight:bold; }
+				.categories {
+					margin-bottom:15px; border-bottom:solid 0px $primary-color; padding-bottom:0px; 
+					.category {
+						@include title; font-size:1.1em;
+						&:hover { text-decoration:underline; }
+					}
+				}
+				.export {
+					float:right;
+					@media print { display:none; }
+					ul {
+						list-style:none;
+						li { display:inline; }
+					}
+				}
+				.content { }
+				.images {
+					ul { list-style:none; overflow:hidden; margin:0; }
+					li { float:left; margin:5px; }
+				}
+			}
+		}
+		section.related-articles {
+			@media print { display:none; }
+			.title { @include title; }
+		}
+		section.related-category-articles {
+			@media print { display:none; }
+			.title { @include title; }
+		}
+		section.comments {
+			@media print { display:none; }
+			.title { @include title; }
+		}
+	}
+}
+
+
+@media print {
+	.ad { display:none; }
+	#header {
+		margin:0; padding:0;
+		.sidebar { display:none; }
+		.logo { margin:25px; padding:0; }
+	}
+	#menu { display:none; }
+	#footer { display:none; }
+	#sidebar { display:none; }
+	a[href]:after { display:none; }
+	.page-single {
+		section.article {
+			article {
+				figure {
+					overflow:hidden; float:left; width:50% !important; height:auto !important; margin-right:15px !important; margin:25px 25px 15px 0 !important;
+					img { max-height:250px !important; height:auto !important; width:100% !important; display:block !important; margin:0; padding:0; }
+				}
+				.content { margin-top:25px; }
+			}
+		}
+	}
+}
