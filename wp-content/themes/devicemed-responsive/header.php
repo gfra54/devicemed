@@ -168,8 +168,9 @@
 	// echo "supplier_id : ". $supplier_id;
 ?>
 <section class="ad header-ad">
+	<?php afficher_pub('megaban', array('class' => 'megaban'));?>
 	<?php
-		$monUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+/*		$monUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 		$_SESSION['arrayBanniereAfficher'] = '';
 		
 		// On récupére les bannières qui ont une date de fin dépassé
@@ -221,6 +222,7 @@
 			echo "<a href='https://urldefense.proofpoint.com/v2/url?u=http-3A__www.dm-2Dexperts.fr&d=AwMFAw&c=swZ-Xf1X63pRFsfLwqPxeIkAR_Uj073mmqakB_XXmeg&r=y8cCPPeAINua2ICvxy0PPu4yd--gsabdzZ9rwDhHBtU&m=CukLFzw90wFwqRT2jv7xZfKZ31tg0ihu_w1zkLhCbi0&s=bnTYno-7r9Q2fQkac7pTcm66rcCDB7W6QVXZJ4xIy1k&e=' id='64' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/banniere-devicemed-2015.gif' /></a>";
 		}else {
 			echo "<a href='http://www.device-med.fr/?url=$lien&id=$banniere_id' id='$banniere_id' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/$image' /></a>";
-		}
+		}*/
+
 	?>
 </section>

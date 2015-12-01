@@ -1,0 +1,5 @@
+installer acf et cpt
+
+créer cpt pubs (importer avec le plugins)
+
+activer admin menu editor

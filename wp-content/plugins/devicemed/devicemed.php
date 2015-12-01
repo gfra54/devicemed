@@ -13,10 +13,30 @@ Author URI: http://www.keepcom.fr
 */
 require_once dirname(__FILE__).'/classes/DM_Wordpress.php';
 
+/* inclure les fonctions utilitaires */
+require_once(dirname(__FILE__).'/php/utils.inc.php');
 
-$files = glob(dirname(__FILE__).'/auto/*.php');
-foreach($files as $file) {
-	include $file;
+/* inclure les fonctions de debug */
+require_once(dirname(__FILE__).'/php/debug.inc.php');
+
+/* inclure les fonctions des pubs */
+require_once(dirname(__FILE__).'/php/pubs.inc.php');
+
+define( 'DEVICEMED_PLUGIN_DIR', dirname(__FILE__) );
+list(,$tmp) = explode('wp-content',str_replace('\\','/',DEVICEMED_PLUGIN_DIR));
+define( 'DEVICEMED_PLUGIN_URL', site_url().'/wp-content'.$tmp );
+
+
+function add_admin_js(){
+    wp_enqueue_script( 'admin-actions', DEVICEMED_PLUGIN_URL . '/js/admin-actions.js' );
+}
+add_action( 'admin_enqueue_scripts', 'add_admin_js' );
+
+
+foreach(glob(dirname(__FILE__).'/php/*/*.php') as $file){
+  if(file_exists($file)){
+    require_once $file;
+  }
 }
 
 DM_Wordpress::initialize();
@@ -50,9 +70,9 @@ if (is_admin())
 	DM_Wordpress_Banniere_Admin::instance();
 	DM_Wordpress_Banniere_Admin_List::instance();
 	DM_Wordpress_Banniere_Admin_Edit::instance();
-	DM_Wordpress_Newsletter_Admin::instance(); //desactivation de l'ancien systeme de newsletter
-	DM_Wordpress_Newsletter_Admin_List::instance();
-	DM_Wordpress_Newsletter_Admin_Edit::instance();
+	// DM_Wordpress_Newsletter_Admin::instance(); //desactivation de l'ancien systeme de newsletter
+	// DM_Wordpress_Newsletter_Admin_List::instance();
+	// DM_Wordpress_Newsletter_Admin_Edit::instance();
 //	DM_Wordpress_Gabarit_Admin::instance();
 //	DM_Wordpress_Gabarit_Admin_List::instance();
 //	DM_Wordpress_Gabarit_Admin_Edit::instance();
@@ -72,7 +92,7 @@ if (is_admin())
 	DM_Wordpress_Suppliers_Download_Admin_Edit::instance();
 	DM_Wordpress_Suppliers_Users_Admin_List::instance();
 	DM_Wordpress_Suppliers_Users_Admin_Edit::instance();
-	DM_Wordpress_Newsletter_Extraire_Admin::instance();
+	// DM_Wordpress_Newsletter_Extraire_Admin::instance();
 	DM_Wordpress_Suppliers_Extraire_Admin::instance();
 }
 
