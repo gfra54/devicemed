@@ -52,17 +52,31 @@ function afficher_pub($type,$attr=array()) {
 function get_selected_pub($pubs) {
 	$pubs_sort=array();
 	foreach($pubs as $key => $pub) {
-		$duree = get_field('duree',$pub->ID);
+/*		$duree = get_field('duree',$pub->ID);
 		$difference = intval((time() - strtotime($pub->post_date)) / (3600 * 24));
 		
-		if(empty($duree) || $duree >= $difference) {
+		if(empty($duree) || $duree >= $difference) {*/
+		if($date_debut = get_field('date_debut',$pub->ID)) {
+			$date_debut.=' 00:00:00';
+		}
+		if($date_fin = get_field('date_fin',$pub->ID)) {
+			$date_fin.=' 23:59:59';
+		}
+		$ok=true;
+		if(!empty($date_debut) && time()<strtotime($date_debut)) {
+			$ok=false;
+		}
+		if(!empty($date_fin) && time()>strtotime($date_fin)) {
+			$ok=false;
+		}
+		if($ok) {
 			if(check_univers(get_field('univers',$pub->ID))){
 				$pubs_sort[$key] = get_field('pages',$pub->ID);
 			}
 		}
 	}
 	asort($pubs_sort);
-	$pubs_sort = array_reverse($pubs_sort);
+	$pubs_sort = array_reverse($pubs_sort,true);
 
 	$normal = array();
 	foreach($pubs_sort as $id_pub => $pages) {

@@ -658,10 +658,10 @@ class DM_Wordpress_Gabarit_Model extends DM_Wordpress_Model
 	
 	public function extractBdd() {
 		// configuration de la base de données base de données
-		$host = 'devicemedrbdd.mysql.db';
-		$user = 'devicemedrbdd';
-		$pass = 'QuXRzEeVCzHV';
-		$db = 'devicemedrbdd';
+		$host = DB_HOST;
+		$user = DB_USER;
+		$pass = DB_PASS;
+		$db = DB_NAME;
 		$nom_fichier = 'newsletter_'. date('Y-m-d H:i') .'.csv';
 
 		//format du CSV

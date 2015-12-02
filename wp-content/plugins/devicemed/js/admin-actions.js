@@ -1,6 +1,12 @@
 (function($) {
 	$(document).ready(function(){
 
+		if($('#acf-field-code').length) {
+		
+		}
+		if($('#acf-field-articles').length){
+			$('#acf-field-articles').attr('size',20);
+		}
 		if($('#acf-url_tracking_clicks').length) {
 			$('#acf-url_tracking_clicks').hide();
 		}
@@ -27,7 +33,8 @@
 					}
 				})
 			}
-			$('<div id="message" class="updated below-h2"><p>\
+			_links.push('<a href="javascript:void()" onclick="">Prévisualiser</a>')
+			$('<div id="message-pub" class="updated below-h2"><p>\
 				<span class="pub-metrics-clicks"></span>\
 				<span class="pub-metrics-display"></span>\
 				'+_links.join(' // ')+'\

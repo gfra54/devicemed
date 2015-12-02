@@ -1,6 +1,6 @@
 <?php	
-	mysql_connect('devicemedrbdd.mysql.db','devicemedrbdd','BG4Buths6X62');
-	mysql_select_db ("devicemedrbdd");
+	mysql_connect(DB_HOST,DB_USER,DB_PASSWORD);
+	mysql_select_db (DB_NAME);
 
 	if(isset($_GET['banniere_id']) && $_GET['banniere_id'] != '') {
 		$banniere_id = $_GET['banniere_id'];

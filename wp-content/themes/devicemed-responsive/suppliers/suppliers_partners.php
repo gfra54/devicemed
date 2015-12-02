@@ -5,8 +5,9 @@
 		<h2 class="title">Liste de nos fournisseurs partenaires</h2>
 		<p>
 			<?php
+
 				// On récupére les fournisseurs partenaires (premium)
-				$sqlFournisseurs = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 AND supplier_status=1";
+				$sqlFournisseurs = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 AND supplier_status=1 ORDER BY supplier_name ASC";
 				$resultFournisseurs = mysql_query($sqlFournisseurs);
 				$nbFournisseurs = mysql_num_rows($resultFournisseurs);
 				

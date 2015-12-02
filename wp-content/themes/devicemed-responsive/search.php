@@ -1,76 +1,42 @@
-<?php get_header(); ?>
+<?php 
+
+
+get_header(); 
+extracss('search');
+extrajs('utils');
+?>
+
+
 <div class="row column-content page-search">
 	<div class="col-md-9 col-sm-8 column-main">
 
 		<section class="results">
 			<h2 class="title">Résultats pour : <?php echo get_search_query(); ?></h2>
-<?php if (have_posts()): ?>
-<?php while (have_posts()): the_post(); ?>
-				<article>
-					<a href="<?php echo get_permalink($post->ID); ?>">
-						<span class="left">
-							<?php if ($thumbnail = devicemed_get_post_featured_thumbnail($post->ID)): ?>
-							<figure style="background-image:url('<?php echo $thumbnail->url; ?>')">
-								<img src="<?php echo $thumbnail->url; ?>" title="<?php echo $thumbnail->post_title; ?>" />
-							</figure>
-							<?php endif; ?>
-						</span>
-						<span class="right">
-							<header>
-								<?php if ($categories = get_the_category()): ?>
-								<span class="categories">
-								<?php
-									$items = array();
-
-									// On récupére les catégories
-									$arrayCategorie = array();
-									$sqlCategories = "SELECT * FROM menu_site";
-									$resultCategories = mysql_query($sqlCategories);
-
-									while($rowCategories = mysql_fetch_array($resultCategories)) {
-										$nomCategorie = $rowCategories['nom_menu'];
-
-										array_push($arrayCategorie, $nomCategorie);
-									}
-									
-									$nbCategoriesTab = sizeOf($categories);
-
-									foreach ($categories as $category)
-									{
-										$nomCategorieTemp = $category->cat_name;
-											
-										if(in_array($nomCategorieTemp, $arrayCategorie)) {
-											if($nbCategoriesTab == 1) {
-												$items[] = '<span class="category_principal">'.$category->cat_name.'</span>';
-											}
-										}else {
-											// On récupére la catégorie parente
-											$parentcat = $category->category_parent;
-											$nomCatParent = get_cat_name($parentcat);
-
-											if($nomCatParent != 'Dossiers') {
-												$items[] = '<span class="category_principal">'.$nomCatParent.' &gt; </span><span class="category">'.$category->cat_name.'</span>';
-											}else {
-												$items[] = '<span class="category">'.$category->cat_name.'</span>';
-											}
-										}
-									}
-									echo implode(', ', $items);
-								?>
-								</span>
-								<?php endif; ?>
-								<h2 class="title"><?php the_title(); ?></h2>
-							</header>
-							<p class="excerpt"><?php echo devicemed_get_post_excerpt(); ?></p>
-							<span class="metas">
-								<span class="date-wrapper">Le <span class="date"><?php echo get_the_date('l d F Y'); ?></span></span>
-								<span class="author-wrapper">par <span class="author"><?php echo get_the_author(); ?></span></span>
-							</span>
-						</span>
-					</a>
-				</article>
-<?php endwhile; ?>
-<?php endif; ?>
+            
+<script>
+  (function() {
+    var cx = '012805594588283116678:z1fggin6flc';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
 
 	</div><!-- .column-main -->
 <?php get_footer(); ?>
+
+<script>
+$(window).load(function(){
+   // $('.gsc-search-button INPUT').remove();
+   // $('<input type="button" value="Rechercher" onclick="$(\'FORM.gsc-search-box\').submit()">').appendTo('.gsc-search-button');
+    if(_s = qs('s')){
+        $('.gsc-input INPUT[type=text]').val(_s);
+        $('.gsc-search-button INPUT[type=image]').trigger('click');
+    }
+})
+</script>

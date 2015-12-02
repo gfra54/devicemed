@@ -1,4 +1,10 @@
 <?php
+function extracss($w) {
+?><link rel="stylesheet" href="<?php echo DEVICEMED_THEME_URL;?>/css/extra/<?php echo $w;?>.css" /><?php 
+}
+function extrajs($w) {
+?><script src="<?php echo DEVICEMED_THEME_URL;?>/js/extra/<?php echo $w;?>.js"></script><?php 
+}
 function addToURL($url,  $key, $value) {
     $info = parse_url( $url );
     parse_str( $info['query'], $query );

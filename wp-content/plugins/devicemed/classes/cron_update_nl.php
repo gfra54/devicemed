@@ -1,6 +1,6 @@
 <?php
-	mysql_connect('devicemedrbdd.mysql.db','devicemedrbdd','BG4Buths6X62') or die ("<font color=red>Erreur à la connexion</font>");
-	mysql_select_db ("devicemedrbdd") or die("<font color=red>Erreur à la sélection de la base</font>");
+	mysql_connect(DB_HOST,DB_USER,DB_PASSWORD) or die ("<font color=red>Erreur à la connexion</font>");
+	mysql_select_db (DB_NAME) or die("<font color=red>Erreur à la sélection de la base</font>");
 	
 	$sqlUpdateNewsletterEnvoyee = "UPDATE wordpress_dm_newsletter_test SET nl_envoyee='0'";
 	$resultUpdateNewsletterEnvoyee = mysql_query($sqlUpdateNewsletterEnvoyee);

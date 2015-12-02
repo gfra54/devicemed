@@ -1,6 +1,8 @@
 <?php 
+get_header(); 
 
-get_header(); ?>
+
+?>
 <div class='notConnected'>
 	<span>Vous devez être connecté(e) pour accéder au contenu de cette page.</span>
 	<a href='http://www.devicemed.fr/members/login'><div class='bt_connecter_archive'>Se connecter</div></a>
@@ -12,7 +14,7 @@ get_header(); ?>
 		<div id='contenu_archives'>
 			
 		
-			<?php foreach($GLOBALS['salons'] as $salon) { $mois = (strftime("%B %Y",strtotime($salon['dateheure'])));?>
+			<?php foreach(get_salons(20) as $salon) { $mois = (utf8_encode(strftime("%B %Y",strtotime($salon['date_debut']))));?>
 			<div class='bloc_manif'>
 				<?php if(!isset($mois_prec) || $mois != $mois_prec) {?>
 					<div class='mois_salons'><?php echo $mois;?></div>
@@ -20,7 +22,7 @@ get_header(); ?>
 				<div class='bloc_description_salons'>
 					<div class='titre_manif'><a href='<?php echo $salon['url'];?>' target='_blank'><?php echo $salon['titre'];?></a></div>
 					<div class='description_manif'><?php echo $salon['texte'];?></div>
-					<div class='date_salon'><?php echo $salon['date'];?> - <?php echo $salon['lieu'];?></div>
+					<div class='date_salon'><?php echo $salon['dates'];?> - <?php echo $salon['lieu'];?></div>
 				</div>
 			</div>
 			<?php $mois_prec=$mois;}?>

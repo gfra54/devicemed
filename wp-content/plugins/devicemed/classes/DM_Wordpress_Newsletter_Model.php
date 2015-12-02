@@ -344,10 +344,10 @@ class DM_Wordpress_Newsletter_Model extends DM_Wordpress_Model
 	
 	public function extractBdd() {
 		// configuration de la base de données base de données
-		$host = 'devicemedrbdd.mysql.db';
-		$user = 'devicemedrbdd';
-		$pass = 'BG4Buths6X62';
-		$db = 'devicemedrbdd';
+		$host = DB_HOST;
+		$user = DB_USER;
+		$pass = DB_PASS;
+		$db = DB_NAME;
 		$nom_fichier = 'newsletter_'. date('Y-m-d H:i') .'.csv';
 
 		//format du CSV

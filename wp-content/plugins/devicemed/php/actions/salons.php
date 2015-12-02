@@ -2,6 +2,48 @@
 
 setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
 
+function get_salons($nb=4) {
+	$args = array( 
+		'post_type'	=> 'salons',
+		'meta_query'	=> array(
+			'relation'		=> 'OR',
+			array(
+				'key'	  	=> 'date_debut',
+				'value'	  	=> date('Y-m-d'),
+				'compare' 	=> '>=',
+			),
+			array(
+				'key'	  	=> 'date_fin',
+				'value'	  	=> date('Y-m-d'),
+				'compare' 	=> '>=',
+			),
+		),		
+/*		'meta_key'=>'date_debut',
+		'orderby' => 'meta_value_num',
+		'order' => 'ASC'*/
+	);
+	if($salons = new WP_Query($args)) {
+		$sort=array();
+		foreach($salons->posts as $key => $salon) {
+			$sort[$key]=get_field('date_debut',$salon->ID);
+		}
+		asort($sort);
+//		$sort = array_reverse($sort,true);
+		$out=array();
+		foreach($sort as $key=>$val) {
+			if(count($out) <= $nb) {
+				$salon = $salons->posts[$key];
+				$tmp = array('titre'=>get_the_title($salon->ID));
+				foreach(array('url','date_debut','date_fin','description','lieu','dates') as $champ) {
+					$tmp[$champ]=get_field($champ,$salon->ID);
+				}
+				$out[]= $tmp;
+
+			}
+		}
+		return $out;
+	}
+}
 $GLOBALS['salons'] = array(
 	array(
 		'url'=>'http://www.pharmapackeurope.com/fr',

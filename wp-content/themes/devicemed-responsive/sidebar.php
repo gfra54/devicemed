@@ -216,7 +216,7 @@
 		<article>
 			<?php
 				// On récupére les fournisseurs partenaires
-				$sqlPartners = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1";
+				$sqlPartners = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 ORDER BY supplier_name ASC";
 				// echo "sqlPartners : ". $sqlPartners;
 				$resultPartners = mysql_query($sqlPartners);
 				$nbPartners = mysql_num_rows($resultPartners);

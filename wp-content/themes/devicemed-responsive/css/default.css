@@ -2107,10 +2107,9 @@ section.home-subscribe .section-newsletter .icon {
 }
 
 .page-single .column-main section .aligncenter {
-  width: 300px;
-  left: 50%;
   position: relative;
-  margin-left: -150px;
+  max-width: 100%;
+  height: auto;
 }
 
 .article_similaire {

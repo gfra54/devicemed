@@ -1,6 +1,6 @@
 <?php
 	try  {
-		$bdd = new PDO('mysql:host=devicemedrbdd.mysql.db;dbname=devicemedrbdd;charset=utf8', 'devicemedrbdd', 'BG4Buths6X62');
+		$bdd = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8', DB_USER, DB_PASSWORD);
 	}
 	catch (Exception $e)
 	{

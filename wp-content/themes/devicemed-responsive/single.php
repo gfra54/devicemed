@@ -14,9 +14,9 @@
 		</div>-->
 		<?php if ($categories = get_the_category()): ?>
 		<?php
-			$monUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+//			$monUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 			
-			if($monUrl != 'http://www.devicemed.fr/uncategorized/support-technique/3671') {
+			if(strstr($_SERVER['REQUEST_URI'], 3671)===false) {
 		?>
 		<div class="categories">
 			<?php
@@ -30,15 +30,14 @@
 				while($rowCategories = mysql_fetch_array($resultCategories)) {
 					$nomCategorie = $rowCategories['nom_menu'];
 
-					array_push($arrayCategorie, $nomCategorie);
+					array_push($arrayCategorie, trim($nomCategorie));
 				}
-				
 				$nbCategoriesTab = sizeOf($categories);
 
 				foreach ($categories as $category)
 				{
-					$nomCategorieTemp = $category->cat_name;
-											
+					$nomCategorieTemp = trim($category->cat_name);
+					$nomCatParent='';
 					if(!in_array($nomCategorieTemp, $arrayCategorie)) {
 						/*if($nbCategoriesTab == 1) {
 							$items[] = '<span class="category_principal">'.$category->cat_name.'</span>';
@@ -48,12 +47,19 @@
 						$parentcat = $category->category_parent;
 						$nomCatParent = get_cat_name($parentcat);
 
-						if($nomCatParent != 'Dossiers') {
+						if($nomCatParent && $nomCatParent != 'Dossiers') {
 							$items[] = '<span class="category_principal">'.$nomCatParent.' &gt; </span><span class="category">'.$category->cat_name.'</span>';
-						}/*else {
-							$items[] = '<span class="category">'.$category->cat_name.'</span>';
-						}*/
+						}
+						// if($nomCatParent != 'Dossiers') {
+						// 	$items[] = '<span class="category_principal">'.$nomCatParent.' &gt; </span><span class="category">'.$category->cat_name.'</span>';
+						// }else {
+						// 	$items[] = '<span class="category">'.$category->cat_name.'</span>';
+						// }
+					}else {
+						$items[] = '<span class="category_principal">'.$nomCategorieTemp.'</span>';
 					}
+
+
 				}
 				echo implode(', ', $items);
 			?>
@@ -61,7 +67,7 @@
 		<?php } ?>
 		<?php endif; ?>
 		<h1 class="title"><?php echo get_the_title(); ?></h1>
-		<?php if($monUrl != 'http://www.devicemed.fr/uncategorized/support-technique/3671') { ?>
+		<?php if(strstr($_SERVER['REQUEST_URI'], 3671)===false) { ?>
 			<div class="metas">
 				<span class="date-wrapper">Publié le <span class="date"><?php echo get_the_date('d F Y'); ?></span></span>
 				<span class="author-wrapper">par <span class="author"><?php the_author(); ?> </span></span>
@@ -127,7 +133,7 @@ $(function() {
 	Aucun autre article dans cette catégorie.
 <?php endif; ?>
 </section>-->
-<?php if($monUrl != 'http://www.devicemed.fr/uncategorized/support-technique/3671') { ?>
+<?php if(strstr($_SERVER['REQUEST_URI'], 3671)===false) { ?>
 	<section class='tags_posts'>
 	<?php
 		$posttags = get_the_tags();
