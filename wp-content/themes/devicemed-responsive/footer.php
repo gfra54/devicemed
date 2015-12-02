@@ -13,5 +13,6 @@
 <script src="<?php bloginfo('stylesheet_directory'); ?>/js/bootstrap.min.js"></script>
 <script src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.bxslider.min.js"></script>
 <script src="<?php bloginfo('stylesheet_directory'); ?>/js/colorbox/jquery.colorbox-min.js"></script>
+<?php if($GLOBALS['habillage']) { extrajs('pubs'); }?>
 </body>
 </html>

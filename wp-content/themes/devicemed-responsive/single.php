@@ -140,8 +140,11 @@ $(function() {
 		if ( $posttags ) {
 			$prefix = '<div class="titre_mot_cle">Mots-clés :</div> ';
 			foreach( $posttags as $tag ) {
-				echo $prefix . '<div class="mot_cle"><a href="' . get_tag_link( $tag->term_id ) . '" target="_blank">' . $tag->name . '</a></div>';
-				$prefix = ' ';
+
+				if(strtolower(substr($tag->name,0,3)) != 'nl-') {
+					echo $prefix . '<div class="mot_cle"><a href="' . get_tag_link( $tag->term_id ) . '" target="_blank">' . $tag->name . '</a></div>';
+					$prefix = ' ';
+				}
 			}
 		}
 	?>

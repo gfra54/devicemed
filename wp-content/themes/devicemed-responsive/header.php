@@ -108,7 +108,11 @@
 	<iframe id='infos_video' width="670" height="320" src="" frameborder="0" allowfullscreen></iframe>
 	<div id='close_popup_video_home'>X</div>
 </div>
-<body>
+
+<?php if(!afficher_pub('habillages')) {?>
+	<body>
+<?php }?>
+
 <div class='bloc_cachepopup'></div>
 <div class="container">
 <div class="bloc_top_header">

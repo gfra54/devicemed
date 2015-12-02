@@ -6,72 +6,132 @@
 
 //require_once(dirname(__FILE__).'/widgets/pubs_300x250.widget.php');
 
-function afficher_pub($type,$attr=array()) {
+function get_pubs($type=false) {
 	$args = array( 
-		'category_name'	=> $type,
-			'post_type'	=> 'pubs',
+		'post_type'	=> 'pubs',
+		'post_status'=>array('draft','publish')
 	);
+
+	if($pubs = new WP_Query($args)) {
+		$out = array();
+		foreach($pubs->posts as $post) {
+			if($type===false || check_espace($type,$post)){
+				$out[]=$post;
+			}
+		}
+		return $out;
+	}
+}
+function afficher_pub($type,$attr=array()) {
 	if(!empty($attr['raw'])){
 		$cadre=false;
 	}
-	if($pubs = new WP_Query($args)) {
-
-		if($pub = get_selected_pub($pubs->posts)) {
-
-			
-			$PUB = pub_metrics($pub);
-			if($type == 'habillages') {
-				$out = '<body class="body-habillage" data-url="'.get_field('url_cible',$PUB['ID']).'">';
-				$out.='<style>.body-habillage {
-					background-color:'.get_field('couleur_de_fond',$PUB['ID']).';
-					padding-top:'.get_field('hauteur',$PUB['ID']).'px;
-					background-image:url('.$PUB['url_tracking_display'].');
-				}</style>';
-				$cadre=false;
-			} else {
-				$cadre=true;
-				if($PUB['url_tracking_display']) {
-					$out = '<a href="'.addToURL($PUB['url_tracking_clicks'],'t',time()).'" target="_blank"><img src="'.addToURL($PUB['url_tracking_display'],'t',time()).'"></a>';
-				}
-			}
-			if($cadre){
-				echo '<section '.array_to_html_attributes($attr,array('class'=>'reclame')).'>';
-			}
-			echo $out;
-			echo get_field('code',$PUB['ID']);
-			
-			if($cadre){
-				echo '</section>';
-			}
+	if($pub = get_selected_pub($type,get_pubs($type))) {
+		if($ret = display_pub($pub,$attr)) {
+			echo $ret;
 			return true;
 		}
 	}
 	return false;
 }
 
-function get_selected_pub($pubs) {
+function display_pub($pub,$attr=array()) {
+	if(empty($pub)){
+		return false;
+	}
+	if(is_numeric($pub)) {
+		$pub = get_post($pub);
+	}
+	$PUB = pub_metrics($pub);
+
+	if($type == 'habillages') {
+		$GLOBALS['habillage']=true;
+		extracss('pubs');
+		$out = '<body class="body-habillage" data-url="'.addURLParameter($PUB['url_tracking_clicks'],'t',time()).'"';
+		$out.=' style="'.
+			'background-color:'.get_field('couleur_de_fond',$PUB['ID']).';'.
+			'padding-top:'.get_field('hauteur',$PUB['ID']).'px;'.
+			'background-image:url('.$PUB['url_tracking_display'].');"'.
+		'>';
+		$cadre=false;
+	} else {
+		$cadre=true;
+		if($PUB['url_tracking_display']) {
+			$style='';
+			$largeur_maximale = get_field('largeur_maximale',$PUB['ID']);
+			if(get_field('bordure',$PUB['ID'])) {
+				$style.='border:1px solid #ccc;';
+				$largeur_maximale-=2;
+			}
+			if($largeur_maximale>0) {
+				$style.='max-width:'.$largeur_maximale.'px;';
+			}
+			if($style){
+				$style = 'style="'.$style.'"';
+			}
+			$out = '<a href="'.addURLParameter($PUB['url_tracking_clicks'],'t',time()).'" target="_blank"><img '.$style.' src="'.addURLParameter($PUB['url_tracking_display'],'t',time()).'"></a>';
+		}
+	}
+	$ret='';
+	if($cadre){
+		$attr['data-id'] = $pub->ID;
+		$attr['data-titre'] = $pub->post_title;
+		$ret.= '<section '.array_to_html_attributes($attr,array('class'=>'reclame')).'>';
+	}
+	$ret.=$out;
+	$ret.=get_field('code',$PUB['ID']);
+	if($cadre){
+		$ret.='</section>';
+	}
+	return $ret;
+}
+
+function get_selected_pub($type, $pubs) {
 	$pubs_sort=array();
 	foreach($pubs as $key => $pub) {
-/*		$duree = get_field('duree',$pub->ID);
-		$difference = intval((time() - strtotime($pub->post_date)) / (3600 * 24));
-		
-		if(empty($duree) || $duree >= $difference) {*/
-		if($date_debut = get_field('date_debut',$pub->ID)) {
-			$date_debut.=' 00:00:00';
-		}
-		if($date_fin = get_field('date_fin',$pub->ID)) {
-			$date_fin.=' 23:59:59';
-		}
-		$ok=true;
-		if(!empty($date_debut) && time()<strtotime($date_debut)) {
-			$ok=false;
-		}
-		if(!empty($date_fin) && time()>strtotime($date_fin)) {
-			$ok=false;
-		}
-		if($ok) {
-			if(check_univers(get_field('univers',$pub->ID))){
-				$pubs_sort[$key] = get_field('pages',$pub->ID);
+		if(check_espace($type,$pub)) {
+			$public = $pub->post_status == 'publish';
+
+			if($date_debut = get_field('date_debut',$pub->ID)) {
+				$date_debut.=' 00:00:00';
+			}
+			if($date_fin = get_field('date_fin',$pub->ID)) {
+				$date_fin.=' 23:59:59';
+			}
+			$ok=true;
+			if(!empty($date_debut)) {
+				if(time()<strtotime($date_debut)) {
+					if($public) {
+						change_post_status($pub->ID,'draft');
+						$public=false;
+					}
+					$ok=false;
+				} else if(!$public){
+					change_post_status($pub->ID,'publish');
+					$public=true;
+				}
+			}
+
+			if(!empty($date_fin)) {
+				if(time()>strtotime($date_fin)) {
+					if($public) {
+						change_post_status($pub->ID,'draft');
+						$public=false;
+					}
+					$ok=false;
+				} else if(!$public){
+					change_post_status($pub->ID,'publish');
+					$public=true;
+				}
+			}
+
+			if(!$public) {
+				$ok=false;
+			}
+			if($ok) {
+				// if(check_univers(get_field('univers',$pub->ID))){
+					$pubs_sort[$key] = get_field('pages',$pub->ID);
+				// }
 			}
 		}
 	}
@@ -91,7 +151,15 @@ function get_selected_pub($pubs) {
 	}
 
 }
-function check_univers($univers) {
+function check_espace($type,$pub) {
+	$espaces = wp_get_post_terms($pub->ID,'pubs');
+	foreach($espaces as $espace) {
+		if($espace->slug == $type) {
+			return true;
+		}
+	}
+}
+/*function check_univers($univers) {
 
 	if($univers == "Toutes les pages") {
 		return true;
@@ -101,7 +169,7 @@ function check_univers($univers) {
 		return true;
 	}
 	return false;
-}
+}*/
 function check_pub_page($pages) {
 	if($pages) {
 		$pages = array_map('trim',explode(PHP_EOL,$pages));
@@ -164,3 +232,5 @@ function pub_metrics($pub) {
 	'post_status'      => 'publish',
 	'suppress_filters' => true );
 */
+
+
