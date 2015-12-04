@@ -1,5 +1,4 @@
 <?php 
-include 'utils.inc.php';
 $GLOBALS['NORENDER']=true;
 get_header(); 
 
@@ -11,12 +10,22 @@ $newsletters = array_reverse(glob('/home/devicemedr/www/wp-content/themes/device
 	<section class="new-newsletter">
 		<h2 class="title">Abonnement à la newsletter bimensuelle</h2>
 
-					<div class="form-label"> &nbsp; &nbsp; <small><label for="create-newsletter"><input id="create-newsletter" type="checkbox" onchange="if(this.checked) { $('#normal').hide();$('#partenaires').show(); } else {$('#partenaires').hide();$('#normal').show();}"> Recevoir les offres de nos partenaires</label></small></div>
-
-					<iframe id="normal" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://widget.mailjet.com/45493f8e7f7ab7abd7241dbcff7fd7dd07f726b6.html" width="100%" height="138"></iframe>
-
-					<iframe id="partenaires" style="display:none" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://widget.mailjet.com/565689424cb5a890ee70e37db49f4d11aa8108bd.html" width="100%" height="138"></iframe>
-
+		<div class="">
+				<form target="popup-news" action="https://app.mailjet.com/account/tools/widget/subscribe/1Ni" class="mailjet-widget-form" id="mailjet-widget-form" accept-charset="utf-8" method="post">      
+	            <div class="form-fieldset">
+	            	<div class="form-row">
+	                	<div class="form-field">
+	                		<input placeholder="Adresse mail" type="text" class="mailjet-widget-email-field" name="email" id="mailjet-widget-email-field-6900"  value="" size="20" maxlength="80"  />
+	            		</div>
+	            	</div>
+				<div class="form-row"><small><label for="changer-newsletter"><input id="changer-newsletter" type="checkbox" onchange="if(this.checked) { $('#normal').hide();$('#partenaires').show(); } else {$('#partenaires').hide();$('#normal').show();}"> Recevoir les offres de nos partenaires</label></small></div>
+				<div class="form-row">
+					<div class="form-submit input_sabonner_magazine">
+						<input type="submit" class="" value="S&#039;abonner">
+					</div>
+				</div>
+		</div>
+    	</form>
 
 
 				<div class="lien-derniere-nl"><b>Lire les dernières newsletters :</b></div><br />
@@ -43,3 +52,18 @@ $newsletters = array_reverse(glob('/home/devicemedr/www/wp-content/themes/device
 
 	</div><!-- .column-main -->
 <?php get_footer(); ?>
+<script>
+	$(document).ready(function(){
+		$('#changer-newsletter').on('change',function(){
+			if($(this).prop('checked')) {
+				_url = 'https://app.mailjet.com/account/tools/widget/subscribe/1Nj';
+			} else {
+				_url = 'https://app.mailjet.com/account/tools/widget/subscribe/1Ni';
+			}
+			$('#mailjet-widget-form').attr('action',_url);
+		});
+	})	
+	$('#mailjet-widget-form').on('submit',function(){
+		window.open('about:blank','popup-news','width=320,height=240,menubar=no,location=no,resizable=no,scrollbars=no,status=no')
+	});
+</script>

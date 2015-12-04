@@ -11,9 +11,9 @@
 			<td>
 				<select name="supplier_id">
 					<option value="0">Aucun</option>
-<?php foreach ($suppliers as $supplier_id => $supplier_name): ?>
-					<option value="<?php echo esc_attr($supplier_id); ?>"<?php echo $data['supplier_id'] == $supplier_id ? ' selected="selected"' : ''; ?>"><?php echo esc_html($supplier_name); ?></option>
-<?php endforeach; ?>
+<?php foreach ($suppliers as $supplier_id => $supplier_name){ ?>
+					<option value="<?php echo esc_attr($supplier_id); ?>" <?php echo $data['supplier_id'] == $supplier_id ? ' selected="selected"' : ''; ?>><?php echo esc_html($supplier_name); ?></option>
+<?php } ?>
 				</select>
 				<?php if ($errors['supplier_id']): ?><span class="description error"><?php echo $errors['supplier_id']; ?></span><?php endif; ?>
 			</td>
@@ -45,7 +45,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td>
+			<td colspan="2">
 				<?php
 				if ($data['supplier_video_media']):
 					$metas = $data['supplier_video_media'][0]['supplier_media_metas'];
@@ -61,7 +61,7 @@
 				?>
 									<div class="form-row">
 									<div class="form-field">
-										<iframe width="100%" height="450" src="<?php echo $media; ?>" allowfullscreen></iframe>
+										<iframe width="650" height="450" src="<?php echo $media; ?>" allowfullscreen></iframe>
 									</div>
 									</div>
 				<?php endif; ?>

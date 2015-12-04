@@ -113,7 +113,6 @@ class DM_Wordpress_Suppliers_Medias_Model extends DM_Wordpress_Model
 			$sqlSave .= " SET supplier_id=$supplier_id, supplier_user_id=$supplier_user_id, supplier_media_related_type='$supplier_media_related_type', supplier_media_metas='$supplier_media_metas', supplier_media_created='$supplier_media_created', supplier_media_modified='$supplier_media_modified', supplier_media_status=$supplier_media_status";
 			$sqlSave .= " WHERE supplier_media_related_id=$supplier_media_related_id";
 		}
-		
 		return $wpdb->query($sqlSave);
 	}
 }

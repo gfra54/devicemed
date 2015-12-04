@@ -94,7 +94,7 @@
 		<?php endif; ?>
 		</div>
 		<div class='links'>
-			<a href='http://www.devicemed.fr/newsletter/inscription'>Recevoir la newsletter</a>
+			<a href='http://www.devicemed.fr/newsletter/inscription'>Archives de la newsletter</a>
 		</div>
 		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='http://www.devicemed.fr/wp-content/uploads/devicemed_allemand.png' /></a></div>
 	</div>
@@ -269,6 +269,9 @@
 					</article></a>
 			<?php endforeach; ?>
 		</div>		
+		<?php if($supplier['supplier_social_youtube'] != '') { ?>
+			<p class='lien_video_youtube'>Pour davantage de vidéos : <?php echo "<a href='". $supplier['supplier_social_youtube'] ."' target='_blank'>". $supplier['supplier_social_youtube'] ."</a>"; ?></p>
+		<?php } ?>
 		<div class="Galeries-wrapper">
 			<?php foreach ($galleries as $gallery): ?>
 				<article>
@@ -306,9 +309,6 @@
 				</article>
 			<?php endforeach; ?>
 		</div>
-		<?php if($supplier['supplier_social_youtube'] != '') { ?>
-			<p class='lien_video_youtube'>Pour davantage de vidéos : <?php echo "<a href='". $supplier['supplier_social_youtube'] ."' target='_blank'>". $supplier['supplier_social_youtube'] ."</a>"; ?></p>
-		<?php } ?>
 	</section>
 <?php else: ?>
 	<section class="results">

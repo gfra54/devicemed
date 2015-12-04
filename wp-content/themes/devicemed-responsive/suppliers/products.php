@@ -107,7 +107,7 @@
 		<?php endif; ?>
 		</div>
 		<div class='links'>
-			<a href='http://www.devicemed.fr/newsletter/inscription'>Recevoir la newsletter</a>
+			<a href='http://www.devicemed.fr/newsletter/inscription'>Archives de la newsletter</a>
 		</div>
 		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='http://www.devicemed.fr/wp-content/uploads/devicemed_allemand.png' /></a></div>
 	</div>

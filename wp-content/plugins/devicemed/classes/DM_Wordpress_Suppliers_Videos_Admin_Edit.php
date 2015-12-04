@@ -110,22 +110,23 @@ class DM_Wordpress_Suppliers_Videos_Admin_Edit extends DM_Wordpress_Admin_Submen
 					
 					$saved = $suppliers_videos->admin_edit_update_video($fields, $supplier_video_id);
 				}
-
 				if ($supplier_video_id)
 				{
 					if ($data['supplier_video_content'])
 					{
 						$infos = DM_Wordpress_Suppliers_Videos::detect_provider_video($data['supplier_video_content']);	
-						$suppliers_medias->save(array(
-							'supplier_id' => $session['supplier_id'],
-							'supplier_user_id' => $session['ID'],
+
+						$tmp = array(
+							'supplier_id' => $data['supplier_id'],
+							'supplier_user_id' => $data['supplier_user_id'],
 							'supplier_media_related_id' => $supplier_video_id,
 							'supplier_media_related_type' => 'Video',
 							'supplier_media_metas' => serialize(array('filetype' => 'stream') + $infos),
 							'supplier_media_created' => date('Y-m-d H:i:s'),
 							'supplier_media_modified' => date('Y-m-d H:i:s'),
 							'supplier_media_status' => 1
-						), !empty($data['supplier_video_media'][0]['ID']) ? $data['supplier_video_media'][0]['ID'] : NULL);
+						);
+						$suppliers_medias->save($tmp, !empty($data['supplier_video_media'][0]['ID']) ? $data['supplier_video_media'][0]['ID'] : NULL);
 					}
 					wp_redirect($this->url(array('supplier_video_id' => $supplier_video_id ? $supplier_video_id : $saved)));
 				}
