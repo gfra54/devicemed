@@ -4,7 +4,7 @@ function acf_load_textad( $field ) {
     // reset choices
     $field['choices'] = array('');
 
-    $posts = get_pubs('textad');
+    $posts = get_pubs('newsletter-textad');
     if($posts) {
         foreach($posts as $post) {
             $field['choices'][$post->ID]=$post->post_title;
@@ -17,10 +17,11 @@ function acf_load_textad( $field ) {
 add_filter('acf/load_field/name=textad', 'acf_load_textad');
 
 function acf_load_bannieres_verticales( $field ) {
+
     // reset choices
     $field['choices'] = array(0=>'');
 
-    $posts = get_pubs('bannieres-verticales');
+    $posts = get_pubs('newsletter-droite');
     if($posts) {
         foreach($posts as $post) {
             $field['choices'][$post->ID]=$post->post_title;
@@ -30,16 +31,14 @@ function acf_load_bannieres_verticales( $field ) {
     
 }
 
-add_filter('acf/load_field/name=banniere_verticale_1', 'acf_load_bannieres_verticales');
-add_filter('acf/load_field/name=banniere_verticale_2', 'acf_load_bannieres_verticales');
-add_filter('acf/load_field/name=banniere_verticale_3', 'acf_load_bannieres_verticales');
+add_filter('acf/load_field/name=banniere_verticale', 'acf_load_bannieres_verticales');
 
 
 function acf_load_bannieres_horizontales( $field ) {
     // reset choices
     $field['choices'] = array(0=>'');
 
-    $posts = get_pubs('bannieres-horizontales');
+    $posts = get_pubs('newsletter-banniere-horizontale');
     if($posts) {
         foreach($posts as $post) {
             $field['choices'][$post->ID]=$post->post_title;

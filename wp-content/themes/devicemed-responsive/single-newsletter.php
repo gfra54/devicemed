@@ -1,4 +1,10 @@
-<?php  if($newsletter = $wp_query->post){
+<?php  
+
+if(check('source')) {
+	ob_start();
+}
+
+if($newsletter = $wp_query->post){
 
 
 $time = strtotime(get_field('date_envoi',$newsletter->ID));
@@ -7,8 +13,21 @@ if(!$date) {
 	$date = strftime("%#d %B %Y",$time);
 }
 $date = utf8_encode($date);
-$urls = array();
 
+
+$banners=array('right'=>array(),'top'=>'','bottom'=>'');
+$banners['top'] = display_pub(get_field('banniere_horizontale_en_haut',$newsletter->ID));
+$banners['bottom'] = display_pub(get_field('banniere_horizontale_en_haut',$newsletter->ID));
+
+$attr['style'].='width:125px;';
+
+
+foreach(get_field('bannieres_verticales') as $tmp) {
+	$banners['right'][] = display_pub($tmp['banniere_verticale']);
+}
+$titre_disp = get_field('titre_disp',$newsletter->ID);
+
+$urls = array();
 $args = array( 
     'post_type' => 'post',
     'tag' => get_field('mot_cle',$newsletter->ID)
@@ -26,7 +45,7 @@ foreach($urls as $url) {
 	} else {
 		$data=false;
 	}
-	$tmp = file_get_contents($url);
+	$tmp = file_get_contents(str_replace('.local','.fr',$url));
 	$content = getHtmlVal('<div class="content">','</article>',$tmp);
 	$text = !empty($data['text']) ? $data['text'] : (cleantext(getHtmlVal('<p><strong>','</strong></p>',$content)));
 	$image = (getHtmlVal('<div class=\'image_clicable\'><a href="','"',$tmp));
@@ -35,15 +54,6 @@ foreach($urls as $url) {
 	$articles[] = array('text'=>$text,'image'=>$image,'category'=>$category,'title'=>$title,'url'=>add_utm($url));
 }
 
-$banners=array('right'=>array(),'top'=>'','bottom'=>'');
-$banners['top'] = display_pub(get_field('banniere_horizontale_en_haut',$newsletter->ID));
-$banners['bottom'] = display_pub(get_field('banniere_horizontale_en_haut',$newsletter->ID));
-
-$attr['style'].='width:125px;';
-foreach(array(1,2,3) as $i) {
-	$banners['right'][] = display_pub(get_field('banniere_verticale_'.$i,$newsletter->ID));
-}
-$titre_disp = get_field('titre_disp',$newsletter->ID)
 
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -111,43 +121,7 @@ $titre_disp = get_field('titre_disp',$newsletter->ID)
                 </tr>
               </tbody>
             </table>
-				<?php /*
-            <table 
-            width="100%" id="top_news">
-              <tbody>
-                <tr>
-                  <td align="left">
-                    <h2 style="font-size:14px;color:#333;font-family:Arial;">Sommaire de la newsletter du <?php echo utf8_encode(strftime("%d %B %Y",strtotime($date_envoi)));?></h2>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <table width="100%" style=
-            "border-bottom:0;border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; margin-left:0px;"
-            id="inhaltsverzeichnis">
-              <tbody>
-                <tr>
-                  <td>
-                    <ul style="padding-left:20px;margin-top:0px;margin-bottom:0;">
-					<?php foreach($articles as $article) {?>
-                      <li style="font-family:Arial;"><a style=
-                      "color:#333333;text-decoration:none;" href=
-                      "<?php echo $article['url'];?>"
-                      target="_blank"><span style=
-                      "color:#333333;font-size:14px;line-height:19px;text-decoration:none;color:#333333 !important;">
-                      <?php if(!empty($article['category'])) { echo $article['category'];?></a>&nbsp;-&nbsp;</span><?php }?><!----><a style=
-                      "color:#005ea8;font-size:14px;text-decoration:none;" href=
-                      "<?php echo $article['url'];?>"
-                      target="_blank"><span style=
-                      "color:#005ea8;font-size:14px;line-height:19px;text-decoration:none;"><?php echo $article['title'];?></span></a></li><!---->
-						<?php }?>
-                    </ul>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-			*/?>
+				
             <table width="100%" style=
             "border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; margin-left:0px;"
             id="content">
@@ -325,5 +299,41 @@ $titre_disp = get_field('titre_disp',$newsletter->ID)
   </table>
 </body>
 </html>
-<?php }?>
+<?php }
+if(check('source')) {
+	$page = ob_get_contents();
+	ob_end_clean();
+	$page = sanitize_output($page);
+	?>
+
+<!DOCTYPE html>
+<html lang="fr">
+
+
+<head>
+
+	<meta charset="UTF-8">
+	<title>Source de <?php echo $newsletter->post_title;?></title>
+	<style type="text/css">
+	body {
+		text-align: center;
+		font-family:sans-serif;
+	}
+	textarea {
+		display: block;
+		margin: 10px auto;
+		width: 90%;
+		height: 300px;
+	}
+	</style>
+</head>
+<body>
+<h1>Code source de &laquo; <?php echo $newsletter->post_title;?> &raquo;</h1>
+<textarea readonly="true" class="js-copytextarea" onfocus="this.select()"><?php echo str_replace('>','&gt;',$page);?></textarea>
+<p>Clic droit sur la zone de texte, puis "Copier"</p>
+</body>
+</html>
+<?php
+}
+?>
 

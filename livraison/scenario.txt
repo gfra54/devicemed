@@ -1,8 +1,11 @@
-installer acf et cpt
+installer acf (b3JkZXJfaWQ9NzAyNjB8dHlwZT1kZXZlbG9wZXJ8ZGF0ZT0yMDE1LTEyLTA0IDA5OjExOjE3) et cpt
 
 créer cat pubs (importer avec le plugins)
 
 activer admin menu editor RPMI4GP6PRMGS3E7446WDVVHHPD2EY6W
+
+activer 3 column admin et Adminimize (bof)
+
 
 changeer url absolue dans le menu de wp vers url relative
 
