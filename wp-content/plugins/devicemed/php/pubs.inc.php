@@ -27,7 +27,7 @@ function afficher_pub($type,$attr=array()) {
 		$cadre=false;
 	}
 	if($pub = get_selected_pub($type,get_pubs($type))) {
-		if($ret = display_pub($pub,$attr)) {
+		if($ret = display_pub($pub,$attr,$type)) {
 			echo $ret;
 			return true;
 		}
@@ -35,7 +35,7 @@ function afficher_pub($type,$attr=array()) {
 	return false;
 }
 
-function display_pub($pub,$attr=array()) {
+function display_pub($pub,$attr=array(),$type=false) {
 	if(empty($pub)){
 		return false;
 	}
@@ -44,7 +44,7 @@ function display_pub($pub,$attr=array()) {
 	}
 	$PUB = pub_metrics($pub);
 
-	if($type == 'habillages') {
+	if($type == 'site-habillage') {
 		$GLOBALS['habillage']=true;
 		extracss('pubs');
 		$out = '<body class="body-habillage" data-url="'.addURLParameter($PUB['url_tracking_clicks'],'t',time()).'"';
@@ -138,21 +138,25 @@ function get_selected_pub($type, $pubs) {
 	asort($pubs_sort);
 	$pubs_sort = array_reverse($pubs_sort,true);
 
-	$normal = array();
+	$pubs_pages = array();
+	$pubs_normal = array();
 	foreach($pubs_sort as $id_pub => $pages) {
 		if(check_pub_page($pages)) {
-			return $pubs[$id_pub];
+			$pubs_pages[]=$pubs[$id_pub];
 		} else if(empty($pages)){
-			$normal[]=$pubs[$id_pub];
+			$pubs_normal[]=$pubs[$id_pub];
 		}
 	}
-	if(count($normal)) {
-		return $normal[array_rand($normal)];
+	if(count($pubs_pages)) {
+		return $pubs_pages[array_rand($pubs_pages)];
+	} else
+	if(count($pubs_normal)) {
+		return $pubs_normal[array_rand($pubs_normal)];
 	}
 
 }
 function check_espace($type,$pub) {
-	$espaces = wp_get_post_terms($pub->ID,'pubs');
+	$espaces = wp_get_post_terms($pub->ID,'emplacements');
 	foreach($espaces as $espace) {
 		if($espace->slug == $type) {
 			return true;
@@ -203,7 +207,7 @@ function pub_metrics($pub) {
 	foreach($pub as $k=>$v) {
 		$out[$k]=$v;
 	}
-	if($out['image'] = sinon(wp_get_attachment_image_src(get_post_thumbnail_id($pub->ID),'full'),0)) {
+	if($out['image'] = get_post_thumbnail_url($pub->ID)) {
 		if(!$url_tracking_display = get_field('url_tracking_display',$pub->ID)) {
 			if($url_tracking_display = bitly_shorten($out['image'])) {
 				update_post_meta($pub->ID, 'url_tracking_display', $url_tracking_display);

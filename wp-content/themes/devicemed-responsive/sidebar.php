@@ -106,7 +106,7 @@
 	}
 ?>
 <div id="sidebar" class="column col-md-3 col-sm-4 column-sidebar">
-	<?php afficher_pub('sidebar-banniere',array('id'=>'sidebar-banniere'));?>
+	<?php afficher_pub('site-colonne');?>
 
 	<?php include_once("agenda.php"); ?>
 

@@ -1,0 +1,122 @@
+{
+    "pubs": {
+        "column-taxonomy": {
+            "column-name": "column-taxonomy",
+            "type": "column-taxonomy",
+            "clone": "",
+            "label": "Taxonomy",
+            "width": "20",
+            "width_unit": "%",
+            "taxonomy": "emplacements",
+            "filter": "off",
+            "sort": "on",
+            "edit": "off",
+            "enable_term_creation": "off"
+        },
+        "title": {
+            "column-name": "title",
+            "type": "title",
+            "clone": "",
+            "label": "Titre",
+            "width": "",
+            "width_unit": "%",
+            "sort": "on",
+            "edit": "off"
+        },
+        "column-meta": {
+            "column-name": "column-meta",
+            "type": "column-meta",
+            "clone": "",
+            "label": "Date de d\u00e9but",
+            "width": "",
+            "width_unit": "%",
+            "field": "date_debut",
+            "field_type": "",
+            "before": "",
+            "after": "",
+            "filter": "off",
+            "sort": "on"
+        },
+        "column-meta-1": {
+            "column-name": "column-meta-1",
+            "type": "column-meta",
+            "clone": "1",
+            "label": "Date de fin",
+            "width": "",
+            "width_unit": "%",
+            "field": "date_fin",
+            "field_type": "",
+            "before": "",
+            "after": "",
+            "filter": "off",
+            "sort": "on"
+        }
+    },
+    "salons": {
+        "title": {
+            "column-name": "title",
+            "type": "title",
+            "clone": "",
+            "label": "Titre",
+            "width": "",
+            "width_unit": "%",
+            "sort": "on",
+            "edit": "off"
+        },
+        "column-meta": {
+            "column-name": "column-meta",
+            "type": "column-meta",
+            "clone": "",
+            "label": "Date de d\u00e9but",
+            "width": "",
+            "width_unit": "%",
+            "field": "date_debut",
+            "field_type": "date",
+            "date_format": "d\/m\/Y",
+            "before": "",
+            "after": "",
+            "filter": "on",
+            "sort": "on"
+        },
+        "column-meta-1": {
+            "column-name": "column-meta-1",
+            "type": "column-meta",
+            "clone": "1",
+            "label": "Date de fin",
+            "width": "",
+            "width_unit": "%",
+            "field": "date_fin",
+            "field_type": "date",
+            "date_format": "d\/m\/Y",
+            "before": "",
+            "after": "",
+            "filter": "off",
+            "sort": "on"
+        },
+        "title-1": {
+            "column-name": "title-1",
+            "type": "title",
+            "clone": "1",
+            "label": "Titre",
+            "width": "",
+            "width_unit": "%",
+            "sort": "on",
+            "edit": "off"
+        },
+        "column-meta-2": {
+            "column-name": "column-meta-2",
+            "type": "column-meta",
+            "clone": "2",
+            "label": "Lieu",
+            "width": "",
+            "width_unit": "%",
+            "field": "lieu",
+            "field_type": "",
+            "before": "",
+            "after": "",
+            "filter": "off",
+            "sort": "on",
+            "date_format": "d\/m\/Y"
+        }
+    }
+}

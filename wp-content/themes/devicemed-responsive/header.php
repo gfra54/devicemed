@@ -109,7 +109,7 @@
 	<div id='close_popup_video_home'>X</div>
 </div>
 
-<?php if(!afficher_pub('habillages')) {?>
+<?php if(!afficher_pub('site-habillage')) {?>
 	<body>
 <?php }?>
 
@@ -172,7 +172,7 @@
 	// echo "supplier_id : ". $supplier_id;
 ?>
 <section class="ad header-ad">
-	<?php afficher_pub('megaban', array('class' => 'megaban'));?>
+	<?php afficher_pub('site-banniere-horizontale');?>
 	<?php
 /*		$monUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 		$_SESSION['arrayBanniereAfficher'] = '';

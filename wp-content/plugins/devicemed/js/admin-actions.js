@@ -1,6 +1,16 @@
 (function($) {
 	$(document).ready(function(){
 
+
+		if(_post_type = getParameterByName('post_type')) {
+			if(_post_type != 'post') {
+				$('.row-actions span.inline').remove();
+			}
+			if(_post_type != 'post' && _post_type != 'newsletter') {
+				$('.row-actions span.view').remove();
+			}
+		}
+
 		if($('#acf-field-code').length) {
 		
 		}
@@ -50,7 +60,7 @@
 					}
 					if($('#acf-field-url_cible').val() && $('#featured-image-url').val()) {
 						_html='<a href="'+$('#acf-field-url_cible').val()+'" target="_blank">';
-						_html+='<img src="'+$('#featured-image-url').val()+'">';
+						_html+='<img style="max-width:100%" src="'+$('#featured-image-url').val()+'">';
 						_html+='</a>';
 					} else {
 						_html = $('#acf-field-code').val();
@@ -80,4 +90,10 @@
 		$.get('/wp-content/plugins/devicemed/php/ajax.php?w='+_w+'&'+$.param(_params),_callback);
 	}
 
+	function getParameterByName(name) {
+	    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+	        results = regex.exec(location.search);
+	    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
 })( jQuery );
