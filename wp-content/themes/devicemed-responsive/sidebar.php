@@ -113,18 +113,8 @@
 	<?php
 	$monUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 	
-	if($monUrl == "http://www.devicemed.fr/") {
-	?>
-		<section id="sidebar-issues">
-			<header>
-				<div class="right-side">
-					<h1 class="title">L’INFO EN VIDÉO</h1>
-				</div>
-			</header>
-			<!--<iframe width="230" height="150" src="https://www.youtube.com/embed/8J6pTmegit0" frameborder="0" allowfullscreen></iframe>-->				
-			<img src='http://www.devicemed.fr/wp-content/uploads/videos/video_dmexperts.png' style="padding-top:12px;" id="click_video" width='230px' />
-		</section>
-	<?php } ?>
+	afficher_pub('cadre-video');?>
+
 	<section id="sidebar-issues">
 		<header>
 			<div class="right-side">
@@ -229,9 +219,9 @@
 					$nomFournisseur2 = str_replace(' ','-', $nomFournisseur2);
 					
 					if($j == $nbPartners) {
-						echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></h3>";
+						echo "<h3 class='title2'><a class=partner-link href=\"http://www.devicemed.fr/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></h3>";
 					}else {
-						echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></h3><br />";
+						echo "<h3 class='title2'><a class=partner-link href=\"http://www.devicemed.fr/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></h3><br />";
 					}
 
 					$j++;

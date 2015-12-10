@@ -23,13 +23,20 @@ function get_pubs($type=false) {
 	}
 }
 function afficher_pub($type,$attr=array()) {
+	if($return = sinon($attr,'return')) {
+		unset($attr['return']);
+	}
 	if(!empty($attr['raw'])){
 		$cadre=false;
 	}
 	if($pub = get_selected_pub($type,get_pubs($type))) {
 		if($ret = display_pub($pub,$attr,$type)) {
-			echo $ret;
-			return true;
+			if($return) {
+				return $ret;
+			} else {
+				echo $ret;
+				return true;
+			}
 		}
 	}
 	return false;
@@ -43,6 +50,23 @@ function display_pub($pub,$attr=array(),$type=false) {
 		$pub = get_post($pub);
 	}
 	$PUB = pub_metrics($pub);
+
+	if($type == 'cadre-video') {
+		$out='<section id="sidebar-issues">';
+		$out.='<header>';
+		$out.='<div class="right-side">';
+		$out.='<h1 class="title">'.get_field('titre_video',$PUB['ID']).'</h1>';
+		$out.='</div>';
+		$out.='</header><article>';
+		if($url_video = get_field('url_video',$PUB['ID'])) {
+			$video = resizeVideo(gestVideo($url_video));
+			$out.=$video;
+		}
+		$out.=get_field('code',$PUB['ID']);
+		$out.='</article></section>';
+		return $out;
+	} else
+	
 
 	if($type == 'site-habillage') {
 		$GLOBALS['habillage']=true;

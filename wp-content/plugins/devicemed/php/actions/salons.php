@@ -36,6 +36,9 @@ function get_salons($nb=4) {
 				$tmp = array('titre'=>get_the_title($salon->ID));
 				foreach(array('url','date_debut','date_fin','description','lieu','dates') as $champ) {
 					$tmp[$champ]=get_field($champ,$salon->ID);
+					if($champ == 'url') {
+						$tmp[$champ]= http($tmp[$champ]);
+					}
 				}
 				$out[]= $tmp;
 

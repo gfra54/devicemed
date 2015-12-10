@@ -2,8 +2,15 @@
 
 function get_post_thumbnail_url($post_id) {
 	if($image_url = get_post_meta($post_id, 'fifu_image_url', true)) {
+
 		return $image_url;
-	} else return sinon(wp_get_attachment_image_src(get_post_thumbnail_id($post_id),'full'),0);
+	} else {
+		if($id = get_post_thumbnail_id($post_id)) {
+			if($tmp = wp_get_attachment_image_src($id,'full')) {
+				return $tmp[0];
+			}
+		}
+	}
 }
 
 

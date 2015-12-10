@@ -17,7 +17,7 @@ $date = utf8_encode($date);
 
 $banners=array('right'=>array(),'top'=>'','bottom'=>'');
 $banners['top'] = display_pub(get_field('banniere_horizontale_en_haut',$newsletter->ID));
-$banners['bottom'] = display_pub(get_field('banniere_horizontale_en_haut',$newsletter->ID));
+$banners['bottom'] = display_pub(get_field('banniere_horizontale_en_bas',$newsletter->ID));
 
 $attr['style'].='width:125px;';
 

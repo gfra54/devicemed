@@ -38,3 +38,7 @@
 .gsc-orderby {
 	display: none !important;
 }
+
+.gsc-tabsArea, .gsc-adBlock {
+	display: none !important;
+}

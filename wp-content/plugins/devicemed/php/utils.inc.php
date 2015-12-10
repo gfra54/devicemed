@@ -1,5 +1,37 @@
 <?php
+function HtmlTagAttributesToString($params) {
+	$out='';
+	foreach($params as $k=>$v) {
+		$out.=$out ? ' ':'';
+		$out.=$k;
+		if($v) {
+			$out.='="'.htmlspecialchars($v).'"';
+		}
+	}
+	return $out;
+}
+function parseHtmlTagAttributes($attr){
 
+	$champs = str_replace('="','=',stripslashes($attr));
+	$params=array();
+	$tab = explode('"',$champs);
+	foreach($tab as $k=>$v) {
+		$tmp = explode('=',$v);
+		if($key=trim($tmp[0])) {
+			unset($tmp[0]);
+			$params[$key] = implode('=',$tmp);
+		}
+	}
+	return $params;
+
+}
+
+function http($url){
+	if(!strstr($url, 'http')) {
+		$url = 'http://'.$url;
+	}
+	return $url;
+}
 function sanitize_output($buffer) {
 
     $search = array(
