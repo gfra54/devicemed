@@ -18,9 +18,6 @@
 			}
 		}
 
-		if($('#acf-field-code').length) {
-		
-		}
 		if($('#acf-field_565f064efd6c2').length){
 			$('#acf-field_565f064efd6c2').prop('disabled',true);
 		}
@@ -30,9 +27,9 @@
 		if($('#acf-url_tracking_display').length) {
 			$('#acf-url_tracking_display').hide();
 		}*/
-		if($('#acf-field-url_cible').length) {
-			_url_tracking_clicks = $('#acf-field-url_tracking_clicks').val();
-			_url_tracking_display = $('#acf-field-url_tracking_display').val();
+		if($('[data-name=url_cible] INPUT').length) {
+			_url_tracking_clicks = $('[data-name=url_tracking_clicks] INPUT').val();
+			_url_tracking_display = $('[data-name=url_tracking_display] INPUT').val();
 			_links = []
 			if(_url_tracking_clicks) {
 				_links.push('<a href="'+_url_tracking_clicks+'+" target="_blank">Voir les stats de click</a>');
@@ -84,8 +81,8 @@
 					'+_links.join(' // ')+'\
 				</p></div>').insertAfter('#titlediv');
 			}
-			$('#acf-field-url_cible').on('change',function(){
-				$('#acf-field-url_tracking_clicks').val("");
+			$('[data-name=url_cible] INPUT').on('change',function(){
+				$('[data-name=url_tracking_clicks] INPUT').val("");
 			});
 		}
 
