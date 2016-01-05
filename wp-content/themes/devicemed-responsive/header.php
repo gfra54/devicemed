@@ -4,9 +4,9 @@
 <head>
 	<meta charset="<?php bloginfo('charset'); ?>">
 	<meta name="viewport" content="width=device-width">
-	<title><?php wp_title(' – ', true, 'right'); ?><?php bloginfo('name'); ?></title>
+	<title>!<?php wp_title(' – ', true, 'right'); ?><?php bloginfo('name'); ?></title>
 	<link rel="profile" href="http://gmpg.org/xfn/11">
-	<link href="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/favicon.ico" rel="SHORTCUT ICON">
+	<link href="/wp-content/themes/devicemed-responsive/images/favicon.ico" rel="SHORTCUT ICON">
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -36,7 +36,7 @@
 			// $(window).scrollTop(280);
 		});
 		
-		$("#click_video").click(function() {
+/*		$("#click_video").click(function() {
 			$.ajax({
 				url: 'http://www.devicemed.fr/wp-content/themes/devicemed-responsive/ajout_clic_video.php?banniere_id=50',
 				dataType: 'json',
@@ -49,7 +49,7 @@
 				}
 			});
 			// $(window).scrollTop(280);
-		});
+		});*/
 		
 		$(".bloc_cachepopup").click(function() {
 			$(".bloc_cachepopup").hide();
@@ -100,7 +100,7 @@
 	Vous devez être connecté pour accéder à cette archive.
 	<br /><br />
 	<div id='lien_notConnected_connecter'>
-		<a href='http://www.devicemed.fr/members/login'>Se connecter</a>
+		<a href='/members/login'>Se connecter</a>
 	</div>
 	<div id='close_popup'>X</div>
 </div>
@@ -116,7 +116,7 @@
 <div class='bloc_cachepopup'></div>
 <div class="container">
 <div class="bloc_top_header">
-	<div class='vogel_logo'><img src='http://www.devicemed.fr/wp-content/uploads/vogel_logo.png' /></div>
+	<div class='vogel_logo'><img src='/wp-content/uploads/vogel_logo.png' /></div>
 	<div class='contenu_droit'>
 			<div class="links">
 				<a href="/">Accueil</a>
@@ -137,9 +137,9 @@
 			</div>
 		<?php endif; ?>
 		<div class='links'>
-			<a href='http://www.devicemed.fr/newsletter/inscription'>Archives de la newsletter</a>
+			<a href='/newsletter/inscription'>Archives de la newsletter</a>
 		</div>
-		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='http://www.devicemed.fr/wp-content/uploads/devicemed_allemand.png' /></a></div>
+		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='/wp-content/uploads/devicemed_allemand.png' /></a></div>
 	</div>
 </div>
 <header id="header">

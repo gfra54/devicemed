@@ -172,7 +172,7 @@
 		<section id="sidebar-issues">
 			<header>
 				<div class="right-side">
-					<h1 class="title"><a href='http://www.devicemed.fr/archives'>Dernier numéro</a></h1>
+					<h1 class="title"><a href='/archives'>Dernier numéro</a></h1>
 				</div>
 			</header>	
 			<?php
@@ -209,12 +209,12 @@
 				</div>
 			</header>	
 			<?php
-				echo "<a href='http://www.devicemed.fr/wp-content/uploads/archives/pdf/juillet_aout2014.pdf' target='_blank'><article>";
+				echo "<a href='/wp-content/uploads/archives/pdf/juillet_aout2014.pdf' target='_blank'><article>";
 					echo "<div class='right-side'>";
 						echo "<span class='issue'>Guide de l'acheteur</span>";
 						echo "<span class='download'>Consulter le guide</span>";
 					echo "</div>";
-					echo "<div class='left-side' style=\"background-image:url('http://www.devicemed.fr/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
+					echo "<div class='left-side' style=\"background-image:url('/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
 						// echo "<img src='$urlImg' />";
 					echo "</div>";
 				echo "</article></a>";

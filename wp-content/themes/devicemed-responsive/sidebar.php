@@ -118,7 +118,7 @@
 	<section id="sidebar-issues">
 		<header>
 			<div class="right-side">
-				<h1 class="title"><a href='http://www.devicemed.fr/archives'>Dernier numéro</a></h1>
+				<h1 class="title"><a href='/archives'>Dernier numéro</a></h1>
 			</div>
 		</header>	
 		<?php
@@ -156,12 +156,12 @@
 		</header>	
 		<?php
 			if ($session = DM_Wordpress_Members::session()):
-				echo "<a href='http://www.devicemed.fr/wp-content/uploads/archives/pdf/juillet_aout2014.pdf' target='_blank'><article>";
+				echo "<a href='/wp-content/uploads/archives/pdf/juillet_aout2014.pdf' target='_blank'><article>";
 					echo "<div class='right-side'>";
 						echo "<span class='issue'>Guide de l'acheteur</span>";
 						echo "<span class='download'>Consulter le guide</span>";
 					echo "</div>";
-					echo "<div class='left-side' style=\"background-image:url('http://www.devicemed.fr/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
+					echo "<div class='left-side' style=\"background-image:url('/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
 						// echo "<img src='$urlImg' />";
 					echo "</div>";
 				echo "</article></a>";
@@ -171,7 +171,7 @@
 						echo "<span class='issue'>Guide de l'acheteur</span>";
 						echo "<span class='download'>Consulter le guide</span>";
 					echo "</div>";
-					echo "<div class='left-side' style=\"background-image:url('http://www.devicemed.fr/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
+					echo "<div class='left-side' style=\"background-image:url('/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
 						// echo "<img src='$urlImg' />";
 					echo "</div>";
 				echo "</article>";
@@ -219,9 +219,9 @@
 					$nomFournisseur2 = str_replace(' ','-', $nomFournisseur2);
 					
 					if($j == $nbPartners) {
-						echo "<h3 class='title2'><a class=partner-link href=\"http://www.devicemed.fr/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></h3>";
+						echo "<h3 class='title2'><a class=partner-link href=\"/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></h3>";
 					}else {
-						echo "<h3 class='title2'><a class=partner-link href=\"http://www.devicemed.fr/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></h3><br />";
+						echo "<h3 class='title2'><a class=partner-link href=\"/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></h3><br />";
 					}
 
 					$j++;
@@ -237,17 +237,17 @@
 		</header>	
 		<article>
 			<?php
-				echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/tag/implant\" target='_blank'>Implants</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/tag/moulage\" target='_blank'>Moulage</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/tag/medtec\" target='_blank'>Medtec</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/tag/impression-3d\" target='_blank'>Impression 3D</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/tag/iso-13485\" target='_blank'>ISO 13485</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/tag/usinage\" target='_blank'>Usinage</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/tag/pharmapack\" target='_blank'>Pharmapack</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/tag/salle-blanche\" target='_blank'>Salle blanche</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/tag/instrument-chirurgical\" target='_blank'>Instruments chirurgicaux</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/tag/mesure-3d\" target='_blank'>Mesure 3D</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"http://www.devicemed.fr/tag/tracabilite\" target='_blank'>Traçabilité</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/implant\" target='_blank'>Implants</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/moulage\" target='_blank'>Moulage</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/medtec\" target='_blank'>Medtec</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/impression-3d\" target='_blank'>Impression 3D</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/iso-13485\" target='_blank'>ISO 13485</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/usinage\" target='_blank'>Usinage</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/pharmapack\" target='_blank'>Pharmapack</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/salle-blanche\" target='_blank'>Salle blanche</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/instrument-chirurgical\" target='_blank'>Instruments chirurgicaux</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/mesure-3d\" target='_blank'>Mesure 3D</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/tracabilite\" target='_blank'>Traçabilité</a></h3><br />";
 			?>
 		</article>
 	</section>

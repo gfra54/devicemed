@@ -7,7 +7,7 @@
 	<meta charset="<?php bloginfo('charset'); ?>">
 	<meta name="viewport" content="width=device-width">
 	<title><?php wp_title(' – ', true, 'right'); ?><?php bloginfo('name'); ?></title>
-	<link href="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/favicon.ico" rel="SHORTCUT ICON">
+	<link href="/wp-content/themes/devicemed-responsive/images/favicon.ico" rel="SHORTCUT ICON">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
 	<!-- Bootstrap -->
@@ -68,7 +68,7 @@
 	Vous devez être connecté pour accéder à cette archive.
 	<br /><br />
 	<div id='lien_notConnected_connecter'>
-		<a href='http://www.devicemed.fr/members/login'>Se connecter</a>
+		<a href='/members/login'>Se connecter</a>
 	</div>
 	<div id='close_popup'>X</div>
 </div>
@@ -76,7 +76,7 @@
 <div class='bloc_cachepopup'></div>
 <div class="container">
 <div class="bloc_top_header">
-	<div class='vogel_logo'><img src='http://www.devicemed.fr/wp-content/uploads/vogel_logo.png' /></div>
+	<div class='vogel_logo'><img src='/wp-content/uploads/vogel_logo.png' /></div>
 	<div class='contenu_droit'>
 		<div class="links">
 		<?php if ($session = DM_Wordpress_Members::session()): ?>
@@ -87,9 +87,9 @@
 		<?php endif; ?>
 		</div>
 		<div class='links'>
-			<a href='http://www.devicemed.fr/newsletter/inscription'>Archives de la newsletter</a>
+			<a href='/newsletter/inscription'>Archives de la newsletter</a>
 		</div>
-		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='http://www.devicemed.fr/wp-content/uploads/devicemed_allemand.png' /></a></div>
+		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='/wp-content/uploads/devicemed_allemand.png' /></a></div>
 	</div>
 </div>
 <header id="header">
@@ -134,7 +134,7 @@
 			$image = $banniereAfficher[0]['image'];
 			$lien = $banniereAfficher[0]['lien'];
 			
-			echo "<a href='http://www.devicemed.fr/?url=$lien&id=$banniere_id' id='$banniere_id' target=_blank><img src='http://www.devicemed.fr/wp-content/uploads/banniere/$image' /></a>";
+			echo "<a href='/?url=$lien&id=$banniere_id' id='$banniere_id' target=_blank><img src='/wp-content/uploads/banniere/$image' /></a>";
 		?>
 	</section>
 <?php } ?>
@@ -148,7 +148,7 @@
 	<section class="results">
 		<h2 class="title"><?php echo esc_html($supplier['supplier_name']); ?></h2>
 		<div class='retour_recherche_fournisseur'>
-			<a href='http://www.devicemed.fr/suppliers/'>
+			<a href='/suppliers/'>
 				Retour à la page de recherche d’un fournisseur
 			</a>
 		</div>
@@ -229,7 +229,7 @@ foreach ($videos as $video):
 $mediasTemp = DM_Wordpress_Suppliers_Videos::get_medias($video['ID']);
 $thumbnail = $mediasTemp[1];
 ?>
-		<a href='<?php echo "http://www.devicemed.fr/posts/details/video/". $video['ID']; ?>'><article>
+		<a href='<?php echo "/posts/details/video/". $video['ID']; ?>'><article>
 			<figure style="background-image:url('<?php echo esc_attr($thumbnail); ?>')">
 				<img src="<?php echo esc_attr($thumbnail); ?>" />
 			</figure>
@@ -356,7 +356,7 @@ $thumbnail = $mediasTemp[1];
 					}
 					else
 					{
-						header('Location:http://www.devicemed.fr/?inscription_fournisseur=1');
+						header('Location:/?inscription_fournisseur=1');
 						$data['supplier_user_e-mail'] = '';
 					}
 				}
@@ -385,7 +385,7 @@ $thumbnail = $mediasTemp[1];
 				$image = $banniereAfficher[0]['image'];
 				$lien = $banniereAfficher[0]['lien'];
 				
-				echo "<a href='http://www.devicemed.fr/?url=$lien&id=$banniere_id' id='$banniere_id' target=_blank><img src='http://www.devicemed.fr/wp-content/uploads/banniere/$image' /></a>";
+				echo "<a href='/?url=$lien&id=$banniere_id' id='$banniere_id' target=_blank><img src='/wp-content/uploads/banniere/$image' /></a>";
 			?>
 			</section>
 		<?php } ?>
@@ -413,7 +413,7 @@ $thumbnail = $mediasTemp[1];
 		<section id="sidebar-issues">
 			<header>
 				<div class="right-side">
-					<h1 class="title"><a href='http://www.devicemed.fr/archives'>Dernier numéro</a></h1>
+					<h1 class="title"><a href='/archives'>Dernier numéro</a></h1>
 				</div>
 			</header>	
 			<?php
@@ -448,12 +448,12 @@ $thumbnail = $mediasTemp[1];
 			</header>		
 			<?php
 				if ($session = DM_Wordpress_Members::session()):
-					echo "<a href='http://www.devicemed.fr/wp-content/uploads/archives/pdf/juillet_aout2014.pdf' target='_blank'><article>";
+					echo "<a href='/wp-content/uploads/archives/pdf/juillet_aout2014.pdf' target='_blank'><article>";
 						echo "<div class='right-side'>";
 							echo "<span class='issue'>Guide de l'acheteur</span>";
 							echo "<span class='download'>Consulter le guide</span>";
 						echo "</div>";
-						echo "<div class='left-side' style=\"background-image:url('http://www.devicemed.fr/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
+						echo "<div class='left-side' style=\"background-image:url('/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
 							// echo "<img src='$urlImg' />";
 						echo "</div>";
 					echo "</article></a>";
@@ -463,7 +463,7 @@ $thumbnail = $mediasTemp[1];
 							echo "<span class='issue'>Guide de l'acheteur</span>";
 							echo "<span class='download'>Consulter le guide</span>";
 						echo "</div>";
-						echo "<div class='left-side' style=\"background-image:url('http://www.devicemed.fr/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
+						echo "<div class='left-side' style=\"background-image:url('/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
 							// echo "<img src='$urlImg' />";
 						echo "</div>";
 					echo "</article>";

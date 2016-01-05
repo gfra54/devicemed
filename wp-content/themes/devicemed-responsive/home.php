@@ -126,7 +126,7 @@ for($i = $posts_per_column; $i < count($posts); $i++) {
 <?php endforeach; ?>
 <section class="home-gallery">
 	<div class="section-header">
-		<h1 class="title"><a href='http://www.devicemed.fr/galeries'>Galerie</a></h1>
+		<h1 class="title"><a href='/galeries'>Galerie</a></h1>
 	</div>
 	<div class="section-gallery-wrapper">
 		<ul>

@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width">
 	<title><?php wp_title(' – ', true, 'right'); ?><?php bloginfo('name'); ?></title>
 	<link rel="profile" href="http://gmpg.org/xfn/11">
-	<link href="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/favicon.ico" rel="SHORTCUT ICON">
+	<link href="/wp-content/themes/devicemed-responsive/images/favicon.ico" rel="SHORTCUT ICON">
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -77,7 +77,7 @@
 	Vous devez être connecté pour accéder à cette archive.
 	<br /><br />
 	<div id='lien_notConnected_connecter'>
-		<a href='http://www.devicemed.fr/members/login'>Se connecter</a>
+		<a href='/members/login'>Se connecter</a>
 	</div>
 	<div id='close_popup'>X</div>
 </div>
@@ -85,7 +85,7 @@
 <div class='bloc_cachepopup'></div>
 <div class="container">
 <div class="bloc_top_header">
-	<div class='vogel_logo'><img src='http://www.devicemed.fr/wp-content/uploads/vogel_logo.png' /></div>
+	<div class='vogel_logo'><img src='/wp-content/uploads/vogel_logo.png' /></div>
 	<div class='contenu_droit'>
 		<?php if ($session = DM_Wordpress_Members::session()): ?>
 			<div class="links">
@@ -100,9 +100,9 @@
 			</div>
 		<?php endif; ?>
 		<div class='links'>
-			<a href='http://www.devicemed.fr/newsletter/inscription'>Archives de la newsletter</a>
+			<a href='/newsletter/inscription'>Archives de la newsletter</a>
 		</div>
-		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='http://www.devicemed.fr/wp-content/uploads/devicemed_allemand.png' /></a></div>
+		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='/wp-content/uploads/devicemed_allemand.png' /></a></div>
 	</div>
 </div>
 <header id="header">
@@ -141,9 +141,9 @@
 		
 		$banniere_model = new DM_Wordpress_Banniere_Model();
 		
-		if($monUrl == 'http://www.devicemed.fr/salons') {
+		if($monUrl == '/salons') {
 			$banniereAfficher = $banniere_model->display_banniere(2, $_SESSION['arrayBanniereAfficher'], 'true');
-		}elseif($monUrl == 'http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle') {
+		}elseif($monUrl == '/category/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle') {
 			$banniereAfficher = $banniere_model->display_banniere(2, $_SESSION['arrayBanniereAfficher'], 'false', 'true');
 		}else {
 			$banniereAfficher = $banniere_model->display_banniere(2, $_SESSION['arrayBanniereAfficher'], 'false');
@@ -154,9 +154,9 @@
 		$image = $banniereAfficher[0]['image'];
 		$lien = $banniereAfficher[0]['lien'];
 		
-		if($monUrl == 'http://www.devicemed.fr/category/dossiers/composants-oem/mecaniques') {
+		if($monUrl == '/category/dossiers/composants-oem/mecaniques') {
 			echo "<a href='http://www.device-med.fr/?url=http://www.balseal.com/medical-devices&id=19' id='19' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/bal_seal.gif' /></a>";
-		}elseif($monUrl == 'http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle') {
+		}elseif($monUrl == '/category/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle') {
 			echo "<a href='http://www.device-med.fr/?url=http://www.precitec.fr&id=30' id='30' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/precitec.gif' /></a>";
 		}else {
 			echo "<a href='http://www.device-med.fr/?url=$lien&id=$banniere_id' id='$banniere_id' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/$image' /></a>";

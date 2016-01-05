@@ -52,7 +52,7 @@
 			<p class='texte_magazine'>Votre demande d'abonnement a été prise en compte. Vous recevrez le dernier numéro gratuitement dès que possible.</p>
 			<p class='texte_magazine'><b>Rappel :</b> si vous souhaitez prolonger votre abonnement gratuit aux numéros suivants, il vous sera nécessaire de remplir le formulaire d'abonnement inclus dans le numéro que vous allez recevoir.</p>
 			<p class='texte_magazine'>Bonne lecture !</p>
-			<div id='bt_retour_magazine'><a href='http://www.devicemed.fr/'>Retour à la page d'accueil</a></div>
+			<div id='bt_retour_magazine'><a href='/'>Retour à la page d'accueil</a></div>
 		<?php } ?>
 	</section>
 

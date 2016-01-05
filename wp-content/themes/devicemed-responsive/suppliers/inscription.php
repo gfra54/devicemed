@@ -78,8 +78,8 @@
 				<p>Pour être référencé gratuitement parmi les fournisseurs de fabricants de dispositifs médicaux, dans ce répertoire mais aussi dans le <span id='bloc_guide_acheteur'>Guide de l'acheteur</span>, merci de remplir ce formulaire :</p>
 				<input type="hidden" name="action" value="create" />
 			<?php endif; ?>
-			<?php if (!empty($errors['general'])): ?><div class='error-general'><?php echo $errors['general']; ?></div><div class="title5" id="retour_fournisseurs2"><a href="http://www.devicemed.fr/suppliers/">Retour à la page de recherche d'un fournisseur</a></div><?php endif; ?>
-			<?php if (!empty($success['general'])): ?><div class='success-general'><?php echo $success['general']; ?></div><div class="title5" id="retour_fournisseurs2"><a href="http://www.devicemed.fr/suppliers/">Retour à la page de recherche d'un fournisseur</a></div><?php endif; ?>
+			<?php if (!empty($errors['general'])): ?><div class='error-general'><?php echo $errors['general']; ?></div><div class="title5" id="retour_fournisseurs2"><a href="/suppliers/">Retour à la page de recherche d'un fournisseur</a></div><?php endif; ?>
+			<?php if (!empty($success['general'])): ?><div class='success-general'><?php echo $success['general']; ?></div><div class="title5" id="retour_fournisseurs2"><a href="/suppliers/">Retour à la page de recherche d'un fournisseur</a></div><?php endif; ?>
 			<?php if (empty($success['general'])): ?>
 				<div class="form-fieldset">
 					<div class="form-row">

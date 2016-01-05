@@ -34,7 +34,7 @@
 					</div>
 				<?php }else { ?>
 					<div class="form-row">
-						<div class="form-submit"><a href='http://www.devicemed.fr/'><div class='lien_accueil_abonnement'>Retour à la page d'accueil</div></a></div>
+						<div class="form-submit"><a href='/'><div class='lien_accueil_abonnement'>Retour à la page d'accueil</div></a></div>
 					</div>
 				<?php } ?>
 			</div>

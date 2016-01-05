@@ -3,7 +3,7 @@
 	<div class="col-md-9 col-sm-8 column-main">
 	<section class="catalogues">
 		<h2 class="title">Tous nos numéros</h2>
-		<div id='soustitre_archives'>Pour recevoir gratuitement le magazine papier, <a href="http://www.devicemed.fr/magazine/abonnement" target="_blank"><b>cliquez ici</b></a>.</div>
+		<div id='soustitre_archives'>Pour recevoir gratuitement le magazine papier, <a href="/magazine/abonnement" target="_blank"><b>cliquez ici</b></a>.</div>
 		<div id='contenu_archives'>
 			<?php if ($session = DM_Wordpress_Members::session()) { ?>
 				<?php 

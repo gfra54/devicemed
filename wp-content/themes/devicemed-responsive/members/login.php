@@ -13,7 +13,7 @@
 				<div class="form-row">
 					<div class="form-field"><input id="login-password" type="password" name="user_password" value="<?php echo esc_attr($data['user_password']); ?>" placeholder="Mot de passe" /></div>
 					<div class="form-message"><?php if (!empty($errors['user_password'])): ?><div class="form-error"><?php echo $errors['user_password']; ?></div><?php endif; ?></div>
-					<p class='mdp-oublie-login'><a href='http://www.devicemed.fr/members/get_password'>Mot de passe oublié ?</a></p>
+					<p class='mdp-oublie-login'><a href='/members/get_password'>Mot de passe oublié ?</a></p>
 				</div>
 				<div class="form-row">
 					<input type="checkbox" name="rester_connecter" /><label class="rester_connecter">Rester connecté</span>

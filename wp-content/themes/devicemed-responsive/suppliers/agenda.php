@@ -1,7 +1,7 @@
 <section id="sidebar-issues">
 	<header>
 		<div class="right-side">
-			<h1 class="title"><a href='http://www.devicemed.fr/salons'>Salons et manifestations</a></h1>
+			<h1 class="title"><a href='/salons'>Salons et manifestations</a></h1>
 		</div>
 	</header>	
 	<article>

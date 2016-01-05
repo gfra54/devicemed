@@ -5,7 +5,7 @@ get_header();
 ?>
 <div class='notConnected'>
 	<span>Vous devez être connecté(e) pour accéder au contenu de cette page.</span>
-	<a href='http://www.devicemed.fr/members/login'><div class='bt_connecter_archive'>Se connecter</div></a>
+	<a href='/members/login'><div class='bt_connecter_archive'>Se connecter</div></a>
 </div>
 <div class="row column-content page-members">
 	<div class="col-md-9 col-sm-8 column-main">

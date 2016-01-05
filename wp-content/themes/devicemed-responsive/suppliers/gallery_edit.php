@@ -7,7 +7,7 @@
 	<meta charset="<?php bloginfo('charset'); ?>">
 	<meta name="viewport" content="width=device-width">
 	<title><?php wp_title(' – ', true, 'right'); ?><?php bloginfo('name'); ?></title>
-	<link href="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/favicon.ico" rel="SHORTCUT ICON">
+	<link href="/wp-content/themes/devicemed-responsive/images/favicon.ico" rel="SHORTCUT ICON">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
 	<!-- Bootstrap -->
@@ -37,7 +37,7 @@
 
 <div class="container">
 <div class="bloc_top_header">
-	<div class='vogel_logo'><img src='http://www.devicemed.fr/wp-content/uploads/vogel_logo.png' /></div>
+	<div class='vogel_logo'><img src='/wp-content/uploads/vogel_logo.png' /></div>
 	<div class='contenu_droit'>
 		<div class="links">
 		<?php if ($session = DM_Wordpress_Members::session()): ?>
@@ -48,9 +48,9 @@
 		<?php endif; ?>
 		</div>
 		<div class='links'>
-			<a href='http://www.devicemed.fr/newsletter/inscription'>Archives de la newsletter</a>
+			<a href='/newsletter/inscription'>Archives de la newsletter</a>
 		</div>
-		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='http://www.devicemed.fr/wp-content/uploads/devicemed_allemand.png' /></a></div>
+		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='/wp-content/uploads/devicemed_allemand.png' /></a></div>
 	</div>
 </div>
 <header id="header">
@@ -383,7 +383,7 @@ $(function () {
 		<section id="sidebar-issues">
 			<header>
 				<div class="right-side">
-					<h1 class="title"><a href='http://www.devicemed.fr/salons'>Salons et manifestations</a></h1>
+					<h1 class="title"><a href='/salons'>Salons et manifestations</a></h1>
 				</div>
 			</header>	
 			<article>
@@ -395,7 +395,7 @@ $(function () {
 		<section id="sidebar-issues">
 			<header>
 				<div class="right-side">
-					<h1 class="title"><a href='http://www.devicemed.fr/archives'>Dernier numéro</a></h1>
+					<h1 class="title"><a href='/archives'>Dernier numéro</a></h1>
 				</div>
 			</header>	
 			<?php
@@ -429,12 +429,12 @@ $(function () {
 				</div>
 			</header>	
 			<?php
-				echo "<a href='http://www.devicemed.fr/wp-content/uploads/archives/pdf/juillet_aout2014.pdf' target='_blank'><article>";
+				echo "<a href='/wp-content/uploads/archives/pdf/juillet_aout2014.pdf' target='_blank'><article>";
 					echo "<div class='right-side'>";
 						echo "<span class='issue'>Guide de l'acheteur</span>";
 						echo "<span class='download'>Consulter le guide</span>";
 					echo "</div>";
-					echo "<div class='left-side' style=\"background-image:url('http://www.devicemed.fr/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
+					echo "<div class='left-side' style=\"background-image:url('/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
 						// echo "<img src='$urlImg' />";
 					echo "</div>";
 				echo "</article></a>";

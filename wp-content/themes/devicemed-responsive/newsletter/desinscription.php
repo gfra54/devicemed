@@ -22,7 +22,7 @@
 						<div class="form-submit"><input type="submit" value="Validation" /></div>
 					</div>
 				<?php }else { ?>
-					<a href='http://www.devicemed.fr/'><div id='bt_retour_accueil_desinscription'>Retour à la page d'accueil</div></a>
+					<a href='/'><div id='bt_retour_accueil_desinscription'>Retour à la page d'accueil</div></a>
 				<?php } ?>
 			</div>
 		</form>
