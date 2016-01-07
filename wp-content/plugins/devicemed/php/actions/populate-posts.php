@@ -1,6 +1,5 @@
 <?php
 function acf_load_textad( $field ) {
-    
     // reset choices
     $field['choices'] = array('');
 
@@ -44,6 +43,7 @@ function acf_load_bannieres_horizontales( $field ) {
             $field['choices'][$post->ID]=$post->post_title;
         }
     }
+
     return $field;
     
 }

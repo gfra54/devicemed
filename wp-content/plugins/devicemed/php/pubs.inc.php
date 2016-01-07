@@ -68,6 +68,7 @@ function display_pub($pub,$attr=array(),$type=false) {
 	} else
 	
 
+
 	if($type == 'site-habillage') {
 		$GLOBALS['habillage']=true;
 		extracss('pubs');
@@ -78,8 +79,10 @@ function display_pub($pub,$attr=array(),$type=false) {
 			'background-image:url('.$PUB['url_tracking_display'].');"'.
 		'>';
 		$cadre=false;
+
 	} else {
 		$cadre=true;
+//			if($PUB['ID'] == 5067) mse($PUB);
 		if($PUB['url_tracking_display']) {
 			$style='';
 			$largeur_maximale = get_field('largeur_maximale',$PUB['ID']);
@@ -100,6 +103,7 @@ function display_pub($pub,$attr=array(),$type=false) {
 	if($cadre){
 		$attr['data-id'] = $pub->ID;
 		$attr['data-titre'] = $pub->post_title;
+		$attr['data-type'] = $type;
 		$ret.= '<section '.array_to_html_attributes($attr,array('class'=>'reclame')).'>';
 	}
 	$ret.=$out;

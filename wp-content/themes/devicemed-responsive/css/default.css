@@ -2110,6 +2110,8 @@ section.home-subscribe .section-newsletter .icon {
   position: relative;
   max-width: 100%;
   height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .article_similaire {

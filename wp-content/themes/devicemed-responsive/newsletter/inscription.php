@@ -2,7 +2,6 @@
 $GLOBALS['NORENDER']=true;
 get_header(); 
 
-$newsletters = array_reverse(glob('/home/devicemedr/www/wp-content/themes/devicemed-responsive/newsletter/newsletter-*.php'));
 
 ?>
 <div class="row column-content page-members">
@@ -31,11 +30,29 @@ $newsletters = array_reverse(glob('/home/devicemedr/www/wp-content/themes/device
 				<div class="lien-derniere-nl"><b>Lire les dernières newsletters :</b></div><br />
 				<div class='link_newsletter'>
 
-					<?php foreach($newsletters as $newsletter) { 
+				<?php 
+				$args = array( 
+						'post_type'	=> 'newsletter',
+						'post_status'=>array('publish')
+					);
+
+					if($newsletters = new WP_Query($args)) {
+						foreach($newsletters->posts as $post) {
+							$date_envoi = get_field('date_envoi',$post->ID);
+							if(strtotime($date_envoi)<=time()) {
+								$url = get_permalink($post->ID);
+								$titre = get_the_title($post->ID);
+								echo 'Le '.(strftime("%d %B %Y",strtotime($date_envoi))). ' : <a href="'.$url.'">'.$titre.'</a><br>';
+							}
+						}
+					}
+					$newsletters = array_reverse(glob('/home/devicemedr/www/wp-content/themes/devicemed-responsive/newsletter/newsletter-*.php'));
+
+					foreach($newsletters as $newsletter) { 
 							$url = str_replace('/home/devicemedr/www/','/',$newsletter);
 							include $newsletter;
 							if(strtotime($date_envoi)<=time()) {
-								echo 'Le '.utf8_encode(strftime("%d %B %Y",strtotime($date_envoi))). ' : <a href="'.$url.'">'.$titre.'</a><br>';
+								echo 'Le '.(strftime("%d %B %Y",strtotime($date_envoi))). ' : <a href="'.$url.'">'.$titre.'</a><br>';
 							}
 					}?>
 
