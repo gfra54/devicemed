@@ -8,10 +8,10 @@ extrajs('utils');
 
 
 <div class="row column-content page-search">
-	<div class="col-md-9 col-sm-8 column-main">
+  <div class="col-md-9 col-sm-8 column-main">
 
-		<section class="results">
-			<h2 class="title">Résultats pour : <?php echo get_search_query(); ?></h2>
+    <section class="results">
+      <h2 class="title">Résultats pour : <?php echo get_search_query(); ?></h2>
             
 <script>
   (function() {
@@ -23,11 +23,16 @@ extrajs('utils');
         '//cse.google.com/cse.js?cx=' + cx;
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(gcse, s);
+
+  
+
   })();
+
+
 </script>
 <gcse:search></gcse:search>
 
-	</div><!-- .column-main -->
+  </div><!-- .column-main -->
 <?php get_footer(); ?>
 
 <script>
@@ -38,5 +43,22 @@ $(window).load(function(){
         $('.gsc-input INPUT[type=text]').val(_s);
         $('.gsc-search-button INPUT[type=image]').trigger('click');
     }
-})
+
+  setInterval(function(){
+    $('.gsc-webResult.gsc-result').each(function(){
+      _lien = $(this).find('a.gs-title');
+      if(!_lien.hasClass('ok')) {
+        _lien.addClass('ok');
+        _lien.attr('target','_self');
+        if(_href = _lien.attr('href')) {
+          if(_href.indexOf('https')>-1) {
+          console.log(_lien.attr('href'));
+            $(this).remove();
+          }
+        }
+      
+      }
+    });
+  },100);
+});
 </script>

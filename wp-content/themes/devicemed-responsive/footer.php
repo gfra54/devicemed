@@ -16,3 +16,23 @@
 <?php if($GLOBALS['habillage']) { extrajs('pubs'); }?>
 </body>
 </html>
+
+<script>
+<?php if($_SERVER['REQUEST_URI'] == '/suppliers/videos/6') {
+	$legendes = array(
+		'Clapets anti-retour',
+		'Raccords Luers cannelés',
+		'Pinces clamps',
+		'Valves hémostatiques',
+		'Qosina',
+		'Crans d\'arrêt',
+		'Seringues',
+		'Adaptateurs Tuohy Borst'
+	);
+	foreach($legendes as $k=>$legende) {
+		if($legende) {
+			echo '$(".content .legend:eq('.$k.')").html(\''.addslashes($legende).'\');';
+		}
+	}
+}?>
+</script>
