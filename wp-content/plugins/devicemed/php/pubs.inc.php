@@ -6,15 +6,23 @@
 
 //require_once(dirname(__FILE__).'/widgets/pubs_300x250.widget.php');
 
+$GLOBALS['PUBS'] = false;
 function get_pubs($type=false) {
-	$args = array( 
-		'post_type'	=> 'pubs',
-		'post_status'=>array('draft','publish')
-	);
+	if(!$GLOBALS['PUBS']) {
+		$args = array( 
+			'post_type'	=> 'pubs',
+			'post_status'=>array('draft','publish'),
+			'posts_per_page'=>1000
+		);
+		
 
-	if($pubs = new WP_Query($args)) {
+		if($pubs = new WP_Query($args)) {
+			$GLOBALS['PUBS']=$pubs->posts;
+		}
+	}
+	if($GLOBALS['PUBS']) {
 		$out = array();
-		foreach($pubs->posts as $post) {
+		foreach($GLOBALS['PUBS'] as $post) {
 			if($type===false || check_espace($type,$post)){
 				$out[]=$post;
 			}
@@ -23,6 +31,8 @@ function get_pubs($type=false) {
 	}
 }
 function afficher_pub($type,$attr=array()) {
+
+
 	if($return = sinon($attr,'return')) {
 		unset($attr['return']);
 	}

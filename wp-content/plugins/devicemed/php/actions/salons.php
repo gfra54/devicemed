@@ -5,6 +5,7 @@ setlocale (LC_TIME, 'fr_FR.utf8','fra');
 function get_salons($nb=4) {
 	$args = array( 
 		'post_type'	=> 'salons',
+		'posts_per_page'=>1000,
 		'meta_query'	=> array(
 			'relation'		=> 'OR',
 			array(

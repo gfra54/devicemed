@@ -147,7 +147,7 @@
 	<div class="sidebar">
 		<div class="search">
 			<form role="search" method="get" action="<?php bloginfo('url'); ?>">
-				<input type="text" name="s" placeholder="Rechercher dans les articles" value="" />
+				<input type="text" name="s" placeholder="Rechercher dans les articles" value="<?php echo get_search_query();?>" />
 				<input type="submit" value="Rechercher" />
 			</form>
 		</div>

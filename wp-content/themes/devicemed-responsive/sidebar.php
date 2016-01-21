@@ -108,12 +108,9 @@
 <div id="sidebar" class="column col-md-3 col-sm-4 column-sidebar">
 	<?php afficher_pub('site-colonne');?>
 
-	<?php include_once("agenda.php"); ?>
+	<?php afficher_pub('cadre-video');?>
 
-	<?php
-	$monUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-	
-	afficher_pub('cadre-video');?>
+	<?php include_once("agenda.php"); ?>
 
 	<section id="sidebar-issues">
 		<header>

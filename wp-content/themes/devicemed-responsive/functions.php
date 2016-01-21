@@ -4,7 +4,8 @@ add_theme_support('post-thumbnails');
 register_nav_menus(array(
 	'primary' => __('Menu principal', 'devicemed'),
 	'footer-primary' => __('Bas de page - Première ligne', 'devicemed'),
-	'footer-secondary' => __('Bas de page - Deuxième ligne', 'devicemed')
+	'footer-secondary' => __('Bas de page - Deuxième ligne', 'devicemed'),
+	'home' => __('Page d\'accueil', 'devicemed'),
 ));
 
 function devicemed_header_menu($id) {

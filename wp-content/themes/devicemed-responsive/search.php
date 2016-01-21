@@ -1,42 +1,84 @@
-<?php 
+<?php
+/**
+ * The template for displaying search results pages.
+ *
+ * @package WordPress
+ * @subpackage Twenty_Fifteen
+ * @since Twenty Fifteen 1.0
+ */
 
+get_header(); ?>
+<style>
+.screen-reader-text {
+	display: none;
+}
+</style>
 
-get_header(); 
-extracss('search');
-extrajs('utils');
-?>
+		<?php 
 
+		
+		if ( have_posts() ) : ?>
 
 <div class="row column-content page-search">
 	<div class="col-md-9 col-sm-8 column-main">
 
 		<section class="results">
-			<h2 class="title">Résultats pour : <?php echo get_search_query(); ?></h2>
-            
-<script>
-  (function() {
-    var cx = '012805594588283116678:z1fggin6flc';
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-        '//cse.google.com/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
-  })();
-</script>
-<gcse:search></gcse:search>
+			<h2 class="title">Résultats trouvés pour "<span id="search_query"><?php echo get_search_query(); ?></span>"</h2>
 
-	</div><!-- .column-main -->
+			<?php
+			// Start the loop.
+			while ( have_posts() ) : the_post(); ?>
+
+				<?php
+				/*
+				 * Run the loop for the search to output the results.
+				 * If you want to overload this in a child theme then include a file
+				 * called content-search.php and that will be used instead.
+				 */
+				get_template_part( 'content', 'search' );
+
+			// End the loop.
+			endwhile;
+
+			// Previous/next page navigation.
+			the_posts_pagination( array(
+				'mid_size'			=> 10,
+				'show_all'			=>true,
+				'prev_text'          => 'Retour &nbsp;',
+				'next_text'          => '&nbsp; Suite',
+				'before_page_number' => '',
+			) );
+
+		// If no content, include the "No posts found" template.
+		else :
+			get_template_part( 'content', 'none' );
+
+		endif;
+		?>
+		</section>
+	</div>
+
 <?php get_footer(); ?>
 
 <script>
-$(window).load(function(){
-   // $('.gsc-search-button INPUT').remove();
-   // $('<input type="button" value="Rechercher" onclick="$(\'FORM.gsc-search-box\').submit()">').appendTo('.gsc-search-button');
-    if(_s = qs('s')){
-        $('.gsc-input INPUT[type=text]').val(_s);
-        $('.gsc-search-button INPUT[type=image]').trigger('click');
-    }
+$('.results ARTICLE').each(function(){
+	if(_href = $(this).find('a').attr('href')) {
+		if(_href.indexOf('/pubs/')>-1) {
+			$(this).remove();
+		}
+	}
+});
+
+
+$('.results .right').each(function(){
+		var src_str = $(this).html();
+		var term = $('#search_query').html();
+		term = term.replace(/(\s+)/,"(<[^>]+>)*$1(<[^>]+>)*");
+		var pattern = new RegExp("("+term+")", "gi");
+
+		src_str = src_str.replace(pattern, "<strong>$1</strong>");
+		src_str = src_str.replace(/(<strong>[^<>]*)((<[^>]+>)+)([^<>]*<\/strong>)/,"$1</strong>$2<strong>$4");
+
+		$(this).html(src_str);
 })
 </script>
