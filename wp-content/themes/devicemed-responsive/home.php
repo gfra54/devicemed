@@ -95,7 +95,14 @@ for($i = $posts_per_column; $i < count($posts); $i++) {
 </div>-->
 <?php
 $categories = array(5,8,7,6,4,3,9);
-foreach ($categories as $category_id):
+
+//me(  );
+
+//$cat = wp_get_nav_menu_items('home');
+//me($cat);
+//foreach ($categories as $category_id):
+foreach(wp_get_nav_menu_items(1370) as $menuitem):
+	$category_id = $menuitem->object_id;
 	$category = get_category($category_id);
 	$posts = devicemed_home_get_last_posts_by_category($category_id, 3);
 	$posts_per_column = floor(count($posts) / 2);
