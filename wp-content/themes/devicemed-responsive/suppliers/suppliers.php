@@ -1,4 +1,138 @@
-<?php get_header(); ?>
+<?php 
+if(isset($_GET['convert_fournisseurs'])){
+
+
+	if(isset($_GET['empty'])) {
+		$args = array(
+			'numberposts' => 5000,
+			'post_status'=>array('draft','publish'),
+			'post_type' =>'fournisseur'
+		);
+		$posts = get_posts( $args );
+		if (is_array($posts)) {
+		   foreach ($posts as $post) {
+		       wp_delete_post( $post->ID, true);
+		   }
+		}
+ 	}
+
+	$res = mysql_query('SELECT * FROM wordpress_dm_suppliers');
+
+	while($fournisseur = mysql_fetch_assoc($res)) {
+		$post = array(
+			'post_type'=>'fournisseur',
+			'post_date'=>$fournisseur['supplier_created'],
+			'post_modified'=>$fournisseur['supplier_modified'],
+			'post_content'=>$fournisseur['supplier_about'],
+			'post_title'=>$fournisseur['supplier_name'],
+			'post_status'=> $fournisseur['supplier_valide'] ? 'publish' : 'draft',
+			'meta_input'=>array(
+				'adresse'=>$fournisseur['supplier_address'],
+				'code_postal'=>$fournisseur['supplier_postalcode'],
+				'ville'=>$fournisseur['supplier_city'],
+				'pays'=>$fournisseur['supplier_country'],
+				'telephone'=>$fournisseur['supplier_telephone'],
+				'url'=>$fournisseur['supplier_website'],
+				'blog'=>$fournisseur['supplier_social_blog'],
+				'facebook'=>$fournisseur['supplier_social_facebook'],
+				'twitter'=>$fournisseur['supplier_social_twitter'],
+				'youtube'=>$fournisseur['supplier_social_youtube'],
+				'googleplus'=>$fournisseur['supplier_social_google_plus'],
+				'linkedin'=>$fournisseur['supplier_social_linkedin'],
+				'premium'=>$fournisseur['supplier_premium'],
+				'nom_contact'=>$fournisseur['supplier_contact_nom'],
+				'email_contact'=>$fournisseur['supplier_contact_mail'],
+				'telephone_contact'=>$fournisseur['supplier_contact_tel'],
+				'optin'=>$fournisseur['supplier_souhait_contact']
+				)
+		);
+
+		echo ($fournisseur['supplier_name']).'<br>';
+
+
+		$post_id = wp_insert_post($post);
+
+
+		foreach($post['meta_input'] as $k=>$v) {
+			update_field($k,$v,$post_id);
+		}
+
+
+		$cats = explode(',',$fournisseur['supplier_category_id']);
+		$$cats_nouveau=array();
+		foreach($cats as $cat) {
+			if($cat = nouvelIdCategorie($cat)) {
+				$cats_nouveau[] = $cat;
+			}
+		}
+		wp_set_post_terms( $post_id, $cats_nouveau, 'categorie' );
+
+//m($fournisseur['supplier_logo']);
+		$url = site_url('/wp-content/uploads/logo_suppliers/').$fournisseur['supplier_logo'];
+		if(strstr($url, '.local')===false) {
+			Generate_Featured_Image($url,$post_id);
+		}
+	}
+	exit;
+}
+if(isset($_GET['convert_cat'])){
+
+	if(isset($_GET['empty'])) {
+		mysql_query('delete from legacy_categories');
+		$res = mysql_query('SELECT * FROM wordpress_term_taxonomy WHERE taxonomy = "categorie"');
+		$cpt=0;
+		while($terme = mysql_fetch_array($res)) {
+			$cpt++;
+			mysql_query('delete from wordpress_terms where term_id = '.$terme['term_id']);
+			mysql_query('delete from wordpress_term_taxonomy where term_taxonomy_id = '.$terme['term_id']);
+			mysql_query('delete from wordpress_term_relashionships where term_taxonomy_id = '.$terme['term_id']);
+		}
+		mysql_query('delete from wordpress_term_taxonomy where taxonomy = "categorie"');
+		me($cpt);
+	}
+/*	foreach(get_terms('categorie', array(  'hide_empty' => false )) as $terme) {
+		if(term_exists($terme->terme_id,'categorie')) {
+			m($terme);
+			wp_delete_term( $terme->terme_id, 'categorie');
+		} else {
+			me($terme);
+		}
+	}*/
+
+
+	$sqlCategorie = "SELECT * FROM wordpress_dm_suppliers_categories";
+	$resultCategorie = mysql_query($sqlCategorie);
+	$nbCategorie = mysql_num_rows($resultCategorie);
+	$arrayCategorie = array();
+
+	while($rowCategorie = mysql_fetch_array($resultCategorie)) {
+		$arrayCategorie[] = $rowCategorie;
+	}
+	foreach($arrayCategorie as $categorie) {
+		if($categorie['supplier_souscategorie_parent']) {
+			$categorie_parent = nouvelIdCategorie($categorie['supplier_souscategorie_parent'],true);
+			$categorie_parent_ancien=$categorie['supplier_souscategorie_parent'];
+		} else	if($categorie['supplier_category_parent']) {
+			$categorie_parent = nouvelIdCategorie($categorie['supplier_category_parent'],false);
+			$categorie_parent_ancien=$categorie['supplier_category_parent'];
+		} else {
+			$categorie_parent=0;
+			$categorie_parent_ancien=0;
+		}
+		if($idCategorie = creerCategorie($categorie['supplier_category_title'],$categorie['ID'],false,$categorie_parent,$categorie_parent_ancien)) {
+			$sqlSousCat = "SELECT * FROM wordpress_dm_suppliers_souscategories WHERE supplier_category_parent=".$categorie['ID'];
+			$resultSousCat = mysql_query($sqlSousCat);
+			while($rowSousCat = mysql_fetch_array($resultSousCat)) {
+				if($idSousCat = creerCategorie($rowSousCat['supplier_souscategorie_name'],$rowSousCat['ID'],true,$idCategorie,$categorie['ID'])) {
+
+				}
+			}
+		}
+	}	
+	exit;
+}
+
+get_header(); ?>
 <div class="row column-content page-members">
 	<div class="col-md-9 col-sm-8 column-main">
 	<section class="profile">

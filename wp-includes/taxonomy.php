@@ -2375,7 +2375,7 @@ function wp_delete_term( $term, $taxonomy, $args = array() ) {
 
 	$term = (int) $term;
 
-	if ( ! $ids = term_exists($term, $taxonomy) )
+	if ( ! $ids = term_exists($term, $taxonomy) ) 
 		return false;
 	if ( is_wp_error( $ids ) )
 		return $ids;

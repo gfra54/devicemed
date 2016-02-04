@@ -102,6 +102,7 @@ class DM_Wordpress_Members
 			}
 			if (!empty($_POST['action']) AND $_POST['action'] == 'login')
 			{
+				me($_POST);
 				if (!$data['user_login'])
 				{
 					$errors['user_login'] = 'Identifiant manquant.';
