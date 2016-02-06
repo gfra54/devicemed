@@ -11,11 +11,18 @@
 			wp_redirect($url);
 		}
 	}
+
+$slider = get_posts(array(
+	'numberposts'	=> 6,
+	'post_type'		=> 'post',
+	'meta_key'		=> 'article_a_la_une',
+	'meta_value'	=> '1'
+));
 ?>
 <?php get_header(); ?>
 <section id="last-posts-featured">
 	<div class="slider">
-<?php $featured = array(); foreach (devicemed_home_get_featured_posts(6) as $post): setup_postdata($post); $featured[] = $post->ID; ?>
+<?php $featured = array(); foreach ($slider as $post): setup_postdata($post); $featured[] = $post->ID; ?>
 		<article>
 			<a href="<?php echo get_permalink($post->ID); ?>">
 			<div class="col-md-8 col-sm-8 column-right">
@@ -54,10 +61,18 @@ $('#last-posts-featured .slider').bxSlider({
 	<div class="col-md-9 col-sm-8 column-main">
 			
 <?php
-$posts = devicemed_home_get_news_posts(4, 0, $featured);
+/*//$posts = devicemed_home_get_news_posts(4, 0, $featured);
+$posts = get_posts(array(
+	'numberposts'	=> 4,
+	'post_type'		=> 'post',
+	'meta_key'		=> 'derniers_articles',
+	'meta_value'	=> '1',
+	'exclude' => $featured
+));
+
 $posts_per_column = floor(count($posts) / 2);
 ?>
-<!--<section class="home-last-posts">
+<section class="home-last-posts">
 	<div class="section-header">
 		<h1 class="title">Derniers articles</h1>
 	</div>
@@ -79,8 +94,8 @@ for($i = $posts_per_column; $i < count($posts); $i++) {
 }
 ?>
 	</div>
-</section>-->
-<!--<div class="ad home-section-ad">
+</section>
+<div class="ad home-section-ad">
 	<?php
 		$banniere_model = new DM_Wordpress_Banniere_Model();
 		$banniereAfficher = $banniere_model->display_banniere(2, $_SESSION['arrayBanniereAfficher']);
@@ -92,8 +107,8 @@ for($i = $posts_per_column; $i < count($posts); $i++) {
 		
 		echo "<a href='http://www.device-med.fr/?url=$lien&id=$banniere_id' id='$banniere_id' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/$image' /></a>";
 	?>
-</div>-->
-<?php
+</div>
+*/
 $categories = array(5,8,7,6,4,3,9);
 
 //me(  );

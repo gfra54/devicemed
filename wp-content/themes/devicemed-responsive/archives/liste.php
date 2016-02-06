@@ -30,20 +30,12 @@
 						$urlImg = $urlTemp ."/wp-content/uploads/archives/apercu/". $archive['apercu_archive'];
 						$lienPdf = $urlTemp ."/wp-content/uploads/archives/pdf/". $archive['pdf_archive'];
 				?>
-				<?php if($archive['pdf_archive'] == '006_gesamt.pdf' || $archive['pdf_archive'] == 'novembre-decembre2015.pdf') { ?>
 					<a href='<?php echo $lienPdf; ?>' target='_blank'>
 						<article class='archive'>
 							<figure><img src='<?php echo $urlImg; ?>' /></figure>
 							<div class='nom_catalogue'><?php echo $archive['titre_archive']; ?></div>
 						</article>
 					</a>
-				<?php }else { ?>
-					<?php echo "<div style='display:none;'>lienPdf : $lienPdf</div>"; ?>
-					<article class='archive_notConnected'>
-						<figure><img src='<?php echo $urlImg; ?>' /></figure>
-						<div class='nom_catalogue'><?php echo $archive['titre_archive']; ?></div>
-					</article>
-				<?php } ?>
 				<?php
 					endforeach;
 				?>

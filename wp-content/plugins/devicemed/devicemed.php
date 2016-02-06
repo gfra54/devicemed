@@ -64,7 +64,7 @@ DM_Wordpress_Config::set(array(
 
 if (is_admin())
 {
-	DM_Wordpress_Posts_Admin::initialize();
+//	DM_Wordpress_Posts_Admin::initialize();
 	DM_Wordpress_Members_Admin::instance();
 	DM_Wordpress_Members_Admin_List::instance();
 	DM_Wordpress_Members_Admin_Edit::instance();
