@@ -424,7 +424,7 @@ class DM_Wordpress_Suppliers_Model extends DM_Wordpress_Model
 		// configuration de la base de données base de données
 		$host = DB_HOST;
 		$user = DB_USER;
-		$pass = DB_PASS;
+		$pass = DB_PASSWORD;
 		$db = DB_NAME;
 		$nom_fichier = 'suppliers_'. date('Y-m-d H:i') .'.csv';
 
@@ -464,7 +464,6 @@ class DM_Wordpress_Suppliers_Model extends DM_Wordpress_Model
 			$sql_query .= " )";
 			$sql_query .= " AND supplier_status=1";
 			$sql_query .= " ORDER BY supplier_name ASC";
-
 			// connexion à la base de données
 			$link = mysql_connect($host, $user, $pass) or die("Je ne peux me connecter." . mysql_error());
 			mysql_select_db($db) or die("Je ne peux me connecter.");
