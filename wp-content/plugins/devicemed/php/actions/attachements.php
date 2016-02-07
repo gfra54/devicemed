@@ -1,6 +1,10 @@
 <?php
 function my_attachments( $attachments )
 {
+
+  if($attachments->get_post_type() != 'fournisseur') {
+    return false;
+  }
   $args = array(
 
     // title of the meta box (string)
