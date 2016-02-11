@@ -4,8 +4,12 @@
 
 		if($('#wp-admin-bar-view .ab-item').length) {
 			if($('#wp-admin-bar-view .ab-item').html().indexOf('Newsletter')>0) {
+				$('<li><a href="/fournisseurs_partenaires?ban&TB_iframe=false&width=300&height=300" title="Voir le bloc fournisseurs" class="thickbox ab-item">Bloc fournisseurs</a></li>').insertAfter('#wp-admin-bar-view');
+				
 				$('<li><a href="'+$('#wp-admin-bar-view .ab-item').attr('href')+'?source=true&TB_iframe=false&width=900&height=958" title="Code source" class="thickbox ab-item">Code source de la newsletter</a></li>').insertAfter('#wp-admin-bar-view');
 				$('#wp-admin-bar-view .ab-item').attr('href',$('#wp-admin-bar-view .ab-item').attr('href')+'?TB_iframe=false');
+
+
 				$('#wp-admin-bar-view .ab-item').addClass("thickbox");
 			}
 		}

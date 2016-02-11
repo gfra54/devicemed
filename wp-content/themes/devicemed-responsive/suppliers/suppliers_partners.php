@@ -1,4 +1,29 @@
 <?php 
+// On récupére les fournisseurs partenaires (premium)
+$sqlFournisseurs = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 AND supplier_status=1 ORDER BY supplier_name ASC";
+$resultFournisseurs = mysql_query($sqlFournisseurs);
+$nbFournisseurs = mysql_num_rows($resultFournisseurs);
+
+if(isset($_GET['ban'])) {
+	echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><!--<img src=http://i.snag.gy/En70p.jpg>-->';
+	echo '<link rel="stylesheet" id="open-sans-css"  href="/wp-content/themes/devicemed-responsive/fonts/opensans-condbold.css" type="text/css" media="all" />';
+	echo '<div style="padding:20px 11px;width:102px;background:#214F8E;"><center style="margin-bottom:8px;font-size:15px;line-height: 1em;color:white;text-transform:uppercase;font-family:opensans-condbold">Fournisseurs partenaires</center>';
+
+	while($rowFournisseurs = mysql_fetch_array($resultFournisseurs)) {
+							$idFournisseur = $rowFournisseurs['ID'];
+							$nomFournisseur = $rowFournisseurs['supplier_name'];
+							$nomFournisseur2 = DM_Wordpress_Suppliers_Model::string_sanitize_nicename($nomFournisseur);
+							$nomFournisseur2 = str_replace(' ','-', $nomFournisseur2);
+							$nom = wp_trim_words($nomFournisseur,2,'');
+							$nom = str_replace('Composites','Comp.',$nom);
+							$nom = str_replace('Medical','Med.',$nom);
+							$nom = str_replace('Medical','Med.',$nom);
+		echo '<div style="padding-top:3px"><a style="font-size:14px;text-decoration:underline;color:white;font-family:opensans-condbold" href="/suppliers/$nomFournisseur2/$idFournisseur" target="_blank"><b>'.$nom.'</b></a></div>';
+
+	}
+	exit;
+}
+
 get_header(); ?>
 <div class="row column-content page-members">
 	<div class="col-md-9 col-sm-8 column-main">

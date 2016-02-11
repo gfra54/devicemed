@@ -60,7 +60,16 @@ function display_pub($pub,$attr=array(),$type=false) {
 		$pub = get_post($pub);
 	}
 	$PUB = pub_metrics($pub);
-
+	if(check_espace('newsletter-textad',$pub)) {
+		  $textad = pub_metrics($pub);
+		  return render_textad(array(
+		      'image'=>get_field('url_tracking_display',$textad['ID']),
+		      'title'=>get_field('titre_pub',$textad['ID']),
+		      'text'=>get_field('texte',$textad['ID']),
+		      'lien'=>get_field('libelle_lien',$textad['ID']),
+		      'url'=>get_field('url_tracking_clicks',$textad['ID'])
+		  ));
+	} else
 	if($type == 'cadre-video') {
 		$out='<section id="sidebar-issues">';
 		$out.='<header>';
@@ -276,3 +285,41 @@ function pub_metrics($pub) {
 */
 
 
+function render_textad($ad) {
+
+ob_start();
+	?>
+  <table border="0" cellspacing="0" width="100%">
+    <tr>
+        <td></td>
+        <td width="500" valign=top align="left" style="text-align:left">
+
+      <div style="padding:10px">
+      <span style="font-size:12px;font-family:Helvetica,Arial,sans-serif;color:#999;">Annonce</span>
+      <div style="border:1px solid #333;padding:10px">
+      <?php if(!empty($ad['image'])) {?>
+        <a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><img style="border:solid 1px #FFFFFF;padding-right:10px;" width="100" height="auto" align="left" alt="img6" src="<?php echo $ad['image'];?>"></a>
+        <p style="margin:0px;padding-left:140px;">
+      <?php } else {?>
+        <p style="margin:0px;">
+      <?php }?>
+        <a style="margin:0px;text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><span style="font-size:16px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;color:black;"><?php echo $ad['title'];?></span></a></p>
+
+      <?php if(!empty($ad['image'])) {?>
+        <p style="padding-left:140px;font-size:12px;line-height:21px;font-family:Arial;color:#333;margin:0px;">
+      <?php } else {?>
+        <p style="font-size:12px;line-height:21px;font-family:Arial;color:#333;margin:0px">
+      <?php }?>
+
+      <?php echo $ad['text'];?>
+      &nbsp;<a target="_blank" style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?>><span style="color:#005ea8;"><?php echo !empty($ad['lien']) ? $ad['lien'] : 'Lire la suite';?></span></a>
+      </p></div></div>
+    </td>
+    <td></td>
+  </tr>
+  </table>
+<?php	
+		$content = ob_get_contents();
+		ob_end_clean();
+		return $content;
+}
