@@ -1,5 +1,5 @@
 <?php
-function acf_load_textad( $field ) {
+/*function acf_load_textad( $field ) {
     // reset choices
     $field['choices'] = array('');
 
@@ -13,7 +13,7 @@ function acf_load_textad( $field ) {
     
 }
 
-add_filter('acf/load_field/name=textad', 'acf_load_textad');
+add_filter('acf/load_field/name=textad', 'acf_load_textad');*/
 
 function acf_load_bannieres_verticales( $field ) {
 
@@ -40,7 +40,14 @@ function acf_load_bannieres_horizontales( $field ) {
     $posts = get_pubs('newsletter-banniere-horizontale');
     if($posts) {
         foreach($posts as $post) {
-            $field['choices'][$post->ID]=$post->post_title;
+            $field['choices'][$post->ID]=$post->post_title.' (Bannière horizontale)';
+        }
+    }
+
+    $posts = get_pubs('newsletter-textad');
+    if($posts) {
+        foreach($posts as $post) {
+            $field['choices'][$post->ID]=$post->post_title.' (TextAd)';
         }
     }
 
@@ -48,6 +55,7 @@ function acf_load_bannieres_horizontales( $field ) {
     
 }
 add_filter('acf/load_field/name=banniere_horizontale_en_haut', 'acf_load_bannieres_horizontales');
+add_filter('acf/load_field/name=banniere_dans_articles', 'acf_load_bannieres_horizontales');
 add_filter('acf/load_field/name=banniere_horizontale_en_bas', 'acf_load_bannieres_horizontales');
 
 
