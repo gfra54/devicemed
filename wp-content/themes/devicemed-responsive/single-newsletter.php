@@ -104,11 +104,13 @@ while($rowFournisseurs = mysql_fetch_assoc($resultFournisseurs)) {
             <div style="height:10px;"></div>
           <?php }?>
 
-    <div style="padding:20px 11px 5px 11px;width:102px;background:#214F8E;bord_er:1px solid black;"><center style="font-size:11px;line-height: 1em;color:white;text-transform:uppercase;font-family:sans-serif;font-weight:bold">Fournisseurs partenaires</center>
+    <div style="padding:00px 11px 5px 11px;width:102px;background:#214F8E;bord_er:1px solid black;">
+    <div style="height:8px"></div>
+    <center style="font-size:11px;line-height: 1em;color:white;text-transform:uppercase;font-family:sans-serif;font-weight:bold">Fournisseurs partenaires</center>
     <div style="height:8px"></div>
       <?php foreach($fournisseurs as $id=>$nom) {?>
-        <div style="padding:3px;border:1px solid white;background:#214F8E;text-align: center;">
-          <a style="font-size:11px;white-space:nowrap;text-decoration:none;color:black;font-family:sans-serif;font-weight:bold;color:white;" href="/suppliers/$nomFournisseur2/<?php echo $nom;?>"><?php echo $nom;?></a>
+        <div style="padding:3px;border:1px solid white;background:white;text-align: center;">
+          <a style="font-size:11px;white-space:nowrap;text-decoration:none;color:black;font-family:sans-serif;font-weight:bold;color:#214F8E;" href="/suppliers/$nomFournisseur2/<?php echo $nom;?>"><?php echo $nom;?></a>
         </div>
         <div style="height:5px"></div>
     <?php }?>
