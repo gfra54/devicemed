@@ -74,10 +74,12 @@
 			</div>
 		<?php } ?>
 		<?php if ($thumbnail = devicemed_get_post_featured_thumbnail($post->ID)): ?>
+			<div class="article-image">
 			<div class='image_clicable'><a href="<?php echo $thumbnail->url; ?>" class="cboxElement"><figure style="background-image:url('<?php echo $thumbnail->url; ?>')">
 				<img src="<?php echo $thumbnail->url; ?>" title="<?php echo esc_attr($thumbnail->post_title); ?>" />
 			</figure></a></div>
-			<div class='source_photo'>Source : <?php echo esc_attr($thumbnail->post_title); ?></div>
+			<div class='source_photo'><div class="source-content">Source : <?php echo esc_attr($thumbnail->post_title); ?></div></div>
+			</div>
 			<?php if($thumbnail->post_excerpt != '') { ?>
 				<div class='legende_photo'><?php echo $thumbnail->post_excerpt; ?></div>
 			<?php } ?>
