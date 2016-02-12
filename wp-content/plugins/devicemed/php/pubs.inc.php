@@ -294,26 +294,26 @@ ob_start();
         <td></td>
         <td width="500" valign=top align="left" style="text-align:left">
 
-      <div style="padding:10px">
+      <div>
+      <div style="height:10px"></div>
       <span style="font-size:12px;font-family:Helvetica,Arial,sans-serif;color:#999;">Annonce</span>
-      <div style="border:1px solid #333;padding:10px">
-      <?php if(!empty($ad['image'])) {?>
-        <a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><img style="border:solid 1px #FFFFFF;padding-right:10px;" width="100" height="auto" align="left" alt="img6" src="<?php echo $ad['image'];?>"></a>
-        <p style="margin:0px;padding-left:140px;">
-      <?php } else {?>
-        <p style="margin:0px;">
-      <?php }?>
-        <a style="margin:0px;text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><span style="font-size:16px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;color:black;"><?php echo $ad['title'];?></span></a></p>
+      <div style="border:1px solid #333;padding:15px">
+      <table>
+      <tr>
+      <td width="120" valign="top">
+        <a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><img style="border:solid 1px #ccc;" width="100" height="auto" src="<?php echo $ad['image'];?>"></a>
+	</td><td valign="top">
+        <a style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><span style="font-size:16px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;color:black;"><?php echo $ad['title'];?></span></a>
+      <div style="height:10px"></div>
 
-      <?php if(!empty($ad['image'])) {?>
-        <p style="padding-left:140px;font-size:12px;line-height:21px;font-family:Arial;color:#333;margin:0px;">
-      <?php } else {?>
-        <p style="font-size:12px;line-height:21px;font-family:Arial;color:#333;margin:0px">
-      <?php }?>
-
-      <?php echo $ad['text'];?>
-      &nbsp;<a target="_blank" style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?>><span style="color:#005ea8;"><?php echo !empty($ad['lien']) ? $ad['lien'] : 'Lire la suite';?></span></a>
-      </p></div></div>
+        <div style="font-size:12px;line-height:21px;font-family:Arial;color:#333;margin:0px">
+		      <?php echo $ad['text'];?>
+      			&nbsp;<a target="_blank" style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?>><span style="color:#005ea8;"><?php echo !empty($ad['lien']) ? $ad['lien'] : 'Lire la suite';?></span></a>
+      </div>
+		</td>
+		</tr>
+		</table>
+      </div></div>
     </td>
     <td></td>
   </tr>

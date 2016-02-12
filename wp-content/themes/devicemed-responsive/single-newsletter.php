@@ -10,28 +10,17 @@ if($newsletter = $wp_query->post){
 $date = datefr(get_field('date_envoi',$newsletter->ID));
 
 
-$banners=array('right'=>array(),'top'=>'','bottom'=>'');
+$banners=array('right'=>array(),'top'=>'','dans_article'=>'','bottom'=>'');
 $banners['top'] = display_pub(get_field('banniere_horizontale_en_haut',$newsletter->ID));
 $banners['dans_article'] = display_pub(get_field('banniere_dans_articles',$newsletter->ID));
 $banners['bottom'] = display_pub(get_field('banniere_horizontale_en_bas',$newsletter->ID));
+
 $attr['style'].='width:125px;';
 
 
 foreach(get_field('bannieres_verticales') as $tmp) {
   $banners['right'][] = display_pub($tmp['banniere_verticale']);
 }
-/*if($textad = get_post(get_field('textad',$newsletter->ID))) {
-  $textad = pub_metrics($textad);
-  $banners['textad'] = array(
-    2 => array(
-      'image'=>get_field('url_tracking_display',$textad['ID']),
-      'title'=>get_field('titre_pub',$textad['ID']),
-      'text'=>get_field('texte',$textad['ID']),
-      'lien'=>get_field('libelle_lien',$textad['ID']),
-      'url'=>get_field('url_tracking_clicks',$textad['ID'])
-    ),
-  );
-}*/
 $titre_disp = get_field('titre_disp',$newsletter->ID);
 
 $urls = array();
@@ -52,7 +41,7 @@ foreach($urls as $url) {
   } else {
     $data=false;
   }
-  $tmp = file_get_contents(str_replace('.local','.fr',$url));
+  $tmp = session_file_get_contents(str_replace('.local','.fr',$url));
   $content = getHtmlVal('<div class="content">','</article>',$tmp);
   $text = !empty($data['text']) ? $data['text'] : (cleantext(getHtmlVal('<p><strong>','</strong></p>',$content)));
   $image = (getHtmlVal('<div class=\'image_clicable\'><a href="','"',$tmp));
@@ -60,6 +49,25 @@ foreach($urls as $url) {
   $category = !empty($data['category']) ? $data['category'] : (getHtmlVal('<span class="category">','</span>',$tmp));
   $articles[] = array('text'=>$text,'image'=>$image,'category'=>$category,'title'=>$title,'url'=>add_utm($url));
 }
+
+
+$sqlFournisseurs = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 AND supplier_status=1 ORDER BY supplier_name ASC";
+$resultFournisseurs = mysql_query($sqlFournisseurs);
+$nbFournisseurs = mysql_num_rows($resultFournisseurs);
+  
+$fournisseurs = array();
+while($rowFournisseurs = mysql_fetch_assoc($resultFournisseurs)) {
+  $nom = wp_trim_words($rowFournisseurs['supplier_name'],2,'');
+  $nom = str_replace('Composites','Comp.',$nom);
+  $nom = str_replace('Medical','Med.',$nom);
+  $nom = str_replace('Medical','Med.',$nom);
+  $nom = str_replace('Balzers','',$nom);
+  $nom = str_replace('Technologies','Tech.',$nom);
+
+  $fournisseurs[$rowFournisseurs['ID']]=$nom;
+}
+
+
 
 
 ?><!DOCTYPE html>
@@ -92,8 +100,19 @@ foreach($urls as $url) {
 
         <?php if(isset($banners['right'])) { ?>
           <?php foreach($banners['right'] as $ban) { ?>
-            <?php echo $ban;?>
+            <?php echo str_replace('<img ','<img width="100%" ',$ban);?>
+            <div style="height:10px;"></div>
           <?php }?>
+
+    <div style="padding:20px 11px 5px 11px;width:102px;background:#214F8E;bord_er:1px solid black;"><center style="font-size:11px;line-height: 1em;color:white;text-transform:uppercase;font-family:sans-serif;font-weight:bold">Fournisseurs partenaires</center>
+    <div style="height:8px"></div>
+      <?php foreach($fournisseurs as $id=>$nom) {?>
+        <div style="padding:3px;border:1px solid white;background:#214F8E;text-align: center;">
+          <a style="font-size:11px;white-space:nowrap;text-decoration:none;color:black;font-family:sans-serif;font-weight:bold;color:white;" href="/suppliers/$nomFournisseur2/<?php echo $nom;?>"><?php echo $nom;?></a>
+        </div>
+        <div style="height:5px"></div>
+    <?php }?>
+    </div>
         <div>&nbsp;</div>
         <?php }?>
 
@@ -111,9 +130,11 @@ foreach($urls as $url) {
         <tr>
           <td valign="top" bgcolor=white>
         <?php if(isset($banners['top'])) { ?>
-          <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;margin-top:10px;border-bottom:1px dotted #555;" width="100%"><tbody><tr>
-            <td align="center" style="padding-bottom:10px;">
+        <div style="height:10px"></div>
+          <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;border-bottom:1px dotted #555;" width="100%"><tbody><tr>
+            <td align="center">
             <?php echo $banners['top'];?>
+            <div style="height:10px"></div>
             </td>
           </tr></tbody></table>
           
@@ -172,15 +193,15 @@ foreach($urls as $url) {
                     suite...</span></a></div>
                   </td>
                 </tr>
-        <?php if($cpt == 2 && isset($banners['dans_article'])) { ?>
+        <?php if($cpt ==2 && $banners['dans_article']) {;?>
 
 <tr>
 <td style="border-bottom:1px dotted #555;" colspan="2"></td>
 </tr>
-<tr><td colspan="2" aling="center" style="padding-top:10px;text-align:center">
-
+<tr><td colspan="2" aling="center" style="text-align:center">
+<div style="height:10px"></div>
 <?php echo $banners['dans_article'];?>
-
+<div style="height:10px"></div>
 </td></tr>
 
 
@@ -193,8 +214,11 @@ foreach($urls as $url) {
             </table><!---->
 
         <?php if(isset($banners['bottom'])) { ?>
-          <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;margin-left:10px;margin-top:10px;border-top:1px dotted #555;" width="700" id="top_news"><tbody><tr>
-            <td align="center" style="padding-top:10px;padding-bottom:10px;"><?php echo $banners['bottom'];?></td>
+            <div style="height:10px"></div>
+            <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;margin-left:10px;border-top:1px dotted #555;" width="700" id="top_news"><tbody><tr>
+            <td align="center" style="padding-top:10px;"><?php echo $banners['bottom'];?>
+            <div style="height:10px"></div>
+            </td>
           </tr></tbody></table>
           
         <?php }?>
