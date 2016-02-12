@@ -24,56 +24,7 @@
 		<a href="<?php echo site_url("/suppliers/download/$supplier_id"); ?>">Documentation PDF</a>
 	</section>
 <?php if (($medias OR $galleries) && $supplier['supplier_premium'] == 1): ?>
-	<!-- section.medias -->
-	<!--<section class="medias">
-		<?php if($supplier['supplier_logo'] != '') { ?>
-			<div class='logo_supplier'>
-				<img src='<?php echo "../../../wp-content/uploads/logo_suppliers/". $supplier['supplier_logo']; ?>' />
-			</div>
-		<?php } ?>
-		<p class="about"><?php echo html_entity_decode($supplier['supplier_about']); ?></p>
-		<header>
-			<?php if ($session = DM_Wordpress_Members::session() && $session_supplier_id == $supplier_id): ?>
-				<div class="buttons">
-					<a href="<?php echo site_url('/suppliers/galleries/add'); ?>">Ajouter une gallerie</a>
-				</div>
-			<?php endif; ?>
-		</header>
-		<div class="Galeries-wrapper">
-<?php foreach ($galleries as $gallery): ?>
-	<article>
-		<?php
-			$gallery_id = $gallery['ID'];
-			
-			$suppliers_medias = new DM_Wordpress_Suppliers_Medias_Model();
-			$arrayMedia = $suppliers_medias->get_medias_by_related('Gallery', $gallery_id);
-		?>
-		<div class="content">
-			<?php
-				for($i = 0;$i < count($arrayMedia);$i++) {
-					$idMedia = $arrayMedia[$i]['ID'];
-					
-					$imagePost = $arrayMedia[$i]['supplier_media_metas'];
-					$arrayTempImage = explode(';', $imagePost);
-					$imagePost = $arrayTempImage[1];
-					$posPremierGuillemet = strpos($imagePost, '"');
-					$posDernierGuillemet = strripos($imagePost, '"');
-					$length = $posDernierGuillemet - $posPremierGuillemet;
-					$imagePost = substr($imagePost, ($posPremierGuillemet+1), ($length-1));
-					
-					$urlGallerie = DM_Wordpress_Suppliers_Galleries::get_media_url($gallery_id, $imagePost);
-					
-					echo "<figure style=\"background-image:url('$urlGallerie');width:200px !important;display:inline-block !important;margin: 10px !important\">";
-						echo "<img src='$urlGallerie' style='width:200px;height:125px;' />";
-					echo "</figure>";
-				}
-			?>
-		</div>
-	</article>
-<?php endforeach; ?>
-		</div>
-	</section>-->
-	<!-- /section.medias -->
+
 	<!-- section.medias -->
 	<section class="medias">
 		<header>

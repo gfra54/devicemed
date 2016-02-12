@@ -1,4 +1,25 @@
 <?php
+function datefr($date) {
+	$GLOBALS['MOIS'] = array("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre");
+	$time = strtotime($date);
+	$Y = date('Y',$time);
+	$m = intval(date('m',$time));
+	$d = intval(date('d',$time));
+	if($d == 1){
+		$d = '1<sup>er</sup>';
+	}
+	return $d.' '.mb_strtolower($GLOBALS['MOIS'][$m-1]).' '.$Y;
+}
+
+function session_file_get_contents($f) {
+	if(!isset($_SESSION['files'][$f]) || empty($_SESSION['files'][$f])){
+		$_SESSION['files'][$f] = file_get_contents($f);
+	}
+	return $_SESSION['files'][$f];
+
+}
+
+
 function HtmlTagAttributesToString($params) {
 	$out='';
 	foreach($params as $k=>$v) {
