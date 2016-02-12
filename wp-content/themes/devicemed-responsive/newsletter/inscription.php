@@ -10,14 +10,13 @@ get_header();
 		<h2 class="title">Abonnement à la newsletter bimensuelle</h2>
 
 		<div class="">
-				<form target="popup-news" action="https://app.mailjet.com/account/tools/widget/subscribe/1Ni" class="mailjet-widget-form" id="mailjet-widget-form" accept-charset="utf-8" method="post">      
+					<form action="https://app.mailjet.com/account/tools/widget/subscribe/1Nj" class="mailjet-widget-form" id="mailjet-widget-form-6901" accept-charset="utf-8" method="post">      
 	            <div class="form-fieldset">
 	            	<div class="form-row">
 	                	<div class="form-field">
-	                		<input placeholder="Adresse mail" type="text" class="mailjet-widget-email-field" name="email" id="mailjet-widget-email-field-6900"  value="" size="20" maxlength="80"  />
+	                		<input placeholder="Adresse mail" type="text" class="mailjet-widget-email-field" name="email" id="mailjet-widget-email-field-6901"  value="" size="20" maxlength="80"  />
 	            		</div>
 	            	</div>
-				<div class="form-row"><small><label for="changer-newsletter"><input id="changer-newsletter" type="checkbox" onchange="if(this.checked) { $('#normal').hide();$('#partenaires').show(); } else {$('#partenaires').hide();$('#normal').show();}"> Recevoir les offres de nos partenaires</label></small></div>
 				<div class="form-row">
 					<div class="form-submit input_sabonner_magazine">
 						<input type="submit" class="" value="S&#039;abonner">
@@ -42,7 +41,7 @@ get_header();
 							if(strtotime($date_envoi)<=time()) {
 								$url = get_permalink($post->ID);
 								$titre = get_the_title($post->ID);
-								echo 'Le '.(strftime("%d %B %Y",strtotime($date_envoi))). ' : <a href="'.$url.'">'.$titre.'</a><br>';
+								echo 'Le '.(datefr($date_envoi)). ' : <a href="'.$url.'">'.$titre.'</a><br>';
 							}
 						}
 					}
