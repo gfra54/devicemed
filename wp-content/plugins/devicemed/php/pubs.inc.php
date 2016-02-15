@@ -298,7 +298,7 @@ ob_start();
 	</tr>
 	<tr>
 		<td>
-			<fieldset border=1 bordercolor="#333">
+			<fieldset border=1 bordercolor="#333" style="border:1px solid #333">
 				<table cellspacing=0 cellpadding="8">
 				<tr>
 					<td width="120" valign="top" border=0>
