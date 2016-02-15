@@ -63,8 +63,8 @@ while($rowFournisseurs = mysql_fetch_assoc($resultFournisseurs)) {
   $nom = str_replace('Medical','Med.',$nom);
   $nom = str_replace('Balzers','',$nom);
   $nom = str_replace('Technologies','Tech.',$nom);
-
-  $fournisseurs[$rowFournisseurs['ID']]=$nom;
+  $nomFournisseur = DM_Wordpress_Suppliers_Model::string_sanitize_nicename($rowFournisseurs['supplier_name']);
+  $fournisseurs[$rowFournisseurs['ID']]=array('nom'=>$nom,'nomFournisseur'=>$nomFournisseur);
 }
 
 
@@ -99,25 +99,49 @@ while($rowFournisseurs = mysql_fetch_assoc($resultFournisseurs)) {
           <td rowspan="3" width="127" valign="top" style="width:127px;">
 
         <?php if(isset($banners['right'])) { ?>
-          <?php foreach($banners['right'] as $ban) { ?>
-            <?php echo str_replace('<img ','<img width="100%" ',$ban);?>
-            <div style="height:10px;"></div>
-          <?php }?>
+          <?php foreach($banners['right'] as $cpt=>$ban) {if($ban) {
+            $ban = str_replace('<a ','<a style="display:block" ',$ban);
+            $ban = str_replace('<img ','<img style="display:block" width="100%" ',$ban);
+            echo $ban;
+            ?>
+            <?php espace(8);?>
+          <?php }}?>
+         <?php }?>
 
-    <div style="padding:00px 11px 5px 11px;width:102px;background:#214F8E;bord_er:1px solid black;">
-    <div style="height:8px"></div>
-    <center style="font-size:11px;line-height: 1em;color:white;text-transform:uppercase;font-family:sans-serif;font-weight:bold">Fournisseurs partenaires</center>
-    <div style="height:8px"></div>
-      <?php foreach($fournisseurs as $id=>$nom) {?>
-        <div style="padding:3px;border:1px solid white;background:white;text-align: center;">
-          <a style="font-size:11px;white-space:nowrap;text-decoration:none;color:black;font-family:sans-serif;font-weight:bold;color:#214F8E;" href="/suppliers/$nomFournisseur2/<?php echo $nom;?>"><?php echo $nom;?></a>
-        </div>
-        <div style="height:5px"></div>
-    <?php }?>
-    </div>
-        <div>&nbsp;</div>
-        <?php }?>
+    <table width="127" bgcolor="#214F8E" cellpadding="0" cellspacing="10">
+    <tr>
+    <!-- <?php marge(6);?> -->
+    <td align="center"> 
+    <!-- <table width="100%" cellpadding="3"><td color=white align=center> -->
+    <font face="sans-serif" color="white" style="font-size:11px;">
+    <b>FOURNISSEURS PARTENAIRES</b>
+    </font>
+    <!-- </td></table> -->
+    </td>
+    <!-- <?php marge(6);?> -->
+    </tr>
+    <?php $cpt=0;foreach($fournisseurs as $id=>$data) {?>
+      <!-- <?php if($cpt) {?><tr><td height="1" style="font-size:2px">&nbsp;</td></tr><?php }?> -->
+      <tr>
+      <!-- <?php marge(6);?> -->
+      <td bgcolor="white" align=center>    
+        <table width="100%" cellpadding="3"><td color=white align=center>
+        <a style="text-decoration:none;" href="/suppliers/<?php echo $data['nomFournisseur'];?>/<?php echo $id;?>">
+          <font face="sans-serif"  color="#214F8E" style="font-size:11px;text-decoration:none;">
+            <b style="text-decoration:none;">
+              <?php echo $data['nom'];?>
+            </b>
+          </font>
+        </a>
+        </td></table>
+      </td>
+      <!-- <?php marge(6);?> -->
+      </tr>
+    <?php $cpt++;}?>
+      <!-- <tr><td height="7" style="font-size:2px">&nbsp;</td></tr> -->
+    </table>
 
+    
 
           </td>
       </tr>
@@ -132,11 +156,11 @@ while($rowFournisseurs = mysql_fetch_assoc($resultFournisseurs)) {
         <tr>
           <td valign="top" bgcolor=white>
         <?php if(isset($banners['top'])) { ?>
-        <div style="height:10px"></div>
+        <?php espace(10);?>
           <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;border-bottom:1px dotted #555;" width="100%"><tbody><tr>
             <td align="center">
             <?php echo $banners['top'];?>
-            <div style="height:10px"></div>
+            <?php espace(10);?>
             </td>
           </tr></tbody></table>
           
@@ -201,9 +225,9 @@ while($rowFournisseurs = mysql_fetch_assoc($resultFournisseurs)) {
 <td style="border-bottom:1px dotted #555;" colspan="2"></td>
 </tr>
 <tr><td colspan="2" aling="center" style="text-align:center">
-<div style="height:10px"></div>
+<?php espace(10);?>
 <?php echo $banners['dans_article'];?>
-<div style="height:10px"></div>
+<?php espace(10);?>
 </td></tr>
 
 
@@ -216,10 +240,10 @@ while($rowFournisseurs = mysql_fetch_assoc($resultFournisseurs)) {
             </table><!---->
 
         <?php if(isset($banners['bottom'])) { ?>
-            <div style="height:10px"></div>
+            <?php espace(10);?>
             <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;margin-left:10px;border-top:1px dotted #555;" width="700" id="top_news"><tbody><tr>
             <td align="center" style="padding-top:10px;"><?php echo $banners['bottom'];?>
-            <div style="height:10px"></div>
+            <?php espace(10);?>
             </td>
           </tr></tbody></table>
           
@@ -340,5 +364,13 @@ if(check('source')) {
 </html>
 <?php
 }
-?>
 
+function espace($nb){
+?>
+<table border=0><tr><td height=<?php echo $nb;?>></td></tr></table>
+<?php  
+}
+function marge($nb) {
+?>
+    <td width=<?php echo $nb;?>>&nbsp;</td>
+<?php }
