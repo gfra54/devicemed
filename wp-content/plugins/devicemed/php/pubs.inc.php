@@ -289,6 +289,7 @@ function render_textad($ad) {
 
 ob_start();
 	?>
+	<center>
   <table border="0" cellspacing="0" width="480">
     <tr>
         <td valign=top align="left" style="text-align:left">
@@ -320,6 +321,7 @@ ob_start();
     </td>
   </tr>
   </table>
+  <center>
 <?php	
 		$content = ob_get_contents();
 		ob_end_clean();
