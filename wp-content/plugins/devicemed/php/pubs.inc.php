@@ -289,33 +289,35 @@ function render_textad($ad) {
 
 ob_start();
 	?>
-  <table border="0" cellspacing="0" width="100%">
+  <table border="0" cellspacing="0" width="480">
     <tr>
-        <td></td>
-        <td width="500" valign=top align="left" style="text-align:left">
-
-      <div>
-      <div style="height:10px"></div>
-      <span style="font-size:12px;font-family:Helvetica,Arial,sans-serif;color:#999;">Annonce</span>
-      <div style="border:1px solid #333;padding:15px">
-      <table>
-      <tr>
-      <td width="120" valign="top">
-        <a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><img style="border:solid 1px #ccc;" width="100" height="auto" src="<?php echo $ad['image'];?>"></a>
-	</td><td valign="top">
-        <a style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><span style="font-size:16px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;color:black;"><?php echo $ad['title'];?></span></a>
-      <div style="height:10px"></div>
-
-        <div style="font-size:12px;line-height:21px;font-family:Arial;color:#333;margin:0px">
-		      <?php echo $ad['text'];?>
-      			&nbsp;<a target="_blank" style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?>><span style="color:#005ea8;"><?php echo !empty($ad['lien']) ? $ad['lien'] : 'Lire la suite';?></span></a>
-      </div>
+        <td valign=top align="left" style="text-align:left">
+        <font size=1 color=#999 face="sans-serif">Annonce</font>
 		</td>
-		</tr>
-		</table>
-      </div></div>
+	</tr>
+	<tr>
+		<td>
+			<fieldset border=1 bordercolor="#333">
+				<table cellspacing=0 cellpadding="8">
+				<tr>
+					<td width="120" valign="top" border=0>
+						<a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank">
+						<table bgcolor=#ccc cellspacing=0 cellpadding=1><td><img style="display:block" width="100" height="auto" src="<?php echo $ad['image'];?>"></td></table></a>
+					</td>
+					<td valign="top" border=0>
+						<a style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><span style="font-size:16px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;color:black;"><?php echo $ad['title'];?></span></a>
+
+
+						<p>
+						<font size=2 face="sans-serif" color="#333"><?php echo $ad['text'];?></font>&nbsp;<a target="_blank" style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?>><font face="sans-serif" size=2 color="#005ea8"><?php echo !empty($ad['lien']) ? $ad['lien'] : 'Lire la suite';?></font></a>
+						</font>
+						</p>
+					</td>
+
+				</tr>
+				</table>
+			</fieldset>
     </td>
-    <td></td>
   </tr>
   </table>
 <?php	

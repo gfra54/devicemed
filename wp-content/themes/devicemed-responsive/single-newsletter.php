@@ -41,7 +41,7 @@ foreach($urls as $url) {
   } else {
     $data=false;
   }
-  $tmp = session_file_get_contents(str_replace('.local','.fr',$url));
+  $tmp = file_get_contents(str_replace('.local','.fr',$url));
   $content = getHtmlVal('<div class="content">','</article>',$tmp);
   $text = !empty($data['text']) ? $data['text'] : (cleantext(getHtmlVal('<p><strong>','</strong></p>',$content)));
   $image = (getHtmlVal('<div class=\'image_clicable\'><a href="','"',$tmp));
