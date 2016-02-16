@@ -6,7 +6,12 @@ if(check('source')) {
 
 if($newsletter = $wp_query->post){
 
+$position_du_bloc_partenaire = get_field('position_du_bloc_partenaire',$newsletter->ID);
+$afficher_le_bloc_partenaire = get_field('afficher_le_bloc_partenaire',$newsletter->ID);
 
+if(empty($position_du_bloc_partenaire)) {
+  $position_du_bloc_partenaire=1;
+}
 $date = datefr(get_field('date_envoi',$newsletter->ID));
 
 
@@ -51,21 +56,6 @@ foreach($urls as $url) {
 }
 
 
-$sqlFournisseurs = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 AND supplier_status=1 ORDER BY supplier_name ASC";
-$resultFournisseurs = mysql_query($sqlFournisseurs);
-$nbFournisseurs = mysql_num_rows($resultFournisseurs);
-  
-$fournisseurs = array();
-while($rowFournisseurs = mysql_fetch_assoc($resultFournisseurs)) {
-  $nom = wp_trim_words($rowFournisseurs['supplier_name'],2,'');
-  $nom = str_replace('Composites','Comp.',$nom);
-  $nom = str_replace('Medical','Med.',$nom);
-  $nom = str_replace('Medical','Med.',$nom);
-  $nom = str_replace('Balzers','',$nom);
-  $nom = str_replace('Technologies','Tech.',$nom);
-  $nomFournisseur = DM_Wordpress_Suppliers_Model::string_sanitize_nicename($rowFournisseurs['supplier_name']);
-  $fournisseurs[$rowFournisseurs['ID']]=array('nom'=>$nom,'nomFournisseur'=>$nomFournisseur);
-}
 
 
 
@@ -99,47 +89,28 @@ while($rowFournisseurs = mysql_fetch_assoc($resultFournisseurs)) {
           <td rowspan="3" width="127" valign="top" style="width:127px;">
 
         <?php if(isset($banners['right'])) { ?>
-          <?php foreach($banners['right'] as $cpt=>$ban) {if($ban) {
-            $ban = str_replace('<a ','<a style="display:block" ',$ban);
-            $ban = str_replace('<img ','<img style="display:block" width="100%" ',$ban);
+          <?php foreach($banners['right'] as $cpt=>$ban) {if($ban) { $cpt++;?>
+
+      <?php if($position_du_bloc_partenaire == $cpt) {
+        bloc_partenaires();
+      }?>     
+
+
+
+           <?php
+      $ban = str_replace('<a ','<a style="display:block" ',$ban);
+      if(strstr($ban,'<img style="')!==false) {
+              $ban = str_replace('<img style="','<img width="100%" style="display:block;',$ban);
+      }else {
+              $ban = str_replace('<img ','<img style="display:block" width="100%" ',$ban);
+      }
             echo $ban;
             ?>
             <?php espace(8);?>
           <?php }}?>
-         <?php }?>
-
-    <table width="127" bgcolor="#214F8E" cellpadding="0" cellspacing="10">
-    <tr>
-    <!-- <?php marge(6);?> -->
-    <td align="center"> 
-    <!-- <table width="100%" cellpadding="3"><td color=white align=center> -->
-    <font face="sans-serif" color="white" style="font-size:11px;">
-    <b>FOURNISSEURS PARTENAIRES</b>
-    </font>
-    <!-- </td></table> -->
-    </td>
-    <!-- <?php marge(6);?> -->
-    </tr>
-    <?php $cpt=0;foreach($fournisseurs as $id=>$data) {?>
-      <!-- <?php if($cpt) {?><tr><td height="1" style="font-size:2px">&nbsp;</td></tr><?php }?> -->
-      <tr>
-      <!-- <?php marge(6);?> -->
-      <td bgcolor="white" align=center>    
-        <table width="100%" cellpadding="3"><td color=white align=center>
-        <a style="text-decoration:none;" href="/suppliers/<?php echo $data['nomFournisseur'];?>/<?php echo $id;?>">
-          <font face="sans-serif"  color="#214F8E" style="font-size:11px;text-decoration:none;">
-            <b style="text-decoration:none;">
-              <?php echo $data['nom'];?>
-            </b>
-          </font>
-        </a>
-        </td></table>
-      </td>
-      <!-- <?php marge(6);?> -->
-      </tr>
-    <?php $cpt++;}?>
-      <!-- <tr><td height="7" style="font-size:2px">&nbsp;</td></tr> -->
-    </table>
+         <?php }
+     bloc_partenaires();
+     ?>
 
     
 
@@ -374,3 +345,53 @@ function marge($nb) {
 ?>
     <td width=<?php echo $nb;?>>&nbsp;</td>
 <?php }
+
+$GLOBALS['bloc_partenaires']=false;
+function bloc_partenaires() {
+  global $afficher_le_bloc_partenaire;
+  if($afficher_le_bloc_partenaire && !$GLOBALS['bloc_partenaires']) {
+    $sqlFournisseurs = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 AND supplier_status=1 ORDER BY supplier_name ASC";
+    $resultFournisseurs = mysql_query($sqlFournisseurs);
+    $nbFournisseurs = mysql_num_rows($resultFournisseurs);
+      
+    $fournisseurs = array();
+    while($rowFournisseurs = mysql_fetch_assoc($resultFournisseurs)) {
+      $nom = wp_trim_words($rowFournisseurs['supplier_name'],2,'');
+      $nom = str_replace('Composites','Comp.',$nom);
+      $nom = str_replace('Medical','Med.',$nom);
+      $nom = str_replace('Medical','Med.',$nom);
+      $nom = str_replace('Balzers','',$nom);
+      $nom = str_replace('Technologies','Tech.',$nom);
+      $nomFournisseur = DM_Wordpress_Suppliers_Model::string_sanitize_nicename($rowFournisseurs['supplier_name']);
+      $fournisseurs[$rowFournisseurs['ID']]=array('nom'=>$nom,'nomFournisseur'=>$nomFournisseur);
+    }
+
+    
+    $GLOBALS['bloc_partenaires']=true;
+    ?>
+    <table width="127" bgcolor="#214F8E" cellpadding="0" cellspacing="10">
+    <tr>
+    <td align="center"> 
+    <font face="sans-serif" color="white" style="font-size:11px;">
+    <b>FOURNISSEURS PARTENAIRES</b>
+    </font>
+    </td>
+    </tr>
+    <?php $cpt=0;foreach($fournisseurs as $id=>$data) {?>
+      <tr>
+      <td bgcolor="white" align=center>    
+        <table width="100%" cellpadding="3"><td color=white align=center>
+        <a style="text-decoration:none;" href="/suppliers/<?php echo $data['nomFournisseur'];?>/<?php echo $id;?>">
+          <font face="sans-serif"  color="#214F8E" style="font-size:11px;text-decoration:none;">
+            <b style="text-decoration:none;">
+              <?php echo $data['nom'];?>
+            </b>
+          </font>
+        </a>
+        </td></table>
+      </td>
+      </tr>
+    <?php $cpt++;}?>
+    </table>
+<?php }
+}

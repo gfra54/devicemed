@@ -105,6 +105,7 @@ function display_pub($pub,$attr=array(),$type=false) {
 		if($PUB['url_tracking_display']) {
 			$style='';
 			$largeur_maximale = get_field('largeur_maximale',$PUB['ID']);
+
 			if(get_field('bordure',$PUB['ID'])) {
 				$style.='border:1px solid #ccc;';
 				$largeur_maximale-=2;
