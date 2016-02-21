@@ -46,6 +46,9 @@
 							<div class="form-submit input_sabonner_magazine"><input type="submit" value="S'abonner" /></div>
 						</div>
 					<?php } ?>
+					<div class="form-row">
+						<a class="link" href="/archives">Cliquer ici pour consulter les numéros précédents</a>
+					</div>
 				</div>
 			</form>
 		<?php }else { ?>
