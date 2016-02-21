@@ -1,0 +1,42 @@
+  #sidebar-fiches .logo_supplier {
+    float: left;
+    width: 49%;
+    background: white;
+    height: 65px;
+    margin-bottom: 2%;
+    display: block;
+    background-size: 87% auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+    -webkit-transition:all 0.3s ease;
+    transition:all 0.3s ease;
+    color: #214f8e;
+    padding-top: 16px;
+    font-family: 'opensans-condbold';
+    text-transform: uppercase;
+    }
+
+
+  #sidebar-fiches .logo_supplier[title="Pierre Fabre Médicament - Supercritical Fluids Division"]{
+    background-size: 75% auto;
+  }
+  #sidebar-fiches .logo_supplier[title="Préiso"]{
+    background-size: 34% auto;
+  }
+  #sidebar-fiches .logo_supplier:hover {
+    opacity: 0.5;
+  }
+  #sidebar-fiches .logo_supplier:nth-child(2n+1) {
+    margin-right: 2%;
+  }
+  #sidebar-fiches .logo_supplier IMG{
+    display: none;
+  }
+
+a.link {
+  text-decoration: underline;
+}
+
+a.link:hover {
+  text-decoration: none;
+}
