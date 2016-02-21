@@ -152,38 +152,6 @@
 				<h1 class="title">Fournisseurs partenaires</h1>
 			</div>
 		</header>	
-		<style>
-			#sidebar-fiches .logo_supplier {
-				float: left;
-				width: 49%;
-				background: white;
-				height: 90px;
-				margin-bottom: 2%;
-				display: block;
-				background-size: 87% auto;
-				background-repeat: no-repeat;
-				background-position: center center;
-				-webkit-transition:all 0.3s ease;
-				transition:all 0.3s ease;
-				color: #214f8e;
-				padding-top: 24px;
-				font-family: 'opensans-condbold';
-				text-transform: uppercase;
-   			}
-			#sidebar-fiches .logo_supplier[title="Préiso"]{
-				background-size: 50% auto;
-			}
-			#sidebar-fiches .logo_supplier:hover {
-				opacity: 0.5;
-				background-size: 95% auto;
-			}
-			#sidebar-fiches .logo_supplier:nth-child(2n+1) {
-				margin-right: 2%;
-			}
-			#sidebar-fiches .logo_supplier IMG{
-				display: none;
-			}
-		</style>
 		<article>
 			<?php
 				// $fournisseurs = get_fournisseurs(array('premium'=>true));
