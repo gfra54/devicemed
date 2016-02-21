@@ -3649,3 +3649,10 @@ section.article .metas {
     text-decoration: underline;
   }  
 
+a.link {
+    text-decoration: underline;
+}
+
+a.link:hover {
+    text-decoration: none;
+}
