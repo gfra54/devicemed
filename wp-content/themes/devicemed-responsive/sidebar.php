@@ -145,63 +145,51 @@
 		?>
 		<a href="<?php echo $urlTemp; ?>/archives" class="more">Consulter d'autres numéros</a>
 	</section>
-	<!--<section id="sidebar-issues">
-		<header>
-			<div class="right-side">
-				<h1 class="title">Guide de l'acheteur</h1>
-			</div>
-		</header>	
-		<?php
-			if ($session = DM_Wordpress_Members::session()):
-				echo "<a href='/wp-content/uploads/archives/pdf/juillet_aout2014.pdf' target='_blank'><article>";
-					echo "<div class='right-side'>";
-						echo "<span class='issue'>Guide de l'acheteur</span>";
-						echo "<span class='download'>Consulter le guide</span>";
-					echo "</div>";
-					echo "<div class='left-side' style=\"background-image:url('/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
-						// echo "<img src='$urlImg' />";
-					echo "</div>";
-				echo "</article></a>";
-			else:
-				echo "<article id='bloc_guide_acheteur'>";
-					echo "<div class='right-side'>";
-						echo "<span class='issue'>Guide de l'acheteur</span>";
-						echo "<span class='download'>Consulter le guide</span>";
-					echo "</div>";
-					echo "<div class='left-side' style=\"background-image:url('/wp-content/uploads/archives/apercu/juillet_aout2014.PNG');\">";
-						// echo "<img src='$urlImg' />";
-					echo "</div>";
-				echo "</article>";
-			endif;
-		?>
-	</section>-->
-	<!--<section id="sidebar-video">
-		<header>
-			<h1 class="title">Vidéo</h1>
-		</header>
-		<div class="video-wrapper">
-			<img src="http://placehold.it/350x250" alt="" />
-		</div>
-	</section>-->
-	<!--<section id="sidebar-agenda">
-		<header>
-			<div class="left-side">
-				<img src="<?php echo get_template_directory_uri(); ?>/images/sidebar-supplier-registration-icon.png"" />
-			</div>
-			<div class="right-side">
-				<h1 class="title">Agenda</h1>
-			</div>
-		</header>
-		<div class="events">Aucun événement à venir</div>
-	</section>-->
+	
 	<section id="sidebar-fiches">
 		<header>
 			<div class="right-side">
 				<h1 class="title">Fournisseurs partenaires</h1>
 			</div>
 		</header>	
+		<style>
+			#sidebar-fiches .logo_supplier {
+				float: left;
+				width: 49%;
+				background: white;
+				height: 90px;
+				margin-bottom: 2%;
+				display: block;
+				background-size: 87% auto;
+				background-repeat: no-repeat;
+				background-position: center center;
+				-webkit-transition:all 0.3s ease;
+				transition:all 0.3s ease;
+				color: #214f8e;
+				padding-top: 24px;
+				font-family: 'opensans-condbold';
+				text-transform: uppercase;
+   			}
+			#sidebar-fiches .logo_supplier[title="Préiso"]{
+				background-size: 50% auto;
+			}
+			#sidebar-fiches .logo_supplier:hover {
+				opacity: 0.5;
+				background-size: 95% auto;
+			}
+			#sidebar-fiches .logo_supplier:nth-child(2n+1) {
+				margin-right: 2%;
+			}
+			#sidebar-fiches .logo_supplier IMG{
+				display: none;
+			}
+		</style>
 		<article>
 			<?php
+				// $fournisseurs = get_fournisseurs(array('premium'=>true));
+				// foreach($fournisseurs as $fournisseur) {
+				// 	mse($fournisseur);
+				// }
 				// On récupére les fournisseurs partenaires
 				$sqlPartners = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 ORDER BY supplier_name ASC";
 				// echo "sqlPartners : ". $sqlPartners;
@@ -214,15 +202,26 @@
 					$nomFournisseur = $rowPartners['supplier_name'];
 					$nomFournisseur2 = DM_Wordpress_Suppliers_Model::string_sanitize_nicename($nomFournisseur);
 					$nomFournisseur2 = str_replace(' ','-', $nomFournisseur2);
-					
-					if($j == $nbPartners) {
+					$image = 'http://www.devicemed.fr/wp-content/uploads/logo_suppliers/'.rawurlencode($rowPartners["supplier_logo"]);
+					?>
+					<a title="<?php echo $nomFournisseur;?>" href="/suppliers/<?php echo $nomFournisseur2.'/'.$idFournisseur;?>" style="background-image:url(<?php echo $image ?>)" class='logo_supplier'>
+						<img src="<?php echo $image ?>" />
+					</a>
+<?php					
+/*					if($j == $nbPartners) {
 						echo "<h3 class='title2'><a class=partner-link href=\"/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></h3>";
 					}else {
 						echo "<h3 class='title2'><a class=partner-link href=\"/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></h3><br />";
-					}
+					}*/
 
 					$j++;
 				}
+				if($nbPartners%2) {?>
+					<a title="Voir la liste des fournisseurs" href="/suppliers/" class='logo_supplier'>
+						Voir tous les fournisseurs &raquo;
+					</a>
+
+				<?php }
 			?>
 		</article>
 	</section>
