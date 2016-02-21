@@ -100,9 +100,9 @@ foreach($urls as $url) {
            <?php
       $ban = str_replace('<a ','<a style="display:block" ',$ban);
       if(strstr($ban,'<img style="')!==false) {
-              $ban = str_replace('<img style="','<img width="100%" style="display:block;',$ban);
+              $ban = str_replace('<img style="','<img width="127" style="display:block;',$ban);
       }else {
-              $ban = str_replace('<img ','<img style="display:block" width="100%" ',$ban);
+              $ban = str_replace('<img ','<img style="display:block" width="127" ',$ban);
       }
             echo $ban;
             ?>
@@ -381,7 +381,7 @@ function bloc_partenaires() {
       <tr>
       <td bgcolor="white" align=center>    
         <table width="100%" cellpadding="3"><td color=white align=center>
-        <a style="text-decoration:none;" href="/suppliers/<?php echo $data['nomFournisseur'];?>/<?php echo $id;?>">
+        <a style="text-decoration:none;" href="http://www.devicemed.fr/suppliers/<?php echo $data['nomFournisseur'];?>/<?php echo $id;?>">
           <font face="sans-serif"  color="#214F8E" style="font-size:11px;text-decoration:none;">
             <b style="text-decoration:none;">
               <?php echo $data['nom'];?>
@@ -393,5 +393,7 @@ function bloc_partenaires() {
       </tr>
     <?php $cpt++;}?>
     </table>
+    <?php espace(8);?>
+
 <?php }
 }
