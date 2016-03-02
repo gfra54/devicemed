@@ -382,7 +382,7 @@
 				?>
 			</h3><br />
 			<h3 class='title5'><a href='?type=liste'>3- Par la liste alphabétique complète</a></h3><br />
-			<h3 class='title52'>4- Par sa catégorie de produits et services</h3>
+			<!-- <h3 class='title52'>4- Par sa catégorie de produits et services</h3>
 			<div id='bloc_categories_fournisseurs'>
 				<?php
 					// On récupére les category parente et on créer une colonne toutes les 7 catégories
@@ -456,7 +456,7 @@
 						$i++;
 					}
 				?>
-			</div>
+			</div>-->
 			<div class='bloc_infos_fournisseurs'>
 				<div class='image_repertoire'><img src='<?php echo get_template_directory_uri(); ?>/images/sidebar-issues-icon.png' /></div>
 				<div class='texte_repertoire'>
