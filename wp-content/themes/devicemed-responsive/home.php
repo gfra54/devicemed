@@ -11,11 +11,17 @@
 			wp_redirect($url);
 		}
 	}
+$slider = get_posts(array(
+	'numberposts'	=> 6,
+	'post_type'		=> 'post',
+	'meta_key'		=> 'article_a_la_une',
+	'meta_value'	=> '1'
+));
 ?>
 <?php get_header(); ?>
 <section id="last-posts-featured">
 	<div class="slider">
-<?php $featured = array(); foreach (devicemed_home_get_featured_posts(6) as $post): setup_postdata($post); $featured[] = $post->ID; ?>
+<?php $featured = array(); foreach ($slider as $post): setup_postdata($post); $featured[] = $post->ID; ?>; $featured[] = $post->ID; ?>
 		<article>
 			<a href="<?php echo get_permalink($post->ID); ?>">
 			<div class="col-md-8 col-sm-8 column-right">
