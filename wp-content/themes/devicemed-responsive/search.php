@@ -14,10 +14,7 @@ get_header(); ?>
 }
 </style>
 
-		<?php 
-
 		
-		if ( have_posts() ) : ?>
 
 <div class="row column-content page-search">
 	<div class="col-md-9 col-sm-8 column-main">
@@ -25,7 +22,8 @@ get_header(); ?>
 		<section class="results">
 			<h2 class="title">Résultats trouvés pour "<span id="search_query"><?php echo get_search_query(); ?></span>"</h2>
 
-			<?php
+		<?php
+		if ( have_posts() ) {
 			// Start the loop.
 			while ( have_posts() ) : the_post(); ?>
 
@@ -50,10 +48,20 @@ get_header(); ?>
 			) );
 
 		// If no content, include the "No posts found" template.
-		else :
-			get_template_part( 'content', 'none' );
+		} else {?>
+			<center>
 
-		endif;
+			<p><i>Aucun résultat trouvé.</i></p>
+
+			<h3 class="title5">Faire une nouvelle recherche</h3>
+			<div class="search">
+			<form role="search" method="get" action="/">
+				<input type="text" name="s" placeholder="Rechercher dans les articles" value="<?php echo htmlspecialchars($_GET['s']);?>">
+				<input type="submit" value="Rechercher">
+			</form>
+			</div>
+			</center>
+		<?php }
 		?>
 		</section>
 	</div>

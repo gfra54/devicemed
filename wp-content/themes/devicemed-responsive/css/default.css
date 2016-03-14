@@ -833,19 +833,22 @@ input[type=submit].button {
 #header .search {
   float: left;
   margin-left: 0px;
+}
+DIV.search {
   background: #ddd;
-  width: 250px;
-  height: 30px;
   overflow: hidden;
   position: relative;
+  width: 250px;
+  height: 30px;
 }
+
 @media screen and (max-width: 768px) {
   #header .search {
     float: none;
     width: auto;
   }
 }
-#header .search input[type=text] {
+.search input[type=text] {
   border: none;
   background: #ddd;
   padding: 0;
@@ -855,11 +858,11 @@ input[type=submit].button {
   box-sizing: border-box;
   padding-left: 10px;
 }
-#header .search input[type=text]:focus {
+.search input[type=text]:focus {
   background: #e7e7e7;
   outline: 0;
 }
-#header .search input[type=submit] {
+.search input[type=submit] {
   position: absolute;
   right: 0;
   top: 0;
