@@ -1,4 +1,5 @@
 <?php 
+$GLOBALS['PAGE_SUPPLIERS']=true;
 // On récupére les fournisseurs partenaires (premium)
 $sqlFournisseurs = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 AND supplier_status=1 ORDER BY supplier_name ASC";
 $resultFournisseurs = mysql_query($sqlFournisseurs);
