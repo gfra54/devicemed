@@ -145,6 +145,18 @@
 </div>
 <header id="header">
 	<div class="logo"><a href="<?php echo home_url(); ?>" title="<?php bloginfo('name'); ?> - <?php bloginfo('description'); ?>"><img src="<?php echo get_template_directory_uri(); ?>/images/logo.png" alt="<?php bloginfo('name'); ?> - <?php bloginfo('description'); ?>" /></a></div>
+	<div class="nl-header">
+
+	<form action="https://app.mailjet.com/account/tools/widget/subscribe/1Nj" target="nl" class="mailjet-widget-form" id="mailjet-widget-form-6901" accept-charset="utf-8" method="post">      
+		<h2>Recevoir notre newsletter</h2>
+		<div class="nl-field">
+        	<input placeholder="Adresse mail" type="email" class="mailjet-widget-email-field" name="email" id="mailjet-widget-email-field-6901"  value="" size="20" maxlength="80"  />
+        	<input type="submit" value="Ok">
+        </div>
+      	<small><u><a href="/newsletter/inscription">Consulter les archives</a></u></small>
+	</form>
+
+	</div>
 	<div class="sidebar">
 		<div class="search">
 			<form role="search" method="get" action="<?php bloginfo('url'); ?>">
