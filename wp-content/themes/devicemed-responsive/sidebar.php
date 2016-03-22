@@ -1,4 +1,5 @@
 <?php
+
 	$supplier_premium = $supplier['supplier_premium'];
 
 	if($_GET['inscription_fournisseur'] == 1) {
@@ -106,11 +107,6 @@
 	}
 ?>
 <div id="sidebar" class="column col-md-3 col-sm-4 column-sidebar">
-	<?php 
-	if(!empty($GLOBALS['PAGE_SUPPLIERS'])) {
-		bloc_partenaires_side();
-	}?>	
-
 	<?php afficher_pub('site-colonne');?>
 
 	<?php afficher_pub('cadre-video');?>
@@ -150,39 +146,7 @@
 		?>
 		<a href="<?php echo $urlTemp; ?>/archives" class="more">Consulter d'autres numéros</a>
 	</section>
-	<?php if(empty($GLOBALS['PAGE_SUPPLIERS'])) {
-		bloc_partenaires_side();
-	}?>	
-	<section id="sidebar-tag">
-		<header>
-			<div class="right-side">
-				<h1 class="title">On en parle</h1>
-			</div>
-		</header>	
-		<article>
-			<?php
-				echo "<h3 class='title2'><a href=\"/tag/implant\" target='_blank'>Implants</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"/tag/moulage\" target='_blank'>Moulage</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"/tag/medtec\" target='_blank'>Medtec</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"/tag/impression-3d\" target='_blank'>Impression 3D</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"/tag/iso-13485\" target='_blank'>ISO 13485</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"/tag/usinage\" target='_blank'>Usinage</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"/tag/pharmapack\" target='_blank'>Pharmapack</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"/tag/salle-blanche\" target='_blank'>Salle blanche</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"/tag/instrument-chirurgical\" target='_blank'>Instruments chirurgicaux</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"/tag/mesure-3d\" target='_blank'>Mesure 3D</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"/tag/tracabilite\" target='_blank'>Traçabilité</a></h3><br />";
-			?>
-		</article>
-	</section>
-	<!--<section id="sidebar-tag">
-		<?php wp_tag_cloud('number=10'); ?>
-	</section>-->
-</div>
-
-
-<?php
-function bloc_partenaires_side() {?>
+	
 	<section id="sidebar-fiches">
 		<header>
 			<div class="right-side">
@@ -230,4 +194,29 @@ function bloc_partenaires_side() {?>
 			?>
 		</article>
 	</section>
-<?php }
+	<section id="sidebar-tag">
+		<header>
+			<div class="right-side">
+				<h1 class="title">On en parle</h1>
+			</div>
+		</header>	
+		<article>
+			<?php
+				echo "<h3 class='title2'><a href=\"/tag/implant\" target='_blank'>Implants</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/moulage\" target='_blank'>Moulage</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/medtec\" target='_blank'>Medtec</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/impression-3d\" target='_blank'>Impression 3D</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/iso-13485\" target='_blank'>ISO 13485</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/usinage\" target='_blank'>Usinage</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/pharmapack\" target='_blank'>Pharmapack</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/salle-blanche\" target='_blank'>Salle blanche</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/instrument-chirurgical\" target='_blank'>Instruments chirurgicaux</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/mesure-3d\" target='_blank'>Mesure 3D</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/tracabilite\" target='_blank'>Traçabilité</a></h3><br />";
+			?>
+		</article>
+	</section>
+	<!--<section id="sidebar-tag">
+		<?php wp_tag_cloud('number=10'); ?>
+	</section>-->
+</div>

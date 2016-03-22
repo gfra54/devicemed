@@ -1,6 +1,4 @@
-<?php 
-$GLOBALS['PAGE_SUPPLIERS']=true;
-get_header(); 
+<?php get_header(); 
 ?>
 <div class="row column-content page-members">
 	<div class="col-md-9 col-sm-8 column-main">
