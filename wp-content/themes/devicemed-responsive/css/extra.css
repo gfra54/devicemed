@@ -55,6 +55,7 @@ a.link:hover {
 .nl-header {
   display: none;
 }
+
 @media all and (min-width: 900px) {
   .nl-header {
     display: block;
