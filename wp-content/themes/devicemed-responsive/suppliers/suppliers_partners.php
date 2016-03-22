@@ -1,5 +1,4 @@
 <?php 
-$GLOBALS['PAGE_SUPPLIERS']=true;
 // On récupére les fournisseurs partenaires (premium)
 $sqlFournisseurs = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 AND supplier_status=1 ORDER BY supplier_name ASC";
 $resultFournisseurs = mysql_query($sqlFournisseurs);
@@ -26,6 +25,7 @@ if(isset($_GET['ban'])) {
 }
 
 get_header(); ?>
+<style>#sidebar-fiches {display: none !important;}</style>
 <div class="row column-content page-members">
 	<div class="col-md-9 col-sm-8 column-main">
 	<section class="profile">
@@ -38,15 +38,18 @@ get_header(); ?>
 				$resultFournisseurs = mysql_query($sqlFournisseurs);
 				$nbFournisseurs = mysql_num_rows($resultFournisseurs);
 				
-				echo "<div id='bloc_supplier_search'>";
+				echo "<div class=\"mosaique-fournisseurs\" id='bloc_supplier_search'>";
 					if($nbFournisseurs > 0) {
 						while($rowFournisseurs = mysql_fetch_array($resultFournisseurs)) {
 							$idFournisseur = $rowFournisseurs['ID'];
 							$nomFournisseur = $rowFournisseurs['supplier_name'];
 							$nomFournisseur2 = DM_Wordpress_Suppliers_Model::string_sanitize_nicename($nomFournisseur);
 							$nomFournisseur2 = str_replace(' ','-', $nomFournisseur2);
+							$image = 'http://www.devicemed.fr/wp-content/uploads/logo_suppliers/'.rawurlencode($rowFournisseurs["supplier_logo"]);?>
 							
-							echo "<div class='supplier_search'><a href=\"/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></div>";
+							<div class="case-fournisseur-logo"><a href="/suppliers/<?php echo $nomFournisseur2;?>/<?php echo $idFournisseur;?>" style="background-image: url(<?php echo $image;?>)" title="<?php echo $nomFournisseur;?>"><img src="<?php echo $image;?>" alt="Logo <?php echo $nomFournisseur;?>"></a></div>
+							<?php
+							//echo "<div class='supplier_search'><a href=\"/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></div>";
 						}
 					}else {
 						echo "<p>Nous avons aucun fournisseur partenaire pour le moment.</p>";
