@@ -137,10 +137,10 @@
 				<a href="<?php echo site_url('/members/login'); ?>">Se connecter</a>
 			</div>
 		<?php endif; ?>
-		<div class='links'>
+<!-- 		<div class='links'>
 			<a href='/newsletter/inscription'>Archives de la newsletter</a>
 		</div>
-		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='/wp-content/uploads/devicemed_allemand.png' /></a></div>
+ -->		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='/wp-content/uploads/devicemed_allemand.png' /></a></div>
 	</div>
 </div>
 <header id="header">
