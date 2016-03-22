@@ -656,6 +656,12 @@ input[type=submit].button {
   box-shadow: 0 6px 6px -6px rgba(22, 33, 44, .2);
   /*.ad-728-90 {display:block;width:728px;height:90px;margin:auto;margin-bottom:10px;margin-top:-20px;}*/
 }
+
+#header .logo a, #header .logo img {
+  display: block;
+  width: 100%;
+}
+
 @media screen and (min-width: 768px) and (max-width: 992px) {
   #header {
     height: auto;
