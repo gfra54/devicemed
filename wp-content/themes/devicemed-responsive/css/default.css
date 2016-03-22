@@ -3678,9 +3678,10 @@ body .container .article .content {
 
 #sidebar {
   width:315px;
+  width:275px;
 }
 body .column-main {
-  width: calc(100% - 315px);
+  width: calc(100% - 275px);
 }
 
 .article-image {
