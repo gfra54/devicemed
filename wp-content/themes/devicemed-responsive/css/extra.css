@@ -96,6 +96,7 @@ a.link:hover {
       color: white;
       border: 0px solid #ddd;
   }
+}
 
 .mosaique-fournisseurs {
   overflow: hidden;
@@ -132,4 +133,42 @@ a.link:hover {
 
 .case-fournisseur-logo A[title="Préiso"]{
   background-size: auto 50% ;
+}
+
+
+section.videos {
+  overflow: hidden;
+}
+
+section.videos #sidebar-issues article{
+  float: none;
+}
+
+
+section h2.title { 
+  font-family: 'opensans-condbold';
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #214f8e;
+  margin: 0;
+  padding: 0;
+  line-height: 1em;
+  margin-bottom: 25px;
+}
+
+section.videos .bloc-item {
+  width: 50%;
+  float: left;
+}
+
+section.videos .bloc-item section {
+  box-shadow:none;
+}
+
+section.videos .bloc-item .archives-videos{
+  display: none;
+}
+
+.video-wrapper{
+  margin-bottom: 0.5em;
 }

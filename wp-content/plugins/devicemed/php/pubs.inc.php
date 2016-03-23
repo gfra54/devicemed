@@ -71,17 +71,18 @@ function display_pub($pub,$attr=array(),$type=false) {
 		  ));
 	} else
 	if($type == 'cadre-video') {
-		$out='<section id="sidebar-issues">';
+		$out='<section id="sidebar-issues" class="cadre-video">';
 		$out.='<header>';
-		$out.='<div class="right-side">';
+		// $out.='<div class="right-side">';
 		$out.='<h1 class="title">'.get_field('titre_video',$PUB['ID']).'</h1>';
-		$out.='</div>';
+		// $out.='</div>';
 		$out.='</header><article>';
 		if($url_video = get_field('url_video',$PUB['ID'])) {
 			$video = resizeVideo(gestVideo($url_video));
 			$out.=$video;
 		}
 		$out.=get_field('code',$PUB['ID']);
+		$out.='<center><a class="more archives-videos" href="/videos">Voir d\'autres vidéos</a></center>';
 		$out.='</article></section>';
 		return $out;
 	} else
