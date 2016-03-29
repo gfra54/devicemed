@@ -17,8 +17,8 @@
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<!-- Bootstrap -->
 	<link href="<?php bloginfo('stylesheet_directory'); ?>/css/bootstrap.min.css" rel="stylesheet">
-	<link href="<?php bloginfo('stylesheet_directory'); ?>/css/default.css" rel="stylesheet">
-	<link href="<?php bloginfo('stylesheet_directory'); ?>/css/extra.css?1" rel="stylesheet">
+	<link href="<?php bloginfo('stylesheet_directory'); ?>/css/default.css?3" rel="stylesheet">
+	<link href="<?php bloginfo('stylesheet_directory'); ?>/css/extra.css?2" rel="stylesheet">
 	<link href="<?php bloginfo('stylesheet_directory'); ?>/js/colorbox/example1/colorbox.css" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.bxslider.min.js"></script>
