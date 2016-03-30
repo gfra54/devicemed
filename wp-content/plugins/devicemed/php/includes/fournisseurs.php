@@ -40,6 +40,22 @@ $GLOBALS['MENU_FOURNISSEURS'] = array(
 	),
 );
 
+function fournisseur_categories($fournisseur) {
+	$out=array();
+	if($cats = wp_get_post_terms($fournisseur['ID'],'categorie')) {
+		foreach ($cats as $cat) {
+			if($cat->parent) {
+				if(!isset($out[$cat->parent])) {
+					$parent = get_term($cat->parent,'categorie');
+					$tmp = array('nom'=>$parent->name,'url'=>get_term_link($parent),'categories'=>array());
+					$out[$cat->parent]=$tmp;
+				}
+				$out[$cat->parent]['categories'][]=array('nom'=>$cat->name,'url'=>get_term_link($cat));
+			}
+		}
+	}
+	return $out;
+}
 function fournisseur_sections($fournisseur) {
 	foreach($GLOBALS['MENU_FOURNISSEURS'] as $item) {
 		$file = get_template_directory().'/single-fournisseur-'.$item['anchor'].'.php';
@@ -66,6 +82,14 @@ function fournisseur_menu($fournisseur) {
 	echo $ret;
 }
 
+function fournisseur_categorie_redir() {
+	if(!empty($_GET['categorie'])) {
+		if($term_id = nouvelIdCategorie($_GET['categorie'])) {
+			wp_redirect(get_term_link(get_term($term_id,'categorie')),301);
+			exit;
+		}
+	}
+}
 function fournisseur_redir($legacy_supplier_id) {
 	if($fournisseur = get_fournisseur($legacy_supplier_id,true)) {
 		wp_redirect($fournisseur['url'],301);
@@ -194,8 +218,23 @@ function fournisseur_enrichir($fournisseur) {
 
 	$fournisseur['nom'] = $fournisseur['post_title'];
 
+
+	$fournisseur['categories'] = fournisseur_categories($fournisseur);
 	return $fournisseur;
 }
+
+function fournisseurs_compte($categorie=false) {
+	if(!$categorie) {
+		return wp_count_posts('fournisseur');
+	} else {
+		$query = new WP_Query( array( 
+			'categorie' => $categorie,
+	 		'post_type'		=> 'fournisseur'
+		) );
+		return $query->found_posts;
+	}
+}
+
 function get_fournisseurs($params=array()) {
 	$args = array();
 	if(sinon($params,'premium')) {
@@ -206,13 +245,19 @@ function get_fournisseurs($params=array()) {
 	} else {
 		$rich=false;
 	}
-	$fournisseurs = get_posts(array(
-		'numberposts'	=> sinon($params,'parpage','default:500'),
-		'offset'	=> sinon($params,'debut','default:0'),
-		'post_type'		=> 'fournisseur',
-		'orderby'=> 'title',
-		'order' => 'ASC'
-	)+$args);
+	if(sinon($params,'categorie')) {
+		$args['categorie']=sinon($params,'categorie');
+	}
+	$args['numberposts'] = sinon($params,'parpage','default:500');
+	$args['offset']	= sinon($params,'debut','default:0');
+	$args['post_type'] = 'fournisseur';
+	$args['orderby'] = 'title';
+	$args['order'] = 'ASC';
+m($arg todo s);
+	$query = new WP_Query($args);
+	$fournisseurs = $query->posts;
+	// me($args,$query->posts);
+	// $fournisseurs = get_posts($args);
 	if($rich || sinon($params,'images')) {
 		foreach($fournisseurs as $k=>$v) {
 			$fournisseurs[$k] = fournisseur_enrichir($v);

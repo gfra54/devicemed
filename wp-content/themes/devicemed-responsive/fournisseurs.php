@@ -2,13 +2,18 @@
 /*
 Template Name: fournisseurs
 */
-$count_posts = wp_count_posts('fournisseur');
+$total = fournisseurs_compte($GLOBALS['categorie']);
 
 $parpage=50;
-$total = ceil($count_posts->publish/$parpage);
+$total = ceil($total/$parpage);
 $p=sinon($_GET,'page-fournisseurs','default:1');
 $debut=($p-1)*$parpage;
-$fournisseurs = get_fournisseurs(array('debut'=>$debut,'parpage'=>$parpage));
+
+$params = array('debut'=>$debut,'parpage'=>$parpage);
+if($GLOBALS['categorie']) {
+	$params['categorie']=$GLOBALS['categorie'];
+}
+$fournisseurs = get_fournisseurs($params);
 
 get_header(); ?>
 <div class="row column-content page-members">

@@ -1,29 +1,76 @@
 <?php
 	$all=in_array('all',$_SERVER['argv'])!==false;
 	$vider=$all || in_array('vider',$_SERVER['argv'])!==false;
-	$insert=$all || in_array('insert',$_SERVER['argv'])!==false;
+	$fournisseurs=$all || in_array('insert',$_SERVER['argv'])!==false;
 	$galleries=$all || in_array('galleries',$_SERVER['argv'])!==false;
 	$videos=$all || in_array('videos',$_SERVER['argv'])!==false;
+	$categories=$all || in_array('categories',$_SERVER['argv'])!==false;
 
 	require_once("../../../../wp-load.php");
 
 
-	if($vider) {
-		$args = array(
-			'numberposts' => 5000,
-			'post_status'=>array('draft','publish'),
-			'post_type' =>'fournisseur'
-		);
-		$posts = get_posts( $args );
-		if (is_array($posts)) {
-			e('effacer '.count($posts).' fournisseurs');
-		   foreach ($posts as $post) {
-		       wp_delete_post( $post->ID, true);
-		   }
+	if($categories) {
+		if($vider) {
+			mysql_query('delete from legacy_categories');
+			$res = mysql_query('SELECT * FROM wordpress_term_taxonomy WHERE taxonomy = "categorie"');
+			$cpt=0;
+			while($terme = mysql_fetch_array($res)) {
+				$cpt++;
+				mysql_query('delete from wordpress_terms where term_id = '.$terme['term_id']);
+				mysql_query('delete from wordpress_term_taxonomy where term_taxonomy_id = '.$terme['term_id']);
+				mysql_query('delete from wordpress_term_relashionships where term_taxonomy_id = '.$terme['term_id']);
+			}
+			mysql_query('delete from wordpress_term_taxonomy where taxonomy = "categorie"');
+			e($cpt.' catégories effacées');
 		}
+
+		$sqlCategorie = "SELECT * FROM wordpress_dm_suppliers_categories";
+		$resultCategorie = mysql_query($sqlCategorie);
+		$nbCategorie = mysql_num_rows($resultCategorie);
+		$arrayCategorie = array();
+
+		while($rowCategorie = mysql_fetch_array($resultCategorie)) {
+			$arrayCategorie[] = $rowCategorie;
+		}
+		foreach($arrayCategorie as $categorie) {
+			if($categorie['supplier_souscategorie_parent']) {
+				$categorie_parent = nouvelIdCategorie($categorie['supplier_souscategorie_parent'],true);
+				$categorie_parent_ancien=$categorie['supplier_souscategorie_parent'];
+			} else	if($categorie['supplier_category_parent']) {
+				$categorie_parent = nouvelIdCategorie($categorie['supplier_category_parent'],false);
+				$categorie_parent_ancien=$categorie['supplier_category_parent'];
+			} else {
+				$categorie_parent=0;
+				$categorie_parent_ancien=0;
+			}
+			if($idCategorie = creerCategorie($categorie['supplier_category_title'],$categorie['ID'],false,$categorie_parent,$categorie_parent_ancien)) {
+				$sqlSousCat = "SELECT * FROM wordpress_dm_suppliers_souscategories WHERE supplier_category_parent=".$categorie['ID'];
+				$resultSousCat = mysql_query($sqlSousCat);
+				while($rowSousCat = mysql_fetch_array($resultSousCat)) {
+					if($idSousCat = creerCategorie($rowSousCat['supplier_souscategorie_name'],$rowSousCat['ID'],true,$idCategorie,$categorie['ID'])) {
+
+					}
+				}
+			}
+		}	
 	}
 
-	if($insert) {
+	if($fournisseurs) {
+		e('Fournisseurs');
+		if($vider) {
+			$args = array(
+				'numberposts' => 5000,
+				'post_status'=>array('draft','publish'),
+				'post_type' =>'fournisseur'
+			);
+			$posts = get_posts( $args );
+			if (is_array($posts)) {
+				e('effacer '.count($posts).' fournisseurs');
+			   foreach ($posts as $post) {
+			       wp_delete_post( $post->ID, true);
+			   }
+			}
+		}
 
 		$res = mysql_query('SELECT * FROM wordpress_dm_suppliers');
 
@@ -80,18 +127,11 @@
 			}
 			wp_set_post_terms( $post_id, $cats_nouveau, 'categorie' );
 
-	//m($fournisseur['supplier_logo']);
 			if($fournisseur['supplier_logo']) {
 				$path = ABSPATH.'wp-content/uploads/logo_suppliers/'.$fournisseur['supplier_logo'];
 				Generate_Featured_Image($path,$post_id);
 			}
 
-/*			$url = site_url('/wp-content/uploads/logo_suppliers/').$fournisseur['supplier_logo'];
-			$url =str_replace('.local','.fr', $url);
-			$url =str_replace(' ','%20', $url);
-			if(strstr($url, '.local')===false) {
-				Generate_Featured_Image($url,$post_id);
-			}*/
 		}
 	}
 	if($galleries) {
@@ -184,3 +224,4 @@
 		}
 
 	}
+

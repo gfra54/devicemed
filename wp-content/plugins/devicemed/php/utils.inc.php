@@ -1,4 +1,5 @@
 <?php
+
 function link_cond($url,$lib=false,$before=false,$after=false) {
 	if(isurl($url)) {
 		echo $before;
@@ -99,7 +100,8 @@ function creerCategorie($nom,$id_ancien,$souscategorie=false, $parent=0,$parent_
 	}
 
 	$slugs[$slug] = true;
-	echo($nom.' ('.$slug.') : '.$parent).'<br>';
+	// e($nom.' ('.$slug.') : '.$parent);
+	echo '.';
 
 	$ret = wp_insert_term($nom,'categorie',array(
 		'parent'=>$parent,
@@ -124,7 +126,7 @@ function creerCategorie($nom,$id_ancien,$souscategorie=false, $parent=0,$parent_
 			)');
 			return $ret['term_id'];
 	} else {
-		me($ret);
+		mse($ret);
 	}
 }
 
