@@ -86,7 +86,7 @@ $GLOBALS['data_videos'] = array(
 	),
 	'dailymotion' => array(
 		'name'=>'dailymotion',
-		'embed' => '<iframe frameborder="0" width="480" height="270" src="//www.dailymotion.com/embed/video/%code%'.($GLOBALS['DAILYMOTION_AFFILIATE_ID'] ? '?syndication='.$GLOBALS['DAILYMOTION_AFFILIATE_ID'].'' :'' ).'" allowfullscreen></iframe>',
+		'embed' => '<iframe frameborder="0" width="480" height="270" src="//www.dailymotion.com/embed/video/%code%" allowfullscreen></iframe>',
 		'debut_code_url'=>'video/',
 		'fin_code_url'=>'_',
 		'debut_code_url_object'=>'video/',
