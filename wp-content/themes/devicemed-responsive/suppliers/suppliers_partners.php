@@ -1,4 +1,5 @@
 <?php 
+
 get_header(); ?>
 <style>#sidebar-fiches {display: none !important;}</style>
 <div class="row column-content page-members">
@@ -8,7 +9,7 @@ get_header(); ?>
 		<p>
 			<div class="mosaique-fournisseurs" id='bloc_supplier_search'>
 			<?php foreach(get_fournisseurs(array('premium'=>true)) as $fournisseur) {?>
-				<div class="case-fournisseur-logo"><a href="<?php echo $fournisseur['url'];?>" style="background-image: url(<?php echo $fournisseur['logo'];?>)" title="<?php echo $fournisseur['nom'];?>"><img src="<?php echo $fournisseur['logo'];?>" alt="Logo <?php echo $nomFournisseur;?>"></a></div>
+				<div class="case-fournisseur-logo"><a href="<?php echo $fournisseur['permalink'];?>" style="background-image: url(<?php echo $fournisseur['logo'];?>)" title="<?php echo $fournisseur['nom'];?>"><img src="<?php echo $fournisseur['logo'];?>" alt="Logo <?php echo $nomFournisseur;?>"></a></div>
 			<?php }?>
 			</div>
 		</p>

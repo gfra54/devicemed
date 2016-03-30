@@ -1,17 +1,77 @@
 <?php
-/*
-add_action('generate_rewrite_rules', 'urls_fournisseurs');
- 
-function urls_fournisseurs() {
-  global $wp_rewrite;
-  $new_non_wp_rules = array(
-    'css/(.*)'       => 'wp-content/themes/'. $theme_name . '/css/$1',
-    'js/(.*)'        => 'wp-content/themes/'. $theme_name . '/js/$1',
-    'images/wordpress-urls-rewrite/(.*)'    => 'wp-content/themes/'. $theme_name . '/images/wordpress-urls-rewrite/$1',
-  );
-  $wp_rewrite->non_wp_rules += $new_non_wp_rules;
-}*/
+$GLOBALS['MENU_FOURNISSEURS'] = array(
+	array(
+		'titre'=>'Coordonnées',
+		'anchor'=>'coordonnees'
+	),
+	array(
+		'titre'=>'Activités',
+		'anchor'=>'activites',
+	),
+	array(
+		'titre'=>'Présentation',
+		'anchor'=>'presentation',
+		'premium'=>true
+	),
+	array(
+		'titre'=>'Articles',
+		'anchor'=>'articles',
+		'premium'=>true
+	),
+	array(
+		'titre'=>'Photos',
+		'anchor'=>'photos',
+		'premium'=>true
+	),
+	array(
+		'titre'=>'Vidéos',
+		'anchor'=>'videos',
+		'premium'=>true
+	),
+	array(
+		'titre'=>'Evénements',
+		'anchor'=>'evenements',
+		'premium'=>true
+	),
+	array(
+		'titre'=>'Documentation',
+		'anchor'=>'documentation',
+		'premium'=>true
+	),
+);
 
+function fournisseur_sections($fournisseur) {
+	foreach($GLOBALS['MENU_FOURNISSEURS'] as $item) {
+		$file = get_template_directory().'/single-fournisseur-'.$item['anchor'].'.php';
+		if(file_exists($file)) {
+			include $file;
+		} else {
+			m($file);
+		}
+	}
+}
+function fournisseur_menu($fournisseur) {
+
+	$ret = '<section class="actions">';
+	foreach($GLOBALS['MENU_FOURNISSEURS'] as $item) {
+		if(!$item['premium'] || $fournisseur['premium']) {
+			$ret.='<a href="'.$fournisseur['url'].'#'.$item['anchor'].'" class="menu_actif">'.$item['titre'].'</a>';
+		} else {
+			$ret.='<span class="details_supplier_disabled">'.$item['titre'].'</span>';
+
+		}
+	}
+	$ret.='</section>';
+
+	echo $ret;
+}
+
+function fournisseur_redir($legacy_supplier_id) {
+	if($fournisseur = get_fournisseur($legacy_supplier_id,true)) {
+		wp_redirect($fournisseur['url'],301);
+		exit;
+	}
+}
 add_filter( 'parse_query', 'filtre_fournisseurs' );
 add_action( 'restrict_manage_posts', 'filtre_fournisseurs_restrict_manage_posts' );
 
@@ -102,6 +162,16 @@ function get_fournisseur($ID,$legacy=false) {
 function fournisseur_enrichir($fournisseur) {
 	$fournisseur = get_object_vars($fournisseur);
 
+	$allmeta = get_post_meta($fournisseur['ID']);
+	foreach($allmeta as $k=>$v) {
+		if(substr($k, 0,1) !='_') {
+			$meta[$k] = $v[0];
+			if(!isset($fournisseur[$k])) {
+				$fournisseur[$k]=$v[0];
+			}
+		}
+	}
+	$fournisseur['meta'] = $meta;
 	$gallerie = get_field('gallerie',$fournisseur['ID'],false);
 	if(!is_array($gallerie)) {
 		$gallerie = array();
@@ -120,7 +190,7 @@ function fournisseur_enrichir($fournisseur) {
 
 	$fournisseur['logo'] = get_post_thumbnail_url($fournisseur['ID']);
 	
-	$fournisseur['url'] = get_post_permalink($fournisseur['ID']);
+	$fournisseur['permalink'] = get_post_permalink($fournisseur['ID']);
 
 	$fournisseur['nom'] = $fournisseur['post_title'];
 
@@ -143,7 +213,6 @@ function get_fournisseurs($params=array()) {
 		'orderby'=> 'title',
 		'order' => 'ASC'
 	)+$args);
-
 	if($rich || sinon($params,'images')) {
 		foreach($fournisseurs as $k=>$v) {
 			$fournisseurs[$k] = fournisseur_enrichir($v);
@@ -151,6 +220,6 @@ function get_fournisseurs($params=array()) {
 		}
 		return $fournisseurs;
 	} else {
-		return json_encode(json_decode($fournisseurs,true));
+		return array_map('get_object_vars',$fournisseurs);
 	}
 }

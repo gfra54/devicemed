@@ -1,4 +1,11 @@
 <?php
+function link_cond($url,$lib=false,$before=false,$after=false) {
+	if(isurl($url)) {
+		echo $before;
+		?><a href="<?php echo esc_html($url) ?>" target='_blank'><?php echo esc_html($lib ? $lib : $url); ?></a><?php
+		echo $after;
+	}
+}
 function array_unique_multi($array) {
 	return array_map("unserialize", array_unique(array_map("serialize", $array)));
 }
