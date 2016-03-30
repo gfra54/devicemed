@@ -75,7 +75,50 @@ ini_set("memory_limit", "1G");
 //error_reporting(-1);
 //ini_set('display_errors', 'On');
 
+function get_fournisseur($ID,$legacy=false) {
+	if($legacy) {
 
+		$query = new WP_Query(array(
+			'post_type'		=> 'fournisseur',
+			'meta_query' => array(
+		       array(
+		           'key' => 'legacy_supplier_id',
+		           'value' => $ID,
+		           'compare' => '=',
+		       )
+		   )
+		));
+		if(count($query->posts)) {
+			return fournisseur_enrichir($query->posts[0]);
+		}
+	} else 
+	if($fournisseur = get_post($ID)){
+		if($fournisseur->post_type == 'fournisseur') {
+			return fournisseur_enrichir($fournisseur);
+		}
+	}
+}
+
+function fournisseur_enrichir($fournisseur) {
+	$fournisseur = get_object_vars($fournisseur);
+
+	$gallerie = get_field('gallerie',$fournisseur['ID'],false);
+	if(!is_array($gallerie)) {
+		$gallerie = array();
+	}
+	$fournisseur['gallerie'] = $gallerie;
+
+	$fournisseur['videos'] = array();
+	while(have_rows('videos',$fournisseur['ID'])) {
+		the_row();
+		$fournisseur['videos'][] = array(
+			'titre_de_la_video'=>get_sub_field('titre_de_la_video'),
+			'url_de_la_video'=>get_sub_field('url_de_la_video')
+		);
+	}
+
+	return $fournisseur;
+}
 function get_fournisseurs($params=array()) {
 	$args = array();
 	if(sinon($params,'premium')) {

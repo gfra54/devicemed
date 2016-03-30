@@ -167,6 +167,7 @@ class DM_Wordpress_Suppliers_Videos
 				$galleries = $suppliers_galleries->get_last_galleries_by_supplier_id($supplier['ID'], 10);
 				$suppliers_videos = new DM_Wordpress_Suppliers_Videos_Model();
 				$videos = $suppliers_videos->get_last_videos_by_supplier_id($supplier['ID'], 10);
+				m($videos);
 				$session = DM_Wordpress_Members::session();
 		
 				$suppliers_categories = new DM_Wordpress_Suppliers_Categories_Model();
