@@ -28,6 +28,7 @@
 		$res = mysql_query('SELECT * FROM wordpress_dm_suppliers');
 
 		while($fournisseur = mysql_fetch_assoc($res)) {
+			// if($fournisseur['ID']!=199) continue;
 			$post = array(
 				'post_type'=>'fournisseur',
 				'post_date'=>$fournisseur['supplier_created'],
@@ -80,12 +81,17 @@
 			wp_set_post_terms( $post_id, $cats_nouveau, 'categorie' );
 
 	//m($fournisseur['supplier_logo']);
-			$url = site_url('/wp-content/uploads/logo_suppliers/').$fournisseur['supplier_logo'];
+			if($fournisseur['supplier_logo']) {
+				$path = ABSPATH.'wp-content/uploads/logo_suppliers/'.$fournisseur['supplier_logo'];
+				Generate_Featured_Image($path,$post_id);
+			}
+
+/*			$url = site_url('/wp-content/uploads/logo_suppliers/').$fournisseur['supplier_logo'];
 			$url =str_replace('.local','.fr', $url);
 			$url =str_replace(' ','%20', $url);
 			if(strstr($url, '.local')===false) {
 				Generate_Featured_Image($url,$post_id);
-			}
+			}*/
 		}
 	}
 	if($galleries) {

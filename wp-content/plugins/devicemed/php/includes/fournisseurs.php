@@ -117,6 +117,13 @@ function fournisseur_enrichir($fournisseur) {
 		);
 	}
 
+
+	$fournisseur['logo'] = get_post_thumbnail_url($fournisseur['ID']);
+	
+	$fournisseur['url'] = get_post_permalink($fournisseur['ID']);
+
+	$fournisseur['nom'] = $fournisseur['post_title'];
+
 	return $fournisseur;
 }
 function get_fournisseurs($params=array()) {
@@ -125,6 +132,9 @@ function get_fournisseurs($params=array()) {
 		$args['meta_key']='premium';
 		$args['meta_value']=1;
 		$params['images']=true;
+		$rich=true;
+	} else {
+		$rich=false;
 	}
 	$fournisseurs = get_posts(array(
 		'numberposts'	=> sinon($params,'parpage','default:500'),
@@ -134,11 +144,9 @@ function get_fournisseurs($params=array()) {
 		'order' => 'ASC'
 	)+$args);
 
-	if(sinon($params,'images')) {
+	if($rich || sinon($params,'images')) {
 		foreach($fournisseurs as $k=>$v) {
-			$v = get_object_vars($v);
-			$v['thumbnail'] = get_post_thumbnail_url($v['ID']);
-			$fournisseurs[$k] = $v;
+			$fournisseurs[$k] = fournisseur_enrichir($v);
 
 		}
 		return $fournisseurs;
