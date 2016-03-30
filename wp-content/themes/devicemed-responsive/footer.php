@@ -10,12 +10,15 @@
 </div><!-- .container -->
 <?php wp_footer(); ?>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="<?php bloginfo('stylesheet_directory'); ?>/js/bootstrap.min.js"></script>
-<script src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.bxslider.min.js"></script>
-<script src="<?php bloginfo('stylesheet_directory'); ?>/js/colorbox/jquery.colorbox-min.js"></script>
+<?php include_external('js/bootstrap.min.js');?>
+<?php include_external('js/jquery.bxslider.min.js');?>
+<?php include_external('js/colorbox/jquery.colorbox-min.js');?>
 <?php 
 	if($GLOBALS['habillage']) { extrajs('pubs'); }
 	extrajs('nl');
+	
+	extrajs('bottom');
+
 ?>
 </body>
 </html>

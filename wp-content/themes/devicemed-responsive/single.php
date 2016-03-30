@@ -101,9 +101,9 @@
 			</ul>
 		</div>-->
 <script type="text/javascript">
-$(function() {
+/*$(function() {
 	$('.image_clicable a').colorbox();
-});
+});*/
 </script>
 		<?php endif; ?>
 

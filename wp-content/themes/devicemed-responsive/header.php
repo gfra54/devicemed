@@ -16,12 +16,12 @@
     <![endif]-->
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<!-- Bootstrap -->
-	<link href="<?php bloginfo('stylesheet_directory'); ?>/css/bootstrap.min.css" rel="stylesheet">
-	<link href="<?php bloginfo('stylesheet_directory'); ?>/css/default.css?3" rel="stylesheet">
-	<link href="<?php bloginfo('stylesheet_directory'); ?>/css/extra.css?3" rel="stylesheet">
-	<link href="<?php bloginfo('stylesheet_directory'); ?>/js/colorbox/example1/colorbox.css" rel="stylesheet">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery.bxslider.min.js"></script>
+	<?php include_external('css/bootstrap.min.css');?>
+	<?php include_external('css/default.css');?>
+	<?php include_external('css/extra.css');?>
+	<?php include_external('js/colorbox/example1/colorbox.css');?>
+	<?php include_external('js/jquery.min.js');?>
+	<?php include_external('js/jquery.bxslider.min.js');?>
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

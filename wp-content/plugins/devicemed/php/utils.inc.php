@@ -1,4 +1,40 @@
 <?php
+function include_external($file,$maj=false){
+	if(is_array($file)) {
+		foreach($file as $fileunique) {
+			include_external($fileunique,$maj);
+		}
+	} else {
+		$ext = getExtension($file);
+		if(!isUrl($file)) {
+			$path = DEVICEMED_THEME_PATH.$file;
+			$time= date('Ymd');
+			$time = $maj && $maj>$time ? $maj : $time;
+			$file = addURLParameter($file,'t',$time);
+			$file = DEVICEMED_THEME_URL.$file;
+		}
+		if($ext == 'css'){
+			baliseCss($file);
+		} else if($ext == 'js') {
+			?><script src="<?php echo $file;?>"></script><?php 
+		}
+		echo PHP_EOL;
+	}
+}	
+
+function isUrl($string) {
+	return filter_var($string, FILTER_VALIDATE_URL);
+}
+
+function baliseCss($file){
+	$css = '<link rel="stylesheet" href="'.$file.'" type="text/css"/>';
+	echo $css;
+}
+
+function getExtension($f) {
+	$tmp = explode('.',$f);
+	return end($tmp);
+}
 function datefr($date) {
 	$GLOBALS['MOIS'] = array("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre");
 	$time = strtotime($date);
@@ -142,7 +178,7 @@ function extracss($w) {
 ?><link rel="stylesheet" href="<?php echo DEVICEMED_THEME_URL;?>/css/extra/<?php echo $w;?>.css" /><?php 
 }
 function extrajs($w) {
-?><script src="<?php echo DEVICEMED_THEME_URL;?>/js/extra/<?php echo $w;?>.js"></script><?php 
+include_external('js/extra/'.$w.'.js');
 }
 function addToURL($url,  $key, $value) {
     $info = parse_url( $url );
