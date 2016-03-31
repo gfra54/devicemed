@@ -1,4 +1,4 @@
-<section class="products">
+<section class="products read-more">
 	<?php foreach($fournisseur['categories'] as $categorie){?>
 		<h2><a href="<?php echo $categorie['url'];?>"><?php echo $categorie['nom'];?></a></h2>
 		<?php foreach($categorie['categories'] as $sous_categorie) {?>

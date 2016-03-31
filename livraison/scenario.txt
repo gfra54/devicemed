@@ -26,3 +26,9 @@ desactiver/activer permalink ds l'admin
 
 faire des redirs 301 : 
 page des fournisseurs non premium
+
+definir query var pour categorie
+
+copier les events pour qosina
+realmeca
+teleflex

@@ -57,27 +57,40 @@ function fournisseur_categories($fournisseur) {
 	return $out;
 }
 function fournisseur_sections($fournisseur) {
+	$page = check('page');
 	foreach($GLOBALS['MENU_FOURNISSEURS'] as $item) {
-		$file = get_template_directory().'/single-fournisseur-'.$item['anchor'].'.php';
-		if(file_exists($file)) {
-			include $file;
-		} else {
-			m($file);
+		if(!$page || $page == $item['anchor']) {
+			$file = get_template_directory().'/single-fournisseur-'.$item['anchor'].'.php';
+			echo '<section id="'.$item['anchor'].'"><h2 class="title"><a name="'.$item['anchor'].'">'.$item['titre'].'</a></h2></section><div>';
+			if(file_exists($file)) {
+				include $file;
+			} else {
+				m($file);
+			}
+			echo '</div>';
 		}
 	}
 }
 function fournisseur_menu($fournisseur) {
-
-	$ret = '<section class="actions">';
+	$page = check('page');
+	$ret='<input type=hidden name=page value="'.htmlspecialchars($page).'">';
+	if(!$page) {
+		$page = 'coordonnees';
+	}
+	$ret.= '<div class="cadre-menu-fournisseurs"><section class="actions menu-fournisseurs">';
 	foreach($GLOBALS['MENU_FOURNISSEURS'] as $item) {
+		if($page == $item['anchor']) {
+			$class='menu_actif';
+		}else {
+			$class='';
+		}
 		if(!$item['premium'] || $fournisseur['premium']) {
-			$ret.='<a href="'.$fournisseur['url'].'#'.$item['anchor'].'" class="menu_actif">'.$item['titre'].'</a>';
+			$ret.='<a href="'.$fournisseur['premalink'].'?page='.$item['anchor'].'" data-id="'.$item['anchor'].'" class="menu-item '.$class.'">'.$item['titre'].'</a>';
 		} else {
 			$ret.='<span class="details_supplier_disabled">'.$item['titre'].'</span>';
-
 		}
 	}
-	$ret.='</section>';
+	$ret.='</section></div>';
 
 	echo $ret;
 }
@@ -196,9 +209,23 @@ function fournisseur_enrichir($fournisseur) {
 		}
 	}
 	$fournisseur['meta'] = $meta;
-	$gallerie = get_field('gallerie',$fournisseur['ID'],false);
+	$gallerie = get_field('gallerie',$fournisseur['ID']);
 	if(!is_array($gallerie)) {
 		$gallerie = array();
+	}
+	foreach($gallerie as $k=>$photo) {
+		if(is_numeric($photo)) {
+			$photo = array('ID'=>$photo,'id'=>$photo);
+			$meta = wp_get_attachment_metadata($photo['id']);
+			$p = get_post($photo['id']);
+			$photo['title'] = $p->post_title;
+			$photo['caption'] = $p->post_excerpt;
+
+			$photo['filename'] = basename($meta['file']);
+			$photo['url'] = wp_upload_dir()['baseurl'].'/'.$meta['file'];
+			$photo['sizes'] = array('thumbnail'=>wp_get_attachment_thumb_url($photo['id']));
+			$gallerie[$k]=$photo;
+		}
 	}
 	$fournisseur['gallerie'] = $gallerie;
 
@@ -211,6 +238,17 @@ function fournisseur_enrichir($fournisseur) {
 		);
 	}
 
+	$fournisseur['salons'] = array();
+	while(have_rows('salons',$fournisseur['ID'])) {
+		the_row();
+		$fournisseur['salons'][] = array(
+			'nom_du_salon'=>get_sub_field('nom_du_salon'),
+			'url'=>get_sub_field('url'),
+			'dates'=>get_sub_field('dates'),
+			'lieu'=>get_sub_field('lieu'),
+			'informations_additionelles'=>get_sub_field('informations_additionelles'),
+		);
+	}
 
 	$fournisseur['logo'] = get_post_thumbnail_url($fournisseur['ID']);
 	
@@ -218,14 +256,30 @@ function fournisseur_enrichir($fournisseur) {
 
 	$fournisseur['nom'] = $fournisseur['post_title'];
 
+	$fournisseur['documentation']=array();
+	$attachments = new Attachments( 'attachments_fournisseur', $fournisseur['ID']); 
+	if($attachments->exist()) {
+		while( $attachments->get() ){ 
+			$fournisseur['documentation'][$attachments->url()]=$attachments->field( 'title' );
+		}
+	}
 
 	$fournisseur['categories'] = fournisseur_categories($fournisseur);
 	return $fournisseur;
 }
 
+function fournisseur_empty($test) {
+	if(!$test) {
+		?><i><small>Cette section est vide</small></i><?php
+		return true;
+	} else {
+		return false;
+	}
+}
 function fournisseurs_compte($categorie=false) {
 	if(!$categorie) {
-		return wp_count_posts('fournisseur');
+		$ret = wp_count_posts('fournisseur');
+		return $ret->publish;
 	} else {
 		$query = new WP_Query( array( 
 			'categorie' => $categorie,
@@ -247,13 +301,24 @@ function get_fournisseurs($params=array()) {
 	}
 	if(sinon($params,'categorie')) {
 		$args['categorie']=sinon($params,'categorie');
+/*		$args['tax_query']=array(
+			array(
+				'taxonomy' => 'categorie',
+				'field' => 'id',
+				'terms' => sinon($params,'categorie')
+			)
+    	);*/
+	} else {
+		$args['post_type'] = 'fournisseur';
 	}
-	$args['numberposts'] = sinon($params,'parpage','default:500');
-	$args['offset']	= sinon($params,'debut','default:0');
-	$args['post_type'] = 'fournisseur';
+//	$args['numberposts'] = sinon($params,'parpage','default:500');
+	
 	$args['orderby'] = 'title';
 	$args['order'] = 'ASC';
-m($arg todo s);
+
+	$args['offset']	= sinon($params,'debut','default:0');
+	$args['posts_per_page'] = sinon($params,'parpage','default:500');
+
 	$query = new WP_Query($args);
 	$fournisseurs = $query->posts;
 	// me($args,$query->posts);

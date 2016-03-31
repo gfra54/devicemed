@@ -1,7 +1,7 @@
 <?php
 	$all=in_array('all',$_SERVER['argv'])!==false;
 	$vider=$all || in_array('vider',$_SERVER['argv'])!==false;
-	$fournisseurs=$all || in_array('insert',$_SERVER['argv'])!==false;
+	$fournisseurs=$all || in_array('fournisseurs',$_SERVER['argv'])!==false;
 	$galleries=$all || in_array('galleries',$_SERVER['argv'])!==false;
 	$videos=$all || in_array('videos',$_SERVER['argv'])!==false;
 	$categories=$all || in_array('categories',$_SERVER['argv'])!==false;
@@ -24,30 +24,41 @@
 			e($cpt.' catégories effacées');
 		}
 
+		$sqlSousCat = "SELECT * FROM wordpress_dm_suppliers_souscategories";
+		$resultSousCat = mysql_query($sqlSousCat);
+		$arraySousCat = array();
+
+		while($rowSousCat = mysql_fetch_assoc($resultSousCat)) {
+			$arraySousCat[$rowSousCat['ID']] = $rowSousCat;
+		}
+
 		$sqlCategorie = "SELECT * FROM wordpress_dm_suppliers_categories";
 		$resultCategorie = mysql_query($sqlCategorie);
 		$nbCategorie = mysql_num_rows($resultCategorie);
 		$arrayCategorie = array();
 
-		while($rowCategorie = mysql_fetch_array($resultCategorie)) {
-			$arrayCategorie[] = $rowCategorie;
+		while($rowCategorie = mysql_fetch_assoc($resultCategorie)) {
+			$arrayCategorie[$rowCategorie['ID']] = $rowCategorie;
 		}
 		foreach($arrayCategorie as $categorie) {
 			if($categorie['supplier_souscategorie_parent']) {
+				$nom_parent = $arraySousCat[$categorie['supplier_souscategorie_parent']]['supplier_souscategorie_name'];
 				$categorie_parent = nouvelIdCategorie($categorie['supplier_souscategorie_parent'],true);
 				$categorie_parent_ancien=$categorie['supplier_souscategorie_parent'];
 			} else	if($categorie['supplier_category_parent']) {
+				$nom_parent = $arrayCategorie[$categorie['supplier_category_parent']]['supplier_category_title'];
 				$categorie_parent = nouvelIdCategorie($categorie['supplier_category_parent'],false);
 				$categorie_parent_ancien=$categorie['supplier_category_parent'];
 			} else {
+				$nom_parent='';
 				$categorie_parent=0;
 				$categorie_parent_ancien=0;
 			}
-			if($idCategorie = creerCategorie($categorie['supplier_category_title'],$categorie['ID'],false,$categorie_parent,$categorie_parent_ancien)) {
+			if($idCategorie = creerCategorie($categorie['supplier_category_title'],$categorie['ID'],false,$categorie_parent,$categorie_parent_ancien,$nom_parent)) {
 				$sqlSousCat = "SELECT * FROM wordpress_dm_suppliers_souscategories WHERE supplier_category_parent=".$categorie['ID'];
 				$resultSousCat = mysql_query($sqlSousCat);
 				while($rowSousCat = mysql_fetch_array($resultSousCat)) {
-					if($idSousCat = creerCategorie($rowSousCat['supplier_souscategorie_name'],$rowSousCat['ID'],true,$idCategorie,$categorie['ID'])) {
+					if($idSousCat = creerCategorie($rowSousCat['supplier_souscategorie_name'],$rowSousCat['ID'],true,$idCategorie,$categorie['ID'],$categorie['supplier_category_title'])) {
 
 					}
 				}
@@ -56,7 +67,6 @@
 	}
 
 	if($fournisseurs) {
-		e('Fournisseurs');
 		if($vider) {
 			$args = array(
 				'numberposts' => 5000,
@@ -67,13 +77,16 @@
 			if (is_array($posts)) {
 				e('effacer '.count($posts).' fournisseurs');
 			   foreach ($posts as $post) {
-			       wp_delete_post( $post->ID, true);
+			   	if($post->post_title == 'Qosina') {
+				       wp_delete_post( $post->ID, true);
+				       echo '.';
+				   }
 			   }
 			}
 		}
 
-		$res = mysql_query('SELECT * FROM wordpress_dm_suppliers');
-
+		e('Fournisseurs');
+		$res = mysql_query('SELECT * FROM wordpress_dm_suppliers WHERE  ID = 6');
 		while($fournisseur = mysql_fetch_assoc($res)) {
 			// if($fournisseur['ID']!=199) continue;
 			$post = array(
@@ -119,7 +132,7 @@
 
 
 			$cats = explode(',',$fournisseur['supplier_category_id']);
-			$$cats_nouveau=array();
+			$cats_nouveau=array();
 			foreach($cats as $cat) {
 				if($cat = nouvelIdCategorie($cat)) {
 					$cats_nouveau[] = $cat;
@@ -170,6 +183,12 @@
 				}
 				if(count($new_photos)) {
 					// e($fournisseur);
+					$tmp=array();
+					foreach($fournisseur['gallerie'] as $photo) {
+						$tmp[]=is_numeric($photo) ? $photo : $photo['id'];
+					}
+					$fournisseur['gallerie']=$tmp;
+
 					$fournisseur['gallerie'] = array_unique(array_merge($fournisseur['gallerie'],$new_photos));
 					foreach($fournisseur['gallerie'] as $k=>$id) {
 						if(get_post_status($id)===false) {

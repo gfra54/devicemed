@@ -1,10 +1,20 @@
 <?php
 
+function cond($before,$data,$after=false) {
+	if($data) {
+		echo $before;
+		echo $data;
+		echo $after;
+		return true;
+	}
+}
+
 function link_cond($url,$lib=false,$before=false,$after=false) {
 	if(isurl($url)) {
 		echo $before;
 		?><a href="<?php echo esc_html($url) ?>" target='_blank'><?php echo esc_html($lib ? $lib : $url); ?></a><?php
 		echo $after;
+		return true;
 	}
 }
 function array_unique_multi($array) {
@@ -87,10 +97,9 @@ function nouvelIdCategorie($id,$souscategorie=false) {
 }
 
 $slugs = array();
-function creerCategorie($nom,$id_ancien,$souscategorie=false, $parent=0,$parent_ancien=0) {
+function creerCategorie($nom,$id_ancien,$souscategorie=false, $parent=0,$parent_ancien=0,$nom_parent='') {
 	global $slugs;
-
-	$slug = sanitize_title($nom);
+	$slug = sanitize_title(trim($nom_parent.' '.$nom));
 	if(!empty($slugs[$slug])) {
 		$cpt=1;
 		while(!empty($slugs[$slug.'-'.$cpt])) {
@@ -99,8 +108,9 @@ function creerCategorie($nom,$id_ancien,$souscategorie=false, $parent=0,$parent_
 		$slug = $slug.'-'.$cpt;
 	}
 
+// ms($nom_parent,$slug);
 	$slugs[$slug] = true;
-	// e($nom.' ('.$slug.') : '.$parent);
+	// e($slug);
 	echo '.';
 
 	$ret = wp_insert_term($nom,'categorie',array(
