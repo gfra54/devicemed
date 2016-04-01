@@ -178,12 +178,38 @@ section.videos .bloc-item .archives-videos{
   margin-bottom: 15px;
 }
 .menu-fournisseurs {
+  top:-100px;
+  -webkit-transition:top 0.5s ease;
+  transition:top 0.5s ease;
   margin-bottom: 0;
 }
-.menu-fournisseurs.menu-floating {
+.menu-fournisseurs .nom-fournisseur {
+  display: none;
+}
+.menu-fournisseurs.menu-floating .nom-fournisseur {
+  display: block;
+  float: left;
+  padding:12px 22px 0 0;
+}
+.page-supplier .column-main section.actions.menu-fournisseurs.menu-floating .button {
+  padding: 8px 8px 8px 0;
+  background: none;
+  color: #214f8e;
+}
+.page-supplier .column-main section.actions.menu-fournisseurs.menu-floating .button.details_supplier_disabled {
+  color:#999;
+}
+.page-supplier .column-main section.actions.menu-fournisseurs.menu-floating .button:focus {
+  outline:0;
+}
+.page-supplier .column-main section.actions.menu-fournisseurs.menu-floating a.menu_actif {
+  text-decoration: underline;
+}
+.page-supplier .column-main section.menu-fournisseurs.menu-floating {
   position: fixed;
   top: 0;
   z-index: 1000;
+  padding: 10px 25px;
 }
 
 .read-more {
@@ -298,4 +324,52 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
 .liste-document-item:hover IMG{
   -webkit-transform:scale(1.1);
   transform:scale(1.1);
+}
+
+.liste-categorie, .liste-categorie li {
+  list-style: none;
+}
+
+.liste-categorie .cat-name{
+  font-weight: bold;
+  cursor: pointer;
+}
+.liste-categorie .cat-name:hover{
+  color:#555;
+  text-decoration: underline;
+}
+.liste-categorie A:hover{
+  text-decoration: underline;
+}
+
+.liste-categorie.closed {
+  margin-bottom: 0;
+}
+.liste-categorie.closed .cat-content{
+  height: 0;
+  overflow: hidden;
+}
+.case-categories-fournisseurs {
+  display: inline-block;
+  vertical-align: top;
+  width: 50%;
+}
+
+.case-initiale {
+  display: inline-block;
+  background: #214f8e;
+  color: white;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #214f8e;
+  opacity: 0.8;
+}
+
+.case-initiale.selected, .case-initiale:hover {
+  color:#214f8e;
+  background: white;
+  opacity: 1;
 }

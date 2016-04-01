@@ -1,3 +1,4 @@
+<?php if(count($fournisseur['categories'])) {?>
 <section class="products read-more">
 	<?php foreach($fournisseur['categories'] as $categorie){?>
 		<h2><a href="<?php echo $categorie['url'];?>"><?php echo $categorie['nom'];?></a></h2>
@@ -7,3 +8,4 @@
 	<?php }?>
 
 </section>
+<?php }?>

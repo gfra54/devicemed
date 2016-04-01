@@ -1,4 +1,16 @@
 <?php
+function fournisseurs_filtre($query) {
+    if ($query->post_type = 'fournisseur' && $query->is_search && !is_admin() ) {
+    	// $query->query['s'] = '%'.$query->query['s'].'%';
+    	// $query->query_vars['s'] = '%'.$query->query_vars['s'].'%';
+    }
+	return $query;
+}
+
+add_filter('pre_get_posts','fournisseurs_filtre');
+
+
+
 $GLOBALS['MENU_FOURNISSEURS'] = array(
 	array(
 		'titre'=>'Coordonnées',
@@ -40,8 +52,103 @@ $GLOBALS['MENU_FOURNISSEURS'] = array(
 	),
 );
 
-function fournisseur_categories($fournisseur) {
+function fournisseurs_filtre_lettres() {
+	$initiale = check('initiale');
+	$lettres = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+
+	echo "<a class='case-initiale ".($initiale == '*' ? 'selected' : '')."' href='/fournisseurs-liste?initiale=*'>#</a>";
+	foreach($lettres as $lettre) {
+		echo " <a class='case-initiale ".($initiale == $lettre ? 'selected' : '')."' href='/fournisseurs-liste?initiale=$lettre'>$lettre</a>";
+	}
+}
+function fournisseurs_filtre_categories($categories,$niveau=1) {
+	if($niveau==1) {
+		$html='<div class="case-categories-fournisseurs">';
+	} else {
+		$html='';
+	}
+	$demi = ceil(count($categories)/2);
+	$cpt=0;
+	foreach($categories as $categorie){
+		$souscat = !empty($categorie['categories']);
+		$html.='<ul class="liste-categorie '.($souscat && $niveau == 1? 'souscat closed' : '').'">';
+		if($souscat && $niveau == 1) {
+			$html.='<li class="cat-name">'.$categorie['name'].'</li>';
+		} else if($souscat){
+			$html.='<li><b>'.$categorie['name'].'</b></li>';
+		} else {
+			$html.='<li><a href="'.$categorie['url'].'">'.$categorie['name'].'</a></li>';
+		}
+		if($souscat) {
+			$sub = fournisseurs_filtre_categories($categorie['categories'],$niveau+1);
+			if($niveau == 1) {
+				$html.='<li class="cat-content">';
+				$html.='<div class="cat-content-in">';
+				$html.=$sub;
+				$html.='</div>';
+				$html.='</li>';
+			} else {
+				$html.='<li>'.$sub.'</li>';
+
+			}
+		}
+		$html.='</ul>';
+		if($niveau == 1) {
+			$cpt++;
+			if($cpt==$demi) {
+				$html.='</div><div class="case-categories-fournisseurs">';
+			}
+		}
+	}
+	if($niveau==1) {
+		$html.='</div>';
+	} else {
+		$html.='';
+	}
+	if($niveau == 1) {
+		echo $html;
+	} else {
+		return $html;
+	}
+}
+function fournisseur_categories($fournisseur=false) {
 	$out=array();
+	if(!$fournisseur) {
+		$categories = get_terms('categorie');
+		$categories_assoc = array();
+		foreach($categories as $k=>$v) {
+			$url = get_term_link($v);
+			$v = get_object_vars($v);
+			$v['url'] = $url;
+			$categories_assoc[$v['term_id']] = $v;
+		}
+
+		$lien_papa = array();
+		foreach($categories_assoc as $categorie) {
+			if(!$categorie['parent']) {
+				$out[$categorie['term_id']] = $categorie;
+			} else {
+				$lien_papa[$categorie['term_id']] = $categorie['parent'];
+			}
+		}
+
+		foreach($categories_assoc as $categorie) {
+			if($categorie['parent']) {
+				if(isset($out[$categorie['parent']])) {
+					if(!isset($out[$categorie['parent']]['categories'])) {
+						$out[$categorie['parent']]['categories'] = array();
+					}
+					$out[$categorie['parent']]['categories'][$categorie['term_id']] = $categorie;
+				} else {
+					$root = $lien_papa[$categorie['parent']];
+					if(!isset($out[$root]['categories'][$categorie['parent']]['categories'])) {
+						$out[$root]['categories'][$categorie['parent']]['categories'] = array();
+					}
+					$out[$root]['categories'][$categorie['parent']]['categories'][$categorie['term_id']] = $categorie;
+				}
+			}
+		}
+	} else
 	if($cats = wp_get_post_terms($fournisseur['ID'],'categorie')) {
 		foreach ($cats as $cat) {
 			if($cat->parent) {
@@ -61,13 +168,17 @@ function fournisseur_sections($fournisseur) {
 	foreach($GLOBALS['MENU_FOURNISSEURS'] as $item) {
 		if(!$page || $page == $item['anchor']) {
 			$file = get_template_directory().'/single-fournisseur-'.$item['anchor'].'.php';
-			echo '<section id="'.$item['anchor'].'"><h2 class="title"><a name="'.$item['anchor'].'">'.$item['titre'].'</a></h2></section><div>';
 			if(file_exists($file)) {
+				ob_start();
 				include $file;
-			} else {
-				m($file);
+				$data = ob_get_contents();
+				ob_end_clean();
+				if(!empty($data)) {
+					echo '<section id="'.$item['anchor'].'"><h2 class="title"><a name="'.$item['anchor'].'">'.$item['titre'].'</a></h2></section><div>';
+					echo $data;
+					echo '</div>';
+				}
 			}
-			echo '</div>';
 		}
 	}
 }
@@ -78,6 +189,7 @@ function fournisseur_menu($fournisseur) {
 		$page = 'coordonnees';
 	}
 	$ret.= '<div class="cadre-menu-fournisseurs"><section class="actions menu-fournisseurs">';
+	$ret.='<div class="nom-fournisseur"><h2 class="title">'.$fournisseur['post_title'].'</h2></div>';
 	foreach($GLOBALS['MENU_FOURNISSEURS'] as $item) {
 		if($page == $item['anchor']) {
 			$class='menu_actif';
@@ -85,9 +197,9 @@ function fournisseur_menu($fournisseur) {
 			$class='';
 		}
 		if(!$item['premium'] || $fournisseur['premium']) {
-			$ret.='<a href="'.$fournisseur['premalink'].'?page='.$item['anchor'].'" data-id="'.$item['anchor'].'" class="menu-item '.$class.'">'.$item['titre'].'</a>';
+			$ret.='<a href="'.$fournisseur['premalink'].'?page='.$item['anchor'].'" data-id="'.$item['anchor'].'" class="button menu-item '.$class.'">'.$item['titre'].'</a>';
 		} else {
-			$ret.='<span class="details_supplier_disabled">'.$item['titre'].'</span>';
+			$ret.='<span class="button details_supplier_disabled">'.$item['titre'].'</span>';
 		}
 	}
 	$ret.='</section></div>';
@@ -99,13 +211,19 @@ function fournisseur_categorie_redir() {
 	if(!empty($_GET['categorie'])) {
 		if($term_id = nouvelIdCategorie($_GET['categorie'])) {
 			wp_redirect(get_term_link(get_term($term_id,'categorie')),301);
-			exit;
+		}
+	} else {
+		if(check('type')=='liste') {
+			wp_redirect('/fournisseurs-liste',301);
+		} else {
+			wp_redirect('/fournisseurs',301);
 		}
 	}
+	exit;
 }
 function fournisseur_redir($legacy_supplier_id) {
 	if($fournisseur = get_fournisseur($legacy_supplier_id,true)) {
-		wp_redirect($fournisseur['url'],301);
+		wp_redirect($fournisseur['permalink'],301);
 		exit;
 	}
 }
@@ -277,50 +395,72 @@ function fournisseur_empty($test) {
 	}
 }
 function fournisseurs_compte($categorie=false) {
-	if(!$categorie) {
-		$ret = wp_count_posts('fournisseur');
-		return $ret->publish;
-	} else {
-		$query = new WP_Query( array( 
-			'categorie' => $categorie,
-	 		'post_type'		=> 'fournisseur'
-		) );
-		return $query->found_posts;
-	}
+	$ret = wp_count_posts('fournisseur');
+	return $ret->publish;
 }
 
 function get_fournisseurs($params=array()) {
 	$args = array();
-	if(sinon($params,'premium')) {
-		$args['meta_key']='premium';
-		$args['meta_value']=1;
-		$params['images']=true;
-		$rich=true;
-	} else {
-		$rich=false;
-	}
-	if(sinon($params,'categorie')) {
-		$args['categorie']=sinon($params,'categorie');
-/*		$args['tax_query']=array(
-			array(
-				'taxonomy' => 'categorie',
-				'field' => 'id',
-				'terms' => sinon($params,'categorie')
-			)
-    	);*/
-	} else {
-		$args['post_type'] = 'fournisseur';
-	}
-//	$args['numberposts'] = sinon($params,'parpage','default:500');
-	
-	$args['orderby'] = 'title';
-	$args['order'] = 'ASC';
 
-	$args['offset']	= sinon($params,'debut','default:0');
-	$args['posts_per_page'] = sinon($params,'parpage','default:500');
 
-	$query = new WP_Query($args);
-	$fournisseurs = $query->posts;
+	if($initiale = sinon($params,'initiale')) {
+		global $wpdb;
+		if($initiale == '*') {
+			$clause = "post_title REGEXP '^[[:digit:]]+.*$'";
+		} else {
+			$clause = "post_title LIKE '$initiale%'";
+		}
+         $results = $wpdb->get_results(
+                "
+                SELECT * FROM $wpdb->posts
+                WHERE post_type = 'fournisseur' 
+                AND $clause
+                AND post_status = 'publish'
+                ORDER BY post_title ASC; 
+                "
+         );
+         $fournisseurs = array();
+  		if ($results){
+            foreach ($results as $post){
+                // setup_postdata ($post); 
+                $fournisseurs[]=$post;
+            }
+         } 
+	} else {
+		if(sinon($params,'premium')) {
+			$args['meta_key']='premium';
+			$args['meta_value']=1;
+			$params['images']=true;
+			$rich=true;
+		} else {
+			$rich=false;
+		}
+
+
+
+		if(sinon($params,'categorie')) {
+			$args['categorie']=sinon($params,'categorie');
+	/*		$args['tax_query']=array(
+				array(
+					'taxonomy' => 'categorie',
+					'field' => 'id',
+					'terms' => sinon($params,'categorie')
+				)
+	    	);*/
+		} else {
+			$args['post_type'] = 'fournisseur';
+		}
+	//	$args['numberposts'] = sinon($params,'parpage','default:500');
+		
+		$args['orderby'] = 'title';
+		$args['order'] = 'ASC';
+
+		$args['offset']	= sinon($params,'debut','default:0');
+		$args['posts_per_page'] = sinon($params,'parpage','default:500');
+
+		$query = new WP_Query($args);
+		$fournisseurs = $query->posts;
+	}
 	// me($args,$query->posts);
 	// $fournisseurs = get_posts($args);
 	if($rich || sinon($params,'images')) {

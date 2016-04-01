@@ -1,3 +1,4 @@
+<?php if($fournisseur['post_content']) {?>
 	<section class="read-more">
 		<?php if($fournisseur['logo']) { ?>
 			<div class='logo_supplier'>
@@ -17,3 +18,4 @@
 			<?php endif; ?>
 		</header>
 	</section>
+<?php }?>

@@ -32,3 +32,5 @@ definir query var pour categorie
 copier les events pour qosina
 realmeca
 teleflex
+
+modifier liens du menu fournisseurs

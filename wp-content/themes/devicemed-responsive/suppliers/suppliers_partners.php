@@ -1,5 +1,4 @@
 <?php 
-
 get_header(); ?>
 <style>#sidebar-fiches {display: none !important;}</style>
 <div class="row column-content page-members">

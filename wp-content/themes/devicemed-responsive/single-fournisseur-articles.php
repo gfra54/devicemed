@@ -1,6 +1,7 @@
+<?php if($fournisseur['premium']) {?>
+<?php query_posts("tag=".$fournisseur['nom']); ?>
+<?php if (have_posts()){ ?>
 	<section class="posts read-more">
-		<?php query_posts("tag=".$fournisseur['nom']); ?>
-		<?php if (have_posts()){ ?>
 			<?php while (have_posts()){ the_post(); ?>
 				<article>
 					<a href="<?php echo get_permalink($post->ID); ?>">
@@ -36,6 +37,6 @@
 					</a>
 				</article>
 			<?php } ?>
-		<?php } ?>
 	</section>
-	<!-- /section.posts -->
+<?php } ?>
+<?php } ?>
