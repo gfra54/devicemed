@@ -4,6 +4,12 @@ var _menu_bottom=false;
 var _wpadminbar = 0;
 $(document).ready(function() {
 
+/*	$('.menu-fournisseurs .button').each(function(){
+		_id = '#'+$(this).data('id');
+		if(!$(_id).length) {
+			$(this).hide()
+		}
+	});*/
 	$(document).on('click','.souscat.opened .cat-name',function(){
 		_cc = $(this).closest('.souscat').find('.cat-content');
 		_cc.animate({'height':0},'slow',function(){
@@ -93,12 +99,7 @@ $(window).scroll(function(){
 			}
 		}
 	}
-	$('.menu-fournisseurs A').each(function(){
-		_id = '#'+$(this).data('id');
-		if(!$(_id).length) {
-			$(this).hide()
-		}
-	});
+
 	$($('.menu-fournisseurs A').get().reverse()).each(function(){
 		_id = '#'+$(this).data('id');
 		if($(_id).length) {
