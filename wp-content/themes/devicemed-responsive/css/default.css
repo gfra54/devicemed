@@ -3686,11 +3686,17 @@ body .container .article .content {
     margin-top: 2em;
 }
 
+body #sidebar {
+  display:none;
+}
+body .column-main {
+  width: 100%;
+}
 @media (min-width: 992px) {
   body .column-main {
     width: calc(100% - 275px);
   }
-  #sidebar {
+  body #sidebar {
     width:315px;
     width:275px;
     display: block;
