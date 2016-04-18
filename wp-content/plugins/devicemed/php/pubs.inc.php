@@ -30,6 +30,21 @@ function get_pubs($type=false) {
 		return $out;
 	}
 }
+function afficher_pub_js($type,$attr=array()) {
+	$pubs = get_selected_pub($type,get_pubs($type),true);
+	foreach($pubs as $k=>$pub) {
+		$pub = get_object_vars($pub);
+		$pub['largeur_maximale'] = get_field('largeur_maximale',$pub['ID']);
+		$pub['bordure'] = get_field('bordure',$pub['ID']);
+		$pub['url_tracking_clicks'] = get_field('url_tracking_clicks',$pub['ID']);
+		$pub['url_tracking_display'] = get_field('url_tracking_display',$pub['ID']);
+
+		$pub['time'] = time();
+
+		$pubs[$k]=$pub;
+	}
+	?><script>randomPub(<?php echo json_encode($pubs);?>);</script><?php
+}
 function afficher_pub($type,$attr=array()) {
 
 
@@ -135,7 +150,7 @@ function display_pub($pub,$attr=array(),$type=false) {
 	return $ret;
 }
 
-function get_selected_pub($type, $pubs) {
+function get_selected_pub($type, $pubs, $all=false) {
 	$pubs_sort=array();
 	foreach($pubs as $key => $pub) {
 		if(check_espace($type,$pub)) {
@@ -196,13 +211,20 @@ function get_selected_pub($type, $pubs) {
 			$pubs_normal[]=$pubs[$id_pub];
 		}
 	}
-	if(count($pubs_pages)) {
-		return $pubs_pages[array_rand($pubs_pages)];
-	} else
-	if(count($pubs_normal)) {
-		return $pubs_normal[array_rand($pubs_normal)];
+	if($all) {
+		if(count($pubs_pages)) {
+			return $pubs_page;
+		} else {
+			return $pubs_normal;			
+		}
+	} else {
+		if(count($pubs_pages)) {
+			return $pubs_pages[array_rand($pubs_pages)];
+		} else
+		if(count($pubs_normal)) {
+			return $pubs_normal[array_rand($pubs_normal)];
+		}
 	}
-
 }
 function check_espace($type,$pub) {
 	$espaces = wp_get_post_terms($pub->ID,'emplacements');

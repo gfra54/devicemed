@@ -1,4 +1,6 @@
-<?php header( 'Cache-Control: max-age=604800' ); ?>
+<?php 
+
+header( 'Cache-Control: max-age=604800' ); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +24,9 @@
 	<?php include_external('js/colorbox/example1/colorbox.css');?>
 	<?php include_external('js/jquery.min.js');?>
 	<?php include_external('js/jquery.bxslider.min.js');?>
+	<?php include_external('js/fancybox/jquery.fancybox.js');?>
+	<?php include_external('js/fancybox/jquery.fancybox.css');?>
+	<?php extrajs('pubs');?>
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -185,7 +190,7 @@
 	// echo "supplier_id : ". $supplier_id;
 ?>
 <section class="ad header-ad">
-	<?php afficher_pub('site-banniere-horizontale');?>
+	<?php afficher_pub_js('site-banniere-horizontale');?>
 	<?php
 /*		$monUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 		$_SESSION['arrayBanniereAfficher'] = '';
