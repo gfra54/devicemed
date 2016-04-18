@@ -77,16 +77,16 @@
 			if (is_array($posts)) {
 				e('effacer '.count($posts).' fournisseurs');
 			   foreach ($posts as $post) {
-			   	if($post->post_title == 'Qosina') {
+			   	// if($post->post_title == 'Qosina') {
 				       wp_delete_post( $post->ID, true);
 				       echo '.';
-				   }
+				   // }
 			   }
 			}
 		}
 
 		e('Fournisseurs');
-		$res = mysql_query('SELECT * FROM wordpress_dm_suppliers WHERE  ID = 6');
+		$res = mysql_query('SELECT * FROM wordpress_dm_suppliers');
 		while($fournisseur = mysql_fetch_assoc($res)) {
 			// if($fournisseur['ID']!=199) continue;
 			$post = array(

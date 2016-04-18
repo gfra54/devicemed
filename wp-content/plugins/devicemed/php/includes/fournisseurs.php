@@ -189,7 +189,7 @@ function fournisseur_menu($fournisseur) {
 		$page = 'coordonnees';
 	}
 	$ret.= '<div class="cadre-menu-fournisseurs"><section class="actions menu-fournisseurs">';
-	$ret.='<div class="nom-fournisseur"><h2 class="title">'.$fournisseur['post_title'].'</h2></div>';
+	// $ret.='<div class="nom-fournisseur"><h2 class="title">'.$fournisseur['post_title'].'</h2></div>';
 	foreach($GLOBALS['MENU_FOURNISSEURS'] as $item) {
 		if($page == $item['anchor']) {
 			$class='menu_actif';

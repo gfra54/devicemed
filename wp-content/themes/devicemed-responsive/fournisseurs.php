@@ -10,7 +10,11 @@ get_header();
 	<section class="profile">
 		<h2 class="title">Les fournisseurs des fabricants de dispositifs médicaux</h2>
 
-			<h3 class='title5'>Quatre façons de trouver un fournisseur...</h3><br />
+			<b class='title5'><big>Consulter la 
+			<a class="link" href="/fournisseurs_partenaires">liste des fournisseurs partenaires</a></big></b>
+			<br />
+			<br />
+			<b class='title5'><big>Ou trouvez un fournisseur...</big></b>
 			<h3 class='title5'><p class='par_nom_motcle'>1- Par son nom ou par mot-clé :</p> 
 			<form name='search_suppliers' method='GET' action='/'>
 			<input type='hidden' name='post_type' value="fournisseur" />
