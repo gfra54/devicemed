@@ -85,7 +85,9 @@ if(check('action') == 'create') {
 get_header(); ?>
 <div class="row column-content page-members">
 	<div class="col-md-9 col-sm-8 column-main">
-<?php if(check('id_fournisseur')) {?>
+<?php if(check('id_fournisseur')) {
+
+	?>
 	<section>
 		<h2 class="title">Action effectuée</h2>
 		<p>Merci d'avoir ajouté ce nouveau fournisseur. L'équipe DeviceMed va vous recontacter très prochainement pour mettre en ligne la fiche correspondante dans le répertoire.</p>
