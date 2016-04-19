@@ -14,7 +14,7 @@ get_header();
 			<a class="link" href="/fournisseurs_partenaires">liste des fournisseurs partenaires</a></big></b>
 			<br />
 			<br />
-			<b class='title5'><big>Ou trouvez un fournisseur...</big></b>
+			<b class='title5'><big>Ou trouver un fournisseur...</big></b>
 			<h3 class='title5'><p class='par_nom_motcle'>1- Par son nom ou par mot-clé :</p> 
 			<form name='search_suppliers' method='GET' action='/'>
 			<input type='hidden' name='post_type' value="fournisseur" />

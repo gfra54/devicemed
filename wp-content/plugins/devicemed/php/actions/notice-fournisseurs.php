@@ -24,6 +24,19 @@ function notice_fournisseur() {
 }
 add_action( 'admin_notices', 'notice_fournisseur' );
 
+function save_post_fournisseur($post_id) {
+	if(is_admin()) {
+		if(get_current_screen()->post_type == 'fournisseur') {
+			foreach(get_transients('liste-fournisseurs') as $transient) {
+				delete_transient($transient);
+			}
+		}
+	}
+
+}
+add_action( 'save_post', 'save_post_fournisseur' );
+
+
 
 add_action('admin_menu','wphidenag');
 function wphidenag() {

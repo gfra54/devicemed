@@ -4,12 +4,12 @@ var _menu_bottom=false;
 var _wpadminbar = 0;
 $(document).ready(function() {
 
-/*	$('.menu-fournisseurs .button').each(function(){
+	$('.menu-fournisseurs .button').each(function(){
 		_id = '#'+$(this).data('id');
 		if(!$(_id).length) {
-			$(this).hide()
+			$(this).addClass('details_supplier_disabled');
 		}
-	});*/
+	});
 	$(document).on('click','.souscat.opened .cat-name',function(){
 		_cc = $(this).closest('.souscat').find('.cat-content');
 		_cc.animate({'height':0},'slow',function(){
@@ -62,22 +62,26 @@ $(document).ready(function() {
 	$('.gallerie-photo').fancybox();
 
 	  $('.menu-fournisseurs .menu-item').click(function(e) {
-	      var target = $('#'+$(this).data('id'));
-	      if(target.length) {
-	      	e.preventDefault();
-		      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-		      if($('.menu-fournisseurs').length) {
-			    _delta = $('.menu-fournisseurs').outerHeight() + 45;
-			  } else {
-				_delta=0;
+	  	if(!$(this).hasClass('details_supplier_disabled')) {
+		      var target = $('#'+$(this).data('id'));
+		      if(target.length) {
+		      	e.preventDefault();
+			      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+			      if($('.menu-fournisseurs').length) {
+				    _delta = $('.menu-fournisseurs').outerHeight() + 45;
+				  } else {
+					_delta=0;
+				  }
+			      if (target.length) {
+			        $('html, body').animate({
+			          scrollTop: target.offset().top - _delta
+			        }, 1000);
+			        return false;
+			      }
 			  }
-		      if (target.length) {
-		        $('html, body').animate({
-		          scrollTop: target.offset().top - _delta
-		        }, 1000);
-		        return false;
-		      }
-		  }
+			} else {
+		      	e.preventDefault();
+			}
 	  });	
 });
 

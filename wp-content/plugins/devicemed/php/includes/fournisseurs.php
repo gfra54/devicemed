@@ -451,74 +451,85 @@ function fournisseurs_compte($categorie=false) {
 function get_fournisseurs($params=array()) {
 	$args = array();
 
-
-	if($initiale = sinon($params,'initiale')) {
-		global $wpdb;
-		if($initiale == '*') {
-			$clause = "post_title REGEXP '^[[:digit:]]+.*$'";
-		} else {
-			$clause = "post_title LIKE '$initiale%'";
-		}
-         $results = $wpdb->get_results(
-                "
-                SELECT * FROM $wpdb->posts
-                WHERE post_type = 'fournisseur' 
-                AND $clause
-                AND post_status = 'publish'
-                ORDER BY post_title ASC; 
-                "
-         );
-         $fournisseurs = array();
-  		if ($results){
-            foreach ($results as $post){
-                // setup_postdata ($post); 
-                $fournisseurs[]=$post;
-            }
-         } 
+	$cache = sinon($params,'cache');
+	if($cache && ($data = get_transient($cache))) {
+		return $data;
 	} else {
-		if(sinon($params,'premium')) {
-			$args['meta_key']='premium';
-			$args['meta_value']=1;
-			$params['images']=true;
-			$rich=true;
+
+		if($initiale = sinon($params,'initiale')) {
+			global $wpdb;
+			if($initiale == '*') {
+				$clause = "post_title REGEXP '^[[:digit:]]+.*$'";
+			} else {
+				$clause = "post_title LIKE '$initiale%'";
+			}
+	         $results = $wpdb->get_results(
+	                "
+	                SELECT * FROM $wpdb->posts
+	                WHERE post_type = 'fournisseur' 
+	                AND $clause
+	                AND post_status = 'publish'
+	                ORDER BY post_title ASC; 
+	                "
+	         );
+	         $fournisseurs = array();
+	  		if ($results){
+	            foreach ($results as $post){
+	                // setup_postdata ($post); 
+	                $fournisseurs[]=$post;
+	            }
+	         } 
 		} else {
-			$rich=false;
+			if(sinon($params,'premium')) {
+				$args['meta_key']='premium';
+				$args['meta_value']=1;
+				$params['images']=true;
+				$rich=true;
+			} else {
+				$rich=false;
+			}
+
+
+
+			if(sinon($params,'categorie')) {
+				$args['categorie']=sinon($params,'categorie');
+		/*		$args['tax_query']=array(
+					array(
+						'taxonomy' => 'categorie',
+						'field' => 'id',
+						'terms' => sinon($params,'categorie')
+					)
+		    	);*/
+			} else {
+				$args['post_type'] = 'fournisseur';
+			}
+		//	$args['numberposts'] = sinon($params,'parpage','default:500');
+			
+			$args['orderby'] = 'title';
+			$args['order'] = 'ASC';
+
+			$args['offset']	= sinon($params,'debut','default:0');
+			$args['posts_per_page'] = sinon($params,'parpage','default:500');
+
+			$query = new WP_Query($args);
+			$fournisseurs = $query->posts;
 		}
 
 
+		// me($args,$query->posts);
+		// $fournisseurs = get_posts($args);
+		if($rich || sinon($params,'images')) {
+			foreach($fournisseurs as $k=>$v) {
+				$fournisseurs[$k] = fournisseur_enrichir($v);
 
-		if(sinon($params,'categorie')) {
-			$args['categorie']=sinon($params,'categorie');
-	/*		$args['tax_query']=array(
-				array(
-					'taxonomy' => 'categorie',
-					'field' => 'id',
-					'terms' => sinon($params,'categorie')
-				)
-	    	);*/
+			}
+			$ret = $fournisseurs;
 		} else {
-			$args['post_type'] = 'fournisseur';
+			$ret = array_map('get_object_vars',$fournisseurs);
 		}
-	//	$args['numberposts'] = sinon($params,'parpage','default:500');
-		
-		$args['orderby'] = 'title';
-		$args['order'] = 'ASC';
-
-		$args['offset']	= sinon($params,'debut','default:0');
-		$args['posts_per_page'] = sinon($params,'parpage','default:500');
-
-		$query = new WP_Query($args);
-		$fournisseurs = $query->posts;
-	}
-	// me($args,$query->posts);
-	// $fournisseurs = get_posts($args);
-	if($rich || sinon($params,'images')) {
-		foreach($fournisseurs as $k=>$v) {
-			$fournisseurs[$k] = fournisseur_enrichir($v);
-
+		if($cache) {
+			set_transient($cache,$ret);
 		}
-		return $fournisseurs;
-	} else {
-		return array_map('get_object_vars',$fournisseurs);
+		return $ret;
 	}
 }
