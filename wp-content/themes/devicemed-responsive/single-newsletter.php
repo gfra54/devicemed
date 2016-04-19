@@ -48,7 +48,7 @@ foreach($urls as $url) {
   }
   $tmp = file_get_contents(str_replace('.local','.fr',$url));
   $content = getHtmlVal('<div class="content">','</article>',$tmp);
-  $text = !empty($data['text']) ? $data['text'] : (cleantext(getHtmlVal('<p><strong>','</strong></p>',$content)));
+  $text = couper(!empty($data['text']) ? $data['text'] : (cleantext(getHtmlVal('<p><strong>','</strong></p>',$content))),300);
   $image = (getHtmlVal('<div class=\'image_clicable\'><a href="','"',$tmp));
   $title = (getHtmlVal('<h1 class="title">','</h1>',$tmp));
   $category = !empty($data['category']) ? $data['category'] : (getHtmlVal('<span class="category">','</span>',$tmp));
@@ -381,7 +381,7 @@ function bloc_partenaires() {
       <tr>
       <td bgcolor="white" align=center>    
         <table width="100%" cellpadding="3"><td color=white align=center>
-        <a style="text-decoration:none;" href="http://www.devicemed.fr/suppliers/<?php echo $data['nomFournisseur'];?>/<?php echo $id;?>">
+        <a target=_blank style="text-decoration:none;" href="http://www.devicemed.fr/suppliers/<?php echo $data['nomFournisseur'];?>/<?php echo $id;?>">
           <font face="sans-serif"  color="#214F8E" style="font-size:11px;text-decoration:none;">
             <b style="text-decoration:none;">
               <?php echo $data['nom'];?>

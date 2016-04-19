@@ -1,4 +1,51 @@
 <?php
+
+function new_fournisseur($fournisseur,$categories=array()) {
+	$date = date('Y-m-d H:i:s');
+	$post = array(
+		'post_type'=>'fournisseur',
+		'post_date'=>$date,
+		'post_modified'=>$date,
+		'post_content'=>sinon($fournisseur,'content'),
+		'post_title'=>sinon($fournisseur,'name','nom_societe'),
+		'post_status'=> sinon($fournisseur,'valide') ? 'publish' : 'draft',
+		'meta_input'=>array(
+			'adresse'=>sinon($fournisseur,'adresse'),
+			'code_postal'=>sinon($fournisseur,'code_postal'),
+			'ville'=>sinon($fournisseur,'ville'),
+			'pays'=>sinon($fournisseur,'pays'),
+			'telephone'=>'',
+			'url'=>http(sinon($fournisseur,'site_web')),
+			'blog'=>'',
+			'facebook'=>'',
+			'twitter'=>'',
+			'youtube'=>'',
+			'googleplus'=>'',
+			'linkedin'=>'',
+			'premium'=>sinon($fournisseur,'premium') ? 1 : 0,
+			'nom_contact'=>sinon($fournisseur,'supplier_contact_nom'),
+			'email_contact'=>sinon($fournisseur,'supplier_contact_email','email'),
+			'telephone_contact'=>sinon($fournisseur,'supplier_contact_tel'),
+			'optin'=>sinon($fournisseur,'contact_fiche_complete','optin'),
+			'legacy_supplier_id'=>false,
+			'videos'=>'',
+			'gallerie'=>'',
+			)
+	);
+
+	$post_id = wp_insert_post($post);
+
+
+	foreach($post['meta_input'] as $k=>$v) {
+		update_field($k,$v,$post_id);
+	}
+
+	if(count($categories)) {
+		wp_set_post_terms( $post_id, $categories, 'categorie' );
+	}
+
+	return $post_id;
+}
 function fournisseurs_filtre($query) {
     if ($query->post_type = 'fournisseur' && $query->is_search && !is_admin() ) {
     	// $query->query['s'] = '%'.$query->query['s'].'%';
@@ -61,7 +108,7 @@ function fournisseurs_filtre_lettres() {
 		echo " <a class='case-initiale ".($initiale == $lettre ? 'selected' : '')."' href='/fournisseurs-liste?initiale=$lettre'>$lettre</a>";
 	}
 }
-function fournisseurs_filtre_categories($categories,$niveau=1) {
+function fournisseurs_filtre_categories($categories,$niveau=1,$checkboxes=false,$selected=array()) {
 	if($niveau==1) {
 		$html='<div class="case-categories-fournisseurs">';
 	} else {
@@ -76,11 +123,13 @@ function fournisseurs_filtre_categories($categories,$niveau=1) {
 			$html.='<li class="cat-name">'.$categorie['name'].'</li>';
 		} else if($souscat){
 			$html.='<li><b>'.$categorie['name'].'</b></li>';
+		} else if($checkboxes){
+			$html.='<li><label><input '.(in_array($categorie['term_id'], $selected)===false ? '' : 'checked').' name="categories[]" value="'.$categorie['term_id'].'" type="checkbox"> '.$categorie['name'].'</label></li>';
 		} else {
 			$html.='<li><a href="'.$categorie['url'].'">'.$categorie['name'].'</a></li>';
 		}
 		if($souscat) {
-			$sub = fournisseurs_filtre_categories($categorie['categories'],$niveau+1);
+			$sub = fournisseurs_filtre_categories($categorie['categories'],$niveau+1,$checkboxes,$selected);
 			if($niveau == 1) {
 				$html.='<li class="cat-content">';
 				$html.='<div class="cat-content-in">';

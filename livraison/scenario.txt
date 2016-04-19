@@ -21,6 +21,7 @@ import acf et cpt ui
 lancer cron fournisseurs
 
 creer page fournisseurs.php
+creer page nouveau-fournisseur.php
 
 desactiver/activer permalink ds l'admin
 

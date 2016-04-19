@@ -1,4 +1,98 @@
-<?php get_header(); ?>
+<?php
+/*
+Template Name: nouveau-fournisseur
+*/
+if(check('action') == 'create') {
+	$data = $_POST;
+	$errors = array();
+	if (!$data['nom_societe'])
+	{
+		$errors['nom_societe'] = 'Veuillez indiquer le nom de votre société.';
+	}
+	
+	if (!$data['adresse'])
+	{
+		$errors['adresse'] = 'Veuillez indiquer l\'adresse de votre société.';
+	}
+	
+	if (!$data['code_postal'])
+	{
+		$errors['code_postal'] = 'Veuillez indiquer le code postal de votre société.';
+	}
+	
+	if (!$data['ville'])
+	{
+		$errors['ville'] = 'Veuillez indiquer la ville de votre société.';
+	}
+	
+	if (!$data['pays'])
+	{
+		$errors['pays'] = 'Veuillez indiquer le pays de votre société.';
+	}
+	
+	if (!$data['nom'])
+	{
+		$errors['nom'] = 'Veuillez indiquer votre nom.';
+	}
+	
+	if (!$data['prenom'])
+	{
+		$errors['prenom'] = 'Veuillez indiquer votre prénom.';
+	}
+
+	if (!$data['supplier_contact_tel'])
+	{
+		$errors['supplier_contact_tel'] = 'Veuillez indiquer le numéro de téléphone de la personne à contacter.';
+	}
+	
+	if (!$data['supplier_contact_nom'])
+	{
+		$errors['supplier_contact_nom'] = "Veuillez indiquer le nom d'une personne à contacter.";
+	}
+	
+	if(!$data['email']) {
+		$errors['email'] = 'Veuillez indiquer votre adresse mail.';
+	}elseif(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+		$errors['email'] = 'Veuillez indiquer une adresse mail valide.';
+	}
+	
+	if(!$data['supplier_contact_mail']) {
+		$errors['supplier_contact_mail'] = "Veuillez indiquer l'adresse mail de la personne à contacter.";
+	}elseif(!filter_var($data['supplier_contact_mail'], FILTER_VALIDATE_EMAIL)) {
+		$errors['supplier_contact_mail'] = 'Veuillez indiquer une adresse mail valide.';
+	}		
+
+	if(!count($errors)) {
+		if($id_fournisseur = new_fournisseur(array(
+			'nom_societe'=>check('nom_societe'),
+			'contenu'=>check('nom').' '.check('prenom').' '.check('email'),
+			'adresse'=>check('adresse'),
+			'code_postal'=>check('code_postal'),
+			'ville'=>check('ville'),
+			'pays'=>check('pays'),
+			'site_web'=>check('site_web'),
+			'supplier_contact_nom'=>check('supplier_contact_nom'),
+			'supplier_contact_tel'=>check('supplier_contact_tel'),
+			'supplier_contact_mail'=>check('supplier_contact_mail'),
+			'email'=>check('email'),
+			'optin'=>check('contact_fiche_complete')
+		),check('categories'))) {
+			wp_redirect('/nouveau-fournisseur?id_fournisseur='.$id_fournisseur);
+			exit;
+		}
+	}
+}
+get_header(); ?>
+<div class="row column-content page-members">
+	<div class="col-md-9 col-sm-8 column-main">
+<?php if(check('id_fournisseur')) {?>
+	<section>
+		<h2 class="title">Action effectuée</h2>
+		<p>Merci d'avoir ajouté ce nouveau fournisseur. L'équipe DeviceMed va vous recontacter très prochainement pour mettre en ligne la fiche correspondante dans le répertoire.</p>
+		<a href="/" class="link">Retourner à l'accueil du site</a>
+	</section>
+<?php } else {?>
+
 <script type='text/javascript'>
 	$(document).ready(function() {
 		$(".title_sous_menu_checkbox").click(function() {
@@ -69,8 +163,6 @@
 		});
 	});
 </script>
-<div class="row column-content page-members">
-	<div class="col-md-9 col-sm-8 column-main">
 	<section class="new-newsletter">
 		<h2 class="title">Figurer dans le répertoire</h2>
 		<form method="post">
@@ -170,7 +262,7 @@
 					<div id='bloc_categories_fournisseurs'>
 						<?php
 							$categories = fournisseur_categories();
-							fournisseurs_filtre_categories($categories,1,true);
+							fournisseurs_filtre_categories($categories,1,true,check('categories'));
 
 						?>
 					</div>
@@ -221,6 +313,8 @@ articles, photos, vidéos, présence à des événements, documentation PDF…)<
 			<?php endif; ?>
 		</form>
 	</section>
-
+<?php }?>
 	</div><!-- .column-main -->
-<?php get_footer(); ?>
+<?php 
+
+get_footer(); ?>
