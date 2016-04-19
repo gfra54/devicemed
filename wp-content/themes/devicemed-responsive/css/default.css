@@ -3687,6 +3687,9 @@ body .container .article .content {
 }
 
 
+body #sidebar {
+  display:none;
+}
 body .column-main {
   width: 100%;
 }
@@ -3695,7 +3698,7 @@ body .column-main {
   body .column-main {
     width: calc(100% - 275px);
   }
-  #sidebar {
+  body #sidebar {
     width:315px;
     width:275px;
     display: block;

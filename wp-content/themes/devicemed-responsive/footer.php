@@ -14,7 +14,6 @@
 <?php include_external('js/jquery.bxslider.min.js');?>
 <?php include_external('js/colorbox/jquery.colorbox-min.js');?>
 <?php 
-	if($GLOBALS['habillage']) { extrajs('pubs'); }
 	extrajs('nl');
 	
 	extrajs('bottom');
