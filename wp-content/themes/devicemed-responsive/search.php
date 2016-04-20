@@ -48,12 +48,21 @@ get_header(); ?>
 			) );
 
 		// If no content, include the "No posts found" template.
-		} else {?>
+		} else if(isset($_GET['s'])){?>
 			<center>
 
 			<p><i>Aucun résultat trouvé.</i></p>
 
 			<h3 class="title5">Faire une nouvelle recherche</h3>
+			<div class="search">
+			<form role="search" method="get" action="/">
+				<input type="text" name="s" placeholder="Rechercher dans les articles" value="<?php echo htmlspecialchars($_GET['s']);?>">
+				<input type="submit" value="Rechercher">
+			</form>
+			</div>
+			</center>
+		<?php } else {?>
+			<h3 class="title5">Faire une recherche</h3>
 			<div class="search">
 			<form role="search" method="get" action="/">
 				<input type="text" name="s" placeholder="Rechercher dans les articles" value="<?php echo htmlspecialchars($_GET['s']);?>">

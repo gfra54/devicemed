@@ -945,13 +945,13 @@ DIV.search {
 #menu-item-1039 {
   background-color: #ddd;
   color: #000;
-  width: 210px;
+/*  width: 210px;*/
   text-align: center;
   left: 1px;
 }
 
 #menu-item-1039 .sub-menu {
-  width: 210px;
+  /*width: 210px;*/
 }
 
 #menu {
