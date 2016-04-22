@@ -23,6 +23,8 @@ lancer cron fournisseurs
 creer page fournisseurs.php
 creer page nouveau-fournisseur.php
 
+ajouter menus draft fopurnisseurs
+
 desactiver/activer permalink ds l'admin
 
 faire des redirs 301 : 
