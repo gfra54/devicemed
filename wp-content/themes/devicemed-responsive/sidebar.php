@@ -1,5 +1,5 @@
 <?php
-
+/*
 	$supplier_premium = $supplier['supplier_premium'];
 
 	if($_GET['inscription_fournisseur'] == 1) {
@@ -104,7 +104,7 @@
 				}
 			}
 		}
-	}
+	}*/
 ?>
 <div id="sidebar" class="column col-md-3 col-sm-4 column-sidebar">
 	<?php afficher_pub('site-colonne');?>
@@ -155,37 +155,13 @@
 		</header>	
 		<article>
 			<?php
-				// $fournisseurs = get_fournisseurs(array('premium'=>true));
-				// foreach($fournisseurs as $fournisseur) {
-				// 	mse($fournisseur);
-				// }
-				// On récupére les fournisseurs partenaires
-				$sqlPartners = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 ORDER BY supplier_name ASC";
-				// echo "sqlPartners : ". $sqlPartners;
-				$resultPartners = mysql_query($sqlPartners);
-				$nbPartners = mysql_num_rows($resultPartners);
-				$j = 1;
-
-				while($rowPartners = mysql_fetch_array($resultPartners)) {
-					$idFournisseur = $rowPartners['ID'];
-					$nomFournisseur = $rowPartners['supplier_name'];
-					$nomFournisseur2 = DM_Wordpress_Suppliers_Model::string_sanitize_nicename($nomFournisseur);
-					$nomFournisseur2 = str_replace(' ','-', $nomFournisseur2);
-					$image = 'http://www.devicemed.fr/wp-content/uploads/logo_suppliers/'.rawurlencode($rowPartners["supplier_logo"]);
-					?>
-					<a title="<?php echo $nomFournisseur;?>" href="/suppliers/<?php echo $nomFournisseur2.'/'.$idFournisseur;?>" style="background-image:url(<?php echo $image ?>)" class='logo_supplier'>
-						<img src="<?php echo $image ?>" />
+				$cpt=0;
+				foreach(get_fournisseurs(array('premium'=>true)) as $fournisseur) {?>
+					<a title="<?php echo $fournisseur['nom'];?>" href="<?php echo $fournisseur['permalink'];?>" style="background-image:url(<?php echo $fournisseur['logo'] ?>)" class='logo_supplier'>
+						<img src="<?php echo $fournisseur['logo'] ?>" />
 					</a>
-<?php					
-/*					if($j == $nbPartners) {
-						echo "<h3 class='title2'><a class=partner-link href=\"/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></h3>";
-					}else {
-						echo "<h3 class='title2'><a class=partner-link href=\"/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></h3><br />";
-					}*/
-
-					$j++;
-				}
-				if($nbPartners%2) {?>
+				<?php $cpt++;}
+				if($cpt%2) {?>
 					<a title="Voir la liste des fournisseurs" href="/suppliers/" class='logo_supplier'>
 						Voir tous les fournisseurs &raquo;
 					</a>

@@ -1,29 +1,4 @@
 <?php 
-// On récupére les fournisseurs partenaires (premium)
-$sqlFournisseurs = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 AND supplier_status=1 ORDER BY supplier_name ASC";
-$resultFournisseurs = mysql_query($sqlFournisseurs);
-$nbFournisseurs = mysql_num_rows($resultFournisseurs);
-
-if(isset($_GET['ban'])) {
-	echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><!--<img src=http://i.snag.gy/En70p.jpg>-->';
-	echo '<link rel="stylesheet" id="open-sans-css"  href="/wp-content/themes/devicemed-responsive/fonts/opensans-condbold.css" type="text/css" media="all" />';
-	echo '<div style="padding:20px 11px;width:102px;background:#214F8E;"><center style="margin-bottom:8px;font-size:15px;line-height: 1em;color:white;text-transform:uppercase;font-family:opensans-condbold">Fournisseurs partenaires</center>';
-
-	while($rowFournisseurs = mysql_fetch_array($resultFournisseurs)) {
-							$idFournisseur = $rowFournisseurs['ID'];
-							$nomFournisseur = $rowFournisseurs['supplier_name'];
-							$nomFournisseur2 = DM_Wordpress_Suppliers_Model::string_sanitize_nicename($nomFournisseur);
-							$nomFournisseur2 = str_replace(' ','-', $nomFournisseur2);
-							$nom = wp_trim_words($nomFournisseur,2,'');
-							$nom = str_replace('Composites','Comp.',$nom);
-							$nom = str_replace('Medical','Med.',$nom);
-							$nom = str_replace('Medical','Med.',$nom);
-		echo '<div style="padding-top:3px"><a style="font-size:14px;text-decoration:underline;color:white;font-family:opensans-condbold" href="/suppliers/$nomFournisseur2/$idFournisseur" target="_blank"><b>'.$nom.'</b></a></div>';
-
-	}
-	exit;
-}
-
 get_header(); ?>
 <style>#sidebar-fiches {display: none !important;}</style>
 <div class="row column-content page-members">
@@ -31,31 +6,11 @@ get_header(); ?>
 	<section class="profile">
 		<h2 class="title">Liste de nos fournisseurs partenaires</h2>
 		<p>
-			<?php
-
-				// On récupére les fournisseurs partenaires (premium)
-				$sqlFournisseurs = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 AND supplier_status=1 ORDER BY supplier_name ASC";
-				$resultFournisseurs = mysql_query($sqlFournisseurs);
-				$nbFournisseurs = mysql_num_rows($resultFournisseurs);
-				
-				echo "<div class=\"mosaique-fournisseurs\" id='bloc_supplier_search'>";
-					if($nbFournisseurs > 0) {
-						while($rowFournisseurs = mysql_fetch_array($resultFournisseurs)) {
-							$idFournisseur = $rowFournisseurs['ID'];
-							$nomFournisseur = $rowFournisseurs['supplier_name'];
-							$nomFournisseur2 = DM_Wordpress_Suppliers_Model::string_sanitize_nicename($nomFournisseur);
-							$nomFournisseur2 = str_replace(' ','-', $nomFournisseur2);
-							$image = 'http://www.devicemed.fr/wp-content/uploads/logo_suppliers/'.rawurlencode($rowFournisseurs["supplier_logo"]);?>
-							
-							<div class="case-fournisseur-logo"><a href="/suppliers/<?php echo $nomFournisseur2;?>/<?php echo $idFournisseur;?>" style="background-image: url(<?php echo $image;?>)" title="<?php echo $nomFournisseur;?>"><img src="<?php echo $image;?>" alt="Logo <?php echo $nomFournisseur;?>"></a></div>
-							<?php
-							//echo "<div class='supplier_search'><a href=\"/suppliers/$nomFournisseur2/$idFournisseur?premiere_visite=1\" target='_blank'>$nomFournisseur</a></div>";
-						}
-					}else {
-						echo "<p>Nous avons aucun fournisseur partenaire pour le moment.</p>";
-					}
-				echo "</div>";
-			?>
+			<div class="mosaique-fournisseurs" id='bloc_supplier_search'>
+			<?php foreach(get_fournisseurs(array('premium'=>true)) as $fournisseur) {?>
+				<div class="case-fournisseur-logo"><a href="<?php echo $fournisseur['permalink'];?>" style="background-image: url(<?php echo $fournisseur['logo'];?>)" title="<?php echo $fournisseur['nom'];?>"><img src="<?php echo $fournisseur['logo'];?>" alt="Logo <?php echo $fournisseur['nom'];?>"></a></div>
+			<?php }?>
+			</div>
 		</p>
 	</section>
 </div><!-- .column-main -->

@@ -1,4 +1,9 @@
-<?php get_header(); ?>
+<?php 
+
+fournisseur_redir($supplier['ID']);
+
+
+get_header(); ?>
 
 <?php 
 		// On ajoute un clic au profil payant

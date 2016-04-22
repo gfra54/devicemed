@@ -56,10 +56,10 @@
 								<h2 class="title"><?php the_title(); ?></h2>
 							</header>
 							<p class="excerpt"><?php echo devicemed_get_post_excerpt(); ?></p>
-							<span class="metas">
+							<!--<span class="metas">
 								<span class="date-wrapper">Le <span class="date"><?php echo get_the_date('l d F Y'); ?></span></span>
 								<span class="author-wrapper">par <span class="author"><?php echo get_the_author(); ?></span></span>
-							</span>
+							</span>-->
 						</span>
 					</a>
 				</article>

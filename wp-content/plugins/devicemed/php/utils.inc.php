@@ -1,4 +1,56 @@
 <?php
+
+function cond($before,$data,$after=false) {
+	if($data) {
+		echo $before;
+		echo $data;
+		echo $after;
+		return true;
+	}
+}
+
+function link_cond($url,$lib=false,$before=false,$after=false) {
+	if(isurl($url)) {
+		echo $before;
+		?><a href="<?php echo esc_html($url) ?>" target='_blank'><?php echo esc_html($lib ? $lib : $url); ?></a><?php
+		echo $after;
+		return true;
+	}
+}
+function array_unique_multi($array) {
+	return array_map("unserialize", array_unique(array_map("serialize", $array)));
+}
+function get_attachment_id_by_url( $url ) {
+	global $wpdb;
+
+	if(!isUrl($url)) {
+		if(strstr($url, 'wp-content/')!==false) {
+			list(,$url) = explode('wp-content/',$url);
+		}
+		$url = str_replace('.','_',$url);
+		$url = str_replace(' ','_',$url);
+		$url = str_replace('(','_',$url);
+		$url = str_replace(')','_',$url);
+		while(strstr($url, '__')!==false) {
+			$url = str_replace('__','_',$url);
+		}
+		$sql = "SELECT ID FROM ".$wpdb->prefix."posts WHERE guid LIKE '%".mysql_escape_string($url)."%'";
+	} else {
+		$sql = "SELECT ID FROM ".$wpdb->prefix."posts WHERE guid= '".mysql_escape_string($url)."'";
+	}
+	// Now we're going to quickly search the DB for any attachment GUID with a partial path match
+	// Example: /uploads/2013/05/test-image.jpg
+	if($attachment = $wpdb->get_col( $sql  )) {
+		// ms($url);
+
+		// Returns null if no attachment is found
+		return $attachment[0];
+	} else if(strstr($url, ' ')!==false) {
+		return get_attachment_id_by_url(str_replace(' ','',$url));
+	}
+}
+
+
 function include_external($file,$maj=false){
 	if(is_array($file)) {
 		foreach($file as $fileunique) {
@@ -23,7 +75,7 @@ function include_external($file,$maj=false){
 }	
 
 function isUrl($string) {
-	return filter_var($string, FILTER_VALIDATE_URL);
+	return strstr($string, 'http://') !==false || strstr($string, 'https://') !==false;
 }
 
 function baliseCss($file){
@@ -34,6 +86,97 @@ function baliseCss($file){
 function getExtension($f) {
 	$tmp = explode('.',$f);
 	return end($tmp);
+}
+function nouvelIdCategorie($id,$souscategorie=false) {
+	$sql='SELECT * FROM legacy_categories WHERE id_ancien = "'.$id.'" AND souscategorie = "'.($souscategorie ? 1 : 0).'"';
+	$ret = mysql_fetch_array(mysql_query($sql));
+	if(isset($ret['id_nouveau'])) {
+		return $ret['id_nouveau'];
+	} 
+	//else me($sql);
+}
+
+$slugs = array();
+function creerCategorie($nom,$id_ancien,$souscategorie=false, $parent=0,$parent_ancien=0,$nom_parent='') {
+	global $slugs;
+	$slug = sanitize_title(trim($nom_parent.' '.$nom));
+	if(!empty($slugs[$slug])) {
+		$cpt=1;
+		while(!empty($slugs[$slug.'-'.$cpt])) {
+			$cpt++;
+		}
+		$slug = $slug.'-'.$cpt;
+	}
+
+// ms($nom_parent,$slug);
+	$slugs[$slug] = true;
+	// e($slug);
+	echo '.';
+
+	$ret = wp_insert_term($nom,'categorie',array(
+		'parent'=>$parent,
+		'slug'=>$slug
+	));
+
+	if(is_array($ret)) {
+			mysql_query('INSERT INTO legacy_categories (
+				nom,
+				id_nouveau,
+				id_ancien,
+				parent_nouveau,
+				parent_ancien,
+				souscategorie
+			) VALUES (
+				"'.addslashes($nom).'",
+				"'.$ret['term_id'].'",
+				"'.$id_ancien.'",
+				"'.$parent.'",
+				"'.$parent_ancien.'",
+				"'.($souscategorie ? '1' : '0').'"
+			)');
+			return $ret['term_id'];
+	} else {
+		mse($ret);
+	}
+}
+
+function Generate_Featured_Image( $image, $post_id  ){
+    $filename = basename($image);
+    $path = dirname($image);
+    $clean = $path.'/'.sanitize_title($filename);
+    if(is_file($image)) {
+    	if($clean != $image) {
+		    copy($image,$clean);
+		}
+	    list(,$fragment) = explode('wp-content/',$clean);
+	    $file = $clean;
+	    $file_url = site_url().'/wp-content/'.$fragment;
+
+	    if($attach_id = get_attachment_id_by_url($file_url)) {
+	    	set_post_thumbnail( $post_id, $attach_id );
+	    } else {
+		    $wp_filetype = wp_check_filetype($filename);
+		    $attachment = array(
+				'guid' => $file_url, 
+		        'post_mime_type' => $wp_filetype['type'],
+		        'post_title' => sanitize_file_name($filename),
+		        'post_content' => '',
+		        'post_status' => 'inherit'
+		    );
+		    $attach_id = wp_insert_attachment_meta( $attachment, $file, $post_id);
+		}
+	    return $attach_id;
+	}
+}
+
+function wp_insert_attachment_meta( $attachment, $file=false, $post_id=0) {
+    if($attach_id = wp_insert_attachment( $attachment, $file, $post_id)) {
+	    require_once(ABSPATH . 'wp-admin/includes/image.php');
+	    $attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+	    $res1= wp_update_attachment_metadata( $attach_id, $attach_data );
+	    $res2= set_post_thumbnail( $post_id, $attach_id );
+	    return $attach_id;
+	}
 }
 function datefr($date) {
 	$GLOBALS['MOIS'] = array("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre");
@@ -84,10 +227,12 @@ function parseHtmlTagAttributes($attr){
 }
 
 function http($url){
-	if(!strstr($url, 'http')) {
-		$url = 'http://'.$url;
+	if($url) {
+		if(!strstr($url, 'http')) {
+			$url = 'http://'.$url;
+		}
+		return $url;
 	}
-	return $url;
 }
 function sanitize_output($buffer) {
 

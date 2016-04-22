@@ -478,7 +478,6 @@ form[name='search_suppliers'] input[type='text'] {
 form[name='search_suppliers'] input[type='submit'] {
   position: absolute;
   right: 425px;
-  top: 122px;
   width: 30px;
   height: 30px;
   line-height: 999em;
@@ -3342,7 +3341,7 @@ section.posts article .categories .sous_category {
   font-size: 1.5em;
   margin-bottom: 15px;
 }
-.details_supplier_disabled {
+.page-supplier .column-main section.actions .details_supplier_disabled {
   display: block;
   float: left;
   background: #777;
@@ -3686,12 +3685,14 @@ body .container .article .content {
     margin-top: 2em;
 }
 
+
 body #sidebar {
   display:none;
 }
 body .column-main {
   width: 100%;
 }
+
 @media (min-width: 992px) {
   body .column-main {
     width: calc(100% - 275px);

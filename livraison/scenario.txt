@@ -10,3 +10,30 @@ activer 3 column admin et Adminimize (bof)
 changeer url absolue dans le menu de wp vers url relative
 
 instaler admin columns 5dc38c7b-b34b-4b43-bbb1-09b9f3d7fc4d
+
+
+----------------------------
+
+instaler plugins attachements
+
+import acf et cpt ui
+
+lancer cron fournisseurs
+
+creer page fournisseurs.php
+creer page nouveau-fournisseur.php
+
+ajouter menus draft fopurnisseurs
+
+desactiver/activer permalink ds l'admin
+
+faire des redirs 301 : 
+page des fournisseurs non premium
+
+definir query var pour categorie
+
+copier les events pour qosina
+realmeca
+teleflex
+
+modifier liens du menu fournisseurs

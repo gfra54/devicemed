@@ -1,4 +1,7 @@
-<?php get_header(); 
+<?php 
+fournisseur_categorie_redir();
+
+get_header(); 
 ?>
 <div class="row column-content page-members">
 	<div class="col-md-9 col-sm-8 column-main">

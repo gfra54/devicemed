@@ -169,95 +169,9 @@
 					<p style='color:red;'>Attention : ne rien cocher dans les catégories où vous êtes uniquement utilisateur (éviter par exemple de remplir la catégorie « Salles propres » si vous êtes plasturgiste utilisateur d’une salle propre).</p>
 					<div id='bloc_categories_fournisseurs'>
 						<?php
-							// On récupére les category parente et on créer une colonne toutes les 7 catégories
-							$sqlCategorieParente = "SELECT * FROM wordpress_dm_suppliers_categories WHERE supplier_category_parent='0' ORDER BY supplier_category_title ASC";
-							$resultCategorieParente = mysql_query($sqlCategorieParente);
-							$i = 1;
+							$categories = fournisseur_categories();
+							fournisseurs_filtre_categories($categories,1,true);
 
-							while($rowCategorieParent = mysql_fetch_array($resultCategorieParente)) {
-								$idCategorieParent = $rowCategorieParent['ID'];
-								$nomCategorieParent = $rowCategorieParent['supplier_category_title'];
-
-								if($i == 1) {
-									echo "<div class='colonne'>";
-								}elseif($i == 8) {
-									echo "</div><div class='colonne'>";
-								}elseif($i == 15) {
-									echo "</div><div class='colonne'>";
-								}elseif($i == 20) {
-									echo "</div>";
-								}
-
-								echo "<h4 class='title3 title_sous_menu_checkbox' id='title_$idCategorieParent'>$nomCategorieParent</h4>";
-
-								echo "<div class='sous_menu_checkbox' id='sous_menu_$idCategorieParent'>";
-									$category = $data['supplier_category_id'];
-									$tabCategory = explode(',', $category);
-									
-									/*** RECUPERATION DES SOUS CATEGORIES ***/	
-									// On récupére les sous catégorie de la catégorie courante
-									$sqlSousCategorieId = "SELECT *	 FROM wordpress_dm_suppliers_souscategories WHERE supplier_category_parent=$idCategorieParent";
-									$resultSousCategorieId = mysql_query($sqlSousCategorieId);
-									$nbSousCategorieId = mysql_num_rows($resultSousCategorieId);
-
-									if($nbSousCategorieId > 0) {
-										while($rowSousCategorie = mysql_fetch_array($resultSousCategorieId)) {
-											$idSousCategorie = $rowSousCategorie['ID'];
-											$nomSousCategorie = $rowSousCategorie['supplier_souscategorie_name'];
-
-											echo "<div class='sous_categorie_inscription'>$nomSousCategorie</div>";
-
-											// On récupére les catégories de la sous catégorie
-											$sqlCategorieSupplier = "SELECT * FROM wordpress_dm_suppliers_categories WHERE supplier_souscategorie_parent=$idSousCategorie ORDER BY supplier_category_title";
-											$resultCategorieSupplier = mysql_query($sqlCategorieSupplier);
-											$nomSousCatTemp = '';
-
-											while($rowCategorieSupplier = mysql_fetch_array($resultCategorieSupplier)) {
-												$idCategorieSupplier = $rowCategorieSupplier['ID'];
-												$titleCategorieSupplier = $rowCategorieSupplier['supplier_category_title'];
-										
-												if(in_array($idCategorieSupplier,  $tabCategory)) {
-													echo "<div class='categorie_inscription'><input type='checkbox' name='categories[]' value='$idCategorieSupplier' checked><span class='intitule_checkbox_fournisseurs'>$titleCategorieSupplier</span></div>";
-												}else {
-													echo "<div class='categorie_inscription'><input type='checkbox' name='categories[]' value='$idCategorieSupplier'><span class='intitule_checkbox_fournisseurs'>$titleCategorieSupplier</span></div>";
-												}
-											}
-										}
-									}else {
-										$sqlCategorieSupplier = "SELECT * FROM wordpress_dm_suppliers_categories WHERE supplier_category_parent=$idCategorieParent ORDER BY supplier_category_title";
-										$resultCategorieSupplier = mysql_query($sqlCategorieSupplier);
-										$nomSousCatTemp = '';
-
-										while($rowCategorieSupplier = mysql_fetch_array($resultCategorieSupplier)) {
-											$idCategorieSupplier = $rowCategorieSupplier['ID'];
-											$titleCategorieSupplier = $rowCategorieSupplier['supplier_category_title'];
-										
-											if(in_array($idCategorieSupplier,  $tabCategory)) {
-												echo "<div class='categorie_inscription'><input type='checkbox' name='categories[]' value='$idCategorieSupplier' checked><span class='intitule_checkbox_fournisseurs'>$titleCategorieSupplier</span></div>";
-											}else {
-												echo "<div class='categorie_inscription'><input type='checkbox' name='categories[]' value='$idCategorieSupplier'><span class='intitule_checkbox_fournisseurs'>$titleCategorieSupplier</span></div>";
-											}
-										}
-									}
-									/*** FIN RECUPERATION SOUS CATEGORIES ***/
-
-									/*$sqlCategorieSupplier = "SELECT * FROM wordpress_dm_suppliers_categories WHERE supplier_category_parent=$idCategorieParent ORDER BY supplier_category_title ASC";
-									$resultCategorieSupplier = mysql_query($sqlCategorieSupplier);
-									
-									while($rowCategorieSupplier = mysql_fetch_array($resultCategorieSupplier)) {
-										$idCategorieSupplier = $rowCategorieSupplier['ID'];
-										$titleCategorieSupplier = $rowCategorieSupplier['supplier_category_title'];
-										
-										if(in_array($idCategorieSupplier,  $tabCategory)) {
-											echo "<input type='checkbox' name='categories[]' value='$idCategorieSupplier' checked><span class='intitule_checkbox_fournisseurs'>$titleCategorieSupplier</span><br />";
-										}else {
-											echo "<input type='checkbox' name='categories[]' value='$idCategorieSupplier'><span class='intitule_checkbox_fournisseurs'>$titleCategorieSupplier</span><br />";
-										}
-									}*/
-								echo "</div>";
-
-								$i++;
-							}
 						?>
 					</div>
 					<br /><br /><div class='title22'>Pour faciliter nos échanges, merci de préciser :</div></p>
@@ -294,8 +208,8 @@
 							<div class="form-field" id="contact_fiche_complete"><input id="nom-societe" type="checkbox" name="contact_fiche_complete" value="1" checked />Je souhaite être contacté pour compléter mon profil (description de la société,
 articles, photos, vidéos, présence à des événements, documentation PDF…)</div>
 						<?php }else { ?>
-							<div class="form-field" id="contact_fiche_complete"><input id="nom-societe" type="checkbox" name="contact_fiche_complete" value="1" />Je souhaite être contacté pour compléter mon profil (description de la société,
-articles, photos, vidéos, présence à des événements, documentation PDF…)</div>
+							<div class="form-field" id="contact_fiche_complete"><label><input id="nom-societe" type="checkbox" name="contact_fiche_complete" value="1" />Je souhaite être contacté pour compléter mon profil (description de la société,
+articles, photos, vidéos, présence à des événements, documentation PDF…)</label></div>
 						<?php } ?>
 					</div>
 					<?php if($success['general'] == '') { ?>
