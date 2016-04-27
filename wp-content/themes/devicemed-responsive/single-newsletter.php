@@ -46,15 +46,30 @@ foreach($urls as $url) {
   } else {
     $data=false;
   }
-  $tmp = file_get_contents(str_replace('.local','.fr',$url));
-  $content = getHtmlVal('<div class="content">','</article>',$tmp);
-  $text = !empty($data['text']) ? $data['text'] : (cleantext(getHtmlVal('<p><strong>','</strong></p>',$content)));
-  $image = (getHtmlVal('<div class=\'image_clicable\'><a href="','"',$tmp));
-  $title = (getHtmlVal('<h1 class="title">','</h1>',$tmp));
-  $category = !empty($data['category']) ? $data['category'] : (getHtmlVal('<span class="category">','</span>',$tmp));
-  $articles[] = array('text'=>$text,'image'=>$image,'category'=>$category,'title'=>$title,'url'=>add_utm($url));
-}
+  $tab = explode('/',$url);
+  $id = $tab[count($tab)-1];
+  if($article = get_object_vars(get_post($id))) {
+  //  $tmp = file_get_contents(str_replace('.local','.fr',$url));
+    $content=false;
+    if(substr($article['post_content'], 0, 9) == '<strong>') {
+      $content = trim(couper(cleantext(getHtmlVal('<strong>','</strong>',$article['post_content'])),300));
+    }
+    if(!$content) {
+      $content = couper(cleantext($article['post_content']),300);
+    }
+    $image = wp_get_attachment_url(get_the_post_thumbnail($id));
+    $title = $article['post_title'];
 
+    $cats = get_the_category($id);
+//    $category = !empty($data['category']) ? $data['category'] : (getHtmlVal('<span class="category">','</span>',$tmp));
+    $category='';
+    foreach($cats as $cat) {
+      $category.= $category ? ' /' : '';
+      $category.= $cat->name;
+    }
+    $articles[] = array('text'=>$content,'image'=>$image,'category'=>$category,'title'=>$title,'url'=>add_utm($url));
+  }
+}
 
 
 
@@ -117,10 +132,11 @@ foreach($urls as $url) {
           </td>
       </tr>
       <tr>
-      <td style="border-bottom:1px solid #454545;">
+      <td style="border-bottom:1px solid #454545;" bgcolor="#0066b3">&nbsp; &nbsp;
       <a style="border:none" href=
-                  "http://www.devicemed.fr/"><img width="290" title="logo" alt="newsletter" src=
-                  "http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/devicemedbig.png" /></a>
+                  "<?php echo site_url();?>/"><img width="290" title="logo" alt="newsletter" src=
+                  "<?php echo site_url();?>/wp-content/themes/devicemed-responsive/images/logo-alpha.png" /></a>
+            <?php espace(10);?>
     </td>
     </tr>
 
