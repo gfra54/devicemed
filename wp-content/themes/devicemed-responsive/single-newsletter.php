@@ -57,7 +57,7 @@ foreach($urls as $url) {
     if(!$content) {
       $content = couper(cleantext($article['post_content']),300);
     }
-    $image = wp_get_attachment_url(get_the_post_thumbnail($id));
+    $image = wp_get_attachment_url(get_post_thumbnail_id($id));
     $title = $article['post_title'];
 
     $cats = get_the_category($id);
