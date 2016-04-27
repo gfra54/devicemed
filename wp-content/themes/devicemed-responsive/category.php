@@ -51,13 +51,18 @@
 											$nomCatParent = get_cat_name($parentcat);
 
 											if($nomCatParent != 'Dossiers') {
-												$items[] = '<span class="category_principal">'.$nomCatParent.' &gt; </span><span class="category">'.$category->cat_name.'</span>';
+												if($nomCatParent) {
+													$items[] = '<span class="category_principal">'.$nomCatParent.' &gt; </span><span class="category">'.$category->cat_name.'</span>';
+												} else {
+													$items[] = '<span class="category_principal">'.$category->cat_name.'';
+												}
 											}/*else {
 												$items[] = '<span class="category">'.$category->cat_name.'</span>';
 											}*/
 										}
 									}
-									echo implode(', ', $items);
+									
+									echo implode(' / ', $items);
 								?>
 								</span>
 								<?php endif; ?>
