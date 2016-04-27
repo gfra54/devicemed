@@ -149,7 +149,7 @@ header( 'Cache-Control: max-age=604800' ); ?>
 	</div>
 </div>
 <header id="header">
-	<div class="logo"><a href="<?php echo home_url(); ?>" title="<?php bloginfo('name'); ?> - <?php bloginfo('description'); ?>"><img src="<?php echo get_template_directory_uri(); ?>/images/logo.png" alt="<?php bloginfo('name'); ?> - <?php bloginfo('description'); ?>" /></a></div>
+	<div class="logo"><a href="<?php echo home_url(); ?>" title="<?php bloginfo('name'); ?> - <?php bloginfo('description'); ?>"><img src="<?php echo get_template_directory_uri(); ?>/images/logo-alpha.png" alt="<?php bloginfo('name'); ?> - <?php bloginfo('description'); ?>" /></a></div>
 	<div class="nl-header">
 
 	<form action="https://app.mailjet.com/account/tools/widget/subscribe/1Nj" target="nl" class="mailjet-widget-form" id="mailjet-widget-form-6901" accept-charset="utf-8" method="post">      

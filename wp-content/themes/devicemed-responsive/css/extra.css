@@ -10,7 +10,7 @@
     background-position: center center;
     -webkit-transition:all 0.3s ease;
     transition:all 0.3s ease;
-    color: #214f8e;
+    color: #0066b3;
     padding-top: 16px;
     font-family: 'opensans-condbold';
     text-transform: uppercase;
@@ -68,7 +68,7 @@ a.link:hover {
   .nl-header h2{
     font-size: 11px;
     margin: 5px 0;
-    color: #214f8e;  
+    color: #0066b3;  
   }
   .nl-field {
     position: relative;
@@ -92,7 +92,7 @@ a.link:hover {
       width: 30px;
       height: 26px;
       overflow: hidden;
-      background: #214f8e;
+      background: #0066b3;
       color: white;
       border: 0px solid #ddd;
   }
@@ -106,7 +106,7 @@ a.link:hover {
   padding-bottom: 25%;
   float: left;
   position: relative;
-  background: #214f8e;
+  background: #0066b3;
 }
 .case-fournisseur-logo A{
   display: block;
@@ -149,7 +149,7 @@ section h2.title {
   font-family: 'opensans-condbold';
   font-weight: bold;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
