@@ -46,14 +46,6 @@ foreach($urls as $url) {
   } else {
     $data=false;
   }
-/*  $tmp = file_get_contents(str_replace('.local','.fr',$url));
-  $content = getHtmlVal('<div class="content">','</article>',$tmp);
-  $text = couper(!empty($data['text']) ? $data['text'] : (cleantext(getHtmlVal('<p><strong>','</strong></p>',$content))),300);
-  $image = (getHtmlVal('<div class=\'image_clicable\'><a href="','"',$tmp));
-  $title = (getHtmlVal('<h1 class="title">','</h1>',$tmp));
-  $category = !empty($data['category']) ? $data['category'] : (getHtmlVal('<span class="category">','</span>',$tmp));
-  $articles[] = array('text'=>$text,'image'=>$image,'category'=>$category,'title'=>$title,'url'=>add_utm($url));*/
-
   $tab = explode('/',$url);
   $id = $tab[count($tab)-1];
   if($article = get_object_vars(get_post($id))) {
@@ -77,7 +69,6 @@ foreach($urls as $url) {
     }
     $articles[] = array('text'=>$content,'image'=>$image,'category'=>$category,'title'=>$title,'url'=>add_utm($url));
   }
-
 }
 
 
@@ -107,7 +98,7 @@ foreach($urls as $url) {
     id="wrapper">
       <tbody>
       <tr>
-      <td style="height:35px; background-color:#454545;font-size:2px">&nbsp;</td>
+          <td></td>
           <td rowspan="3" width="10" valign="top">&nbsp;</td>
 
           <td rowspan="3" width="127" valign="top" style="width:127px;">
@@ -141,11 +132,10 @@ foreach($urls as $url) {
           </td>
       </tr>
       <tr>
-      <td style="border-bottom:1px solid #454545;" bgcolor="#0066b3">&nbsp; &nbsp;
+      <td _style="border-bottom:1px solid #454545;" bgcolor="#0066b3">&nbsp; 
       <a style="border:none" href=
                   "<?php echo site_url();?>/"><img width="290" title="logo" alt="newsletter" src=
-                  "<?php echo site_url();?>/wp-content/themes/devicemed-responsive/images/logo-alpha.png" /></a>
-            <?php espace(10);?>
+                  "<?php echo site_url();?>/wp-content/themes/devicemed-responsive/images/devicemedbig.png" /></a>
     </td>
     </tr>
 
@@ -203,7 +193,7 @@ foreach($urls as $url) {
                     href=
                     "<?php echo $article['url'];?>"
                     target="_blank"><span style=
-                    "font-size:16px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;color:#005ea8;">
+                    "font-size:16px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;color:#0066b3;">
                     <?php echo $article['title'];?></span></a></div>
 
                     <div style=
@@ -211,7 +201,7 @@ foreach($urls as $url) {
                     <?php echo strip_tags($article['text']);?>&nbsp; <a style=
                     "text-decoration:none;" href=
                     "<?php echo $article['url'];?>"
-                    target="_blank"><span style="color:#005ea8;">Lire la
+                    target="_blank"><span style="color:#0066b3;">Lire la
                     suite...</span></a></div>
                   </td>
                 </tr>
@@ -394,7 +384,7 @@ function bloc_partenaires() {
     
     $GLOBALS['bloc_partenaires']=true;
     ?>
-    <table width="127" bgcolor="#214F8E" cellpadding="0" cellspacing="10">
+    <table width="127" bgcolor="#0066b3" cellpadding="0" cellspacing="10">
     <tr>
     <td align="center"> 
     <font face="sans-serif" color="white" style="font-size:11px;">
@@ -406,8 +396,8 @@ function bloc_partenaires() {
       <tr>
       <td bgcolor="white" align=center>    
         <table width="100%" cellpadding="3"><td color=white align=center>
-        <a target=_blank style="text-decoration:none;" href="http://www.devicemed.fr/suppliers/<?php echo $data['nomFournisseur'];?>/<?php echo $id;?>">
-          <font face="sans-serif"  color="#214F8E" style="font-size:11px;text-decoration:none;">
+        <a style="text-decoration:none;" href="http://www.devicemed.fr/suppliers/<?php echo $data['nomFournisseur'];?>/<?php echo $id;?>">
+          <font face="sans-serif"  color="#0066b3" style="font-size:11px;text-decoration:none;">
             <b style="text-decoration:none;">
               <?php echo $data['nom'];?>
             </b>
