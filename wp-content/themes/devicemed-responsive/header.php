@@ -106,7 +106,7 @@ header( 'Cache-Control: max-age=604800' ); ?>
 	Vous devez être connecté pour accéder à cette archive.
 	<br /><br />
 	<div id='lien_notConnected_connecter'>
-		<a href='/members/login'>Se connecter</a>
+		<a href='/members/login?uri=<?php echo $_SERVER['REQUEST_URI'];?>'>Se connecter</a>
 	</div>
 	<div id='close_popup'>X</div>
 </div>

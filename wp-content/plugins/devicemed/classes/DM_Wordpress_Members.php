@@ -100,6 +100,7 @@ class DM_Wordpress_Members
 					$data[ $field ] = trim(stripslashes($_POST[ $field ]));
 				}
 			}
+
 			if (!empty($_POST['action']) AND $_POST['action'] == 'login')
 			{
 				if (!$data['user_login'])
@@ -120,7 +121,7 @@ class DM_Wordpress_Members
 					{
 						if ($results['user_status'] == 0)
 						{
-							$errors['user_login'] = 'Votre compte a été désactivé.';
+							$errors['user_login'] = 'Votre compte est désactivé.';
 						}
 						else
 						{
@@ -139,14 +140,22 @@ class DM_Wordpress_Members
 				}
 				if (!$errors)
 				{
-					if ($referer = DM_Wordpress_Session::get(self::$session_referer))
+					if(!empty($_POST['uri'])) {
+						$uri = $_POST['uri'];
+					} else {
+						$uri = get_home_url();
+					}
+					wp_redirect($uri);
+
+/*					if ($referer = DM_Wordpress_Session::get(self::$session_referer))
 					{
+						
 						wp_redirect("http://www.devicemed.fr/");
 					}
 					else
 					{
 						wp_redirect(get_home_url());
-					}
+					}*/
 				}
 			}
 			if (!empty($_POST['action']) AND $_POST['action'] == 'create')

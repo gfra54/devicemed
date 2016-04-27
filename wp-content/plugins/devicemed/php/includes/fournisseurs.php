@@ -124,7 +124,7 @@ function fournisseurs_filtre_categories($categories,$niveau=1,$checkboxes=false,
 		} else if($souscat){
 			$html.='<li><b>'.$categorie['name'].'</b></li>';
 		} else if($checkboxes){
-			$html.='<li><label><input '.(in_array($categorie['term_id'], $selected)===false ? '' : 'checked').' name="categories[]" value="'.$categorie['term_id'].'" type="checkbox"> '.$categorie['name'].'</label></li>';
+			$html.='<li><label><input '.(empty($selected) || in_array($categorie['term_id'], $selected)===false ? '' : 'checked').' name="categories[]" value="'.$categorie['term_id'].'" type="checkbox"> '.$categorie['name'].'</label></li>';
 		} else {
 			$html.='<li><a href="'.$categorie['url'].'">'.$categorie['name'].'</a></li>';
 		}

@@ -5,6 +5,7 @@
 			<h2 class="title">Connexion avec un compte existant</h2>
 			<form method="post">
 			<input type="hidden" name="action" value="login" />
+			<input type="hidden" name="uri" value="<?php echo htmlspecialchars(check('uri'));?>" />
 			<div class="form-fieldset">
 				<div class="form-row">
 					<div class="form-field"><input id="login-email" type="text" name="user_login" value="<?php echo esc_attr($data['user_login']); ?>" placeholder="Email" /></div>
