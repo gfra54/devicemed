@@ -6,8 +6,8 @@ function get_salons($nb=4) {
 	$args = array( 
 		'post_type'	=> 'salons',
 		'posts_per_page'=>1000,
-		'meta_query'	=> array(
-			'relation'		=> 'OR',
+/*		'meta_query'	=> array(
+			'relation'		=> 'AND',
 			array(
 				'key'	  	=> 'date_debut',
 				'value'	  	=> date('Y-m-d'),
@@ -18,7 +18,7 @@ function get_salons($nb=4) {
 				'value'	  	=> date('Y-m-d'),
 				'compare' 	=> '>=',
 			),
-		),		
+		),*/		
 /*		'meta_key'=>'date_debut',
 		'orderby' => 'meta_value_num',
 		'order' => 'ASC'*/
@@ -26,7 +26,9 @@ function get_salons($nb=4) {
 	if($salons = new WP_Query($args)) {
 		$sort=array();
 		foreach($salons->posts as $key => $salon) {
-			$sort[$key]=get_field('date_debut',$salon->ID);
+			if(strtotime(get_field('date_debut',$salon->ID)) > time() || strtotime(get_field('date_fin',$salon->ID)) > time()) {
+				$sort[$key]=get_field('date_debut',$salon->ID);
+			}
 		}
 		asort($sort);
 //		$sort = array_reverse($sort,true);
