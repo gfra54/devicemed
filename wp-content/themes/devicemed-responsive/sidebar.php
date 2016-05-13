@@ -107,7 +107,7 @@
 	}*/
 ?>
 <div id="sidebar" class="column col-md-3 col-sm-4 column-sidebar">
-	<?php afficher_pub('site-colonne');?>
+	<?php afficher_pub_js('site-colonne');?>
 
 	<?php afficher_pub('cadre-video');?>
 

@@ -10,7 +10,9 @@ function pagecache($name=false) {
 		$file = $path.$name;
 		$content = str_replace('</head>','</head>'.CACHETAG,$content);
 		echo $content;
-		return file_put_contents($file, $content);
+		if(!isset($_GET['nocache'])) {
+			return file_put_contents($file, $content);
+		}
 	}
 }
 

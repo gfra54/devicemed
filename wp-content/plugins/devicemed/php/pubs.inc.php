@@ -35,8 +35,10 @@ function afficher_pub_js($type,$attr=array()) {
 	if(count($pubs)) {
 		$pubs_final = array();
 		foreach($pubs as $k=>$pub) {
-			$pub = get_object_vars($pub);
+			$pub = pub_metrics($pub);
+//			$pub = get_object_vars($pub);
 			$tmp=array();
+			$tmp['id'] = $pub['ID'];
 			$tmp['largeur_maximale'] = get_field('largeur_maximale',$pub['ID']);
 			$tmp['bordure'] = get_field('bordure',$pub['ID']);
 			$tmp['url_tracking_clicks'] = get_field('url_tracking_clicks',$pub['ID']);
@@ -266,9 +268,11 @@ function check_pub_page($pages) {
 }
 
 function pub_metrics($pub) {
+
 	if($url_cible = get_field('url_cible',$pub->ID)) {
 		if(!$url_tracking_clicks = get_field('url_tracking_clicks',$pub->ID)) {
-			$url_tracking_clicks = bitly_shorten($url_cible);
+			$url = addURLParameter($url_cible,$pub->ID);
+			$url_tracking_clicks = bitly_shorten($url);
 			if(!$url_tracking_clicks) {
 				$url_tracking_clicks = $url_cible;
 			} else {

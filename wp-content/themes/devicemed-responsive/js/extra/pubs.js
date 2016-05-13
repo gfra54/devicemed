@@ -31,7 +31,8 @@ function randomPub(_pubs) {
 		}
 		console.log(_pub);
 
-		document.write('<a href="'+addURLParameter(_pub.url_tracking_clicks,'t',_pub.time)+'" target="_blank"><img '+_style+' src="'+addURLParameter(_pub.url_tracking_display,'t',_pub.time)+'"></a>');
+		
+		document.write('<section data-id="'+_pub.id+'"><a href="'+addURLParameter(_pub.url_tracking_clicks,'t',_pub.time)+'" target="_blank"><img '+_style+' src="'+addURLParameter(_pub.url_tracking_display,'t',_pub.time)+'"></a></section>');
 	}
 
 }
