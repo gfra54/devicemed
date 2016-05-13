@@ -1,4 +1,6 @@
 <?php 
+pagecache();
+
 	if(isset($_GET['url']) && $_GET['url'] != '') {
 		$banniere_model = new DM_Wordpress_Banniere_Model();
 		if($banniere_model->clic_banniere($_GET['id'])) {
@@ -198,4 +200,7 @@ $('section.home-gallery .section-gallery-wrapper ul').bxSlider({
 </section>
 
 </div><!-- .column-main -->
-<?php get_footer(); ?>
+<?php get_footer(); 
+
+pagecache('index.html');
+?>

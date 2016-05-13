@@ -1,4 +1,28 @@
 <?php
+define('CACHETAG','<!-- CACHETAG -->');
+function pagecache($name=false) {
+	if($name===false) {
+		ob_start();
+	} else {
+		$content = ob_get_contents();
+		ob_end_clean();
+		list($path) = explode('wp-content',__FILE__);
+		$file = $path.$name;
+		$content = str_replace('</head>','</head>'.CACHETAG,$content);
+		echo $content;
+		return file_put_contents($file, $content);
+	}
+}
+
+function cachepage_clear($name) {
+	list($path) = explode('wp-content',__FILE__);
+	$file = $path.$name;
+	if(file_exists($file)) {
+		if(strstr(file_get_contents($file), CACHETAG)!==false) {
+			unlink($file);
+		}
+	}
+}
 
 function cond($before,$data,$after=false) {
 	if($data) {
