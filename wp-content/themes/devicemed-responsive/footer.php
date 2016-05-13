@@ -21,3 +21,6 @@
 ?>
 </body>
 </html>
+<?php
+	pagecache();
+?>

@@ -3,7 +3,11 @@ var _menu_top=false;
 var _menu_bottom=false;
 var _wpadminbar = 0;
 $(document).ready(function() {
-
+	if(read_cookie('wpadmin')) {
+		$('body').addClass('voir-adminbar');
+		$('#wp-admin-bar-my-account').remove();
+		$('body').css('padding-top',1);
+	}
 	$('.menu-fournisseurs .button').each(function(){
 		_id = '#'+$(this).data('id');
 		if(!$(_id).length) {
@@ -117,3 +121,7 @@ $(window).scroll(function(){
 });
 
 
+function read_cookie(key){
+    var result;
+    return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? (result[1]) : null;
+}

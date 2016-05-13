@@ -1,27 +1,67 @@
 <?php
 define('CACHETAG','<!-- CACHETAG -->');
-function pagecache($name=false) {
-	if($name===false) {
-		ob_start();
-	} else {
-		$content = ob_get_contents();
-		ob_end_clean();
-		list($path) = explode('wp-content',__FILE__);
-		$file = $path.$name;
-		$content = str_replace('</head>','</head>'.CACHETAG,$content);
+$GLOBALS['pagecache-name']=false;
+function get_pagecache($name=false) {
+	if($name === false) {
+		$name = get_the_ID();
+	}
+	if($content = get_transient('pagecache-'.$name)) {
 		echo $content;
-		if(!isset($_GET['nocache'])) {
-			return file_put_contents($file, $content);
-		}
+		exit;
+	} else {
+		pagecache($name);
+		return false;
 	}
 }
 
+function pagecache($name=false) {
+	if($name) {
+		$GLOBALS['pagecache-name']=$name;
+		ob_start();
+	} else {
+		if(!empty($GLOBALS['pagecache-name'])) {
+			$name = $GLOBALS['pagecache-name'];
+			$GLOBALS['pagecache-name']=false;
+			$content = ob_get_contents();
+			ob_end_clean();
+			echo cacheproof($content);
+			$content = cachetag($content);
+			if(is_numeric($name)) {
+				set_transient('pagecache-'.$name,$content);
+			} else {
+				list($path) = explode('wp-content',__FILE__);
+				$file = $path.$name;
+				if(!isset($_GET['nocache'])) {
+					if(!file_exists($file)) {
+						return file_put_contents($file, $content);
+					}
+				}
+			}
+		}
+	}
+}
+function cachetag($content) {
+
+	$content = str_replace('html {','html .voir-adminbar{',$content);
+	$content = str_replace('* html body {','* html body.voir-adminbar {',$content);
+	$content = str_replace('<div id="wpadminbar"','<div id="wpadminbar" style="display:none"',$content);
+	$content = str_replace('</head>','</head>'.CACHETAG,$content);
+	return $content;
+}
+function cacheproof($content) {
+	$content = str_replace('</title>','.</title>',$content);
+	return $content;
+}
 function cachepage_clear($name) {
-	list($path) = explode('wp-content',__FILE__);
-	$file = $path.$name;
-	if(file_exists($file)) {
-		if(strstr(file_get_contents($file), CACHETAG)!==false) {
-			unlink($file);
+	if(is_numeric($name)) {
+		delete_transient('pagecache-'.$name);
+	} else {
+		list($path) = explode('wp-content',__FILE__);
+		$file = $path.$name;
+		if(file_exists($file)) {
+			if(strstr(file_get_contents($file), CACHETAG)!==false) {
+				unlink($file);
+			}
 		}
 	}
 }

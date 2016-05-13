@@ -402,3 +402,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
          column-count: 2;  
   padding-top: 10px;
 }
+
+.voir-adminbar #wpadminbar {
+  display: block !important;
+}
