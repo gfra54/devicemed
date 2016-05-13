@@ -26,7 +26,8 @@ function pagecache($name=false) {
 			ob_end_clean();
 			echo cacheproof($content);
 			$content = cachetag($content);
-			if(is_numeric($name)) {
+			set_transient('pagecache-'.$name,$content);
+/*			if(is_numeric($name)) {
 				set_transient('pagecache-'.$name,$content);
 			} else {
 				list($path) = explode('wp-content',__FILE__);
@@ -36,7 +37,7 @@ function pagecache($name=false) {
 						return file_put_contents($file, $content);
 					}
 				}
-			}
+			}*/
 		}
 	}
 }
@@ -53,7 +54,8 @@ function cacheproof($content) {
 	return $content;
 }
 function cachepage_clear($name) {
-	if(is_numeric($name)) {
+	delete_transient('pagecache-'.$name);
+/*	if(is_numeric($name)) {
 		delete_transient('pagecache-'.$name);
 	} else {
 		list($path) = explode('wp-content',__FILE__);
@@ -63,7 +65,7 @@ function cachepage_clear($name) {
 				unlink($file);
 			}
 		}
-	}
+	}*/
 }
 
 function cond($before,$data,$after=false) {

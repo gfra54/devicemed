@@ -1,7 +1,7 @@
 <?php 
 function save_post_cache($post_id) {
 	if(is_admin()) {
-		cachepage_clear('index.html');
+		cachepage_clear('index');
 		cachepage_clear($post_id);
 		//get_current_screen()->post_type		
 	}
@@ -15,7 +15,7 @@ function watch_pagecache($query ) {
 	if(!$GLOBALS['pagecache_on']) {
 		$GLOBALS['pagecache_on']=true;
 		if($query->is_home()) {
-			pagecache('index.html');
+			get_pagecache('index');
 		} else {
 			if(is_numeric($pid = $query->query['p'])) {
 				get_pagecache($pid);
