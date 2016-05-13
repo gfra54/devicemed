@@ -273,8 +273,8 @@ function fournisseur_categorie_redir() {
 function fournisseur_redir($legacy_supplier_id) {
 	if($fournisseur = get_fournisseur($legacy_supplier_id,true)) {
 		wp_redirect($fournisseur['permalink'],301);
-		exit;
 	}
+	exit;
 }
 add_filter( 'parse_query', 'filtre_fournisseurs' );
 add_action( 'restrict_manage_posts', 'filtre_fournisseurs_restrict_manage_posts' );
@@ -341,7 +341,6 @@ ini_set("memory_limit", "1G");
 
 function get_fournisseur($ID,$legacy=false) {
 	if($legacy) {
-
 		$query = new WP_Query(array(
 			'post_type'		=> 'fournisseur',
 			'meta_query' => array(

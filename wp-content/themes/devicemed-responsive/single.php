@@ -1,4 +1,6 @@
 <?php 
+watch_pagecache();
+
 	get_header(); ?>
 	<div class="row column-content page-single">
 		<div class="col-md-9 col-sm-8 column-main">

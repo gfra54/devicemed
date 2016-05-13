@@ -11,19 +11,20 @@ add_action( 'save_post', 'save_post_cache' );
 // add_action( 'admin_menu', 'save_post_cache' );
 
 $GLOBALS['pagecache_on']=false;
-function watch_pagecache($query ) {
+function watch_pagecache() {
+	global $wp_query;
 	if(!$GLOBALS['pagecache_on']) {
 		$GLOBALS['pagecache_on']=true;
-		if($query->is_home()) {
+		if($wp_query->is_home()) {
 			get_pagecache('index');
 		} else {
-			if(is_numeric($pid = $query->query['p'])) {
+			if(is_numeric($pid = $wp_query->query['p'])) {
 				get_pagecache($pid);
 			}
 		}
 	}
 }
-add_action( 'pre_get_posts', 'watch_pagecache' );
+//add_action( 'pre_get_posts', 'watch_pagecache' );
 
 /*function add_action_pagecache() {
 	pagecache();

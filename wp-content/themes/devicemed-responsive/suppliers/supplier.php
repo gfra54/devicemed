@@ -1,7 +1,5 @@
 <?php 
-
 fournisseur_redir($supplier['ID']);
-
 
 get_header(); ?>
 
