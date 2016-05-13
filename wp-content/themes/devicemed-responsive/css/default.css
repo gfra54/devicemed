@@ -25,7 +25,7 @@
   min-height: 30px;
   position: absolute;
   width: 166px;
-  background-color: #214f8e;
+  background-color: #0066b3;
   margin-left: 219px;
   margin-top: -18px;
   color: #fff;
@@ -133,7 +133,7 @@
 }
 
 .tags_posts p a {
-  background-color: #214f8e;
+  background-color: #0066b3;
   padding: 10px;
   color: #fff;
   opacity: 0.8;
@@ -157,7 +157,7 @@ form[name='form_lost_mdp_user'] input[type='submit'] {
   position: relative;
   left: 20px;
   border: none;
-  background: #214f8e;
+  background: #0066b3;
   margin: 0;
   padding: 5px;
   color: white;
@@ -217,7 +217,7 @@ body {
 }
 
 .lien_inscription_fournisseur {
-  color:#214f8e;
+  color:#0066b3;
   font-weight: bold;
 }
 
@@ -265,7 +265,7 @@ input[name='contact_fiche_complete'] {
 #retour_fournisseurs {
   width: 300px;
   border: none;
-  background: #214f8e;
+  background: #0066b3;
   margin: 0;
   color: white;
   opacity: 0.8;
@@ -278,7 +278,7 @@ input[name='contact_fiche_complete'] {
 #retour_fournisseurs2 {
   width: 300px;
   border: none;
-  background: #214f8e;
+  background: #0066b3;
   margin: 0;
   color: white;
   opacity: 0.8;
@@ -302,7 +302,7 @@ form[name='desinscrire_newsletter'] .form-label {
   top: 3px;
   right: 10px;
   left: 10px;
-  color: #214f8e;
+  color: #0066b3;
   float: left;
 }
 
@@ -337,7 +337,7 @@ form[name='desinscrire_newsletter'] .form-label {
 }
 
 .events {
-  color: #214f8e;
+  color: #0066b3;
   padding: 5px;
   height: 20px;
   text-align: center;
@@ -449,7 +449,7 @@ form[name='search_suppliers'] {
   width: 200px;
   margin: 0 auto;
   border: none;
-  background: #214f8e;
+  background: #0066b3;
   padding: 5px;
   text-align: center;
   color: white;
@@ -507,7 +507,7 @@ input[name='recherche_fournisseur'] {
 
 .remise_a_zero {
   padding: 5px;
-  background: #214f8e;
+  background: #0066b3;
   color: white;
   border: none;
   height: 26px;
@@ -591,7 +591,7 @@ a, a:hover {
   font-family: 'opensans-condbold';
   font-weight: 100;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -644,19 +644,21 @@ table.form-table tr.valid td input[type=text], table.form-table tr.valid td inpu
 }
 input[type=submit].button {
   border: none;
-  background: #214f8e;
+  background: #0066b3;
   color: #fff;
   padding: 10px 15px 10px 15px;
 }
 #header {
   display: block;
-  background: white;
+  background: #0066b3;
   min-height: 125px;
   overflow: hidden;
   box-shadow: 0 6px 6px -6px rgba(22, 33, 44, .2);
   /*.ad-728-90 {display:block;width:728px;height:90px;margin:auto;margin-bottom:10px;margin-top:-20px;}*/
 }
-
+#header h2, #header .nl-header a {
+  color:white;
+}
 #header .logo a, #header .logo img {
   display: block;
   width: 100%;
@@ -896,7 +898,7 @@ DIV.search {
   color: black;
   margin-left: 10px;
   float: left;
-  background: #214f8e;
+  background: #0066b3;
 }
 .header-ad {
   display: block;
@@ -913,6 +915,7 @@ DIV.search {
   background-repeat: repeat-x;
   height: 31px;
   width: 100%;
+  background: #333;
 }
 
 .vogel_logo {
@@ -978,7 +981,7 @@ DIV.search {
 }
 
 #menu ul > li:hover, #menu ul > li.active {
-  background: #214f8e;
+  background: #0066b3;
   color: white;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, .3);
 }
@@ -989,7 +992,7 @@ DIV.search {
   display: none;
   position: absolute;
   z-index: 100;
-  background: #214f8e;
+  background: #0066b3;
   color: white;
   font-size: 13px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, .3);
@@ -1080,7 +1083,7 @@ footer#footer .credits {
   font-family: 'opensans-condbold';
   font-weight: 100;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -1088,7 +1091,7 @@ footer#footer .credits {
 #sidebar-annual-guide .download {
   display: block;
   margin-top: 10px;
-  color: #214f8e;
+  color: #0066b3;
 }
 #sidebar-issues header {
   overflow: hidden;
@@ -1111,7 +1114,7 @@ footer#footer .credits {
   font-size: 20px;
   text-transform: uppercase;
   text-align: center;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -1137,7 +1140,7 @@ footer#footer .credits {
   font-weight: 100;
   font-size: 20px;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -1147,7 +1150,7 @@ footer#footer .credits {
   width: 200px;
   border: none;
   text-align: center;
-  background: #214f8e;
+  background: #0066b3;
   margin: 0;
   padding: 5px;
   color: white;
@@ -1166,7 +1169,7 @@ footer#footer .credits {
 
 .mois_salons {
   width: 100%;
-  background-color: #214f8e;
+  background-color: #0066b3;
   text-align: center;
   font-size: 14px;
   color: #fff;
@@ -1180,7 +1183,7 @@ footer#footer .credits {
 .titre_manif {
   font-size: 18px;
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   text-transform: uppercase;
 }
 
@@ -1224,7 +1227,7 @@ footer#footer .credits {
 .nom_catalogue {
   width: 100%;
   padding: 5px;
-  background: #214f8e;
+  background: #0066b3;
   color: white;
   border: none;
   text-align: center;
@@ -1269,10 +1272,10 @@ footer#footer .credits {
 #sidebar-issues article .download {
   display: block;
   margin-top: 10px;
-  color: #214f8e;
+  color: #0066b3;
 }
 #sidebar-issues .more {
-  color: #214f8e;
+  color: #0066b3;
   padding: 5px;
   height: 20px;
   text-align: center;
@@ -1284,7 +1287,7 @@ footer#footer .credits {
 }
 
 #sidebar-issues .more:hover {
-  background: #214f8e;
+  background: #0066b3;
   color: white;
 }
 
@@ -1321,28 +1324,28 @@ footer#footer .credits {
 #sidebar-fiches article .download {
   display: block;
   margin-top: 10px;
-  color: #214f8e;
+  color: #0066b3;
 }
 #sidebar-fiches .more {
-  color: #214f8e;
+  color: #0066b3;
   padding: 5px;
   height: 20px;
   text-align: center;
   width: 100%;
 }
 #sidebar-fiches .more:hover {
-  background: #214f8e;
+  background: #0066b3;
   color: white;
 }
 #sidebar-issues .more {
-  color: #214f8e;
+  color: #0066b3;
   padding: 5px;
   height: 20px;
   text-align: center;
   width: 100%;
 }
 #sidebar-issues .more:hover {
-  background: #214f8e;
+  background: #0066b3;
   color: white;
 }
 #sidebar-supplier-registration header {
@@ -1366,7 +1369,7 @@ footer#footer .credits {
   font-family: 'opensans-condbold';
   font-weight: 100;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -1392,7 +1395,7 @@ footer#footer .credits {
 #sidebar-supplier-registration .supplier-registration-form input[type=submit] {
   width: 100%;
   padding: 5px;
-  background: #214f8e;
+  background: #0066b3;
   color: white;
   border: none;
 }
@@ -1403,7 +1406,7 @@ footer#footer .credits {
 #sidebar-video header .title {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -1431,7 +1434,7 @@ footer#footer .credits {
 #sidebar-agenda header .title {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -1443,7 +1446,7 @@ footer#footer .credits {
   font-family: 'opensans-condbold';
   font-weight: bold;
   font-size: 15px;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   text-align: left;
@@ -1453,7 +1456,7 @@ footer#footer .credits {
   font-family: 'opensans-condbold';
   font-weight: bold;
   font-size: 15px;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   text-align: left;
@@ -1462,7 +1465,7 @@ footer#footer .credits {
 .title5 {
   font-family: Arial;
   font-size: 12px;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 30px;
@@ -1472,7 +1475,7 @@ footer#footer .credits {
 .title52 {
   font-family: Arial;
   font-size: 12px;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 20px;
@@ -1484,7 +1487,7 @@ footer#footer .credits {
   font-family: 'opensans-condbold';
   font-weight: bold;
   font-size: 13px;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding-bottom: 10px !important;
   padding: 0;
@@ -1495,7 +1498,7 @@ footer#footer .credits {
   font-family: Arial;
   font-weight: 100;
   font-size: 13px;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding-bottom: 10px !important;
   padding: 0;
@@ -1594,7 +1597,7 @@ footer#footer .credits {
   overflow: hidden;
 }
 #last-posts-featured .bx-controls .bx-pager .bx-pager-item a.active {
-  background: #214f8e;
+  background: #0066b3;
 }
 #last-posts-featured article {
   overflow: auto;
@@ -1641,7 +1644,7 @@ footer#footer .credits {
 #last-posts-featured article .title {
   font-family: 'opensans-condbold';
   font-weight: 100;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -1657,7 +1660,7 @@ footer#footer .credits {
 #last-posts-featured article .more {
   font-size: 12px;
   color: white;
-  background: #214f8e;
+  background: #0066b3;
   padding: 5px 10px 5px 10px;
   float: left;
   text-transform: uppercase;
@@ -1691,14 +1694,14 @@ footer#footer .credits {
   padding-bottom: 15px;
   padding-top: 20px;
   overflow: hidden;
-  border-bottom: solid 2px #214f8e;
+  border-bottom: solid 2px #0066b3;
   overflow: hidden;
 }
 .home-last-posts .section-header .title {
   font-family: 'opensans-condbold';
   font-weight: 100;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -1732,7 +1735,7 @@ footer#footer .credits {
 .home-last-posts article .title, .home-last-posts .ad .title {
   font-family: 'opensans-condbold';
   font-weight: 100;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -1741,7 +1744,7 @@ footer#footer .credits {
 #sidebar-issues article .title2 {
   font-family: 'opensans-condbold';
   font-weight: 100;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -1756,7 +1759,7 @@ footer#footer .credits {
 .home-last-posts article .more, .home-last-posts .ad .more {
   font-size: 10px;
   color: white;
-  background: #214f8e;
+  background: #0066b3;
   padding: 5px 10px 5px 10px;
   float: left;
   text-transform: uppercase;
@@ -1823,12 +1826,12 @@ section.home-gallery2 .section-header {
   padding-bottom: 15px;
   padding-top: 20px;
   overflow: hidden;
-  border-bottom: solid 2px #214f8e;
+  border-bottom: solid 2px #0066b3;
 }
 section.home-gallery2 .section-header .title {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -1868,11 +1871,11 @@ section.home-gallery2 .section-gallery-wrapper {
 }
 
 .page_active {
-  background-color: #214f8e;
+  background-color: #0066b3;
 }
 
 .page:hover {
-  background-color: #214f8e;
+  background-color: #0066b3;
 }
 
 section.home-gallery2 .section-gallery-wrapper ul {
@@ -1930,7 +1933,7 @@ section.home-gallery2 .bx-controls .bx-pager .bx-pager-item a {
   overflow: hidden;
 }
 section.home-gallery2 .bx-controls .bx-pager .bx-pager-item a.active {
-  background: #214f8e;
+  background: #0066b3;
 }
 section.home-gallery {
   overflow: hidden;
@@ -1942,14 +1945,14 @@ section.home-gallery .section-header {
   padding: 25px;
   padding-bottom: 15px;
   padding-top: 20px;
-  border-bottom: solid 2px #214f8e;
+  border-bottom: solid 2px #0066b3;
   overflow: hidden;
 }
 section.home-gallery .section-header .title {
   font-family: 'opensans-condbold';
   font-weight: 100;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2013,7 +2016,7 @@ section.home-gallery .bx-controls .bx-pager .bx-pager-item a {
   overflow: hidden;
 }
 section.home-gallery .bx-controls .bx-pager .bx-pager-item a.active {
-  background: #214f8e;
+  background: #0066b3;
 }
 section.home-subscribe {
   overflow: hidden;
@@ -2025,14 +2028,14 @@ section.home-subscribe .section-header {
   padding: 25px;
   padding-bottom: 15px;
   padding-top: 20px;
-  border-bottom: solid 2px #214f8e;
+  border-bottom: solid 2px #0066b3;
   overflow: hidden;
 }
 section.home-subscribe .section-header .title {
   font-family: 'opensans-condbold';
   font-weight: 100;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2041,7 +2044,7 @@ section.home-subscribe .section-header .title {
 section.home-subscribe .icon {
   width: 25%;
   height: 100px;
-  background: #214f8e;
+  background: #0066b3;
   float: left;
 }
 section.home-subscribe .content {
@@ -2168,7 +2171,7 @@ section.home-subscribe .section-newsletter .icon {
   line-height: 46px;
   margin: 0;
   padding: 0;
-  color: #214f8e;
+  color: #0066b3;
   font-family: 'opensans-condbold';
   margin-bottom: 15px;
   max-width: 90%;
@@ -2177,7 +2180,7 @@ section.home-subscribe .section-newsletter .icon {
   font-size: 20px;
   margin: 0;
   padding: 0;
-  color: #214f8e;
+  color: #0066b3;
   font-family: 'opensans-condbold';
   line-height: 1em;
   margin-bottom: 15px;
@@ -2190,13 +2193,13 @@ section.home-subscribe .section-newsletter .icon {
 }
 .page-single .column-main section.article article .categories {
   margin-bottom: 15px;
-  border-bottom: solid 0px #214f8e;
+  border-bottom: solid 0px #0066b3;
   padding-bottom: 0px;
 }
 .page-single .column-main section.article article .categories .category {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2205,7 +2208,7 @@ section.home-subscribe .section-newsletter .icon {
 .page-single .column-main section.article article .categories .category_principal {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   text-transform: uppercase;
   margin: 0;
   padding: 0;
@@ -2274,7 +2277,7 @@ section.home-subscribe .section-newsletter .icon {
   font-family: 'opensans-condbold';
   font-weight: bold;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2288,7 +2291,7 @@ section.home-subscribe .section-newsletter .icon {
   font-family: 'opensans-condbold';
   font-weight: bold;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2302,7 +2305,7 @@ section.home-subscribe .section-newsletter .icon {
   font-family: 'opensans-condbold';
   font-weight: bold;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2364,7 +2367,7 @@ section.home-subscribe .section-newsletter .icon {
   font-family: 'opensans-condbold';
   font-weight: bold;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2400,7 +2403,7 @@ section.home-subscribe .section-newsletter .icon {
 .page-search .column-main section.results article .categories .category {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2411,7 +2414,7 @@ section.home-subscribe .section-newsletter .icon {
   font-family: 'opensans-condbold';
   font-weight: bold;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2421,7 +2424,7 @@ section.home-subscribe .section-newsletter .icon {
 .page-search .column-main section.results article .categories .sous_category {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2431,7 +2434,7 @@ section.home-subscribe .section-newsletter .icon {
 section.posts article .categories .category {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2439,7 +2442,7 @@ section.posts article .categories .category {
 }
 
 #sidebar-fiches {
-  background-color: #214f8e !important;
+  background-color: #0066b3 !important;
   color: #fff !important;
 }
 
@@ -2451,7 +2454,7 @@ section.posts article .categories .category {
   padding-left: 5px;
   position: relative;
   bottom: 2px;
-  color: #214f8e;
+  color: #0066b3;
 }
 
 #sidebar-fiches article h3.title2 a {
@@ -2459,7 +2462,7 @@ section.posts article .categories .category {
 }
 
 #sidebar-tag {
-  background-color: #214f8e !important;
+  background-color: #0066b3 !important;
   color: #fff !important;
   margin-bottom: 0px !important;
   padding-bottom: 0px !important;
@@ -2507,7 +2510,7 @@ section.posts article .categories .category {
 section.posts article .categories .category_principal {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2518,7 +2521,7 @@ section.posts article .categories .category_principal {
 section.posts article .categories .sous_category {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2529,7 +2532,7 @@ section.posts article .categories .sous_category {
   font-family: 'opensans-condbold';
   font-weight: bold;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2563,7 +2566,7 @@ section.posts article .categories .sous_category {
   font-family: 'opensans-condbold';
   font-weight: bold;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2600,7 +2603,7 @@ section.posts article .categories .sous_category {
 .page-category .column-main section.results article .categories .category {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2609,7 +2612,7 @@ section.posts article .categories .sous_category {
 .page-category .column-main section.results article .categories .category_principal {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2619,7 +2622,7 @@ section.posts article .categories .sous_category {
 .page-category .column-main section.results article .title {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2654,11 +2657,11 @@ section.posts article .categories .sous_category {
   padding: 10px;
   z-index: 9999;
   display: none;
-  border: 3px solid #214f8e;
+  border: 3px solid #0066b3;
 }
 
 #close_popup {
-  background-color: #214f8e;
+  background-color: #0066b3;
   width: 30px;
   height: 30px;
   text-align: center;
@@ -2672,7 +2675,7 @@ section.posts article .categories .sous_category {
 }
 
 #close_popup_video_home {
-  background-color: #214f8e;
+  background-color: #0066b3;
   width: 30px;
   height: 30px;
   text-align: center;
@@ -2696,7 +2699,7 @@ section.posts article .categories .sous_category {
   padding: 10px;
   z-index: 9999;
   display: none;
-  border: 3px solid #214f8e;
+  border: 3px solid #0066b3;
 }
 
 .popup_video_home {
@@ -2711,11 +2714,11 @@ section.posts article .categories .sous_category {
   padding: 10px;
   z-index: 9999;
   display: none;
-  border: 3px solid #214f8e;
+  border: 3px solid #0066b3;
 }
 
 #close_popup_premiumsupplier {
-  background-color: #214f8e;
+  background-color: #0066b3;
   width: 30px;
   height: 30px;
   text-align: center;
@@ -2732,7 +2735,7 @@ section.posts article .categories .sous_category {
   float: right;
   top: -30px;
   position: relative;
-  background: #214f8e;
+  background: #0066b3;
   padding: 10px 15px 10px 15px;
   color: white;
 }
@@ -2752,7 +2755,7 @@ section.posts article .categories .sous_category {
 #lien_notConnected_connecter {
   width: 100px;
   border: none;
-  background: #214f8e;
+  background: #0066b3;
   margin: 0;
   padding: 5px;
   color: white;
@@ -2791,7 +2794,7 @@ section.posts article .categories .sous_category {
   font-family: 'opensans-condbold';
   font-weight: bold;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2816,7 +2819,7 @@ section.posts article .categories .sous_category {
   font-size: 30px;
   margin: 0;
   padding: 0;
-  color: #214f8e;
+  color: #0066b3;
   font-family: 'opensans-condbold';
   line-height: 1em;
   margin-bottom: 15px;
@@ -2899,7 +2902,7 @@ section.posts article .categories .sous_category {
 .page-members .column-main section .title {
   font-family: 'opensans-condbold';
   font-weight: 100;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2909,7 +2912,7 @@ section.posts article .categories .sous_category {
   font-family: 'opensans-condbold';
   font-weight: 100;
   font-size: 20px;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2919,7 +2922,7 @@ section.posts article .categories .sous_category {
   font-family: 'opensans-condbold';
   font-weight: 100;
   font-size: 20px;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2931,7 +2934,7 @@ section.posts article .categories .sous_category {
   font-weight: bold;
   text-transform: uppercase;
   font-size: 20px;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -2943,7 +2946,7 @@ section.posts article .categories .sous_category {
   font-weight: bold;
   text-transform: uppercase;
   font-size: 20px;
-  color: #214f8e;
+  color: #0066b3;
   text-decoration: none;
 }
 
@@ -2959,7 +2962,7 @@ section.posts article .categories .sous_category {
   font-family: 'opensans-condbold';
   font-weight: bold;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -3021,7 +3024,7 @@ section.posts article .categories .sous_category {
   margin-top: 20px;
   width: 100%;
   border: none;
-  background: #214f8e;
+  background: #0066b3;
   margin: 0;
   padding: 5px;
   color: white;
@@ -3037,7 +3040,7 @@ section.posts article .categories .sous_category {
 .lien_accueil_abonnement:hover {
   width: 100%;
   border: none;
-  background: #214f8e;
+  background: #0066b3;
   margin: 0;
   padding: 5px;
   color: white;
@@ -3046,7 +3049,7 @@ section.posts article .categories .sous_category {
 .page-members .column-main .form-fieldset .form-row .form-submit input[type=submit] {
   width: 100%;
   border: none;
-  background: #214f8e;
+  background: #0066b3;
   margin: 0;
   padding: 5px;
   color: white;
@@ -3065,7 +3068,7 @@ section.posts article .categories .sous_category {
   width: 200px;
   text-align: center;
   border: none;
-  background: #214f8e;
+  background: #0066b3;
   margin: 0;
   padding: 5px;
   color: white;
@@ -3090,7 +3093,7 @@ section.posts article .categories .sous_category {
 .page-suppliers-posts-edit .column-main section .title, .page-suppliers-products-edit .column-main section .title, .page-suppliers-galleries-edit .column-main section .title, .page-suppliers-videos-edit .column-main section .title {
   font-family: 'opensans-condbold';
   font-weight: 100;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -3107,7 +3110,7 @@ section.posts article .categories .sous_category {
   font-family: 'opensans-condbold';
   font-weight: bold;
   text-transform: uppercase;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -3200,7 +3203,7 @@ section.posts article .categories .sous_category {
   z-index: 1;
 }
 .page-suppliers-posts-edit .column-main section .form-fieldset #files .uploaded-file.selected, .page-suppliers-products-edit .column-main section .form-fieldset #files .uploaded-file.selected, .page-suppliers-galleries-edit .column-main section .form-fieldset #files .uploaded-file.selected, .page-suppliers-videos-edit .column-main section .form-fieldset #files .uploaded-file.selected {
-  border: solid 3px #214f8e;
+  border: solid 3px #0066b3;
 }
 .page-suppliers-posts-edit .column-main section .form-fieldset #files .uploaded-file:hover button, .page-suppliers-products-edit .column-main section .form-fieldset #files .uploaded-file:hover button, .page-suppliers-galleries-edit .column-main section .form-fieldset #files .uploaded-file:hover button, .page-suppliers-videos-edit .column-main section .form-fieldset #files .uploaded-file:hover button {
   display: block;
@@ -3237,7 +3240,7 @@ section.posts article .categories .sous_category {
 }
 .page-suppliers-posts-edit .column-main section .form-fieldset .form-submit input[type=submit], .page-suppliers-products-edit .column-main section .form-fieldset .form-submit input[type=submit], .page-suppliers-galleries-edit .column-main section .form-fieldset .form-submit input[type=submit], .page-suppliers-videos-edit .column-main section .form-fieldset .form-submit input[type=submit] {
   border: none;
-  background: #214f8e;
+  background: #0066b3;
   color: white;
   padding: 15px;
   float: right;
@@ -3255,7 +3258,7 @@ section.posts article .categories .sous_category {
   font-family: 'opensans-condbold';
   font-weight: 100;
   font-size: 20px;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -3274,7 +3277,7 @@ section.posts article .categories .sous_category {
 
 .page-supplier .column-main section > header .buttons a {
   display: inline-block;
-  background: #214f8e;
+  background: #0066b3;
   padding: 5px 10px 5px 10px;
   color: white;
 }
@@ -3284,7 +3287,7 @@ section.posts article .categories .sous_category {
 .page-supplier .column-main section.actions a {
   display: block;
   float: left;
-  background: #214f8e;
+  background: #0066b3;
   padding: 10px 15px 10px 15px;
   color: white;
   margin-right: 5px;
@@ -3334,7 +3337,7 @@ section.posts article .categories .sous_category {
 .page-supplier .column-main section.events article .title {
   font-family: 'opensans-condbold';
   font-weight: 100;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -3374,7 +3377,7 @@ section.article .metas {
 
 #bt_retour_magazine {
   border: none;
-  background: #214f8e;
+  background: #0066b3;
   margin: 0;
   padding: 5px;
   color: white;
@@ -3426,7 +3429,7 @@ section.article .metas {
 .page-supplier .column-main section.posts article .title {
   font-family: 'opensans-condbold';
   font-weight: bold;
-  color: #214f8e;
+  color: #0066b3;
   margin: 0;
   padding: 0;
   line-height: 1em;
@@ -3489,7 +3492,7 @@ section.article .metas {
   height: 50px;
   padding-top: 10px;
   padding-left: 10px;
-  background-color: #214f8e;
+  background-color: #0066b3;
 }
 
 .page-supplier .column-main section.products article .title {
@@ -3553,7 +3556,7 @@ section.article .metas {
 }
 
 .mot_cle {
-  background-color: #214f8e;
+  background-color: #0066b3;
   width: auto;
   display: inline-block;
   color: #fff;
