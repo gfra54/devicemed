@@ -163,7 +163,9 @@ function fournisseurs_filtre_categories($categories,$niveau=1,$checkboxes=false,
 function fournisseur_categories($fournisseur=false) {
 	$out=array();
 	if(!$fournisseur) {
-		$categories = get_terms('categorie');
+		$categories = get_terms('categorie',array(
+		    'hide_empty' => false,
+		));
 		$categories_assoc = array();
 		foreach($categories as $k=>$v) {
 			$url = get_term_link($v);
@@ -180,7 +182,11 @@ function fournisseur_categories($fournisseur=false) {
 				$lien_papa[$categorie['term_id']] = $categorie['parent'];
 			}
 		}
-
+		foreach($categories_assoc as $categorie) {
+			if(!$categorie['parent']) {
+				$out[$categorie['term_id']] = $categorie;
+			}
+		}
 		foreach($categories_assoc as $categorie) {
 			if($categorie['parent']) {
 				if(isset($out[$categorie['parent']])) {
@@ -188,6 +194,29 @@ function fournisseur_categories($fournisseur=false) {
 						$out[$categorie['parent']]['categories'] = array();
 					}
 					$out[$categorie['parent']]['categories'][$categorie['term_id']] = $categorie;
+				}
+			}
+		}
+		foreach($categories_assoc as $categorie) {
+			if($categorie['parent'] && !isset($out[$categorie['parent']])) {
+				$root = $lien_papa[$categorie['parent']];
+				if(isset($out[$root])) {
+					if(!isset($out[$root]['categories'][$categorie['parent']]['categories'])) {
+						$out[$root]['categories'][$categorie['parent']]['categories'] = array();
+					}
+					$out[$root]['categories'][$categorie['parent']]['categories'][$categorie['term_id']] = $categorie;
+				}
+			}
+		}
+/*		foreach($categories_assoc as $categorie) {
+			if($categorie['parent']) {
+				if(isset($out[$categorie['parent']])) {
+					if(!isset($out[$categorie['parent']]['categories'])) {
+						$out[$categorie['parent']]['categories'] = array();
+					}
+					if(!isset($out[$categorie['parent']]['categories'][$categorie['term_id']])) {
+						$out[$categorie['parent']]['categories'][$categorie['term_id']] = $categorie;
+					}
 				} else {
 					$root = $lien_papa[$categorie['parent']];
 					if(!isset($out[$root]['categories'][$categorie['parent']]['categories'])) {
@@ -197,6 +226,7 @@ function fournisseur_categories($fournisseur=false) {
 				}
 			}
 		}
+		// me($out);*/
 	} else
 	if($cats = wp_get_post_terms($fournisseur['ID'],'categorie')) {
 		foreach ($cats as $cat) {
