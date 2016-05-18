@@ -1,4 +1,4 @@
-  <?php
+<?php
 /*
 Plugin Name: Third Column
 Plugin URI: http://www.bang-on.net/thirdcolumn.zip

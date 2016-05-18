@@ -1,5 +1,72 @@
 <?php
 
+function telecharger_fournisseurs() {
+	$categories = fournisseur_categories();
+	$fournisseurs = get_fournisseurs(array('enrichir'=>true,'cache'=>'extraction_excel'));
+	$data = array();
+	foreach($categories as $categorie) {
+		$ligne_categorie = array('Fournisseur','Pays','Web',mb_strtoupper($categorie['name']));
+		foreach($categorie['categories'] as $sous_categorie) {
+			if($sous_categorie['categories']) {
+				foreach($sous_categorie['categories'] as $sous_sous_categorie) {
+				$ligne_categorie[$sous_sous_categorie['term_id']] = $sous_categorie['name'].PHP_EOL.$sous_sous_categorie['name'];
+				}
+			} else {
+				$ligne_categorie[$sous_categorie['term_id']] = $sous_categorie['name'];
+			}
+		}
+		$data[]=array();
+		$data[]=$ligne_categorie;
+		foreach($fournisseurs as $fournisseur) {
+			$ligne_fournisseur = array();
+			$ligne_fournisseur[] = $fournisseur['post_title'];
+			$ligne_fournisseur[] = $fournisseur['pays'];
+			$ligne_fournisseur[] = $fournisseur['url'];
+			$debut = count($ligne_fournisseur);
+			$cpt=0;
+			foreach($ligne_categorie as $idcat=>$cat) {
+				$debut--;
+				if($debut<0) {
+					$trouve=false;
+					foreach($fournisseur['categories'] as $categorie) {
+						foreach($categorie['categories'] as $sous_categorie) {
+							if($sous_categorie['id'] == $idcat) {
+								$trouve=true;
+							}
+						}
+					}
+					if($trouve) {
+						$ligne_fournisseur[]='X';
+						$cpt++;
+					} else {
+						$ligne_fournisseur[]='';
+					}
+				}
+			}
+			if($cpt) {
+				$data[]=$ligne_fournisseur;
+			}
+		}
+		
+	}
+	foreach($data as $k=>$v) {
+		foreach($v as $i=>$j) {
+			$v[$i] = '"'.str_replace('"','\\"',str_replace("\n",' ',trim($j))).'"';
+		}
+		$data[$k] = $v;
+	}
+	$out='';
+	foreach($data as $ligne) {
+		$out.=implode(';',$ligne).PHP_EOL;
+	}
+
+	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+	header("Content-Length: " . strlen($out));
+	header("Content-type: text/x-csv");
+	header("Content-Disposition: attachment; filename=extraction-fournisseurs-".date('Y-m-d-h-i-s').'.csv');
+	echo utf8_decode(trim($out));
+	exit;	
+}
 function new_fournisseur($fournisseur,$categories=array()) {
 	$date = date('Y-m-d H:i:s');
 	$post = array(
@@ -236,7 +303,7 @@ function fournisseur_categories($fournisseur=false) {
 					$tmp = array('nom'=>$parent->name,'url'=>get_term_link($parent),'categories'=>array());
 					$out[$cat->parent]=$tmp;
 				}
-				$out[$cat->parent]['categories'][]=array('nom'=>$cat->name,'url'=>get_term_link($cat));
+				$out[$cat->parent]['categories'][]=array('nom'=>$cat->name,'url'=>get_term_link($cat),'id'=>$cat->term_id);
 			}
 		}
 	}
@@ -547,7 +614,7 @@ function get_fournisseurs($params=array()) {
 
 		// me($args,$query->posts);
 		// $fournisseurs = get_posts($args);
-		if($rich || sinon($params,'images')) {
+		if($rich || sinon($params,'images') || sinon($params,'enrichir')) {
 			foreach($fournisseurs as $k=>$v) {
 				$fournisseurs[$k] = fournisseur_enrichir($v);
 

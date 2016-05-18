@@ -3,6 +3,9 @@
 Template Name: fournisseurs
 */
 
+if(check('excel')) {
+	telecharger_fournisseurs();
+}
 get_header(); 
 ?>
 <div class="row column-content page-members">

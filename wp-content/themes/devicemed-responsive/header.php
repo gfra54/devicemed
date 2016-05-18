@@ -1,7 +1,6 @@
 <?php 
 
-header( 'Cache-Control: max-age=604800' ); ?>
-<!DOCTYPE html>
+header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 <html>
 <head>
 	<meta charset="<?php bloginfo('charset'); ?>">
