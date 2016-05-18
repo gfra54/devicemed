@@ -59,3 +59,4 @@ get_header();
 </div><!-- .column-main -->
 <!-- FOOTER -->
 <?php get_footer(); ?>
+<script>$('#sidebar-fiches').prependTo('#sidebar');</script>
