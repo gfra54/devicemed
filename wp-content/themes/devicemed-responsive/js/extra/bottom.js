@@ -3,7 +3,7 @@ var _menu_top=false;
 var _menu_bottom=false;
 var _wpadminbar = 0;
 $(document).ready(function() {
-	if(read_cookie('wpadmin')) {
+/*	if(read_cookie('wpadmin')) {
 		$('body').addClass('voir-adminbar');
 		if($('#wp-admin-bar').length==0) {
 
@@ -44,7 +44,7 @@ $(document).ready(function() {
 			$('body').css('padding-top',1);
 		}
 
-	}
+	}*/
 	$('.menu-fournisseurs .button').each(function(){
 		_id = '#'+$(this).data('id');
 		if(!$(_id).length) {
