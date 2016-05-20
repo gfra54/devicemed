@@ -1,6 +1,6 @@
 <?php
 
-/*add_filter( 'wp_terms_checklist_args', 'keep_hierarchy_category', 1, 2 );
+add_filter( 'wp_terms_checklist_args', 'keep_hierarchy_category', 1, 2 );
 function keep_hierarchy_category( $args, $post_id ) {
 
 	if(get_post_type() == 'fournisseur') {
@@ -57,4 +57,3 @@ function change_cat_meta_postbox_js(){
 	<?php }	
 }
 add_action('in_admin_footer', 'change_cat_meta_postbox_js');
-*/

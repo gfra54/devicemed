@@ -1,7 +1,9 @@
 <?php
+define('DOCUSTOMCACHE',false);
 define('CACHETAG','<!-- CACHETAG -->');
 $GLOBALS['pagecache-name']=false;
 function get_pagecache($name=false) {
+	if(!DOCUSTOMCACHE) {return false;}
 	if($name === false) {
 		$name = get_the_ID();
 	}
@@ -15,6 +17,7 @@ function get_pagecache($name=false) {
 }
 
 function pagecache($name=false) {
+	if(!DOCUSTOMCACHE) {return false;}
 	if($name) {
 		$GLOBALS['pagecache-name']=$name;
 		ob_start();

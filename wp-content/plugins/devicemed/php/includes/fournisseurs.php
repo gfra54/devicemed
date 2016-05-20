@@ -300,7 +300,12 @@ function fournisseur_categories($fournisseur=false) {
 			if($cat->parent) {
 				if(!isset($out[$cat->parent])) {
 					$parent = get_term($cat->parent,'categorie');
-					$tmp = array('nom'=>$parent->name,'url'=>get_term_link($parent),'categories'=>array());
+					if($parent->parent) {
+						$parent2 = get_term($parent->parent,'categorie');
+						$tmp = array('nom'=>$parent2->name,'url'=>get_term_link($parent2),'niveau'=>'1');
+						$out[$parent->parent]=$tmp;
+					}
+					$tmp = array('nom'=>$parent->name,'url'=>get_term_link($parent),'categories'=>array(),'niveau'=>'2');
 					$out[$cat->parent]=$tmp;
 				}
 				$out[$cat->parent]['categories'][]=array('nom'=>$cat->name,'url'=>get_term_link($cat),'id'=>$cat->term_id);
