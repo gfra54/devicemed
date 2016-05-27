@@ -28,18 +28,27 @@ get_header(); ?>
 				<h2 class="title">Résultats trouvés pour "<span id="search_query"><?php echo get_search_query(); ?></span>"</h2>
 				<?php 
 				// Start the loop.
-				while ( have_posts() ) : the_post(); ?>
-
-					<?php
+				$fournisseurs=array();
+				while ( have_posts() ) : the_post(); 
+/*					if(get_post_type() == 'fournisseur') {
+						$fournisseurs[] = get_post();
+					} else {*/
 					/*
 					 * Run the loop for the search to output the results.
 					 * If you want to overload this in a child theme then include a file
 					 * called content-search.php and that will be used instead.
 					 */
-					get_template_part( 'content', 'search' );
-
+						get_template_part( 'content', 'search' );
+					// }
 				// End the loop.
 				endwhile;
+				if(count($fournisseurs)) {?>
+					<p></p><hr>
+					<h3>Fournisseurs correspondants dans notre répertoire</h3>
+					<?php foreach($fournisseurs as $fournisseur) {?>
+						<p><a href="<?php echo get_permalink($fournisseur->ID);?>"><?php echo $fournisseur->post_title;?></a></p>
+					<?php }?>
+				<?php }
 
 				// Previous/next page navigation.
 				the_posts_pagination( array(
