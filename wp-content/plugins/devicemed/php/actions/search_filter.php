@@ -1,8 +1,7 @@
 <?php
 function search_filter($query) {
-	if ($query->is_search) {
-		// $query->set('post_type', array('post','fournisseur'));
-		$query->set('post_type', array('post'));
+	if ($query->is_search && $_GET['post_type']) {
+		$query->set('post_type', explode(',',$_GET['post_type']));
 	}
 	return $query;
 }

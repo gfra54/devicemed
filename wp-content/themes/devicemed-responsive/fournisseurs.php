@@ -20,8 +20,8 @@ get_header();
 			<b class='title5'><big>Comment trouver un fournisseur...</big></b>
 			<h3 class='title5'><p class='par_nom_motcle'>1- Par son nom ou par mot-clé :</p> 
 			<form name='search_suppliers' method='GET' action='/'>
-			<input type='hidden' name='post_type' value="fournisseur" />
 			<input type='text' name='s' placeHolder='Rechercher...' />
+			<input type='hidden' name='fournisseurs' value="1"/>
 			<input type='submit' value='Rechercher' />
 			</form>
 			</h3><br />

@@ -7,6 +7,7 @@
  * @subpackage Twenty_Fifteen
  * @since Twenty Fifteen 1.0
  */
+$recherche_fournisseurs = isset($_GET['fournisseurs']);
 
 get_header(); ?>
 <style>
@@ -30,16 +31,16 @@ get_header(); ?>
 				// Start the loop.
 				$fournisseurs=array();
 				while ( have_posts() ) : the_post(); 
-/*					if(get_post_type() == 'fournisseur') {
+					if(get_post_type() == 'fournisseur') {
 						$fournisseurs[] = get_post();
-					} else {*/
+					} else if(!$recherche_fournisseurs){
 					/*
 					 * Run the loop for the search to output the results.
 					 * If you want to overload this in a child theme then include a file
 					 * called content-search.php and that will be used instead.
 					 */
 						get_template_part( 'content', 'search' );
-					// }
+					}
 				// End the loop.
 				endwhile;
 				if(count($fournisseurs)) {?>
@@ -50,6 +51,7 @@ get_header(); ?>
 					<?php }?>
 				<?php }
 
+				if(!$recherche_fournisseurs) {
 				// Previous/next page navigation.
 				the_posts_pagination( array(
 					'mid_size'			=> 10,
@@ -58,6 +60,7 @@ get_header(); ?>
 					'next_text'          => '&nbsp; Suite',
 					'before_page_number' => '',
 				) );
+			}
 
 			// If no content, include the "No posts found" template.
 			} else {?>
