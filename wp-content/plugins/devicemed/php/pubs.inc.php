@@ -58,7 +58,18 @@ function afficher_pub($type,$attr=array()) {
 	if(!empty($attr['raw'])){
 		$cadre=false;
 	}
-	if($pub = get_selected_pub($type,get_pubs($type))) {
+	$pubs = get_pubs($type);
+	if($type=="cadre-video") {
+		$pub=false;
+		foreach($pubs as $tmp_pub) {
+			if(!$pub && $tmp_pub->post_status == 'publish') {
+				$pub = $tmp_pub;
+			}
+		}
+	} else {
+		$pub = get_selected_pub($type,$pubs);
+	}
+	if($pub) {
 		if($ret = display_pub($pub,$attr,$type)) {
 			if($return) {
 				return $ret;

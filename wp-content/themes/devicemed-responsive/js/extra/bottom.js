@@ -100,7 +100,7 @@ $(document).ready(function() {
 		});
 	}
 
-	$('.gallerie-photo').fancybox();
+	$('.gallerie-photo, .lien-photo').fancybox();
 
 	  $('.menu-fournisseurs .menu-item').click(function(e) {
 	  	if(!$(this).hasClass('details_supplier_disabled')) {

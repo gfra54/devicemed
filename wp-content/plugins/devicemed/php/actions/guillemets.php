@@ -1,6 +1,6 @@
 <?php
 remove_filter('the_content', 'wptexturize');
-add_filter('the_content', 'frenchquotes');
+/*add_filter('the_content', 'frenchquotes');
 
 function frenchquotes($text){
     $size = strlen($text);
@@ -55,4 +55,4 @@ function frenchquotes($text){
 	$text = str_replace('&laquo;','&laquo;&thinsp;',$text);
 
     return $text;
-}
+}*/
