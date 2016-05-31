@@ -51,7 +51,7 @@ foreach($urls as $url) {
   if($article = get_object_vars(get_post($id))) {
   //  $tmp = file_get_contents(str_replace('.local','.fr',$url));
     $content=false;
-    if(substr($article['post_content'], 0, 9) == '<strong>') {
+    if(substr($article['post_content'], 0, 8) == '<strong>') {
       $content = trim(couper(cleantext(getHtmlVal('<strong>','</strong>',$article['post_content'])),300));
     }
     if(!$content) {
