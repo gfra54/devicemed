@@ -13,11 +13,11 @@ watch_pagecache();
 		}
 	}
 
+
 $slider = get_posts(array(
 	'numberposts'	=> 6,
 	'post_type'		=> 'post',
-	'meta_key'		=> 'article_a_la_une',
-	'meta_value'	=> '1'
+	'post__in'		=> get_option( 'sticky_posts' )
 ));
 ?>
 <?php get_header(); ?>
