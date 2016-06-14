@@ -1,5 +1,5 @@
 <?php 
-function save_post_cache($post_id) {
+/*function save_post_cache($post_id) {
 	if(is_admin()) {
 		cachepage_clear('index');
 		cachepage_clear($post_id);
@@ -10,7 +10,7 @@ function save_post_cache($post_id) {
 add_action( 'save_post', 'save_post_cache' );
 // add_action( 'admin_menu', 'save_post_cache' );
 
-$GLOBALS['pagecache_on']=false;
+/*$GLOBALS['pagecache_on']=false;
 function watch_pagecache() {
 	global $wp_query;
 	if(!$GLOBALS['pagecache_on']) {
@@ -31,8 +31,9 @@ function watch_pagecache() {
 }
 add_action('shutdown','add_action_pagecache');*/
 
-foreach($_COOKIE as $name=>$val) {
+/*foreach($_COOKIE as $name=>$val) {
 	if(substr($name, 0, 20) == 'wordpress_logged_in_') {
 		setcookie('wpadmin', true, time()+(3600 * 24 * 30),'/');
 	}
 }
+*/

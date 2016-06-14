@@ -1,5 +1,5 @@
 <?php
-define('DOCUSTOMCACHE',false);
+/*define('DOCUSTOMCACHE',false);
 define('CACHETAG','<!-- CACHETAG -->');
 $GLOBALS['pagecache-name']=false;
 function get_pagecache($name=false) {
@@ -30,17 +30,6 @@ function pagecache($name=false) {
 			echo cacheproof($content);
 			$content = cachetag($content);
 			set_transient('pagecache-'.$name,$content);
-/*			if(is_numeric($name)) {
-				set_transient('pagecache-'.$name,$content);
-			} else {
-				list($path) = explode('wp-content',__FILE__);
-				$file = $path.$name;
-				if(!isset($_GET['nocache'])) {
-					if(!file_exists($file)) {
-						return file_put_contents($file, $content);
-					}
-				}
-			}*/
 		}
 	}
 }
@@ -58,19 +47,8 @@ function cacheproof($content) {
 }
 function cachepage_clear($name) {
 	delete_transient('pagecache-'.$name);
-/*	if(is_numeric($name)) {
-		delete_transient('pagecache-'.$name);
-	} else {
-		list($path) = explode('wp-content',__FILE__);
-		$file = $path.$name;
-		if(file_exists($file)) {
-			if(strstr(file_get_contents($file), CACHETAG)!==false) {
-				unlink($file);
-			}
-		}
-	}*/
 }
-
+*/
 function cond($before,$data,$after=false) {
 	if($data) {
 		echo $before;

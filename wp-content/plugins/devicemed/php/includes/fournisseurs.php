@@ -2,7 +2,8 @@
 
 function telecharger_fournisseurs() {
 	$categories = fournisseur_categories();
-	$fournisseurs = get_fournisseurs(array('enrichir'=>true,'cache'=>'extraction_excel'));
+//	$fournisseurs = get_fournisseurs(array('enrichir'=>true,'cache'=>'extraction_excel'));
+	$fournisseurs = get_fournisseurs(array('enrichir'=>true));
 	$data = array();
 	foreach($categories as $categorie) {
 		$ligne_categorie = array('Fournisseur','Pays','Web',mb_strtoupper($categorie['name']));

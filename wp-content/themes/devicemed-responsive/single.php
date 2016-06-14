@@ -1,6 +1,4 @@
 <?php 
-watch_pagecache();
-
 	get_header(); ?>
 	<div class="row column-content page-single">
 		<div class="col-md-9 col-sm-8 column-main">
@@ -75,18 +73,30 @@ watch_pagecache();
 					<span class="date-wrapper">Publié le <span class="date"><?php echo get_the_date('d F Y'); ?></span></span>
 					<span class="author-wrapper">par <span class="author"><?php the_author(); ?> </span></span>
 				</div>
-			<?php } ?>
-			<?php if ($thumbnail = devicemed_get_post_featured_thumbnail($post->ID)): ?>
+			<?php } 
+			if ($thumbnail = devicemed_get_post_featured_thumbnail($post->ID)): 
+
+ 				if($fi = $dynamic_featured_image->get_featured_images()) {
+					$url = $fi[0]['full'];
+					?>
+					<a class="lien-photo" href="<?php echo $thumbnail->url; ?>"><img src="<?php echo $url;?>" style="width:100%"></a>
+					<div class='source_photo_horizontale'><div class="source-content">Source : <?php echo esc_attr($thumbnail->post_title); ?></div></div>
+					<?php
+				} else {
+
+			?>
 				<div class="article-image">
 				<div class='image_clicable'><a href="<?php echo $thumbnail->url; ?>" class="cboxElement"><figure style="background-image:url('<?php echo $thumbnail->url; ?>')">
-					<img src="<?php echo $thumbnail->url; ?>" title="<?php echo esc_attr($thumbnail->post_title); ?>" />
+					<img src="<?php echo $thumbnail->url ?>" title="<?php echo esc_attr($thumbnail->post_title); ?>" />
 				</figure></a></div>
 				<div class='source_photo'><div class="source-content">Source : <?php echo esc_attr($thumbnail->post_title); ?></div></div>
 				</div>
 				<?php if($thumbnail->post_excerpt != '') { ?>
 					<div class='legende_photo'><?php echo $thumbnail->post_excerpt; ?></div>
 				<?php } ?>
-			<?php endif; ?>
+			<?php }
+
+			endif; ?>
 			<div class="content">
 				<?php 
 					the_content(); 

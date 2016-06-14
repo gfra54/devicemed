@@ -1,5 +1,4 @@
 <?php 
-watch_pagecache();
 	if(isset($_GET['url']) && $_GET['url'] != '') {
 		$banniere_model = new DM_Wordpress_Banniere_Model();
 		if($banniere_model->clic_banniere($_GET['id'])) {
