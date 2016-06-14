@@ -76,13 +76,13 @@
 			<?php } 
 			if ($thumbnail = devicemed_get_post_featured_thumbnail($post->ID)): 
 
- 				if($fi = $dynamic_featured_image->get_featured_images()) {
+/* 				if($fi = $dynamic_featured_image->get_featured_images()) {
 					$url = $fi[0]['full'];
 					?>
 					<a class="lien-photo" href="<?php echo $thumbnail->url; ?>"><img src="<?php echo $url;?>" style="width:100%"></a>
 					<div class='source_photo_horizontale'><div class="source-content">Source : <?php echo esc_attr($thumbnail->post_title); ?></div></div>
 					<?php
-				} else {
+				} else {*/
 
 			?>
 				<div class="article-image">
@@ -94,7 +94,7 @@
 				<?php if($thumbnail->post_excerpt != '') { ?>
 					<div class='legende_photo'><?php echo $thumbnail->post_excerpt; ?></div>
 				<?php } ?>
-			<?php }
+			<?php //}
 
 			endif; ?>
 			<div class="content">
