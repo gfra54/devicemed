@@ -10,77 +10,45 @@
 */
 
 $GLOBALS['data_videos'] = array(
-	'jeuxvideo' => array(
-		'name'=>'jeuxvideo',
-		'parse_debut'=> 'Lecteur exportable : <input type="text" value="',
-		'parse_fin'=>'&lt;/div&gt;',
-		'add'=>'</div>'
-	),
-	'goal4replay' => array(
-		'name'=>'goal4replay',
-		'embed' => '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="288" height="214" id="videoEmbed" align="middle"><param name="allowFullScreen" value="true" /><param name="allowScriptAccess" value="always" /><param name="wmode" value="transparent" /><param name="scale" value="true" /><param name="movie" value="http://www.goal4replay.net/videoEmbedLa.swf?ID=S%code%&MediaID=1" /><param name="quality" value="high" /><param name="bgcolor" value="#999999" /><embed src="http://www.goal4replay.net/videoEmbedLa.swf?ID=S%code%&MediaID=1" quality="high"  width="288" height="214" name="videoEmbedLa" align="middle" allowScriptAccess="always"  allowFullScreen="true" wmode="transparent" scale="true" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /></embed></object>',
-		'debut_code_url'=>'ID=',
-		'fin_code_url'=>'&',
-		'debut_code_url_object'=>'ID=S',
-		'fin_code_url_object'=>'&',
-	),
-	//do we need this ? <script async src="//platform.vine.co/static/scripts/embed.js" charset="utf-8"></script>
 	'vine' => array(
 		'name'=>'vine',
 		'embed' => '<iframe class="vine-embed" src="https://vine.co/v/%code%/embed/simple" width="288" height="214" frameborder="0"></iframe>',
 		'debut_code_url'=>'/v/',
 		'fin_code_url'=>'',
 		'player'=>'https://vine.co/v/%code%/embed/simple',
-		'direct'=>'http://vine.co/%code%',
+		'direct'=>'https://vine.co/%code%',
 	),
 	'youtube' => array(
 		'name'=>'youtube',
-		'embed' => '<iframe title="YouTube video player" autoplay="1" class="youtube-player" type="text/html" width="400" height="400" src="http://www.youtube.com/embed/%code%" divers="?rel=0&amp;hd=1" frameborder="0"></iframe>',
+		'embed' => '<iframe title="YouTube video player" autoplay="1" class="youtube-player" type="text/html" width="400" height="400" src="https://www.youtube.com/embed/%code%" divers="?rel=0&amp;hd=1" frameborder="0"></iframe>',
 		'debut_code_url'=>'v=',
 		'fin_code_url'=>'&',
 		'debut_code_url_object'=>'/v/',
 		'fin_code_url_object'=>'?',
-		'player'=>'http://www.youtube.com/embed/%code%',
-		'direct'=>'http://www.youtube.com/v/%code%',
+		'player'=>'https://www.youtube.com/embed/%code%',
+		'direct'=>'https://www.youtube.com/v/%code%',
 		'meta'=>array(
-			'url'=>'http://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=%code%&format=json',
+			'url'=>'https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=%code%&format=json',
 			'title'=>'title'
 		)
 	),
 	'youtu.be' => array(
 		'name'=>'youtu.be',
-		'embed' => '<iframe width="288" height="214" src="http://www.youtube.com/embed/%code%" frameborder="0" allowfullscreen></iframe>',
+		'embed' => '<iframe width="288" height="214" src="https://www.youtube.com/embed/%code%" frameborder="0" allowfullscreen></iframe>',
 		'debut_code_url'=>'.be/',
 		'fin_code_url'=>'',
 		'debut_code_url_object'=>'.be/',
 		'fin_code_url_object'=>'',
-		'player'=>'http://www.youtube.com/embed/%code%',
-		'direct'=>'http://www.youtube.com/v/%code%',
+		'player'=>'https://www.youtube.com/embed/%code%',
+		'direct'=>'https://www.youtube.com/v/%code%',
 		'meta'=>array(
-			'url'=>'http://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=%code%&format=json',
+			'url'=>'https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=%code%&format=json',
 			'title'=>'title'
 		)
 	),
-	/*
-	'ina' => array(
-		'name'=>'ina',
-		'embed' => '<iframe title="YouTube video player" autoplay="1" class="youtube-player" type="text/html" width="288" height="214" src="http://www.youtube.com/embed/%code%" divers="?rel=0&amp;hd=1" frameborder="0"></iframe>',
-		'debut_code_url'=>'v=',
-		'fin_code_url'=>'&',
-		'debut_code_url_object'=>'/v/',
-		'fin_code_url_object'=>'?',
-	),*/
-	'rutube' => array(
-		'name'=>'rutube',
-		'embed' => '<object width="288" height="214"><param name="movie" value="http://video.rutube.ru/%code%"></param><param name="wmode" value="window"></param><param name="allowFullScreen" value="true"></param><embed src="http://video.rutube.ru/%code%" type="application/x-shockwave-flash" wmode="window" width="288" height="214" allowFullScreen="true" ></embed></object>',
-		'debut_code_url'=>'v=',
-		'fin_code_url'=>'&',
-		'debut_code_url_object'=>'video.rutube.ru/',
-		'fin_code_url_object'=>'"></param',
-	),
 	'vimeo' => array(
 		'name'=>'vimeo',
-		'embed' => '<iframe src="http://player.vimeo.com/video/%code%?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff" width="288" height="214" frameborder="0"></iframe>',
+		'embed' => '<iframe src="https://player.vimeo.com/video/%code%?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff" width="288" height="214" frameborder="0"></iframe>',
 		'debut_code_url'=>'vimeo.com/',
 		'fin_code_url'=>'?',
 	),

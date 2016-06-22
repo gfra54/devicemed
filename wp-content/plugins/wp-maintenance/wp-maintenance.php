@@ -81,7 +81,7 @@ function wpm_date_picker() {
     wp_enqueue_script('jquery-ui-datepicker');
     //wp_enqueue_script( 'jquery-datepicker', WP_PLUGIN_URL.'/'.WPSPO_NAME_DIR.'/wpspo-js/jquery.ui.datepicker.min.js', array('jquery', 'jquery-ui-core' ) );
     //wp_enqueue_script('jquery-ui-fr-datepicker', WP_PLUGIN_URL.'/'.WPSPO_NAME_DIR.'/wpspo-js/jquery.ui.datepicker-fr.js', array('jquery-ui-datepicker'));
-    wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+    wp_enqueue_style('jquery-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
     
 }
 
@@ -283,7 +283,7 @@ function wpm_enqueue_color_picker( $hook_suffix ) {
 
 function wpm_admin_styles() {
     wp_enqueue_style('thickbox');
-    wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+    wp_enqueue_style('jquery-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
 }
 
 if (isset($_GET['page']) && $_GET['page'] == 'wp-maintenance/wp-maintenance.php') {

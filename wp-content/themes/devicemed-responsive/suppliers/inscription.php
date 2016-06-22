@@ -1,4 +1,8 @@
-<?php get_header(); ?>
+<?php
+wp_redirect('/nouveau-fournisseur',301);
+
+exit;
+ get_header(); ?>
 <script type='text/javascript'>
 	$(document).ready(function() {
 		$(".title_sous_menu_checkbox").click(function() {

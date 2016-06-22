@@ -25,6 +25,7 @@ class DM_Wordpress_Suppliers
 	static public function inscription($params)
 	{	
 		wp_redirect('/nouveau-fournisseur',301);
+		exit;
 		$supplier = new DM_Wordpress_Suppliers_Model();
 
 		$data = array();

@@ -108,7 +108,7 @@ function display_pub($pub,$attr=array(),$type=false) {
 		// $out.='</div>';
 		$out.='</header><article>';
 		if($url_video = get_field('url_video',$PUB['ID'])) {
-			$video = resizeVideo(gestVideo($url_video));
+			$video = resizeVideo(gestVideo(https($url_video)));
 			$out.=$video;
 		}
 		$out.=get_field('code',$PUB['ID']);
