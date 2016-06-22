@@ -911,7 +911,7 @@ DIV.search {
 }
 
 .bloc_top_header {
-  background-image: url('http://www.devicemed.fr/wp-content/uploads/head_top_bg.png');
+  background-image: url('/wp-content/uploads/head_top_bg.png');
   background-repeat: repeat-x;
   height: 31px;
   width: 100%;
@@ -957,7 +957,7 @@ DIV.search {
 }
 
 #menu {
-  background-image: url('http://www.devicemed.fr/wp-content/uploads/main_menu_bg.png');
+  background-image: url('/wp-content/uploads/main_menu_bg.png');
   font-size: 15px;
   font-family: 'opensans-condbold';
   overflow: auto;

@@ -1,4 +1,11 @@
 <?php
+
+function https($url) {
+	if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+		$url = str_replace('http://','https://',$url);
+	}
+	return $url;
+}
 /*define('DOCUSTOMCACHE',false);
 define('CACHETAG','<!-- CACHETAG -->');
 $GLOBALS['pagecache-name']=false;

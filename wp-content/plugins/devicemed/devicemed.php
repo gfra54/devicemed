@@ -28,6 +28,7 @@ mysql_select_db (DB_NAME) or die("<font color=red>Erreur à la sélection de la 
 setlocale (LC_TIME, 'fr_FR.UTF-8','fr_FR.UTF8','fra'); 
 
 
+
 define( 'DEVICEMED_PLUGIN_DIR', dirname(__FILE__) );
 list($pre,$tmp) = explode('wp-content',str_replace('\\','/',DEVICEMED_PLUGIN_DIR));
 define( 'DEVICEMED_PLUGIN_URL', site_url().'/wp-content'.$tmp );

@@ -41,8 +41,8 @@ function afficher_pub_js($type,$attr=array()) {
 			$tmp['id'] = $pub['ID'];
 			$tmp['largeur_maximale'] = get_field('largeur_maximale',$pub['ID']);
 			$tmp['bordure'] = get_field('bordure',$pub['ID']);
-			$tmp['url_tracking_clicks'] = get_field('url_tracking_clicks',$pub['ID']);
-			$tmp['url_tracking_display'] = get_field('url_tracking_display',$pub['ID']);
+			$tmp['url_tracking_clicks'] = https(get_field('url_tracking_clicks',$pub['ID']));
+			$tmp['url_tracking_display'] = https(get_field('url_tracking_display',$pub['ID']));
 			$tmp['time'] = time();
 			$pubs_final[]=$tmp;
 		}
