@@ -318,17 +318,19 @@ function fournisseur_categories($fournisseur=false) {
 function fournisseur_sections($fournisseur) {
 	$page = check('page');
 	foreach($GLOBALS['MENU_FOURNISSEURS'] as $item) {
-		if(!$page || $page == $item['anchor']) {
-			$file = get_template_directory().'/single-fournisseur-'.$item['anchor'].'.php';
-			if(file_exists($file)) {
-				ob_start();
-				include $file;
-				$data = ob_get_contents();
-				ob_end_clean();
-				if(!empty($data)) {
-					echo '<section id="'.$item['anchor'].'"><h2 class="title"><a name="'.$item['anchor'].'">'.$item['titre'].'</a></h2></section><div>';
-					echo $data;
-					echo '</div>';
+		if(!$item['premium'] || $fournisseur['premium']) {
+			if(!$page || $page == $item['anchor']) {
+				$file = get_template_directory().'/single-fournisseur-'.$item['anchor'].'.php';
+				if(file_exists($file)) {
+					ob_start();
+					include $file;
+					$data = ob_get_contents();
+					ob_end_clean();
+					if(!empty($data)) {
+						echo '<section id="'.$item['anchor'].'"><h2 class="title"><a name="'.$item['anchor'].'">'.$item['titre'].'</a></h2></section><div>';
+						echo $data;
+						echo '</div>';
+					}
 				}
 			}
 		}
