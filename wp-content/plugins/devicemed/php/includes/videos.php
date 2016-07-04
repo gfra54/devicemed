@@ -20,7 +20,7 @@ $GLOBALS['data_videos'] = array(
 	),
 	'youtube' => array(
 		'name'=>'youtube',
-		'embed' => '<iframe title="YouTube video player" autoplay="1" class="youtube-player" type="text/html" width="400" height="400" src="https://www.youtube.com/embed/%code%" divers="?rel=0&amp;hd=1" frameborder="0"></iframe>',
+		'embed' => '<iframe title="YouTube video player" autoplay="1" class="youtube-player" type="text/html" width="400" height="400" src="https://www.youtube.com/embed/%code%" divers="?rel=0&amp;hd=1" frameborder="0" allowfullscreen></iframe>',
 		'debut_code_url'=>'v=',
 		'fin_code_url'=>'&',
 		'debut_code_url_object'=>'/v/',

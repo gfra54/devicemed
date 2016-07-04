@@ -65,7 +65,9 @@ if(check('action') == 'create') {
 	if(!count($errors)) {
 		if($id_fournisseur = new_fournisseur(array(
 			'nom_societe'=>check('nom_societe'),
-			'contenu'=>check('nom').' '.check('prenom').' '.check('email'),
+			'content'=>'',
+			'nom_contact_commercial'=>check('nom').' '.check('prenom'),
+			'mail_contact_commercial'=>check('email'),
 			'adresse'=>check('adresse'),
 			'code_postal'=>check('code_postal'),
 			'ville'=>check('ville'),

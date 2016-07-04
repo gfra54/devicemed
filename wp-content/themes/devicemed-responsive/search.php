@@ -71,7 +71,7 @@ get_header(); ?>
 				<h3 class="title5">Faire une nouvelle recherche</h3>
 				<div class="search">
 				<form role="search" method="get" action="/">
-					<input type="text" name="s" placeholder="Rechercher dans les articles" value="<?php echo htmlspecialchars($_GET['s']);?>">
+					<input type="text" name="s" placeholder="Rechercher dans les articles" value="">
 					<input type="submit" value="Rechercher">
 				</form>
 				</div>
