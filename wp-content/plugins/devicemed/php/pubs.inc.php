@@ -422,7 +422,6 @@ function store_pubs() {
 			}
 			set_transient('pubs',$pubs);
 			set_transient('pubs_stored',true);
-			me($pubs);
 		}
 	}
 }
