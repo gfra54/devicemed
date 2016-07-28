@@ -8,23 +8,11 @@
 
 $GLOBALS['PUBS'] = false;
 function get_pubs($type=false) {
-	if(!$GLOBALS['PUBS']) {
-		$args = array( 
-			'post_type'	=> 'pubs',
-			'post_status'=>array('draft','publish'),
-			'posts_per_page'=>1000
-		);
-		
-
-		if($pubs = new WP_Query($args)) {
-			$GLOBALS['PUBS']=$pubs->posts;
-		}
-	}
-	if($GLOBALS['PUBS']) {
+   	if($pubs = get_transient('pubs')) {
 		$out = array();
-		foreach($GLOBALS['PUBS'] as $post) {
-			if($type===false || check_espace($type,$post)){
-				$out[]=$post;
+		foreach($pubs as $pub) {
+			if($type===false || check_espace($type,$pub)){
+				$out[]=$pub;
 			}
 		}
 		return $out;
@@ -43,6 +31,7 @@ function afficher_pub_js($type,$attr=array()) {
 			$tmp['bordure'] = get_field('bordure',$pub['ID']);
 			$tmp['url_tracking_clicks'] = https(get_field('url_tracking_clicks',$pub['ID']));
 			$tmp['url_tracking_display'] = https(get_field('url_tracking_display',$pub['ID']));
+			$tmp['image'] = https($pub['image']);
 			$tmp['time'] = time();
 			$pubs_final[]=$tmp;
 		}
@@ -169,48 +158,60 @@ function get_selected_pub($type, $pubs, $all=false) {
 	$pubs_sort=array();
 	foreach($pubs as $key => $pub) {
 		if(check_espace($type,$pub)) {
-			$public = $pub->post_status == 'publish';
-
-			if($date_debut = get_field('date_debut',$pub->ID)) {
+			$public = $pub['post_status'] == 'publish';
+			if($date_debut = $pub['date_debut']) {
 				$date_debut.=' 00:00:00';
 			}
-			if($date_fin = get_field('date_fin',$pub->ID)) {
+			if($date_fin = $pub['date_fin']) {
 				$date_fin.=' 23:59:59';
 			}
 			$ok=true;
+			$change=false;
 			if(!empty($date_debut)) {
 				if(time()<strtotime($date_debut)) {
 					if($public) {
-						change_post_status($pub->ID,'draft');
+						change_post_status($pub['ID'],'draft');
+						$change=true;
+						// m('1 on est avant publication. Si la pub est public, on la met en draft',$pub);
 						$public=false;
 					}
 					$ok=false;
 				} else if(!$public){
-					change_post_status($pub->ID,'publish');
-					$public=true;
+					if(!$date_fin || time()<strtotime($date_fin)) {
+						change_post_status($pub['ID'],'publish');
+						$change=true;
+						// m('2 on est apres le debut de publication. Si la pub est draft, on la met en public',$pub);
+						$public=true;
+					}
 				}
 			}
 
 			if(!empty($date_fin)) {
 				if(time()>strtotime($date_fin)) {
 					if($public) {
-						change_post_status($pub->ID,'draft');
+						change_post_status($pub['ID'],'draft');
+						$change=true;
+						// m('3 on est apres la date de fin. Si la pub est public, on la met en draft',$pub);
 						$public=false;
 					}
 					$ok=false;
 				} else if(!$public){
-					change_post_status($pub->ID,'publish');
-					$public=true;
+					if(!$date_debut || time()>strtotime($date_debut)) {
+						change_post_status($pub['ID'],'publish');
+						$change=true;
+						// m('4 on est avant la date de fin et apres la date de debut. Si la pub est pas public, on la met en public',$pub);
+						$public=true;
+					}
 				}
 			}
-
+			if($change) {
+				store_pub($pub);
+			}
 			if(!$public) {
 				$ok=false;
 			}
 			if($ok) {
-				// if(check_univers(get_field('univers',$pub->ID))){
-					$pubs_sort[$key] = get_field('pages',$pub->ID);
-				// }
+				$pubs_sort[$key] = $pub['pages'];
 			}
 		}
 	}
@@ -242,7 +243,11 @@ function get_selected_pub($type, $pubs, $all=false) {
 	}
 }
 function check_espace($type,$pub) {
-	$espaces = wp_get_post_terms($pub->ID,'emplacements');
+	if(isset($pub['espaces'])) {
+		$espaces = $pub['espaces'];
+	} else {
+		$espaces = wp_get_post_terms($pub->ID,'emplacements');
+	}
 	foreach($espaces as $espace) {
 		if($espace->slug == $type) {
 			return true;
@@ -279,15 +284,21 @@ function check_pub_page($pages) {
 }
 
 function pub_metrics($pub) {
-
-	if($url_cible = get_field('url_cible',$pub->ID)) {
-		if(!$url_tracking_clicks = get_field('url_tracking_clicks',$pub->ID)) {
-			$url = addURLParameter($url_cible,$pub->ID);
+	if(is_object($pub)) {
+		$id = $pub->ID;
+	} else {
+		$id = $pub['ID'];
+	}
+	$url_tracking_clicks=false;
+	$url_tracking_display=false;
+	if($url_cible = get_field('url_cible',$id)) {
+		if(!$url_tracking_clicks = get_field('url_tracking_clicks',$id)) {
+			$url = addURLParameter($url_cible,$id);
 			$url_tracking_clicks = bitly_shorten($url);
 			if(!$url_tracking_clicks) {
 				$url_tracking_clicks = $url_cible;
 			} else {
-				update_post_meta($pub->ID, 'url_tracking_clicks', $url_tracking_clicks);
+				update_post_meta($id, 'url_tracking_clicks', $url_tracking_clicks);
 			}
 		}
 	}
@@ -295,8 +306,8 @@ function pub_metrics($pub) {
 	foreach($pub as $k=>$v) {
 		$out[$k]=$v;
 	}
-	if($out['image'] = get_post_thumbnail_url($pub->ID)) {
-		if(!$url_tracking_display = get_field('url_tracking_display',$pub->ID)) {
+	if($out['image'] = get_post_thumbnail_url($id)) {
+		if(!$url_tracking_display = get_field('url_tracking_display',$id)) {
 			if($url_tracking_display = bitly_shorten($out['image'])) {
 				update_post_meta($pub->ID, 'url_tracking_display', $url_tracking_display);
 			} else {
@@ -306,6 +317,7 @@ function pub_metrics($pub) {
 	}
 	$out['url_tracking_clicks']=$url_tracking_clicks;
 	$out['url_tracking_display']=$url_tracking_display;
+	$out['url_cible'] = $url_cible;
 	return $out;
 }
 /*'posts_per_page'   => 5,
@@ -367,4 +379,50 @@ ob_start();
 		$content = ob_get_contents();
 		ob_end_clean();
 		return $content;
+}
+
+
+function store_pub($post,$pubs=false) {
+	if(!$pubs) {
+		$pubs = get_transient('pubs');
+		$save=true;
+	} else {
+		$save=false;
+	}
+	if($post->post_status == 'trash') {
+		unset($pubs[$post->ID]);
+	} else {
+		if(!is_array($pubs)) {
+			$pubs = array();
+		}
+		$pub = pub_metrics($post);
+		$pub['espaces'] = wp_get_post_terms($post->ID,'emplacements');
+		$pub['date_debut'] = get_field('date_debut',$post->ID);
+		$pub['date_fin'] = get_field('date_fin',$post->ID);
+		$pub['pages'] = get_field('pages',$post->ID);
+		$pubs[$post->ID]=$pub;
+	}
+	if($save) {
+		set_transient('pubs',$pubs);
+	}
+	return $pubs;
+}
+
+function store_pubs() {
+	if(WP_DEBUG || !get_transient('pubs_stored')) {
+		$args = array( 
+			'post_type'	=> 'pubs',
+			'post_status'=>array('draft','publish'),
+			'posts_per_page'=>1000
+		);
+		if($posts = new WP_Query($args)) {
+			$pubs = array();
+			foreach($posts->posts as $post) {
+				$pubs = store_pub($post,$pubs);
+			}
+			set_transient('pubs',$pubs);
+			set_transient('pubs_stored',true);
+			me($pubs);
+		}
+	}
 }

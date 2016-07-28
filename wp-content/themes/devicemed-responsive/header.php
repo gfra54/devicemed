@@ -181,69 +181,6 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 		<?php devicemed_header_menu('menu-principal'); ?>
 	</nav><!-- #menu -->
 </header><!-- #header -->
-<?php
-	// On vérifies si on est sur une page fournisseur
-	$monUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-	// echo "monUrl : ". $monUrl;
-	$supplier_id = $supplier['ID'];
-	// echo "supplier_id : ". $supplier_id;
-?>
 <section class="ad header-ad">
 	<?php afficher_pub_js('site-banniere-horizontale');?>
-	<?php
-/*		$monUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-		$_SESSION['arrayBanniereAfficher'] = '';
-		
-		// On récupére les bannières qui ont une date de fin dépassé
-		$current_date = date("Y-m-d");
-		$sql_banniere_date_limite = "SELECT ID FROM `wordpress_dm_banniere` WHERE date_fin <= '$current_date'";
-		$result_banniere_date_limite = mysql_query($sql_banniere_date_limite);
-		$i_baniere_id = 0;
-		
-		while($row_banniere = mysql_fetch_array($result_banniere_date_limite)) {
-			$banniere_id = $row_banniere['ID'];
-			if($i_baniere_id == 0) {
-				$_SESSION['arrayBanniereAfficher'] .= "$banniere_id";
-			}else {
-				$_SESSION['arrayBanniereAfficher'] .= ",$banniere_id";
-			}
-			$i_baniere_id++;
-		}
-		
-		if($monUrl != 'http://www.devicemed.fr/') {
-			if($_SESSION['arrayBanniereAfficher'] == '') {
-				$_SESSION['arrayBanniereAfficher'] .= '53,54';
-			}else {
-				$_SESSION['arrayBanniereAfficher'] .= ',53,54';
-			}
-		}
-		
-		$banniere_model = new DM_Wordpress_Banniere_Model();
-		
-		if($monUrl == 'http://www.devicemed.fr/salons') {
-			$banniereAfficher = $banniere_model->display_banniere(2, $_SESSION['arrayBanniereAfficher'], 'true');
-		}elseif($monUrl == 'http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle') {
-			$banniereAfficher = $banniere_model->display_banniere(2, $_SESSION['arrayBanniereAfficher'], 'false', 'true');
-		}else {
-			$banniereAfficher = $banniere_model->display_banniere(2, $_SESSION['arrayBanniereAfficher'], 'false');
-		}
-
-		$banniere_id = $banniereAfficher[0]['ID'];
-		$_SESSION['arrayBanniereAfficher'] .= $banniere_id;
-		$image = $banniereAfficher[0]['image'];
-		$lien = $banniereAfficher[0]['lien'];
-		
-		if($monUrl == 'http://www.devicemed.fr/category/dossiers/composants-oem/mecaniques') {
-			echo "<a href='http://www.device-med.fr/?url=http://www.balseal.com/medical-devices&id=19' id='19' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/bal_seal.gif' /></a>";
-		}elseif($monUrl == 'http://www.devicemed.fr/category/dossiers/equipements-de-production-et-techniques-de-fabrication/metrologie_controle') {
-			echo "<a href='http://www.device-med.fr/?url=http://www.precitec.fr&id=30' id='30' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/precitec.gif' /></a>";
-		}elseif($monUrl == 'http://www.devicemed.fr/category/dossiers/sous-traitance-et-services/plasturgie-sous-traitance-et-services') {
-			echo "<a href='http://www.device-med.fr/?url=http://www.thieme.eu/fr/polyurethane&id=38' id='38' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/WEB Banner.jpg' /></a>";
-		}elseif($monUrl == 'http://www.devicemed.fr/category/dossiers/reglementation') {
-			echo "<a href='https://urldefense.proofpoint.com/v2/url?u=http-3A__www.dm-2Dexperts.fr&d=AwMFAw&c=swZ-Xf1X63pRFsfLwqPxeIkAR_Uj073mmqakB_XXmeg&r=y8cCPPeAINua2ICvxy0PPu4yd--gsabdzZ9rwDhHBtU&m=CukLFzw90wFwqRT2jv7xZfKZ31tg0ihu_w1zkLhCbi0&s=bnTYno-7r9Q2fQkac7pTcm66rcCDB7W6QVXZJ4xIy1k&e=' id='64' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/banniere-devicemed-2015.gif' /></a>";
-		}else {
-			echo "<a href='http://www.device-med.fr/?url=$lien&id=$banniere_id' id='$banniere_id' target=_blank><img src='http://www.device-med.fr/wp-content/uploads/banniere/$image' /></a>";
-		}*/
-
-	?>
 </section>

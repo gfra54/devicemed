@@ -1,4 +1,17 @@
 <?php 
+
+function save_post_action($post_id) {
+    global $post; 
+    if ($post->post_type == 'pubs'){
+    	store_pubs();
+    	store_pub($post);
+	} else if ($post->post_type == 'fournisseur'){
+		fournisseur_enrichir($post,true);
+	}
+
+}
+add_action( 'save_post', 'save_post_action' );
+
 /*function save_post_cache($post_id) {
 	if(is_admin()) {
 		cachepage_clear('index');

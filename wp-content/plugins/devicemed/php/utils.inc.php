@@ -1,5 +1,9 @@
 <?php
 
+function transient_key($lib,$id) {
+	return $lib.'_'.$id;
+}
+
 function https($url) {
 	if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 		$url = str_replace('http://','https://',$url);

@@ -1,3 +1,8 @@
+desactiver
+	adminimize
+	YARP
+
+-----------------------------------
 installer acf (b3JkZXJfaWQ9NzAyNjB8dHlwZT1kZXZlbG9wZXJ8ZGF0ZT0yMDE1LTEyLTA0IDA5OjExOjE3) et cpt
 
 créer cat pubs (importer avec le plugins)

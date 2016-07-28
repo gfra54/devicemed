@@ -469,76 +469,83 @@ function get_fournisseur($ID,$legacy=false) {
 	}
 }
 
-function fournisseur_enrichir($fournisseur) {
-	$fournisseur = get_object_vars($fournisseur);
+function fournisseur_enrichir($fournisseur,$force=false) {
+	$key = transient_key('fournisseur',$fournisseur->ID);
+	$f = get_transient($key);
+	if(!$force && $f) {
+		return $f;
+	} else {
+		$fournisseur = get_object_vars($fournisseur);
 
-	$allmeta = get_post_meta($fournisseur['ID']);
-	foreach($allmeta as $k=>$v) {
-		if(substr($k, 0,1) !='_') {
-			$meta[$k] = $v[0];
-			if(!isset($fournisseur[$k])) {
-				$fournisseur[$k]=$v[0];
+		$allmeta = get_post_meta($fournisseur['ID']);
+		foreach($allmeta as $k=>$v) {
+			if(substr($k, 0,1) !='_') {
+				$meta[$k] = $v[0];
+				if(!isset($fournisseur[$k])) {
+					$fournisseur[$k]=$v[0];
+				}
 			}
 		}
-	}
-	$fournisseur['meta'] = $meta;
-	$gallerie = get_field('gallerie',$fournisseur['ID']);
-	if(!is_array($gallerie)) {
-		$gallerie = array();
-	}
-	foreach($gallerie as $k=>$photo) {
-		if(is_numeric($photo)) {
-			$photo = array('ID'=>$photo,'id'=>$photo);
-			$meta = wp_get_attachment_metadata($photo['id']);
-			$p = get_post($photo['id']);
-			$photo['title'] = $p->post_title;
-			$photo['caption'] = $p->post_excerpt;
-
-			$photo['filename'] = basename($meta['file']);
-			$photo['url'] = wp_upload_dir()['baseurl'].'/'.$meta['file'];
-			$photo['sizes'] = array('thumbnail'=>wp_get_attachment_thumb_url($photo['id']));
-			$gallerie[$k]=$photo;
+		$fournisseur['meta'] = $meta;
+		$gallerie = get_field('gallerie',$fournisseur['ID']);
+		if(!is_array($gallerie)) {
+			$gallerie = array();
 		}
-	}
-	$fournisseur['gallerie'] = $gallerie;
+		foreach($gallerie as $k=>$photo) {
+			if(is_numeric($photo)) {
+				$photo = array('ID'=>$photo,'id'=>$photo);
+				$meta = wp_get_attachment_metadata($photo['id']);
+				$p = get_post($photo['id']);
+				$photo['title'] = $p->post_title;
+				$photo['caption'] = $p->post_excerpt;
 
-	$fournisseur['videos'] = array();
-	while(have_rows('videos',$fournisseur['ID'])) {
-		the_row();
-		$fournisseur['videos'][] = array(
-			'titre_de_la_video'=>get_sub_field('titre_de_la_video'),
-			'url_de_la_video'=>get_sub_field('url_de_la_video')
-		);
-	}
-
-	$fournisseur['salons'] = array();
-	while(have_rows('salons',$fournisseur['ID'])) {
-		the_row();
-		$fournisseur['salons'][] = array(
-			'nom_du_salon'=>get_sub_field('nom_du_salon'),
-			'url'=>get_sub_field('url'),
-			'dates'=>get_sub_field('dates'),
-			'lieu'=>get_sub_field('lieu'),
-			'informations_additionelles'=>get_sub_field('informations_additionelles'),
-		);
-	}
-
-	$fournisseur['logo'] = get_post_thumbnail_url($fournisseur['ID']);
-	
-	$fournisseur['permalink'] = get_post_permalink($fournisseur['ID']);
-
-	$fournisseur['nom'] = $fournisseur['post_title'];
-
-	$fournisseur['documentation']=array();
-	$attachments = new Attachments( 'attachments_fournisseur', $fournisseur['ID']); 
-	if($attachments->exist()) {
-		while( $attachments->get() ){ 
-			$fournisseur['documentation'][$attachments->url()]=$attachments->field( 'title' );
+				$photo['filename'] = basename($meta['file']);
+				$photo['url'] = wp_upload_dir()['baseurl'].'/'.$meta['file'];
+				$photo['sizes'] = array('thumbnail'=>wp_get_attachment_thumb_url($photo['id']));
+				$gallerie[$k]=$photo;
+			}
 		}
-	}
+		$fournisseur['gallerie'] = $gallerie;
 
-	$fournisseur['categories'] = fournisseur_categories($fournisseur);
-	return $fournisseur;
+		$fournisseur['videos'] = array();
+		while(have_rows('videos',$fournisseur['ID'])) {
+			the_row();
+			$fournisseur['videos'][] = array(
+				'titre_de_la_video'=>get_sub_field('titre_de_la_video'),
+				'url_de_la_video'=>get_sub_field('url_de_la_video')
+			);
+		}
+
+		$fournisseur['salons'] = array();
+		while(have_rows('salons',$fournisseur['ID'])) {
+			the_row();
+			$fournisseur['salons'][] = array(
+				'nom_du_salon'=>get_sub_field('nom_du_salon'),
+				'url'=>get_sub_field('url'),
+				'dates'=>get_sub_field('dates'),
+				'lieu'=>get_sub_field('lieu'),
+				'informations_additionelles'=>get_sub_field('informations_additionelles'),
+			);
+		}
+
+		$fournisseur['logo'] = get_post_thumbnail_url($fournisseur['ID']);
+		
+		$fournisseur['permalink'] = get_post_permalink($fournisseur['ID']);
+
+		$fournisseur['nom'] = $fournisseur['post_title'];
+
+		$fournisseur['documentation']=array();
+		$attachments = new Attachments( 'attachments_fournisseur', $fournisseur['ID']); 
+		if($attachments->exist()) {
+			while( $attachments->get() ){ 
+				$fournisseur['documentation'][$attachments->url()]=$attachments->field( 'title' );
+			}
+		}
+
+		$fournisseur['categories'] = fournisseur_categories($fournisseur);
+		set_transient($key,$fournisseur);
+		return $fournisseur;
+	}
 }
 
 function fournisseur_empty($test) {
