@@ -243,7 +243,7 @@ function get_selected_pub($type, $pubs, $all=false) {
 	}
 }
 function check_espace($type,$pub) {
-	if(isset($pub['espaces'])) {
+	if(is_array($pub) && isset($pub['espaces'])) {
 		$espaces = $pub['espaces'];
 	} else {
 		$espaces = wp_get_post_terms($pub->ID,'emplacements');
