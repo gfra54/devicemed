@@ -1,51 +1,72 @@
 <?php
 
-function telecharger_fournisseurs() {
+function telecharger_fournisseurs($params = array()) {
 	$categories = fournisseur_categories();
 //	$fournisseurs = get_fournisseurs(array('enrichir'=>true,'cache'=>'extraction_excel'));
 	$fournisseurs = get_fournisseurs(array('enrichir'=>true));
 	$data = array();
+	$id_categorie = sinon($params,'categorie');
+	$id_sous_categorie = sinon($params,'sous_categorie');
+	$cat_ref=false;
+	$sous_cat_ref=false;
 	foreach($categories as $categorie) {
-		$ligne_categorie = array('Fournisseur','Pays','Web',mb_strtoupper($categorie['name']));
-		foreach($categorie['categories'] as $sous_categorie) {
-			if($sous_categorie['categories']) {
-				foreach($sous_categorie['categories'] as $sous_sous_categorie) {
-				$ligne_categorie[$sous_sous_categorie['term_id']] = $sous_categorie['name'].PHP_EOL.$sous_sous_categorie['name'];
-				}
-			} else {
-				$ligne_categorie[$sous_categorie['term_id']] = $sous_categorie['name'];
+		if($categorie['term_id'] == $id_categorie || empty($id_categorie)) {
+			if($categorie['term_id'] == $id_categorie) {
+				$cat_ref = $categorie;
 			}
-		}
-		$data[]=array();
-		$data[]=$ligne_categorie;
-		foreach($fournisseurs as $fournisseur) {
-			$ligne_fournisseur = array();
-			$ligne_fournisseur[] = $fournisseur['post_title'];
-			$ligne_fournisseur[] = $fournisseur['pays'];
-			$ligne_fournisseur[] = $fournisseur['url'];
-			$debut = count($ligne_fournisseur);
-			$cpt=0;
-			foreach($ligne_categorie as $idcat=>$cat) {
-				$debut--;
-				if($debut<0) {
-					$trouve=false;
-					foreach($fournisseur['categories'] as $categorie) {
-						foreach($categorie['categories'] as $sous_categorie) {
-							if($sous_categorie['id'] == $idcat) {
-								$trouve=true;
+			$ligne_categorie = array('Fournisseur','Pays','Web',mb_strtoupper($categorie['name']));
+			foreach($categorie['categories'] as $sous_categorie) {
+				if(empty($id_categorie) || $sous_categorie['parent'] == $id_categorie) {
+					if($sous_categorie['categories']) {
+						foreach($sous_categorie['categories'] as $sous_sous_categorie) {
+							if(empty($id_sous_categorie) || $id_sous_categorie == $sous_sous_categorie['term_id']) {
+								if($id_sous_categorie == $sous_sous_categorie['term_id']) {
+									$sous_cat_ref = $sous_sous_categorie;
+								}
+								$ligne_categorie[$sous_sous_categorie['term_id']] = $sous_categorie['name'].PHP_EOL.$sous_sous_categorie['name'];
 							}
 						}
-					}
-					if($trouve) {
-						$ligne_fournisseur[]='X';
-						$cpt++;
 					} else {
-						$ligne_fournisseur[]='';
+						if(empty($id_sous_categorie) || $id_sous_categorie == $sous_categorie['term_id']) {
+							if($id_sous_categorie == $sous_categorie['term_id']) {
+								$sous_cat_ref = $sous_categorie;
+							}
+							$ligne_categorie[$sous_categorie['term_id']] = $sous_categorie['name'];
+						}
 					}
 				}
 			}
-			if($cpt) {
-				$data[]=$ligne_fournisseur;
+			$data[]=array();
+			$data[]=$ligne_categorie;
+			foreach($fournisseurs as $fournisseur) {
+				$ligne_fournisseur = array();
+				$ligne_fournisseur[] = $fournisseur['post_title'];
+				$ligne_fournisseur[] = $fournisseur['pays'];
+				$ligne_fournisseur[] = $fournisseur['url'];
+				$debut = count($ligne_fournisseur);
+				$cpt=0;
+				foreach($ligne_categorie as $idcat=>$cat) {
+					$debut--;
+					if($debut<0) {
+						$trouve=false;
+						foreach($fournisseur['categories'] as $categorie) {
+							foreach($categorie['categories'] as $sous_categorie) {
+								if($sous_categorie['id'] == $idcat) {
+									$trouve=true;
+								}
+							}
+						}
+						if($trouve) {
+							$ligne_fournisseur[]='X';
+							$cpt++;
+						} else {
+							$ligne_fournisseur[]='';
+						}
+					}
+				}
+				if($cpt) {
+					$data[]=$ligne_fournisseur;
+				}
 			}
 		}
 		
@@ -56,15 +77,21 @@ function telecharger_fournisseurs() {
 		}
 		$data[$k] = $v;
 	}
+
 	$out='';
 	foreach($data as $ligne) {
 		$out.=implode(';',$ligne).PHP_EOL;
 	}
 
+	if($sous_cat_ref) {
+		$file = '-'.$sous_cat_ref['slug'];
+	} else if($cat_ref) {
+		$file = '-'.$cat_ref['slug'];
+	}
 	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 	header("Content-Length: " . strlen($out));
 	header("Content-type: text/x-csv");
-	header("Content-Disposition: attachment; filename=extraction-fournisseurs-".date('Y-m-d-h-i-s').'.csv');
+	header("Content-Disposition: attachment; filename=extraction-fournisseurs".$file."-".date('Y-m-d-h-i-s').'.csv');
 	echo utf8_decode(trim($out));
 	exit;	
 }

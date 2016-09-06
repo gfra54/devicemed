@@ -4,7 +4,7 @@ Template Name: fournisseurs
 */
 
 if(check('excel')) {
-	telecharger_fournisseurs();
+	telecharger_fournisseurs(array('categorie'=>check('categorie'),'sous_categorie'=>check('sous_categorie')));
 }
 get_header(); 
 ?>

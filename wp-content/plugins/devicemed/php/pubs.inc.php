@@ -51,7 +51,7 @@ function afficher_pub($type,$attr=array()) {
 	if($type=="cadre-video") {
 		$pub=false;
 		foreach($pubs as $tmp_pub) {
-			if(!$pub && $tmp_pub->post_status == 'publish') {
+			if(!$pub && $tmp_pub['post_status'] == 'publish') {
 				$pub = $tmp_pub;
 			}
 		}

@@ -23,7 +23,7 @@ function acf_load_bannieres_verticales( $field ) {
     $posts = get_pubs('newsletter-droite');
     if($posts) {
         foreach($posts as $post) {
-            $field['choices'][$post->ID]=$post->post_title;
+            $field['choices'][$post['ID']]=$post['post_title'];
         }
     }
     return $field;
@@ -40,14 +40,14 @@ function acf_load_bannieres_horizontales( $field ) {
     $posts = get_pubs('newsletter-banniere-horizontale');
     if($posts) {
         foreach($posts as $post) {
-            $field['choices'][$post->ID]=$post->post_title.' (Bannière horizontale)';
+            $field['choices'][$post['ID']]=$post['post_title'].' (Bannière horizontale)';
         }
     }
 
     $posts = get_pubs('newsletter-textad');
     if($posts) {
         foreach($posts as $post) {
-            $field['choices'][$post->ID]=$post->post_title.' (TextAd)';
+            $field['choices'][$post['ID']]=$post['post_title'].' (TextAd)';
         }
     }
 
