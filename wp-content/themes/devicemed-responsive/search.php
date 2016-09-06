@@ -72,6 +72,7 @@ get_header(); ?>
 				<div class="search">
 				<form role="search" method="get" action="/">
 					<input type="text" name="s" placeholder="Rechercher dans les articles" value="">
+					<input type="hidden" name="fournisseurs" value="<?php echo intval($recherche_fournisseurs);?>">
 					<input type="submit" value="Rechercher">
 				</form>
 				</div>
