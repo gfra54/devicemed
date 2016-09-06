@@ -7,7 +7,7 @@
  * @subpackage Twenty_Fifteen
  * @since Twenty Fifteen 1.0
  */
-$recherche_fournisseurs = isset($_GET['fournisseurs']);
+$recherche_fournisseurs = !empty($_GET['fournisseurs']);
 
 get_header(); ?>
 <style>
@@ -25,8 +25,23 @@ get_header(); ?>
 
 		<?php
 		if(isset($_GET['s'])) {
+			$s = $_GET['s'];
 			if ( have_posts() ) {?>
+				<center>
 				<h2 class="title">Résultats trouvés pour "<span id="search_query"><?php echo get_search_query(); ?></span>"</h2>
+
+				<b class="title">Lancer une nouvelle recherche</b>
+				<div class="search">
+				<form role="search" method="get" action="/">
+					<input type="text" name="s" placeholder="Rechercher dans les articles" value="<?php echo htmlspecialchars($s);?>">
+					<input type="hidden" name="fournisseurs" value="<?php echo intval($recherche_fournisseurs);?>">
+					<input type="submit" value="Rechercher">
+				</form>
+				</div>
+				<p></p>
+				<p>&nbsp;</p>
+				</center>
+
 				<?php 
 				// Start the loop.
 				$fournisseurs=array();
