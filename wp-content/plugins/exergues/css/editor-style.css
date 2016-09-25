@@ -1,0 +1,41 @@
+.entry-exergue {
+    font-size: 0.85em;
+    float: left;
+    /*border: 1px solid black;*/
+    background: #ccc;
+    width: 40%;
+    margin: 0 15px 15px 0;
+    padding: 5px;
+    position: relative;
+}
+.exergue-delete{
+	display: block;
+	width:16px;
+	height: 16px;
+	color:red;
+	top: 0;
+	left: 0;
+	position: absolute;
+	cursor: pointer;
+	background: white;
+}
+.exergue-delete:before{
+	display: block;
+	content:'\2716';
+	font-size: 16px;
+	line-height: 16px;
+}
+
+.exergue-auteur{
+	display: block;
+	font-size: smaller;
+	font-family: sans-serif;
+}
+.entry-exergue h2{
+	margin: 0;
+}
+.entry-exergue p{
+	margin: 0;
+	margin-bottom: 0.5em;
+}
+

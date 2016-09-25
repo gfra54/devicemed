@@ -406,3 +406,35 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
 .voir-adminbar #wpadminbar {
   display: block !important;
 }
+
+
+.entry-exergue {
+    float: left;
+    width: 40%;
+    background: #ddd;
+    padding: 0.5em;
+    margin: 1.2em;
+    margin-left: -0.5em;
+    margin-top: 0;
+    color: #333;
+    font-size: 0.8em;
+    line-height: 1.3em;
+    background-size: 300%;
+    background-position: top center;
+}
+.entry-exergue h2{
+  color: #0066b3;
+  font-family: 'opensans-condbold';
+  margin: 0;
+}
+
+.entry-exergue p{
+  margin-top: 0.5em;
+}
+.entry-exergue-bleu h2{
+  color:white;
+}
+.entry-exergue-bleu {
+  color:white;
+  background:#0066b3
+}
