@@ -1,5 +1,33 @@
 <?php
 
+
+function get_related($id,$all=true) {
+	$categories = wp_get_post_terms($id,'category');
+	if ($categories) {
+		$cats = array();
+		foreach($categories as $cpt=>$cat) {
+			if($all || $cpt == 0) {
+				$cats[]=$cat->term_id;
+			}
+		}
+		$args=array(
+		'cat_in' => $cats,
+		'post__not_in' => array($id),
+		'posts_per_page'=>5,
+		'caller_get_posts'=>1
+		);
+		$my_query = new WP_Query($args);
+		if( $my_query->have_posts() ) {
+			me($my_query->posts);
+		}
+		wp_reset_query();
+	}
+}
+
+
+function isLocal() {
+	return strstr($_SERVER['HTTP_HOST'],'.local')!==false;
+}
 function transient_key($lib,$id) {
 	return $lib.'_'.$id;
 }

@@ -342,7 +342,18 @@ function fournisseur_categories($fournisseur=false) {
 			}
 		}
 	}
-	return $out;
+	$sort_term = array();
+	foreach($out as $term_id => $term) {
+		$sort_term[$term_id] = $term['nom'];
+	}
+	asort($sort_term);
+
+	$final = array();
+	foreach($sort_term as $term_id => $term) {
+		$final[$term_id] = $out[$term_id];
+	}
+
+	return $final;
 }
 function fournisseur_sections($fournisseur) {
 	$page = check('page');
@@ -497,13 +508,15 @@ function get_fournisseur($ID,$legacy=false) {
 }
 
 function fournisseur_enrichir($fournisseur,$force=false) {
+	if(isLocal()) {
+		$force=true;
+	}
 	$key = transient_key('fournisseur',$fournisseur->ID);
 	$f = get_transient($key);
 	if(!$force && $f) {
 		return $f;
 	} else {
 		$fournisseur = get_object_vars($fournisseur);
-
 		$allmeta = get_post_meta($fournisseur['ID']);
 		foreach($allmeta as $k=>$v) {
 			if(substr($k, 0,1) !='_') {

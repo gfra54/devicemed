@@ -43,11 +43,7 @@ get_header();
 				<div class='image_repertoire'><img src='<?php echo get_template_directory_uri(); ?>/images/sidebar-issues-icon.png' /></div>
 				<div class='texte_repertoire'>
 					Le répertoire existe en version papier au sein du Guide de l'acheteur.<br />
-					<?php if ($session = DM_Wordpress_Members::session()): ?>
-						<a href='/wp-content/uploads/archives/pdf/juillet_aout2014.pdf' target='_blank'><b>Accéder au PDF du guide.</b></a>
-					<?php else: ?>
-						<span id='bloc_guide_acheteur2'><b>Accéder au PDF du guide.</b></span>
-					<?php endif; ?>
+						<a href='/wp-content/uploads/archives/pdf/devicemed-guide-acheteur-2016.pdf' target='_blank'><b>Accéder au PDF du guide.</b></a>
 				</div>
 			</div>
 			<div class='bloc_infos_fournisseurs'>

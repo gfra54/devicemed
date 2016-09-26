@@ -51,7 +51,7 @@ if($arts = new WP_Query($args)) {
   //    $category = !empty($data['category']) ? $data['category'] : (getHtmlVal('<span class="category">','</span>',$tmp));
     $category='';
     foreach($cats as $cat) {
-      $category.= $category ? ' /' : '';
+      $category.= $category ? ' / ' : '';
       $category.= $cat->name;
     }
     $articles[] = array('text'=>$content,'image'=>$image,'category'=>$category,'title'=>$title,'url'=>add_utm(get_permalink($art->ID)));
