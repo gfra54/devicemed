@@ -20,49 +20,36 @@
 				if(strstr($_SERVER['REQUEST_URI'], 3671)===false) {
 			?>
 			<div class="categories">
-				<?php
-					$items = array();
 
-					// On récupére les catégories
-					$arrayCategorie = array();
-					$sqlCategories = "SELECT * FROM menu_site";
-					$resultCategories = mysql_query($sqlCategories);
-
-					while($rowCategories = mysql_fetch_array($resultCategories)) {
-						$nomCategorie = $rowCategories['nom_menu'];
-
-						array_push($arrayCategorie, trim($nomCategorie));
-					}
-					$nbCategoriesTab = sizeOf($categories);
-
-					foreach ($categories as $category)
-					{
-						$nomCategorieTemp = trim($category->cat_name);
-						$nomCatParent='';
-						if(!in_array($nomCategorieTemp, $arrayCategorie)) {
-							/*if($nbCategoriesTab == 1) {
-								$items[] = '<span class="category_principal">'.$category->cat_name.'</span>';
+					<?php 
+					$cat_sort = array();
+					foreach($categories as $cpt=>$categorie){
+						if($categorie->category_parent) {
+							if(!isset($cat_sort[$categorie->category_parent]))  {
+								$cat_sort[$categorie->category_parent] = array();
 							}
-						}else {*/
-							// On récupére la catégorie parente
-							$parentcat = $category->category_parent;
-							$nomCatParent = get_cat_name($parentcat);
-
-							if($nomCatParent && $nomCatParent != 'Dossiers') {
-								$items[] = '<span class="category_principal">'.$nomCatParent.' &gt; </span><span class="category">'.$category->cat_name.'</span>';
+							$cat_sort[$categorie->category_parent][] = $categorie;
+						} else {
+							if(!isset($cat_sort[$categorie->term_id]))  {
+								$cat_sort[$categorie->term_id] = true;
 							}
-							// if($nomCatParent != 'Dossiers') {
-							// 	$items[] = '<span class="category_principal">'.$nomCatParent.' &gt; </span><span class="category">'.$category->cat_name.'</span>';
-							// }else {
-							// 	$items[] = '<span class="category">'.$category->cat_name.'</span>';
-							// }
-						}else {
-							$items[] = '<span class="category_principal">'.$nomCategorieTemp.'</span>';
 						}
-
-
 					}
-					echo implode(', ', $items);
+					foreach($cat_sort as $cat => $scats) {
+						$cat = get_term($cat,'category');
+						echo '<span class="category_principal">'.$cat->name.'</span>';
+						if(is_array($scats)) {
+							echo ' > <span class="category">';
+							foreach($scats as $cpt=>$scat)  {
+								if($cpt) {
+									echo ', ';
+								}
+								echo $scat->name;
+							}
+							echo '</span>';
+						}
+						echo '<br>';
+					}
 				?>
 			</div>
 			<?php } ?>
@@ -167,42 +154,7 @@
 		<section class='tags_posts'>
 			<!-- Encart afficher titres articles de la même catégorie -->
 			<?php
-			  //Obtenir la catégorie
-			  global $wp_query;
-			$cats = get_the_category();
-			  $postAuthor = $wp_query->post->post_author;
-			$tempQuery = $wp_query;
-			  $currentId = $post->ID;
-			 
-			// La catégorie du billet affiché
-			  $catlist = "";
-			  forEach( $cats as $c ) {
-			  if( $catlist != "" ) { $catlist .= ","; }
-			  $catlist .= $c->cat_ID;
-			  }
-			  $newQuery = "posts_per_page=100&cat=" . $catlist;
-			//Choisir un nombre qui sera le nombre moins un (10 pour afficher 9 titres)
-			  query_posts( $newQuery );
-			$categoryPosts = "";
-			  $count = 0;
-			if (have_posts()) {
-			  while (have_posts()) {
-			  the_post();
-			  if( $count<4 && $currentId!=$post->ID) {
-			  // maximum 100 titres mais vous pouvez adapter
-			  // On récupére la photo des articles similaires
-			  $imageURL = wp_get_attachment_url( get_post_thumbnail_id($post->ID));
-			  
-			  $count++;
-			  if($count == 1) {
-				$categoryPosts .= '<a href="' . get_permalink() . '" target="_blank"><div class="article_similaire1"><div class="image_article_similaire"><img src="'. $imageURL .'" /></div><div class="legende_article_similaire">' . the_title( "", "", false ) . '</div></div></a>';
-			  }else {
-				$categoryPosts .= '<a href="' . get_permalink() . '" target="_blank"><div class="article_similaire"><div class="image_article_similaire"><img src="'. $imageURL .'" /></div><div class="legende_article_similaire">' . the_title( "", "", false ) . '</div></div></a>';
-			  }
-			  }
-			  }
-			  }
-			  $wp_query = $tempQuery;
+				$related = get_related($post->ID);
 			  ?>
 			 
 			  <h2 class="title">Articles similaires :</h2>

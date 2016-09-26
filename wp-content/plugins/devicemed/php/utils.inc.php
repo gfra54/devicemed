@@ -11,7 +11,7 @@ function get_related($id,$all=true) {
 			}
 		}
 		$args=array(
-		'cat_in' => $cats,
+		'cat' => $cats,
 		'post__not_in' => array($id),
 		'posts_per_page'=>5,
 		'caller_get_posts'=>1
