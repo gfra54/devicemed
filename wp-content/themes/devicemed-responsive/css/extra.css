@@ -431,10 +431,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
 .entry-exergue p{
   margin-top: 0.5em;
 }
-.entry-exergue-bleu h2{
+.entry-exergue h2{
   color:white;
 }
-.entry-exergue-bleu {
+.entry-exergue {
   color:white;
   background:#0066b3
 }

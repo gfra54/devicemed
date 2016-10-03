@@ -382,43 +382,42 @@ ob_start();
 }
 
 
-function store_pub($post,$pubs=false) {
-	if(!$pubs) {
-		$pubs = get_transient('pubs');
-		$save=true;
-	} else {
-		$save=false;
-	}
+function store_pub($post) {
+	$pubs = get_transient('pubs');
 	if($post->post_status == 'trash') {
 		unset($pubs[$post->ID]);
 	} else {
 		if(!is_array($pubs)) {
 			$pubs = array();
 		}
-		$pub = pub_metrics($post);
-		$pub['espaces'] = wp_get_post_terms($post->ID,'emplacements');
-		$pub['date_debut'] = get_field('date_debut',$post->ID);
-		$pub['date_fin'] = get_field('date_fin',$post->ID);
-		$pub['pages'] = get_field('pages',$post->ID);
-		$pubs[$post->ID]=$pub;
+		$pubs[$post->ID]=prepare_store_pub($post);
 	}
-	if($save) {
-		set_transient('pubs',$pubs);
-	}
-	return $pubs;
+	return set_transient('pubs',$pubs);
 }
 
-function store_pubs() {
-	if(WP_DEBUG || !get_transient('pubs_stored')) {
+function prepare_store_pub($post) {
+	$pub = pub_metrics($post);
+	$pub['espaces'] = wp_get_post_terms($post->ID,'emplacements');
+	$pub['date_debut'] = get_field('date_debut',$post->ID);
+	$pub['date_fin'] = get_field('date_fin',$post->ID);
+	$pub['pages'] = get_field('pages',$post->ID);
+	return $pub;
+}
+
+
+function store_pubs($force=false) {
+	if(WP_DEBUG || !get_transient('pubs_stored') || $force) {
 		$args = array( 
 			'post_type'	=> 'pubs',
 			'post_status'=>array('draft','publish'),
-			'posts_per_page'=>1000
+			'posts_per_page'=>1000,
+			'order'=>'DESC',
+			'orderby'=>'date'
 		);
 		if($posts = new WP_Query($args)) {
 			$pubs = array();
 			foreach($posts->posts as $post) {
-				$pubs = store_pub($post,$pubs);
+				$pubs[$post->ID] = prepare_store_pub($post);
 			}
 			set_transient('pubs',$pubs);
 			set_transient('pubs_stored',true);
