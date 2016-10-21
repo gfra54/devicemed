@@ -60,13 +60,12 @@ get_header(); ?>
 						</b>
 						<hr>
 					<?php }?>
-				<?php if($terme) {?>
+				
 					<label for="terme">
 						<h3 class='title5'>Recherche rapide d'un fournisseur</h3>
 						<input id="terme" type="text" value="<?php echo htmlspecialchars($terme);?>">
 					<label>
-				<?php }?>
-				<hr>
+
 				<div class="liste-fournisseurs">
 					<div id='bloc_supplier_search'>
 						<div class="lettre-groupe">
