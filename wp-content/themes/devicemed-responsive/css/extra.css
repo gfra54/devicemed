@@ -496,7 +496,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
 }
 
 .entry-exergue p{
-  margin-top: 0.5em;
+  margin-bottom: 8px;
+}
+.entry-exergue p:last-child {
+  margin-bottom: 0;
 }
 .entry-exergue h2, .entry-exergue h3, .entry-exergue h4, .entry-exergue h5{
     color: #454545;
