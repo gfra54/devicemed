@@ -26,7 +26,7 @@ function exergue_add_editor_styles() {
 add_action( 'admin_init', 'exergue_add_editor_styles' );
 
 function exergue_add_admin_js(){
-    wp_enqueue_script( 'exergues-admin-actions', WP_EXERGUES_PLUGIN_URL . '/js/admin-actions.js' );
+    wp_enqueue_script( 'exergues-admin-actions', WP_EXERGUES_PLUGIN_URL . '/js/admin-actions.js?'.filemtime(WP_EXERGUES_PLUGIN_DIR.'/js/admin-actions.js') );
 }
 add_action( 'admin_enqueue_scripts', 'exergue_add_admin_js' );
 
