@@ -102,11 +102,23 @@ a.link:hover {
   overflow: hidden;
 }
 .case-fournisseur-logo {
-  width: 25%;
-  padding-bottom: 25%;
+  width: 20%;
+  padding-bottom: 20%;
   float: left;
   position: relative;
   background: #0066b3;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  margin:2.5%;
+  overflow: hidden;
+  -webkit-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1);
+  box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1);
+}
+.case-fournisseur-logo:hover {
+  -webkit-box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.3);
+  box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.3);
 }
 .case-fournisseur-logo A{
   display: block;
@@ -128,13 +140,28 @@ a.link:hover {
 }
 
 .case-fournisseur-logo A:hover {
-  opacity: 0.8;
+  /*opacity: 0.8;*/
 }
 
 .case-fournisseur-logo A[title="Préiso"]{
   background-size: auto 50% ;
 }
 
+.case-fournisseur-texte {
+  display: table;
+  height: 100%;
+  width: 100%;
+  font-family: 'opensans-condbold';
+  color: #0066b3;
+  font-size: 25px;
+}
+
+
+.case-fournisseur-texte span{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
 
 section.videos {
   overflow: hidden;
@@ -336,8 +363,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
 }
 .cat-lien{
   font-size: 12px;
-  
+
 }
+
 .liste-categorie .cat-name:hover{
   color:#555;
   text-decoration: underline;
