@@ -61,6 +61,7 @@ get_header(); ?>
 					<?php }?>
 				<div class="liste-fournisseurs">
 					<div id='bloc_supplier_search'>
+						<div class="lettre-groupe">
 					<?php 
 						$lettre_prec=false;
 						foreach($fournisseurs as $fournisseur) { 
@@ -70,6 +71,8 @@ get_header(); ?>
 							}
 							?>
 								<?php if($lettre!=$lettre_prec) {?>
+									</div>
+									<div class="lettre-groupe">
 									<div class="lettre-fournisseur"><?php echo strtoupper($lettre);?></div>
 								<?php }?>
 								<?php if(get_field('premium',$fournisseur['ID'])) {?>
@@ -80,6 +83,7 @@ get_header(); ?>
 
 					
 					<?php $lettre_prec = $lettre;}?>
+						</div>
 					</div>
 					<?php if($total>1) {?>
 						<hr><b>

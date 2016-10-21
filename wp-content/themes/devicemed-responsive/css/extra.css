@@ -415,6 +415,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
   text-decoration: underline;
 }
 
+.lettre-groupe{
+  -webkit-column-break-inside: avoid; /* Chrome, Safari */
+  page-break-inside: avoid;           /* Theoretically FF 20+ */
+  break-inside: avoid-column;         /* IE 11 */  
+}
 .lettre-fournisseur {
   font-size: 30px;
   color:black;

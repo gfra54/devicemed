@@ -70,7 +70,7 @@ get_header(); ?>
 					</div>
 					<p>&nbsp;</p>
 				<?php }
-				if($cpt) {?>
+				if($cpt && !$recherche_fournisseurs) {?>
 					<p></p><hr>
 					<h3>Résultat de la recherche dans tous nos articles</h3>
 				<?php 
