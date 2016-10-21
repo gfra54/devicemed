@@ -219,7 +219,7 @@ function fournisseurs_filtre_categories($categories,$niveau=1,$checkboxes=false,
 		if($souscat && $niveau == 1) {
 			$html.='<li class="cat-name">'.$categorie['name'].'</li>';
 		} else if($souscat){
-			$html.='<li><b>'.$categorie['name'].'</b></li>';
+			$html.='<li><b><a href="'.$categorie['url'].'">'.$categorie['name'].'</a></b></li>';
 		} else if($checkboxes){
 			$html.='<li><label><input '.(empty($selected) || in_array($categorie['term_id'], $selected)===false ? '' : 'checked').' name="categories[]" value="'.$categorie['term_id'].'" type="checkbox"> '.$categorie['name'].'</label></li>';
 		} else {
@@ -230,6 +230,7 @@ function fournisseurs_filtre_categories($categories,$niveau=1,$checkboxes=false,
 			if($niveau == 1) {
 				$html.='<li class="cat-content">';
 				$html.='<div class="cat-content-in">';
+				$html.='<ul class="liste-categorie "><li><a href="'.$categorie['url'].'" class="cat-lien">Voir tous les fournisseurs pour &laquo; <b>'.$categorie['name'].'</b> &raquo;</a></li></ul>';
 				$html.=$sub;
 				$html.='</div>';
 				$html.='</li>';

@@ -334,6 +334,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
   font-weight: bold;
   cursor: pointer;
 }
+.cat-lien{
+  font-size: 12px;
+  
+}
 .liste-categorie .cat-name:hover{
   color:#555;
   text-decoration: underline;
