@@ -21,7 +21,7 @@ list(,$tmp) = explode('wp-content',str_replace('\\','/',WP_EXERGUES_PLUGIN_DIR))
 define( 'WP_EXERGUES_PLUGIN_URL', site_url().'/wp-content'.$tmp );
 
 function exergue_add_editor_styles() {
-    add_editor_style( WP_EXERGUES_PLUGIN_URL.'/css/editor-style.css');
+    add_editor_style( WP_EXERGUES_PLUGIN_URL.'/css/editor-style.css?'.filemtime(WP_EXERGUES_PLUGIN_DIR.'/css/editor-style.css'));
 }
 add_action( 'admin_init', 'exergue_add_editor_styles' );
 
