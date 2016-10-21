@@ -68,6 +68,7 @@ get_header(); ?>
 							</a></div>
 					<?php }?>
 					</div>
+					
 					<a href="/fournisseurs-liste?terme=<?php echo urlencode($s);?>">Voir tous les fournisseurs</a> &raquo;
 					<p>&nbsp;</p>
 				<?php }
