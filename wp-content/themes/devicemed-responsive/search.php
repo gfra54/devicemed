@@ -58,7 +58,7 @@ get_header(); ?>
 					<h3>Résultat de la recherche dans notre répertoire des fournisseurs</h3>
 					<div class="mosaique-fournisseurs" id='bloc_supplier_search'>
 					<?php foreach($fournisseurs as $fournisseur) { $fournisseur = fournisseur_enrichir($fournisseur);?>
-						<div class="case-fournisseur-logo"><a href="<?php echo $fournisseur['permalink'];?>" style="background-image: url(<?php echo $fournisseur['logo'];?>)" title="<?php echo $fournisseur['nom'];?>">
+						<div class="case-fournisseur-logo <?php echo $fournisseur['premium'] ? 'partenaire' : '';?>"><a href="<?php echo $fournisseur['permalink'];?>" style="background-image: url(<?php echo $fournisseur['logo'];?>)" title="<?php echo $fournisseur['nom'];?>">
 
 							<?php if($fournisseur['logo']) {?>
 								<img src="<?php echo $fournisseur['logo'];?>" alt="Logo <?php echo $fournisseur['nom'];?>">

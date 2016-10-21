@@ -101,6 +101,8 @@ a.link:hover {
 .mosaique-fournisseurs {
   overflow: hidden;
 }
+
+
 .case-fournisseur-logo {
   width: 20%;
   padding-bottom: 20%;
@@ -115,6 +117,22 @@ a.link:hover {
   -moz-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1);
   box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1);
 }
+.case-fournisseur-logo.partenaire:before {
+    content: 'partenaire';
+    display: block;
+    position: absolute;
+    top: 22px;
+    left: -102px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    background: red;
+    color: white;
+    z-index: 1;
+    padding: 2px 100px;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
 .case-fournisseur-logo:hover {
   -webkit-box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.3);
   -moz-box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.3);
