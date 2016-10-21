@@ -17,6 +17,7 @@
 	extrajs('nl');
 	
 	extrajs('bottom');
+	extrajs('fournisseur');
 
 ?>
 </body>

@@ -438,6 +438,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
   page-break-inside: avoid;           /* Theoretically FF 20+ */
   break-inside: avoid-column;         /* IE 11 */  
 }
+.lettre-groupe.hide,.lettre-groupe .hide{
+  display: none;
+}
 .lettre-fournisseur {
   font-size: 30px;
   color:black;
@@ -507,4 +510,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
     margin-right: 0em;
     margin-top: 0em;
     float: right;
+}
+#terme {
+  background: 50% 50% url(../images/search-icon.png) no-repeat;
+  background-color: #ddd;
+  border: 10px solid transparent;
+  height: 30px;
+  background-position: right center;
+  padding-right: 27px;
 }
