@@ -151,16 +151,28 @@
 			}
 		?>
 		</section>
-		<section class='tags_posts'>
+		<section class="relateds">
 			<!-- Encart afficher titres articles de la même catégorie -->
 			<?php
-				$related = get_related($post->ID);
+				$relateds = get_related($post->ID);
 			  ?>
 			 
-			  <h2 class="title">Articles similaires :</h2>
-			<ul class="widget-container">
-			<?php echo $categoryPosts; ?>
-			</ul>
+			  <h2 class="title">A lire aussi</h2>
+			  <?php foreach($relateds as $related) {
+			  	list($image) = wp_get_attachment_image_src(get_post_thumbnail_id($related->ID),'medium');
+			  	?>
+			  <a class="related-article" href="<?php echo get_the_permalink($related->ID);?>" style="background-image:url(<?php echo $image;?>)">
+			  	<span class="related-titre"><?php 
+			  	$titre = $related->post_title;
+			  	$pre = wp_trim_words( $titre,8, '' );
+			  	echo $pre;
+			  	if(strlen($titre)>strlen($pre)) {
+			  		echo '<span class="ellipsis">&hellip;</span>';
+			  		echo '<span class="reste">'.str_replace($pre,'',$titre).'</span>';
+			  	}
+			  	?></span>
+			  </a>
+			  <?php }?>
 			<!-- fin encart afficher titres articles de la même catégorie en cours -->
 		</section>
 	<?php } ?>

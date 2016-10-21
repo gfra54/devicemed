@@ -1,7 +1,7 @@
 <?php
 
 
-function get_related($id,$all=true) {
+function get_related($id,$qte=3,$all=true) {
 	$categories = wp_get_post_terms($id,'category');
 	if ($categories) {
 		$cats = array();
@@ -13,14 +13,16 @@ function get_related($id,$all=true) {
 		$args=array(
 		'cat' => $cats,
 		'post__not_in' => array($id),
-		'posts_per_page'=>5,
-		'caller_get_posts'=>1
+		'posts_per_page'=>$qte,
+		'caller_get_posts'=>1,
+		'order'=>'DESC',
+		'orderby'=>'date'
 		);
 		$my_query = new WP_Query($args);
 		if( $my_query->have_posts() ) {
-			me($my_query->posts);
+			wp_reset_query();
+			return $my_query->posts;
 		}
-		wp_reset_query();
 	}
 }
 
