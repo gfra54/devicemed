@@ -409,32 +409,47 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
 
 
 .entry-exergue {
+    border-radius:5px;
     float: left;
     width: 40%;
-    background: #ddd;
-    padding: 0.5em;
-    margin: 1.2em;
-    margin-left: -0.5em;
+    background: #bad4ef;
+    margin: 8px 11px;
+    margin-left: 0em;
     margin-top: 0;
-    color: #333;
+    color: black;
     font-size: 0.8em;
     line-height: 1.3em;
     background-size: 300%;
     background-position: top center;
 }
+.exergue-texte {
+  padding: 18px;
+}
+.exergue-texte p{
+  margin-bottom: 0;
+}
 .entry-exergue h2{
   color: #0066b3;
   font-family: 'opensans-condbold';
   margin: 0;
+  border-bottom: 2px solid white;
+  padding-bottom: 11px;
+  margin-bottom: 11px;
 }
 
 .entry-exergue p{
   margin-top: 0.5em;
 }
 .entry-exergue h2{
-  color:white;
+    color: #454545;
 }
-.entry-exergue {
-  color:white;
-  background:#0066b3
+.entry-exergue.exergue-full{
+  margin: 10px 0;
+  float: none;
+}
+.entry-exergue.exergue-droite{
+    margin: 8px 11px;
+    margin-right: 0em;
+    margin-top: 0em;
+    float: right;
 }

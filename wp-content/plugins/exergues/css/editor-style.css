@@ -39,3 +39,8 @@
 	margin-bottom: 0.5em;
 }
 
+.entry-exergue.exergue-droite{
+	float:right;
+    margin: 0 0 15px 15px;
+}
+

@@ -16,10 +16,15 @@
 
             // Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceExample');
             ed.addCommand('mceSPQ', function(){
-               _txt = 'Donec rutrum congue leo eget malesuada. Donec rutrum congue leo eget malesuada. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Proin eget tortor risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum porta. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Sed porttitor lectus nibh.';
+               _txt = 'Contenu de l\'encadré.';
                 _txt = '<div class="exergue-texte"><h2>Titre de l\'encadré</h2><p>'+_txt+'</p></div>';
                 if(_txt) {
-                    ed.execCommand('mceInsertContent', false, '<div class="entry-exergue ">'+ _txt +'</div>');
+                    _taille = prompt('Quelle largeur définir pour cet encadré.\nVous pouvez entrer une valeur en pourcentage de la largeur du contenu (50%, 20%, 100%)','40%');
+                    _alignement=true;
+                    if(_taille != '100%'){
+                        _alignement = confirm('Cliquez sur OK pour aligner le bloc à gauche. Sinon, le bloc sera aligné à droite');
+                    }
+                    ed.execCommand('mceInsertContent', false, '<div class="entry-exergue '+(_alignement?'' : 'exergue-droite')+' '+(_taille == '100%' ? 'exergue-full' : '')+'" style="width:'+_taille+'">'+ _txt +'</div>');
                     ed.execCommand('mceRepaint');
                 }
             });
