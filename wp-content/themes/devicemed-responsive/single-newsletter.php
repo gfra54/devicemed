@@ -189,7 +189,7 @@ if($arts = new WP_Query($args)) {
                     "text-decoration:none;" href=
                     "<?php echo $article['url'];?>"
                     target="_blank"><span style="color:#0066b3;">Lire la
-                    suite...</span></a></div>
+                    suite.</span></a></div>
                   </td>
                 </tr>
         <?php if($cpt ==2 && $banners['dans_article']) {;?>
