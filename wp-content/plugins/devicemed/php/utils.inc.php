@@ -1,5 +1,35 @@
 <?php
 
+function array_sort_field($tab,$field,$inv=false,$field2=false,$inv2=false) {
+	if($field2){
+		$t1=$t2=array();
+		foreach ($tab as $key => $row) {
+		    $t1[$key]  = $row[$field];
+		    $t2[$key] = $row[$field2];
+		}
+		
+		array_multisort($t1, ($inv ? SORT_DESC : SORT_ASC), $t2, ($inv2 ? SORT_DESC : SORT_ASC), $tab);	
+		return $tab;
+	} else {
+		$sort=array();
+		$sort_flag=SORT_REGULAR;
+		foreach($tab as $k=>$v) {
+			if(!is_numeric($v[$field])){
+				$sort_flag = SORT_STRING;
+			}
+			$sort[$k] = strtolower($v[$field]);
+		}
+		asort($sort,$sort_flag);
+		if(!$inv) {
+			$sort = array_reverse($sort,true);
+		}
+		$out = array();
+		foreach($sort as $k=>$v) {
+			$out[$k] = $tab[$k];
+		}
+		return $out;
+	}
+}
 
 function get_related($id,$qte=3,$all=true) {
 	$categories = wp_get_post_terms($id,'category');

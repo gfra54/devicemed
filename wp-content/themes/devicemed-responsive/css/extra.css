@@ -439,12 +439,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
   background:#0066b3
 }
 
-.relateds {
+.page-single .column-main section.relateds {
+  overflow: hidden;
+  padding-bottom: 20px;
+}
+.related-articles {
   overflow: hidden;
 }
-.related-article {
+.related-articles .related-article {
   float: left;
-  width:calc(33% - 15px);
+  width:calc(33% - 5px);
   margin-left: 10px;
   padding-bottom: 40%;
   position: relative;
@@ -480,7 +484,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
 .related-article:hover .reste {
   display: inline;
 }
-.related-article:nth_child(1) {
+.related-articles .related-article:nth-child(1) {
   margin-left: 0;
 }
 

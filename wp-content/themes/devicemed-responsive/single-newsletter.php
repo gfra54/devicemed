@@ -352,23 +352,17 @@ $GLOBALS['bloc_partenaires']=false;
 function bloc_partenaires() {
   global $afficher_le_bloc_partenaire;
   if($afficher_le_bloc_partenaire && !$GLOBALS['bloc_partenaires']) {
-    $sqlFournisseurs = "SELECT * FROM wordpress_dm_suppliers WHERE supplier_premium=1 AND supplier_status=1 ORDER BY supplier_name ASC";
-    $resultFournisseurs = mysql_query($sqlFournisseurs);
-    $nbFournisseurs = mysql_num_rows($resultFournisseurs);
-      
-    $fournisseurs = array();
-    while($rowFournisseurs = mysql_fetch_assoc($resultFournisseurs)) {
-      $nom = wp_trim_words($rowFournisseurs['supplier_name'],2,'');
+    $fournisseurs = get_fournisseurs(array('premium'=>true));
+    foreach($fournisseurs as $fournisseur) {
+      $nom = wp_trim_words($fournisseur['post_title'],2,'');
       $nom = str_replace('Composites','Comp.',$nom);
       $nom = str_replace('Medical','Med.',$nom);
       $nom = str_replace('Medical','Med.',$nom);
       $nom = str_replace('Balzers','',$nom);
       $nom = str_replace('Technologies','Tech.',$nom);
-      $nomFournisseur = DM_Wordpress_Suppliers_Model::string_sanitize_nicename($rowFournisseurs['supplier_name']);
-      $fournisseurs[$rowFournisseurs['ID']]=array('nom'=>$nom,'nomFournisseur'=>$nomFournisseur);
+      $data_fournisseurs[$fournisseur['ID']]=array('nom'=>$nom,'url'=>$fournisseur['permalink']);
     }
 
-    
     $GLOBALS['bloc_partenaires']=true;
     ?>
     <table width="127" bgcolor="#0066b3" cellpadding="0" cellspacing="10">
@@ -379,11 +373,11 @@ function bloc_partenaires() {
     </font>
     </td>
     </tr>
-    <?php $cpt=0;foreach($fournisseurs as $id=>$data) {?>
+    <?php $cpt=0;foreach($data_fournisseurs as $id=>$data) {?>
       <tr>
       <td bgcolor="white" align=center>    
         <table width="100%" cellpadding="3"><td color=white align=center>
-        <a style="text-decoration:none;" href="http://www.devicemed.fr/suppliers/<?php echo $data['nomFournisseur'];?>/<?php echo $id;?>">
+        <a style="text-decoration:none;" href="<?php echo $data['url'];?>">
           <font face="sans-serif"  color="#0066b3" style="font-size:11px;text-decoration:none;">
             <b style="text-decoration:none;">
               <?php echo $data['nom'];?>

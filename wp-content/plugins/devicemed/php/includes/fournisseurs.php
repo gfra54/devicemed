@@ -213,6 +213,14 @@ function fournisseurs_filtre_categories($categories,$niveau=1,$checkboxes=false,
 	}
 	$demi = ceil(count($categories)/2);
 	$cpt=0;
+	foreach($categories as $id_categorie => $categorie) {
+		$categories[$id_categorie]['categories'] = array_sort_field($categorie['categories'],'slug',true);
+		foreach($categorie['categories'] as $id_sous_categorie => $sous_categorie){
+			$categories[$id_categorie][$id_sous_categorie]['categories'] = array_sort_field($sous_categorie['categories'],'slug',true);
+		}
+	}
+	$categories = array_sort_field($categories,'slug',true);
+	// me($categories);
 	foreach($categories as $categorie){
 		$souscat = !empty($categorie['categories']);
 		$html.='<ul class="liste-categorie '.($souscat && $niveau == 1? 'souscat closed' : '').'">';
@@ -324,36 +332,73 @@ function fournisseur_categories($fournisseur=false) {
 			}
 		}
 		// me($out);*/
+
+
 	} else
 	if($cats = wp_get_post_terms($fournisseur['ID'],'categorie')) {
+
+		$cats_tmp=array();
 		foreach ($cats as $cat) {
 			if($cat->parent) {
-				if(!isset($out[$cat->parent])) {
-					$parent = get_term($cat->parent,'categorie');
-					if($parent->parent) {
-						$parent2 = get_term($parent->parent,'categorie');
-						$tmp = array('nom'=>$parent2->name,'url'=>get_term_link($parent2),'niveau'=>'1');
-						$out[$parent->parent]=$tmp;
-					}
-					$tmp = array('nom'=>$parent->name,'url'=>get_term_link($parent),'categories'=>array(),'niveau'=>'2');
-					$out[$cat->parent]=$tmp;
+				if(!isset($cats_tmp[$cat->parent])) {
+					$parent = get_object_vars(get_term($cat->parent,'categorie'))+array('categories'=>array());
+					$cats_tmp[$cat->parent] = $parent;
 				}
-				$out[$cat->parent]['categories'][]=array('nom'=>$cat->name,'url'=>get_term_link($cat),'id'=>$cat->term_id);
+				if($parent['parent']) {
+					if(!isset($cats_tmp[$parent['parent']])) {
+						$cats_tmp[$parent['parent']] = get_object_vars(get_term($parent['parent'],'categorie'))+array('categories'=>array());
+					}
+				}
+			}
+			if(!isset($cats_tmp[$cat->ID])) {
+				$cats_tmp[$cat->term_id] = get_object_vars($cat)+array('categories'=>array());
+			}
+		}
+		foreach($cats_tmp as $cat) {
+			if($cat['parent']) {
+				$cats_tmp[$cat['parent']]['categories'][] = $cat['term_id'];
+			}
+		}
+		foreach($cats_tmp as $cat) {
+			$tmp = array();
+			foreach($cat['categories'] as $idcat) {
+				$tmp[$idcat]=$cats_tmp[$idcat];
+			}
+			$cat['categories']=$tmp;
+			$cats_tmp[$cat['term_id']] = $cat;
+		}
+
+		foreach($cats_tmp as $cat) {
+			if(!$cat['parent']){
+				$out[$cat['term_id']]=fournisseur_categorie_simple($cat,$cats_tmp);
 			}
 		}
 	}
-	$sort_term = array();
-	foreach($out as $term_id => $term) {
-		$sort_term[$term_id] = $term['nom'];
-	}
-	asort($sort_term);
 
-	$final = array();
-	foreach($sort_term as $term_id => $term) {
-		$final[$term_id] = $out[$term_id];
-	}
+	$out = array_sort_field($out,'nom',true);
+	return $out;
+}
 
-	return $final;
+
+function fournisseur_categorie_simple($cat,$cats,$niveau=1) {
+	$cat_tmp = array(
+		'nom'=>$cat['name'],
+		'url'=>get_term_link($cat['term_id'],'categorie'),
+		'id'=>$cat['term_id'],
+		'niveau'=>$niveau,
+		'categories'=>array()
+	);
+
+	foreach($cat['categories'] as $sous_cat) {
+		if(is_numeric($sous_cat)) {
+			$sous_cat = $cats[$sous_cat];
+		}
+		$cat_tmp['categories'][$sous_cat['term_id']] = fournisseur_categorie_simple($sous_cat,$cats,$niveau+1);
+	}
+	if(count($cat_tmp['categories']) == 0){
+		unset($cat_tmp['categories']);
+	}
+	return $cat_tmp;
 }
 function fournisseur_sections($fournisseur) {
 	$page = check('page');

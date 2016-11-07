@@ -2,7 +2,6 @@
 $GLOBALS['NORENDER']=true;
 get_header(); 
 
-
 ?>
 <div class="row column-content page-members">
 	<div class="col-md-9 col-sm-8 column-main">
@@ -45,7 +44,7 @@ get_header();
 							}
 						}
 					}
-					$newsletters = array_reverse(glob('/home/devicemedr/www/wp-content/themes/devicemed-responsive/newsletter/newsletter-*.php'));
+					$newsletters = array_reverse(glob('wp-content/themes/devicemed-responsive/newsletter/newsletter-*.php'));
 
 					foreach($newsletters as $newsletter) { 
 							$url = str_replace('/home/devicemedr/www/','/',$newsletter);

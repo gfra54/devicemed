@@ -1,13 +1,16 @@
 <?php if(count($fournisseur['categories'])) {?>
 <section class="products read-more">
 	<?php foreach($fournisseur['categories'] as $categorie){?>
-		<?php if($categorie['niveau'] == 1) {?>
-			<h2><a href="<?php echo $categorie['url'];?>"><?php echo $categorie['nom'];?></a></h2>
-		<?php } else {?>
-			<h4><a href="<?php echo $categorie['url'];?>"><?php echo $categorie['nom'];?></a></h4>
-		<?php }?>
+		<h2><a href="<?php echo $categorie['url'];?>"><?php echo $categorie['nom'];?></a></h2>
 		<?php foreach($categorie['categories'] as $sous_categorie) {?>
-			<a href="<?php echo $sous_categorie['url'];?>"><?php echo $sous_categorie['nom'];?></a><br>
+			<?php if($sous_categorie['categories']){?>
+				<b><a href="<?php echo $sous_categorie['url'];?>"><?php echo $sous_categorie['nom'];?></a></b><br>
+				<?php foreach($sous_categorie['categories'] as $sous_sous_categorie) {?>
+					&nbsp; &nbsp; &nbsp; <a href="<?php echo $sous_sous_categorie['url'];?>"><?php echo $sous_sous_categorie['nom'];?></a><br>
+				<?php }?>
+			<?php } else {?>
+				<a href="<?php echo $sous_categorie['url'];?>"><?php echo $sous_categorie['nom'];?></a><br>
+			<?php }?>
 		<?php }?>
 	<?php }?>
 
