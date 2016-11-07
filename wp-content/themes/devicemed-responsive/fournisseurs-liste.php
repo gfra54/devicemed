@@ -4,6 +4,7 @@ Template Name: fournisseurs-liste
 */
 $initiale = check('initiale');
 $terme = trim(check('terme'));
+$voir = trim(check('voir'));
 if($initiale) {
 	$params = array('initiale'=>$initiale);
 } else {

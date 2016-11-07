@@ -16,7 +16,7 @@ function check_current_config(){
 
     $GLOBALS['wpdb']->get_results('UPDATE '.$GLOBALS['wpdb']->prefix.'posts SET guid = REPLACE(guid,"'.$old.'","'.$siteurl.'")');
 
-  me('update terminated');
+  me('update terminated : '.get_option('siteurl'));
   }
 }
 add_action( 'init', 'check_current_config' );

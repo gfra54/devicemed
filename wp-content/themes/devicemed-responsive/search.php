@@ -69,7 +69,7 @@ get_header(); ?>
 					<?php }?>
 					</div>
 					
-					<a href="/fournisseurs-liste?terme=<?php echo urlencode($s);?>">Voir tous les fournisseurs</a> &raquo;
+					<a href="/fournisseurs-liste">Voir tous les fournisseurs</a> &raquo;
 					<p>&nbsp;</p>
 				<?php }
 				if($cpt && !$recherche_fournisseurs) {?>

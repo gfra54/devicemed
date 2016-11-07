@@ -359,6 +359,7 @@ function bloc_partenaires() {
     $fournisseurs = array();
     while($rowFournisseurs = mysql_fetch_assoc($resultFournisseurs)) {
       $nom = wp_trim_words($rowFournisseurs['supplier_name'],2,'');
+      if(strstr($nom,'Heptal') !== false) continue;
       $nom = str_replace('Composites','Comp.',$nom);
       $nom = str_replace('Medical','Med.',$nom);
       $nom = str_replace('Medical','Med.',$nom);

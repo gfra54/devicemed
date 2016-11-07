@@ -1,5 +1,4 @@
 $(document).ready(function(){
-	console.log(1)
 	if($('#terme').val()) {
 		recherche_rapide($('#terme').val());
 	}
