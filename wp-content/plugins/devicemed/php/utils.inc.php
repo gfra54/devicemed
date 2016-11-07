@@ -730,7 +730,7 @@ function sinon(){
 * @return ''
 * 
 */
-function couper($texte, $taille=50, $suite = ' ...') {
+function couper($texte, $taille=50, $suite = '...') {
 	if (!($length=strlen($texte)) OR $taille <= 0) return '';
 	$offset = 400 + 2*$taille;
 	while ($offset<$length

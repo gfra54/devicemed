@@ -16,10 +16,18 @@
 
             // Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceExample');
             ed.addCommand('mceSPQ', function(){
-               _txt = 'Donec rutrum congue leo eget malesuada. Donec rutrum congue leo eget malesuada. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Proin eget tortor risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum porta. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Sed porttitor lectus nibh.';
+               _txt = 'Contenu de l\'encadré.';
                 _txt = '<div class="exergue-texte"><h2>Titre de l\'encadré</h2><p>'+_txt+'</p></div>';
                 if(_txt) {
-                    ed.execCommand('mceInsertContent', false, '<div class="entry-exergue ">'+ _txt +'</div>');
+                    _taille = prompt('Quelle largeur définir pour cet encadré.\nVous pouvez entrer une valeur en pourcentage de la largeur du contenu (50%, 20%, 100%), ou bien en pixels (50px, 150px, etc.).\nPréférez les pourcentages. ','40%');
+                    if(!_taille) {
+                        return;
+                    }
+                    _alignement_droite=false;
+                    if(_taille != '100%'){
+                      _alignement_droite = confirm('Voulez-vous aligner le bloc à droite ?');
+                    }
+                    ed.execCommand('mceInsertContent', false, '<div class="entry-exergue '+(!_alignement_droite?'' : 'exergue-droite')+' '+(_taille == '100%' ? 'exergue-full' : '')+'" style="width:'+_taille+'">'+ _txt +'</div>');
                     ed.execCommand('mceRepaint');
                 }
             });
@@ -66,3 +74,31 @@
     // Register plugin
     tinymce.PluginManager.add('spq', tinymce.plugins.SPQPlugin);
 })();
+
+    function exergue_edit(_obj){
+            _exergue = jQuery(_obj,jQuery('#content_ifr'));
+            _taille = prompt('Quelle largeur définir pour cet encadré.\nVous pouvez entrer une valeur en pourcentage de la largeur du contenu (50%, 20%, 100%), ou bien en pixels (50px, 150px, etc.).\nPréférez les pourcentages. ',_exergue.attr('style').replace('width:','').replace(';','').replace(/ /g,''));
+            if(!_taille) {
+                return;
+            }
+            if(_taille.indexOf('%')==-1){
+                _taille+='%';
+            }
+            _exergue.attr('style','width:'+_taille);
+            _exergue.attr('data-mce-style','width:'+_taille);
+            
+            if(_taille != '100%'){
+                _exergue.removeClass('exergue-full');
+            } else {
+                _exergue.addClass('exergue-full');
+            }
+    }
+
+function exergue_align(_obj) {
+        _alignement_droite=false;
+        _exergue = jQuery(_obj,jQuery('#content_ifr'));
+        _taille = _exergue.attr('style').replace('width:','').replace(';','').replace(/ /g,'');
+        if(_taille != '100%'){
+            _exergue.toggleClass('exergue-droite');
+        }
+}

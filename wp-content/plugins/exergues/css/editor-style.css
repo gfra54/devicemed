@@ -5,8 +5,10 @@
     background: #ccc;
     width: 40%;
     margin: 0 15px 15px 0;
-    padding: 5px;
     position: relative;
+}
+.exergue-texte{
+	padding: 5px;
 }
 .exergue-delete{
 	display: block;
@@ -25,6 +27,50 @@
 	font-size: 16px;
 	line-height: 16px;
 }
+.exergue-edit{
+	display: block;
+	width:16px;
+	height: 16px;
+	color:red;
+	top: 0;
+	right: 0;
+	position: absolute;
+	cursor: pointer;
+	background: white;
+}
+.exergue-edit:before{
+	display: block;
+	content:'\270E';
+	font-size: 16px;
+	line-height: 16px;
+}
+.exergue-align{
+	display: block;
+	width:16px;
+	height: 16px;
+	color:red;
+	right: 0;
+	bottom: 0;
+	position: absolute;
+	cursor: pointer;
+	background: white;
+}
+.exergue-align:before{
+	display: block;
+	content:'\21D2';
+	font-size: 16px;
+	line-height: 16px;
+}
+.entry-exergue.exergue-droite .exergue-align{
+	right: auto;
+	left:0;
+}
+.entry-exergue.exergue-droite .exergue-align:before{
+	content:'\21D0';
+}
+.entry-exergue.exergue-full .exergue-align{
+	display: none;
+}
 
 .exergue-auteur{
 	display: block;
@@ -38,4 +84,15 @@
 	margin: 0;
 	margin-bottom: 0.5em;
 }
+
+.entry-exergue.exergue-droite{
+	float:right;
+    margin: 0 0 15px 15px;
+}
+
+.entry-exergue.exergue-full{
+	float:none;
+	margin: 10px 0;
+}
+
 

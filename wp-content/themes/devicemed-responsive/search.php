@@ -44,27 +44,45 @@ get_header(); ?>
 				<?php 
 				// Start the loop.
 				$fournisseurs=array();
+				$cpt=0;
 				while ( have_posts() ) : the_post(); 
 					if(get_post_type() == 'fournisseur') {
 						$fournisseurs[] = get_post();
-					} else if(!$recherche_fournisseurs){
-					/*
-					 * Run the loop for the search to output the results.
-					 * If you want to overload this in a child theme then include a file
-					 * called content-search.php and that will be used instead.
-					 */
-						get_template_part( 'content', 'search' );
+					} else {
+						$cpt++;
 					}
 				// End the loop.
 				endwhile;
 				if(count($fournisseurs)) {?>
 					<p></p><hr>
-					<h3>Fournisseurs correspondants dans notre répertoire</h3>
-					<?php foreach($fournisseurs as $fournisseur) {?>
-						<p><a href="<?php echo get_permalink($fournisseur->ID);?>"><?php echo $fournisseur->post_title;?></a></p>
-					<?php }?>
-				<?php }
+					<h3>Résultat de la recherche dans notre répertoire des fournisseurs</h3>
+					<div class="mosaique-fournisseurs" id='bloc_supplier_search'>
+					<?php foreach($fournisseurs as $fournisseur) { $fournisseur = fournisseur_enrichir($fournisseur);?>
+						<div class="case-fournisseur-logo <?php echo $fournisseur['premium'] ? 'partenaire' : '';?>"><a href="<?php echo $fournisseur['permalink'];?>" style="background-image: url(<?php echo $fournisseur['logo'];?>)" title="<?php echo $fournisseur['nom'];?>">
 
+							<?php if($fournisseur['logo']) {?>
+								<img src="<?php echo $fournisseur['logo'];?>" alt="Logo <?php echo $fournisseur['nom'];?>">
+							<?php } else {?>
+								<div class="case-fournisseur-texte"><span><?php echo $fournisseur['nom'];?></span></div>
+							<?php } ?>
+							</a></div>
+					<?php }?>
+					</div>
+					
+					<a href="/fournisseurs-liste">Voir tous les fournisseurs</a> &raquo;
+					<p>&nbsp;</p>
+				<?php }
+				if($cpt && !$recherche_fournisseurs) {?>
+					<p></p><hr>
+					<h3>Résultat de la recherche dans tous nos articles</h3>
+				<?php 
+
+					while ( have_posts() ) : the_post(); 
+						if(get_post_type() != 'fournisseur') {
+							get_template_part( 'content', 'search' );
+						}
+					endwhile;
+				}
 				if(!$recherche_fournisseurs) {
 				// Previous/next page navigation.
 				the_posts_pagination( array(
