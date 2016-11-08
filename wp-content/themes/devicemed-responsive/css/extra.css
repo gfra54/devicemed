@@ -596,3 +596,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
   background-position: right center;
   padding-right: 27px;
 }
+body .container .article .content a {
+  color:#0066b3;
+  text-decoration: underline;
+}
+body .container .article .content a:hover {
+  text-decoration: none;
+}
