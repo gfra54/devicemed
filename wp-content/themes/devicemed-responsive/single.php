@@ -1,5 +1,12 @@
 <?php 
 	get_header(); ?>
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@devicemedfr">
+	<meta name="twitter:creator" content="@devicemedfr">
+	<meta name="twitter:description" content="">
+	<meta name="twitter:title" content="Guus Hiddink en dix dates">
+
 	<div class="row column-content page-single">
 		<div class="col-md-9 col-sm-8 column-main">
 
@@ -99,21 +106,26 @@
 	</section>
 
 	<?php if(strstr($_SERVER['REQUEST_URI'], 3671)===false) { ?>
-		<section class='tags_posts'>
+		
 		<?php
 			$posttags = get_the_tags();
 			if ( $posttags ) {
-				$prefix = '<div class="titre_mot_cle">Mots-clés :</div> ';
+				$tags='';
 				foreach( $posttags as $tag ) {
 
 					if(strtolower(substr($tag->name,0,3)) != 'nl-') {
-						echo $prefix . '<div class="mot_cle"><a href="' . get_tag_link( $tag->term_id ) . '" target="_blank">' . $tag->name . '</a></div>';
-						$prefix = ' ';
+						if($tag->name != 'reseaux-sociaux') {
+							$tags.=$prefix . '<div class="mot_cle"><a href="' . get_tag_link( $tag->term_id ) . '" target="_blank">' . $tag->name . '</a></div>';
+						}
 					}
 				}
+				if($tags) {
+					echo '<section class="tags_posts"><div class="titre_mot_cle">Mots-clés :</div> '.$tags.'</section>';
+				}
+
 			}
 		?>
-		</section>
+		
 		<section class="relateds">
 			<!-- Encart afficher titres articles de la même catégorie -->
 			<?php
