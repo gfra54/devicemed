@@ -99,7 +99,7 @@ function opengraph_metadata() {
 		$metadata[ "og:$property" ] = apply_filters( $filter, '' );
 	}
 
-	$twitter_properties = array( 'card', 'creator' );
+	$twitter_properties = array( 'card', 'creator' , 'site', 'description', 'title', 'image');
 
 	foreach ( $twitter_properties as $property ) {
 		$filter = 'twitter_' . $property;
@@ -136,6 +136,12 @@ function opengraph_default_metadata() {
 	// twitter card metadata
 	add_filter( 'twitter_card', 'twitter_default_card', 5 );
 	add_filter( 'twitter_creator', 'twitter_default_creator', 5 );
+	add_filter( 'twitter_site', 'twitter_default_site', 5 );
+	add_filter( 'twitter_description', 'twitter_default_description', 5 );
+	add_filter( 'twitter_title', 'twitter_default_title', 5 );
+	add_filter( 'twitter_image', 'twitter_default_image', 5 );
+
+	$GLOBALS['opengraph_settings'] = parse_ini_file('settings.ini',true);
 }
 add_action( 'wp', 'opengraph_default_metadata' );
 
@@ -326,7 +332,7 @@ function opengraph_default_description( $description ) {
 
 	// strip description to first 55 words.
 	$description = strip_tags( strip_shortcodes( $description ) );
-	$description = __opengraph_trim_text( $description );
+	$description = __opengraph_trim_text( $description , $GLOBALS['opengraph_settings']['Settings']['continue']);
 
 	return $description;
 }
@@ -362,31 +368,68 @@ function twitter_default_card( $card ) {
 	return $card;
 }
 
+function twitter_default_site( $site ) {
+	if(!$site) {
+		$site = $GLOBALS['opengraph_settings']['Twitter']['site'];
+	}
+	if(!$site) {
+		$site = $GLOBALS['opengraph_settings']['Twitter']['creator'];
+	}
+	if(substr($site, 0,1)!='@'){
+		$site = '@'.$site;
+	}
+	return $site;
+}
+
+function twitter_default_title( $title ) {
+	if ( $title ) {
+		return $title;
+	}
+
+	$title = opengraph_default_title();
+
+	return $title;
+}
+
+function twitter_default_image( $image ) {
+	if ( $image ) {
+		return $image;
+	}
+
+	if($images = opengraph_default_image()) {
+		$image = $images[0];
+	}
+	return $image;
+}
+
+
+
+function twitter_default_description( $description ) {
+	if ( $description ) {
+		return $description;
+	}
+
+	$description = opengraph_default_description();
+
+	return $description;
+}
+
 
 /**
  * Default twitter-card creator.
  */
 function twitter_default_creator( $creator ) {
-	if ( $creator || ! is_singular() ) {
-		return $creator;
+	if(!$creator) {
+		$creator = $GLOBALS['opengraph_settings']['Twitter']['creator'];
 	}
-
-	$post = get_queried_object();
-	$author = $post->post_author;
-	$twitter = get_the_author_meta( 'twitter', $author );
-
-	if ( ! $twitter ) {
-		return $creator;
+	if(!$creator) {
+		$creator = $GLOBALS['opengraph_settings']['Twitter']['site'];
 	}
-
-	// check if twitter-account matches "http://twitter.com/username"
-	if ( preg_match( '/^http:\/\/twitter\.com\/(#!\/)?(\w+)/i', $twitter, $matches ) ) {
-		$creator = '@' . $matches[2];
-	} elseif ( preg_match( '/^@?(\w+)$/i', $twitter, $matches ) ) { // check if twitter-account matches "(@)username"
-		$creator = '@' . $matches[1];
+	if(substr($creator, 0,1)!='@'){
+		$creator = '@'.$creator;
 	}
-
 	return $creator;
+
 }
 
 
@@ -511,9 +554,9 @@ add_filter( 'site_icon_image_sizes', 'opengraph_site_icon_image_sizes' );
  * Helper function to trim text using the same default values for length and
  * 'more' text as wp_trim_excerpt.
  */
-function __opengraph_trim_text( $text ) {
+function __opengraph_trim_text( $text , $continue = ' [...]') {
 	$excerpt_length = apply_filters( 'excerpt_length', 55 );
-	$excerpt_more = apply_filters( 'excerpt_more', ' [...]' );
+	$excerpt_more = apply_filters( 'excerpt_more', $continue );
 
 	return wp_trim_words( $text, $excerpt_length, $excerpt_more );
 }
