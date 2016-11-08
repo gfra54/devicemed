@@ -123,7 +123,7 @@
 			  <h2 class="title">A lire aussi</h2>
 			  <div class="related-articles">
 			  <?php foreach($relateds as $related) {
-			  	list($image) = wp_get_attachment_image_src(get_post_thumbnail_id($related->ID),'medium');
+			  	list($image) = wp_get_attachment_image_src(get_post_thumbnail_id($related->ID),'large');
 			  	?>
 			  <a class="related-article" href="<?php echo get_the_permalink($related->ID);?>" style="background-image:url(<?php echo $image;?>)">
 			  	<span class="related-titre"><?php 
