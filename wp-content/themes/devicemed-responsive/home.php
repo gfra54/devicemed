@@ -64,13 +64,14 @@ $('#last-posts-featured .slider').bxSlider({
 			
 <?php
 
+$deja = array();
 $categories = array(5,8,7,6,4,3,9);
 
 foreach(wp_get_nav_menu_items('page-daccueil') as $menuitem):
 	$category_id = $menuitem->object_id;
 	$category = get_category($category_id);
-	$posts = devicemed_home_get_last_posts_by_category($category_id, 3);
-	$posts_per_column = floor(count($posts) / 2);
+	$posts = devicemed_home_get_last_posts_by_category($category_id, 6);
+	// $posts_per_column = floor(count($posts) / 2);
 ?>
 <section class="home-last-posts">
 	<div class="section-header">
@@ -78,20 +79,28 @@ foreach(wp_get_nav_menu_items('page-daccueil') as $menuitem):
 	</div>
 	<div class="section-column-left">
 <?php
-for($i = 0; $i < $posts_per_column; $i++) {
-	$post = $posts[ $i ];
-	setup_postdata($post);
-	get_template_part('home/last-posts');
-}
+	$qte=1;
+	while((list(,$post) = each($posts)) && $qte) {
+		if(empty($deja[$post->ID])) {
+			$deja[$post->ID]=true;
+			$qte--;
+			setup_postdata($post);
+			get_template_part('home/last-posts');
+		}
+	}
 ?>
 	</div>
 	<div class="section-column-right">
 <?php
-for($i = $posts_per_column; $i < count($posts); $i++) {
-	$post = $posts[ $i ];
-	setup_postdata($post);
-	get_template_part('home/last-posts');
-}
+	$qte=2;
+	while((list(,$post) = each($posts)) && $qte) {
+		if(empty($deja[$post->ID])) {
+			$deja[$post->ID]=true;
+			$qte--;
+			setup_postdata($post);
+			get_template_part('home/last-posts');
+		} 
+	}
 ?>
 	</div>
 </section>
