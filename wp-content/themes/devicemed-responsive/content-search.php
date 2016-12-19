@@ -55,7 +55,16 @@
 								<?php endif; ?>
 								<h2 class="title"><?php the_title(); ?></h2>
 							</header>
-							<p class="excerpt"><?php echo devicemed_get_post_excerpt(); ?></p>
+							<p class="excerpt"><?php 
+
+							$txt = get_the_excerpt(); 
+
+							if(stristr($txt, $s)===false) {
+								$txt = mise_en_avant_recherche($s, get_the_content());
+							} 
+
+							echo $txt;
+							?></p>
 							<!--<span class="metas">
 								<span class="date-wrapper">Le <span class="date"><?php echo get_the_date('l d F Y'); ?></span></span>
 								<span class="author-wrapper">par <span class="author"><?php echo get_the_author(); ?></span></span>

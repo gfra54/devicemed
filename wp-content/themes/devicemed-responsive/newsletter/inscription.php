@@ -31,7 +31,8 @@ get_header();
 				<?php 
 				$args = array( 
 						'post_type'	=> 'newsletter',
-						'post_status'=>array('publish')
+						'post_status'=>array('publish'),
+						'posts_per_page'=>100
 					);
 
 					if($newsletters = new WP_Query($args)) {
@@ -45,9 +46,12 @@ get_header();
 						}
 					}
 					$newsletters = array_reverse(glob('wp-content/themes/devicemed-responsive/newsletter/newsletter-*.php'));
-
 					foreach($newsletters as $newsletter) { 
+
 							$url = str_replace('/home/devicemedr/www/','/',$newsletter);
+							if(substr($url,0,4)!='http') {
+								$url = '/'.$url;
+							}
 							include $newsletter;
 							if(strtotime($date_envoi)<=time()) {
 								echo 'Le '.(strftime("%d %B %Y",strtotime($date_envoi))). ' : <a href="'.$url.'">'.$titre.'</a><br>';

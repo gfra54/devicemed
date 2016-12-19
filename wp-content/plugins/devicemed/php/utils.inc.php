@@ -1,5 +1,26 @@
 <?php
-
+function isDev(){
+	return strstr($_SERVER['HTTP_HOST'], '.local')!==false;
+}
+function mise_en_avant_recherche($s,$txt) {
+	$txt = strip_tags($txt);
+	$len=150;
+	$tab = preg_split("/".$s."/i", $txt);
+	if(isset($tab[1])) {
+		if(strlen($tab[0])>$len) {
+			$ret = '[...] '.substr($tab[0],-$len);
+		} else {
+			$ret = $tab[0];
+		}
+		$ret.='<strong>'.(substr($txt,strlen($tab[0]),strlen($s))).'</strong>';
+		if(strlen($tab[1])>$len) {
+			$ret.= substr($tab[1],0,$len).' [...]';
+		} else {
+			$ret.= $tab[1];
+		}
+	}	
+	return $ret;
+}
 function array_sort_field($tab,$field,$inv=false,$field2=false,$inv2=false) {
 	if($field2){
 		$t1=$t2=array();

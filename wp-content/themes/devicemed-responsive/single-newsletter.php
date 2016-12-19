@@ -36,7 +36,18 @@ $args = array(
 $articles = array();
 
 if($arts = new WP_Query($args)) {
+  $articles_sorted=array();
+  $ordre_articles = explode("\n",strip_tags(get_field('ordre_articles',$newsletter->ID)));
+  foreach($ordre_articles as $idart) {
+    $idart = trim($idart);
+    if($idart) {
+      $articles_sorted[$idart]=true;
+    }
+  }
   foreach($arts->posts as $art) {
+    $articles_sorted[$art->ID]=$art;
+  }
+  foreach($articles_sorted as $art) {
     $content=false;
     if(substr($art->post_content, 0, 8) == '<strong>') {
       $content = trim(couper(cleantext(getHtmlVal('<strong>','</strong>',$art->post_content)),300));

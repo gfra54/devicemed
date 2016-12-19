@@ -603,3 +603,8 @@ body .container .article .content a {
 body .container .article .content a:hover {
   text-decoration: none;
 }
+
+
+.page-search .excerpt strong {
+  background:yellow;
+}

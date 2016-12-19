@@ -3,15 +3,88 @@
 function save_post_action($post_id) {
     global $post; 
     if ($post->post_type == 'pubs'){
+
+    	$display = bitly_shorten(get_post_thumbnail_url($post_id));
+		update_field('url_tracking_display', $display, $post_id);
+
+    
+		$clicks = bitly_shorten(get_field('url_cible',$post_id));
+		update_field('url_tracking_clicks', $clicks, $post_id);
+
+
+
     	store_pubs();
     	store_pub($post);
 	} else if ($post->post_type == 'fournisseur'){
 		fournisseur_enrichir($post,true);
-	}
+
+
+	} else if ($post->post_type == 'newsletter'){
+
+		$ordre_articles = get_field('ordre_articles',$post_id);
+		if(!$ordre_articles) {
+			$ordre_articles='';
+			$args = array( 
+			    'post_type' => 'post',
+			    'tag' => get_field('mot_cle',$post_id)
+			);
+
+			if($arts = new WP_Query($args)) {
+			  foreach($arts->posts as $art) {
+			  	$ordre_articles.=$ordre_articles?"\n": '';
+			  	$ordre_articles.=$art->ID;
+			  }
+			}
+			update_field('ordre_articles',$ordre_articles,$post_id);
+		}
+
+	} 
 
 }
 add_action( 'save_post', 'save_post_action' );
 
+/*
+function on_all_status_transitions( $new_status, $old_status, $post ) {
+    global $post; 
+    if ($post->post_type == 'fournisseur'){
+	    if ( $new_status != $old_status ) {
+	    	if($new_status ==' publish' && $old_status == 'draft') {
+
+	    		$envoi_mail = get_post_meta($post->ID,'envoi_mail');
+	    		if(!$envoi_mail) {
+					if(isDev()) {
+	    				$to = 'jilfransoi@gmail.com';
+	    			} else {
+		    			$to = get_field('mail_contact_commercial',$post->ID);
+		    		}
+
+	    			$subject = 'Le fournisseurs "'.$post->post_title.'" est validé.';
+	    			$message = 'Bonjour '.get_field('nom_contact_commercial',$post->ID)."\n".
+	    			'Vous avez soumis le fournisseur "'.$post->post_title.'" pour qu\'il soit visible dans le répertoire DeviceMed des fournisseurs.'."\n".
+	    			'Nos équipes ont passé en revue les données qui ont été saisies, et nous avons le plaisir de vous annoncer que ce fournisseur est désormais validé, et visible en ligne à cette adresse : '."\n\n".
+
+	    			get_the_permalink($post)."\n\n".
+
+	    			'Nous vous invitons à vérifer dès maintenant l\'exactitude des informations présentes sur la fiche fournisseur. Vous pouvez nous contacter pour indiquer des éventuels changements à apporter à votre fiche en envoyant un email à laurence.jaffeux@devicemed.fr (ou en répondant à cet email).'."\n\n".
+
+	    			'Cordialement,'."\n".
+	    			'l\'équipe DeviceMed';
+	    			$headers='Reply-to: laurence.jaffeux@devicemed.fr';
+	    			// $headers = 'BCC: web@devicemed.fr';
+					if(wp_mail( $to, $subject, $message, $headers)) {
+						add_post_meta($post->ID, 'envoi_mail', true, true);
+					}
+	    		}
+
+
+	    	}
+
+	    }
+	}
+}
+add_action(  'transition_post_status',  'on_all_status_transitions', 10, 3 );
+
+*/
 /*function save_post_cache($post_id) {
 	if(is_admin()) {
 		cachepage_clear('index');
