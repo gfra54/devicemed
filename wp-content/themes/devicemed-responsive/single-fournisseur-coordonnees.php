@@ -1,6 +1,6 @@
 	<section class="supplier">
 		<div class='info_supplier'>
-			<?php if($fournisseur['logo']) { ?>
+			<?php if($fournisseur['logo'] && $fournisseur['premium']) { ?>
 				<div class='logo_supplier'>
 					<img src='<?php echo $fournisseur['logo']; ?>' />
 				</div>
