@@ -35,8 +35,9 @@
 					}
 					$('#wp-link-wrap').data('ok',true);
 				}
-			} else {
-				$('#tmp-url-field').val('');
+			} else if(document.getElementById('tmp-url-field')){
+				$('#url-field').css('display','block');
+				$('.link-connexe, #tmp-url-field').remove();
 			}
 		},100);		
 
