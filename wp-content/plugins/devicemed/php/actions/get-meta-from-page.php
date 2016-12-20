@@ -10,6 +10,10 @@ function get_meta_from_page(){
         if(!$content['title'] && $content['og:title']) {
           $content['title'] = $content['og:title'];
         }
+        if(!$content['title']) {
+            $html = file_get_contents($content['url']);
+            $content['title'] = str_replace('  –  DeviceMed.fr','',getHtmlVal('<title>','</title>',$html));
+        }
       } else {
         $content['title']='Titre du lien';
       }
