@@ -1,6 +1,44 @@
 (function($) {
 	$(document).ready(function(){
+		// $('<link rel="stylesheet" href="/wp-content/plugins/devicemed/css/admin.css" type="text/css" media="all" />').appendTo('head');
+		
+		setInterval(function(){
+			if(document.getElementById('wp-link-wrap').style.display == 'block') {
+				if(!$('#wp-link-wrap').data('ok')) {
 
+					$('<div class="link-connexe">\
+						<label><span>&nbsp;</span><input type="checkbox" id="link-connexe-checkbox"> Lien connexe (affichage différent)</label>\
+					</div>').insertAfter('#wp-link-wrap .link-target');
+
+					$('<input id="tmp-url-field" type="text">').insertAfter('#wp-link-wrap #url-field');
+					$('#url-field').css('display','none');
+					$('#tmp-url-field').val($('#url-field').val().replace('#lien-connexe',''));
+					$('#tmp-url-field').on('blur keyup',function(){
+						update_url_field();
+					});
+					$('#tmp-url-field').on('change',function(){
+						_url = update_url_field();
+						$.post('/wp-admin/',{
+							'action'	: 'get-meta-from-page',
+							'url'		: $(this).val()
+						},function(_data){
+							if('title' in _data) {
+								$('#link-title-field').val(_data.title);
+							}
+						})
+					});
+					$('#link-connexe-checkbox').on('change',function(){
+						update_url_field();
+					});
+					if($('#url-field').val().indexOf('#lien-connexe')!=-1) {
+						$('#link-connexe-checkbox').prop('checked',true);
+					}
+					$('#wp-link-wrap').data('ok',true);
+				}
+			} else {
+				$('#tmp-url-field').val('');
+			}
+		},100);		
 
 		if($('#wp-admin-bar-view .ab-item').length) {
 			if($('#wp-admin-bar-view .ab-item').html().indexOf('Newsletter')>0) {
@@ -104,4 +142,33 @@
 	        results = regex.exec(location.search);
 	    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 	}
+
+	function addUrlParam(_url,_param,_value) {
+		if(_url.indexOf('?')==-1) {
+			_c = '?';
+		} else {
+			_c='&';
+		}
+		if(_url.indexOf('&'+_param)== -1 && _url.indexOf('?'+_param)== -1) {
+			_url += _c+_param+(typeof _value !='undefined' ? '='+_value : '');
+		}
+		return _url;
+	}
+	function addHash(_url,_hash) {
+		if(_url.indexOf('#'+_hash)== -1) {
+			_url += '#'+_hash;
+		}
+		return _url;
+	}
+	function update_url_field() {
+		_url = $('#tmp-url-field').val();
+		if($('#link-connexe-checkbox').prop('checked')) {
+			_url = addHash(_url,'lien-connexe');
+		}	
+		$('#url-field').val(_url);
+	}
+
+
 })( jQuery );
+
+

@@ -41,6 +41,11 @@ function add_admin_js(){
 }
 add_action( 'admin_enqueue_scripts', 'add_admin_js' );
 
+function devicemed_add_editor_styles() {
+    add_editor_style( DEVICEMED_PLUGIN_URL.'/css/editor-style.css?'.filemtime(DEVICEMED_PLUGIN_DIR.'/css/editor-style.css'));
+}
+add_action( 'admin_init', 'devicemed_add_editor_styles' );
+
 
 foreach(glob(dirname(__FILE__).'/php/*/*.php') as $file){
   if(file_exists($file)){

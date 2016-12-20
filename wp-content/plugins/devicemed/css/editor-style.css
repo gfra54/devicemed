@@ -1,0 +1,8 @@
+a[href*="#lien-connexe"] {
+	display: block;
+	padding: 20px;
+	border: 1px dotted #ccc;
+	margin: 15px 0;
+	position: relative;
+}
+
