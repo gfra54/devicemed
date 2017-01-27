@@ -18,6 +18,31 @@ function save_post_action($post_id) {
 	} else if ($post->post_type == 'fournisseur'){
 		fournisseur_enrichir($post,true);
 
+		$noms_fournisseurs = get_transient('noms_fournisseurs');
+		if(!is_array($noms_fournisseurs) || count($noms_fournisseurs) == 0) {
+			$fournisseurs = get_fournisseurs(array('cache'=>true));
+	
+			$noms_fournisseurs = array();
+			foreach($fournisseurs as $fournisseur) {
+				if($alternatives_nom = fournisseur_alternatives_nom($fournisseur)) {
+					$noms_fournisseurs[$fournisseur['ID']] = array(
+						'alternatives'=>$alternatives_nom,
+						'url'=>get_the_permalink($fournisseur['ID']),
+						'nom'=>$fournisseur['post_title']
+					);
+				}
+			}
+
+		} else {
+			if($alternatives_nom = fournisseur_alternatives_nom($post)) {
+				$noms_fournisseurs[$post_id] = array(
+					'alternatives'=>$alternatives_nom,
+					'url'=>get_the_permalink($post_id),
+					'nom'=>$post->post_title
+				);
+			}
+		}
+		set_transient('noms_fournisseurs',$noms_fournisseurs);
 
 	} else if ($post->post_type == 'newsletter'){
 
@@ -38,7 +63,9 @@ function save_post_action($post_id) {
 			update_field('ordre_articles',$ordre_articles,$post_id);
 		}
 
-	} 
+	} else {
+		update_post_meta($post_id,'content_parsed','');
+	}
 
 }
 add_action( 'save_post', 'save_post_action' );

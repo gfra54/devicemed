@@ -5,7 +5,7 @@
 				<img src='<?php echo $fournisseur['logo']; ?>' />
 			</div>
 		<?php } ?>
-		<p class="about"><?php echo $fournisseur['post_content']; ?></p>
+		<p class="about"><?php echo wpautop($fournisseur['post_content']); ?></p>
 		<header>
 			<!--<div class="aucun_article">Aucune galerie.</div>-->
 			<?php if ($session = DM_Wordpress_Members::session() && $session_supplier_id == $supplier_id): ?>

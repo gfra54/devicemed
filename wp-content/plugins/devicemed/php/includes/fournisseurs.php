@@ -1,5 +1,36 @@
 <?php
 
+function fournisseur_parse_liens($id, $content) {
+	$content_parsed=false;
+	$content_parsed = get_post_meta( $id, 'content_parsed', true );
+	if(empty($content_parsed) || isLocal()) {
+		$noms_fournisseurs = get_transient('noms_fournisseurs');
+		foreach($noms_fournisseurs as $id=>$fournisseur) {
+			foreach($fournisseur['alternatives'] as $alternative) {
+				if($alternative && stristr($content, $alternative)!==false) {
+					$tmp_content = $content;
+					$tmp_content = preg_replace('/\b('.$alternative.')\b/uie', 'liens_fournisseurs_eval($fournisseur,"$1")', $tmp_content);
+					if($tmp_content != $content) {
+						$content = $tmp_content;
+					}
+				}
+			}
+		}
+		$content = preg_replace('/\[lien_fournisseur\=(.+)\]/ue', 'liens_fournisseurs_decode("$1")', $content);
+
+		$content_parsed = $content;
+		update_post_meta($id,'content_parsed',$content_parsed);
+	}
+	return $content_parsed;
+}
+function liens_fournisseurs_eval($fournisseur,$val) {
+	return '[lien_fournisseur='.base64_encode('<a class="lien-fournisseur" href="'.$fournisseur['url'].'" title="Fiche fournisseur '.htmlspecialchars($fournisseur['nom']).'">'.$val.'</a>').']';
+}
+
+function liens_fournisseurs_decode($lien) {
+	return base64_decode($lien);
+}
+
 function telecharger_fournisseurs($params = array()) {
 	$categories = fournisseur_categories();
 //	$fournisseurs = get_fournisseurs(array('enrichir'=>true,'cache'=>'extraction_excel'));
@@ -552,7 +583,17 @@ function get_fournisseur($ID,$legacy=false) {
 		}
 	}
 }
-
+function fournisseur_alternatives_nom($fournisseur) {
+	if(is_object($fournisseur)) {
+		$fournisseur = get_object_vars($fournisseur);
+	}
+	$tab = array_map('trim',explode(PHP_EOL,trim(get_field('alternatives_nom',$fournisseur['ID']))));
+	$tab[]=$fournisseur['post_title'];
+	usort($tab, function($a, $b) {
+	    return strlen($b) - strlen($a);
+	});
+	return array_filter(array_unique($tab));
+}
 function fournisseur_enrichir($fournisseur,$force=false) {
 	if(isLocal()) {
 		$force=true;
@@ -562,7 +603,9 @@ function fournisseur_enrichir($fournisseur,$force=false) {
 	if(!$force && $f) {
 		return $f;
 	} else {
-		$fournisseur = get_object_vars($fournisseur);
+		if(is_object($fournisseur)) {
+			$fournisseur = get_object_vars($fournisseur);
+		}
 		$allmeta = get_post_meta($fournisseur['ID']);
 		foreach($allmeta as $k=>$v) {
 			if(substr($k, 0,1) !='_') {
