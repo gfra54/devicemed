@@ -19,27 +19,31 @@ function save_post_action($post_id) {
 		fournisseur_enrichir($post,true);
 
 		$noms_fournisseurs = get_transient('noms_fournisseurs');
-		if(!is_array($noms_fournisseurs) || count($noms_fournisseurs) == 0) {
-			$fournisseurs = get_fournisseurs(array('cache'=>true));
-	
-			$noms_fournisseurs = array();
-			foreach($fournisseurs as $fournisseur) {
-				if($alternatives_nom = fournisseur_alternatives_nom($fournisseur)) {
-					$noms_fournisseurs[$fournisseur['ID']] = array(
+		if(get_field('no_liens',$post_id)) {
+			unset($noms_fournisseurs[$post_id]);
+		} else {
+			if(!is_array($noms_fournisseurs) || count($noms_fournisseurs) == 0) {
+				$fournisseurs = get_fournisseurs(array('cache'=>true));
+		
+				$noms_fournisseurs = array();
+				foreach($fournisseurs as $fournisseur) {
+					if($alternatives_nom = fournisseur_alternatives_nom($fournisseur)) {
+						$noms_fournisseurs[$fournisseur['ID']] = array(
+							'alternatives'=>$alternatives_nom,
+							'url'=>get_the_permalink($fournisseur['ID']),
+							'nom'=>$fournisseur['post_title']
+						);
+					}
+				}
+
+			} else {
+				if($alternatives_nom = fournisseur_alternatives_nom($post)) {
+					$noms_fournisseurs[$post_id] = array(
 						'alternatives'=>$alternatives_nom,
-						'url'=>get_the_permalink($fournisseur['ID']),
-						'nom'=>$fournisseur['post_title']
+						'url'=>get_the_permalink($post_id),
+						'nom'=>$post->post_title
 					);
 				}
-			}
-
-		} else {
-			if($alternatives_nom = fournisseur_alternatives_nom($post)) {
-				$noms_fournisseurs[$post_id] = array(
-					'alternatives'=>$alternatives_nom,
-					'url'=>get_the_permalink($post_id),
-					'nom'=>$post->post_title
-				);
 			}
 		}
 		set_transient('noms_fournisseurs',$noms_fournisseurs);
