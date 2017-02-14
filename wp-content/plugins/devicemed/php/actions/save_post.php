@@ -23,8 +23,8 @@ function save_post_action($post_id) {
 			unset($noms_fournisseurs[$post_id]);
 		} else {
 			if(!is_array($noms_fournisseurs) || count($noms_fournisseurs) == 0) {
-				$fournisseurs = get_fournisseurs(array('cache'=>true));
-		
+				$fournisseurs = get_fournisseurs(array('cache'=>false));
+
 				$noms_fournisseurs = array();
 				foreach($fournisseurs as $fournisseur) {
 					if($alternatives_nom = fournisseur_alternatives_nom($fournisseur)) {

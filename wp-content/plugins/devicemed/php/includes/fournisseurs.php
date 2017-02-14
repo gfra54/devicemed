@@ -746,7 +746,7 @@ function get_fournisseurs($params=array()) {
 			
 			$args['orderby'] = 'title';
 			$args['order'] = 'ASC';
-
+			$args['post_status'] = 'publish';
 			$args['offset']	= sinon($params,'debut','default:0');
 			$args['posts_per_page'] = sinon($params,'parpage','default:500');
 
