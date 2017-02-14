@@ -4,15 +4,11 @@ function fournisseur_parse_liens($id, $content) {
 	$content_parsed=false;
 	$content_parsed = get_post_meta( $id, 'content_parsed', true );
 	if(empty($content_parsed) || isLocal()) {
-		$noms_fournisseurs = get_transient('noms_fournisseurs');
-		foreach($noms_fournisseurs as $id=>$fournisseur) {
+		$GLOBALS['noms_fournisseurs'] = get_transient('noms_fournisseurs');
+		foreach($GLOBALS['noms_fournisseurs'] as $id=>$fournisseur) {
 			foreach($fournisseur['alternatives'] as $alternative) {
-				if($alternative && stristr($content, $alternative)!==false) {
-					$tmp_content = $content;
-					$tmp_content = preg_replace('/\b('.$alternative.')\b/uie', 'liens_fournisseurs_eval($fournisseur,"$1")', $tmp_content);
-					if($tmp_content != $content) {
-						$content = $tmp_content;
-					}
+				if($alternative) {
+					$content = html_replace($alternative, 'liens_fournisseurs_eval("'.$id.'","$1")',$content);
 				}
 			}
 		}
@@ -23,8 +19,9 @@ function fournisseur_parse_liens($id, $content) {
 	}
 	return $content_parsed;
 }
-function liens_fournisseurs_eval($fournisseur,$val) {
-	return '[lien_fournisseur='.base64_encode('<a class="lien-fournisseur" href="'.$fournisseur['url'].'" title="Fiche fournisseur '.htmlspecialchars($fournisseur['nom']).'">'.$val.'</a>').']';
+function liens_fournisseurs_eval($id,$val) {
+	$fournisseur = $GLOBALS['noms_fournisseurs'][$id];
+	return '[lien_fournisseur='.base64_encode('<a class="lien-fournisseur'.($fournisseur['premium'] ? ' lien-fournisseur-premium' : '').'" href="'.$fournisseur['url'].'" title="Fiche fournisseur '.htmlspecialchars($fournisseur['nom']).'">'.$val.'</a>').']';
 }
 
 function liens_fournisseurs_decode($lien) {

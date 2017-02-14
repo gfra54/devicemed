@@ -659,3 +659,9 @@ body .container .article .content a.lien-fournisseur:hover {
     text-decoration: none;
     color: #000;
 }
+
+body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
+  color:rgba(0,102,179,1);
+  font-family: 'opensans-condbold';
+    letter-spacing: 0.5px;
+}

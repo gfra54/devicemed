@@ -30,6 +30,7 @@ function save_post_action($post_id) {
 					if($alternatives_nom = fournisseur_alternatives_nom($fournisseur)) {
 						$noms_fournisseurs[$fournisseur['ID']] = array(
 							'alternatives'=>$alternatives_nom,
+							'premium'=>get_field('premium',$fournisseur['ID']),
 							'url'=>get_the_permalink($fournisseur['ID']),
 							'nom'=>$fournisseur['post_title']
 						);
@@ -40,6 +41,7 @@ function save_post_action($post_id) {
 				if($alternatives_nom = fournisseur_alternatives_nom($post)) {
 					$noms_fournisseurs[$post_id] = array(
 						'alternatives'=>$alternatives_nom,
+						'premium'=> get_field('premium',$post_id),
 						'url'=>get_the_permalink($post_id),
 						'nom'=>$post->post_title
 					);

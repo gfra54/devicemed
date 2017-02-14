@@ -1,4 +1,34 @@
 <?php
+
+function html_replace($find,$replace, $content) {
+	require_once plugin_dir_path( __FILE__ ).'/simple_html_dom.php';
+	$html = new simple_html_dom();
+	$html->load('<div id="parser">'.$content.'</div>', true, false);
+	
+	$el = $html->find('div[id=parser]',0);
+
+	foreach($el->nodes as $node) {
+		if($node->tag !='a'){
+			if($children = $node->children()) {
+				foreach($children as $child) {
+					if($child->tag !='a'){
+						$child->innertext = html_replace($find,$replace,$child->innertext);
+					}
+				}
+			} else {
+				if(stristr($node->innertext, '<a ')===false) {
+					$tmp=$node->innertext;
+					$node->innertext = preg_replace('/\b('.$find.')\b/uie', $replace, $node->innertext,1);
+				}
+			}
+		}
+	}
+	return $el->innertext;
+
+}
+
+
+
 function isDev(){
 	return strstr($_SERVER['HTTP_HOST'], '.local')!==false;
 }
