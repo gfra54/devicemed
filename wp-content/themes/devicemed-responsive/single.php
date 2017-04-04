@@ -1,11 +1,7 @@
 <?php 
+
 	get_header(); ?>
 
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:site" content="@devicemedfr">
-	<meta name="twitter:creator" content="@devicemedfr">
-	<meta name="twitter:description" content="">
-	<meta name="twitter:title" content="Guus Hiddink en dix dates">
 
 	<div class="row column-content page-single">
 		<div class="col-md-9 col-sm-8 column-main">

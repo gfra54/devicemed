@@ -9,6 +9,7 @@
 $GLOBALS['PUBS'] = false;
 function get_pubs($type=false) {
    	if($pubs = get_transient('pubs')) {
+		$GLOBALS['PUBS'] = $pubs;
 		$out = array();
 		foreach($pubs as $pub) {
 			if($type===false || check_espace($type,$pub)){
@@ -156,6 +157,8 @@ function display_pub($pub,$attr=array(),$type=false) {
 
 function get_selected_pub($type, $pubs, $all=false) {
 	$pubs_sort=array();
+	$tochange=array();
+	$change=false;
 	foreach($pubs as $key => $pub) {
 		if(check_espace($type,$pub)) {
 			$public = $pub['post_status'] == 'publish';
@@ -166,7 +169,6 @@ function get_selected_pub($type, $pubs, $all=false) {
 				$date_fin.=' 23:59:59';
 			}
 			$ok=true;
-			$change=false;
 			if(!empty($date_debut)) {
 				if(time()<strtotime($date_debut)) {
 					if($public) {
@@ -204,9 +206,6 @@ function get_selected_pub($type, $pubs, $all=false) {
 					}
 				}
 			}
-			if($change) {
-				store_pub($pub);
-			}
 			if(!$public) {
 				$ok=false;
 			}
@@ -215,6 +214,13 @@ function get_selected_pub($type, $pubs, $all=false) {
 			}
 		}
 	}
+
+
+
+	if($change) {
+		//store_pubs(true);
+	}
+
 	asort($pubs_sort);
 	$pubs_sort = array_reverse($pubs_sort,true);
 
@@ -229,18 +235,19 @@ function get_selected_pub($type, $pubs, $all=false) {
 	}
 	if($all) {
 		if(count($pubs_pages)) {
-			return $pubs_pages;
+			$ret = $pubs_pages;
 		} else {
-			return $pubs_normal;			
+			$ret = $pubs_normal;			
 		}
 	} else {
 		if(count($pubs_pages)) {
-			return $pubs_pages[array_rand($pubs_pages)];
+			$ret = $pubs_pages[array_rand($pubs_pages)];
 		} else
 		if(count($pubs_normal)) {
-			return $pubs_normal[array_rand($pubs_normal)];
+			$ret = $pubs_normal[array_rand($pubs_normal)];
 		}
 	}
+	return $ret;
 }
 function check_espace($type,$pub) {
 	if(is_array($pub) && isset($pub['espaces'])) {
@@ -382,17 +389,24 @@ ob_start();
 }
 
 
+
+
+
 function store_pub($post) {
-	$pubs = get_transient('pubs');
-	if($post->post_status == 'trash') {
-		unset($pubs[$post->ID]);
+	if(!$GLOBALS['PUBS']) {
+		$GLOBALS['store_pub'] = get_transient('pubs');
 	} else {
-		if(!is_array($pubs)) {
-			$pubs = array();
-		}
-		$pubs[$post->ID]=prepare_store_pub($post);
+		$GLOBALS['store_pub'] = $GLOBALS['PUBS'];
 	}
-	return set_transient('pubs',$pubs);
+
+
+
+	if($post->post_status == 'trash') {
+		unset($GLOBALS['store_pub'][$post->ID]);
+	} else {
+		$GLOBALS['store_pub'][$post->ID]=prepare_store_pub($post);
+	}
+	return set_transient('pubs',$GLOBALS['store_pub']);
 }
 
 function prepare_store_pub($post) {
@@ -405,12 +419,14 @@ function prepare_store_pub($post) {
 }
 
 
+
+
 function store_pubs($force=false) {
 	if(WP_DEBUG || !get_transient('pubs_stored') || $force) {
 		$args = array( 
 			'post_type'	=> 'pubs',
 			'post_status'=>array('draft','publish'),
-			'posts_per_page'=>1000,
+			'posts_per_page'=>100,
 			'order'=>'DESC',
 			'orderby'=>'date'
 		);
