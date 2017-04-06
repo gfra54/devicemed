@@ -3,6 +3,8 @@
 function save_post_action($post_id) {
     global $post; 
     if ($post->post_type == 'pubs'){
+		
+		
 
     	$display = bitly_shorten(get_post_thumbnail_url($post_id));
 		update_field('url_tracking_display', $display, $post_id);
@@ -13,7 +15,10 @@ function save_post_action($post_id) {
 
 
 
-    	store_pubs();
+    	store_pubs(true);
+
+
+
     	store_pub($post);
 	} else if ($post->post_type == 'fournisseur'){
 		fournisseur_enrichir($post,true);
