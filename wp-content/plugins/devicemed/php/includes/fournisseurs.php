@@ -1,27 +1,43 @@
 <?php
 
+$GLOBALS['b64']=array();
 function fournisseur_parse_liens($id, $content) {
+	$GLOBALS['b64']=array();
 	$content_parsed=false;
 	$content_parsed = get_post_meta( $id, 'content_parsed', true );
-	if(empty($content_parsed) || isLocal()) {
+	if(true || empty($content_parsed) || isLocal()) {
 		$GLOBALS['noms_fournisseurs'] = get_transient('noms_fournisseurs');
 		foreach($GLOBALS['noms_fournisseurs'] as $id=>$fournisseur) {
 			foreach($fournisseur['alternatives'] as $alternative) {
 				if($alternative) {
-					$content = html_replace($alternative, 'liens_fournisseurs_eval("'.$id.'","$1")',$content);
+					if(stristr($content,$alternative)!==false) {
+
+						$content = html_replace($alternative, 'liens_fournisseurs_eval("'.$id.'","$1")',$content);
+					}
 				}
 			}
 		}
-		$content = preg_replace('/\[lien_fournisseur\=(.+)\]/ue', 'liens_fournisseurs_decode("$1")', $content);
+		foreach($GLOBALS['b64'] as $b64) {
+			$content = str_replace('[lien_fournisseur='.$b64.']',liens_fournisseurs_decode($b64),$content);
+		}
+		//	$content = preg_replace('/\[lien_fournisseur\=(.+)\]/ue', 'liens_fournisseurs_decode("$1")', $content);
+
 
 		$content_parsed = $content;
 		update_post_meta($id,'content_parsed',$content_parsed);
 	}
+	$GLOBALS['b64']=array();
 	return $content_parsed;
 }
+
+
+
 function liens_fournisseurs_eval($id,$val) {
 	$fournisseur = $GLOBALS['noms_fournisseurs'][$id];
-	return '[lien_fournisseur='.base64_encode('<a class="lien-fournisseur'.($fournisseur['premium'] ? ' lien-fournisseur-premium' : '').'" href="'.$fournisseur['url'].'" title="Fiche fournisseur '.htmlspecialchars($fournisseur['nom']).'">'.$val.'</a>').']';
+	$b64 = base64_encode('<a class="lien-fournisseur'.($fournisseur['premium'] ? ' lien-fournisseur-premium' : '').'" href="'.$fournisseur['url'].'" title="Fiche fournisseur '.htmlspecialchars($fournisseur['nom']).'">'.$val.'</a>');
+	$GLOBALS['b64'][] = $b64;
+	$ret = '[lien_fournisseur='.$b64.']';
+	return $ret;
 }
 
 function liens_fournisseurs_decode($lien) {
@@ -50,8 +66,10 @@ function telecharger_fournisseurs($params = array()) {
 							if(empty($id_sous_categorie) || $id_sous_categorie == $sous_sous_categorie['term_id']) {
 								if($id_sous_categorie == $sous_sous_categorie['term_id']) {
 									$sous_cat_ref = $sous_sous_categorie;
+								
 								}
-								$ligne_categorie[$sous_sous_categorie['term_id']] = $sous_categorie['name'].PHP_EOL.$sous_sous_categorie['name'];
+
+								$ligne_categorie[$sous_sous_categorie['term_id']] = $sous_categorie['name'].' '.$sous_sous_categorie['name'];
 							}
 						}
 					} else {
@@ -65,10 +83,12 @@ function telecharger_fournisseurs($params = array()) {
 				}
 			}
 			$data[]=array();
+
 			$data[]=$ligne_categorie;
+
 			foreach($fournisseurs as $fournisseur) {
 				$ligne_fournisseur = array();
-				$ligne_fournisseur[] = $fournisseur['post_title'];
+				$ligne_fournisseur[] = $fournisseur['post_title'].$fournisseur['ID'];
 				$ligne_fournisseur[] = $fournisseur['pays'];
 				$ligne_fournisseur[] = $fournisseur['url'];
 				$debut = count($ligne_fournisseur);
@@ -76,11 +96,19 @@ function telecharger_fournisseurs($params = array()) {
 				foreach($ligne_categorie as $idcat=>$cat) {
 					$debut--;
 					if($debut<0) {
+						
+
 						$trouve=false;
 						foreach($fournisseur['categories'] as $categorie) {
 							foreach($categorie['categories'] as $sous_categorie) {
 								if($sous_categorie['id'] == $idcat) {
 									$trouve=true;
+								} else if(is_array($sous_categorie['categories'])){
+									foreach($sous_categorie['categories'] as $sous_sous_categorie) {
+										if($sous_sous_categorie['id'] == $idcat) {
+											$trouve=true;
+										}
+									}
 								}
 							}
 						}
@@ -99,6 +127,9 @@ function telecharger_fournisseurs($params = array()) {
 		}
 		
 	}
+
+
+
 	foreach($data as $k=>$v) {
 		foreach($v as $i=>$j) {
 			$v[$i] = '"'.str_replace('"','\\"',str_replace("\n",' ',trim($j))).'"';
