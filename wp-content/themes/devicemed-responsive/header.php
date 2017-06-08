@@ -151,10 +151,13 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 	<div class="logo"><a href="<?php echo home_url(); ?>" title="<?php bloginfo('name'); ?> - <?php bloginfo('description'); ?>"><img src="<?php echo get_template_directory_uri(); ?>/images/logo-alpha.png" alt="<?php bloginfo('name'); ?> - <?php bloginfo('description'); ?>" /></a></div>
 	<div class="nl-header">
 
-	<form action="https://app.mailjet.com/account/tools/widget/subscribe/1Nj" target="nl" class="mailjet-widget-form" id="mailjet-widget-form-6901" accept-charset="utf-8" method="post">      
+	<form action="http://devicemed.us15.list-manage1.com/subscribe" id="formnl" target="formnl" method="get">      
+		<input type="hidden" name="u" value="3e97c5daff9192e3f43c22080">
+		<input type="hidden" name="id" value="8b91d09d5c">
+
 		<h2>Recevoir notre newsletter</h2>
 		<div class="nl-field">
-        	<input placeholder="Adresse mail" type="email" class="mailjet-widget-email-field" name="email" id="mailjet-widget-email-field-6901"  value="" size="20" maxlength="80"  />
+        	<input placeholder="Adresse mail" type="email" name="EMAIL" value="" size="20" maxlength="80"  />
         	<input type="submit" value="Ok">
         </div>
       	<small><u><a href="/newsletter/inscription">Consulter les archives</a></u></small>

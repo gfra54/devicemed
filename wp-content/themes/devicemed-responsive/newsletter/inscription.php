@@ -3,27 +3,21 @@ $GLOBALS['NORENDER']=true;
 get_header(); 
 
 ?>
+<style>
+.nl-header {
+	display:none;
+}
+</style>
 <div class="row column-content page-members">
 	<div class="col-md-9 col-sm-8 column-main">
 	<section class="new-newsletter">
 		<h2 class="title">Abonnement à la newsletter bimensuelle</h2>
 
 		<div class="">
-					<form action="https://app.mailjet.com/account/tools/widget/subscribe/1Nj" class="mailjet-widget-form" id="mailjet-widget-form-6901" accept-charset="utf-8" method="post">      
-	            <div class="form-fieldset">
-	            	<div class="form-row">
-	                	<div class="form-field">
-	                		<input placeholder="Adresse mail" type="text" class="mailjet-widget-email-field" name="email" id="mailjet-widget-email-field-6901"  value="" size="20" maxlength="80"  />
-	            		</div>
-	            	</div>
-				<div class="form-row">
-					<div class="form-submit input_sabonner_magazine">
-						<input type="submit" class="" value="S&#039;abonner">
-					</div>
-				</div>
+			<button class="btn-nl">Cliquez ici pour vous abonner</button>
 		</div>
     	</form>
-
+    	<br><br><p style="color:tomato">Attention: Si vous souhaitez vous abonner à la newsletter de DeviceMed, vous devez faire en sorte d'ajouter l'adresse <b>newsletter@devicemed.fr</b> à votre liste de contacts pour être certain que notre mailing ne termine pas dans vos spams</p>
 
 				<div class="lien-derniere-nl"><b>Lire les dernières newsletters :</b></div><br />
 				<div class='link_newsletter'>

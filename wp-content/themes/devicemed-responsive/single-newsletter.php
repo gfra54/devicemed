@@ -130,10 +130,14 @@ if($arts = new WP_Query($args)) {
           </td>
       </tr>
       <tr>
-      <td _style="border-bottom:1px solid #454545;" bgcolor="#0066b3">&nbsp; 
+      <td _style="border-bottom:1px solid #454545;">
+      <table width="100%"><tr><td bgcolor="#0066b3">&nbsp; 
       <a style="border:none" href=
                   "<?php echo site_url();?>/"><img width="290" title="logo" alt="newsletter" src=
                   "<?php echo site_url();?>/wp-content/themes/devicemed-responsive/images/devicemedbig.png" /></a>
+      </td>
+      <td>&nbsp;</td>
+      <td bgcolor="#0066b3" valing="middle" align=center width=340><a href="<?php echo site_url();?>/magazine/abonnement"><img src="<?php echo site_url();?>/wp-content/themes/devicemed-responsive/images/newsletter/nl-abonnement-magazine.png" border=0></a></td></tr></table>
     </td>
     </tr>
 
@@ -294,7 +298,7 @@ if($arts = new WP_Query($args)) {
 
                 <tr>
                   <td style="text-align:center;font-family:Arial;font-size:11px">
-    <p style="text-align: center">Cet email a été envoyé à <a href="mailto:[[EMAIL_TO]]">[[EMAIL_TO]]</a>, <a href="[[UNSUB_LINK_FR]]">cliquez ici pour vous désabonner</a>.</p>
+    <p style="text-align: center">Cet email a été envoyé par DeviceMed à *|EMAIL|*, <a href="*|UNSUB|*">cliquez ici pour vous désabonner</a>.</p>
           </td>
                 </tr>
               </tbody>
@@ -304,7 +308,8 @@ if($arts = new WP_Query($args)) {
         </tr>
       </tbody>
     </table>
-<center><a href="[[PERMALINK]]" style="font-family:sans-serif;font-size:10px;">Si vous ne visualisez pas bien cet email, cliquez ici pour voir la version en ligne.</a></center>
+  
+<center><a href="*|ARCHIVE|*" style="font-family:sans-serif;font-size:10px;">Si vous ne visualisez pas bien cet email, cliquez ici pour voir la version en ligne.</a></center>
 
   </td>
   <td></td>
@@ -387,7 +392,7 @@ function bloc_partenaires() {
     <?php $cpt=0;foreach($data_fournisseurs as $id=>$data) {?>
       <tr>
       <td bgcolor="white" align=center>    
-        <table width="100%" cellpadding="3"><td color=white align=center>
+        <table width="100%" cellpadding="3"><tr><td color=white align=center>
         <a style="text-decoration:none;" href="<?php echo $data['url'];?>">
           <font face="sans-serif"  color="#0066b3" style="font-size:11px;text-decoration:none;">
             <b style="text-decoration:none;">
@@ -395,7 +400,7 @@ function bloc_partenaires() {
             </b>
           </font>
         </a>
-        </td></table>
+        </td></tr></table>
       </td>
       </tr>
     <?php $cpt++;}?>

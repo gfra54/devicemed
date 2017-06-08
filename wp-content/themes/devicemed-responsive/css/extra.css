@@ -1,3 +1,15 @@
+
+.btn-nl {
+  background: #0066B3;
+  color:white;
+  border:1px solid #0066B3;
+  outline: 0;
+  padding:8px;
+}
+.btn-nl:hover {
+  color: #0066B3;
+  background:white;
+}
   #sidebar-fiches .logo_supplier {
     float: left;
     width: 49%;

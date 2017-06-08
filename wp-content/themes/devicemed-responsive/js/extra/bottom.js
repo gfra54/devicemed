@@ -3,48 +3,19 @@ var _menu_top=false;
 var _menu_bottom=false;
 var _wpadminbar = 0;
 $(document).ready(function() {
-/*	if(read_cookie('wpadmin')) {
-		$('body').addClass('voir-adminbar');
-		if($('#wp-admin-bar').length==0) {
 
-			$('<script type="text/javascript" src="/wp-includes/js/admin-bar.min.js?ver=4.1.8"></script>\
-				<link rel="stylesheet" id="dashicons-css"  href="/wp-includes/css/dashicons.min.css?ver=4.1.8" type="text/css" media="all" />\
-				<link rel="stylesheet" href="/wp-includes/css/admin-bar.min.css?ver=4.1.8" type="text/css"/>\
-				<div id="wpadminbar" class="" role="navigation">\
-				<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Aller à la barre d’outils</a>\
-				<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Barre de navigation supérieure." tabindex="0">\
-				<ul id="wp-admin-bar-root-default" class="ab-top-menu">\
-				<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="/wp-admin/about.php" title="À propos de WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">\
-				<li id="wp-admin-bar-about"><a class="ab-item" href="/wp-admin/about.php">À propos de WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">\
-				<li id="wp-admin-bar-wporg"><a class="ab-item" href="http://www.wordpress-fr.net/">Site de WordPress-FR</a>		</li>\
-				<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		</li>\
-				<li id="wp-admin-bar-support-forums"><a class="ab-item" href="http://www.wordpress-fr.net/support">Forums d’entraide</a>		</li>\
-				<li id="wp-admin-bar-feedback"><a class="ab-item" href="https://wordpress.org/support/forum/requests-and-feedback">Remarque</a>		</li></ul></div>		</li>\
-				<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item" aria-haspopup="true" href="/wp-admin/">DeviceMed.fr</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">\
-				<li id="wp-admin-bar-dashboard"><a class="ab-item" href="/wp-admin/">Tableau de bord</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">\
-				<li id="wp-admin-bar-themes"><a class="ab-item" href="/wp-admin/themes.php">Thèmes</a>		</li>\
-				<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item" href="/wp-admin/customize.php?url=http%3A%2F%2Fwww.devicemed.local%2F%3Fs%3Dqosina">Personnaliser</a>		</li>\
-				<li id="wp-admin-bar-menus"><a class="ab-item" href="/wp-admin/nav-menus.php">Menus</a>		</li></ul></div>		</li>\
-				<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item" aria-haspopup="true" href="/wp-admin/post-new.php" title="Créer"><span class="ab-icon"></span><span class="ab-label">Créer</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">\
-				<li id="wp-admin-bar-new-post"><a class="ab-item" href="/wp-admin/post-new.php">Article</a>		</li>\
-				<li id="wp-admin-bar-new-media"><a class="ab-item" href="/wp-admin/media-new.php">Fichier média</a>		</li>\
-				<li id="wp-admin-bar-new-page"><a class="ab-item" href="/wp-admin/post-new.php?post_type=page">Page</a>		</li>\
-				<li id="wp-admin-bar-new-salons"><a class="ab-item" href="/wp-admin/post-new.php?post_type=salons">Salon</a>		</li>\
-				<li id="wp-admin-bar-new-newsletter"><a class="ab-item" href="/wp-admin/post-new.php?post_type=newsletter">Newsletter</a>		</li>\
-				<li id="wp-admin-bar-new-pubs"><a class="ab-item" href="/wp-admin/post-new.php?post_type=pubs">Publicité</a>		</li>\
-				<li id="wp-admin-bar-new-fournisseur"><a class="ab-item" href="/wp-admin/post-new.php?post_type=fournisseur">Fournisseur</a>		</li>\
-				<li id="wp-admin-bar-new-user"><a class="ab-item" href="/wp-admin/user-new.php">Utilisateur</a>		</li></ul></div>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">\
-				<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" type="text" value="" maxlength="150"><input type="submit" class="adminbar-button" value="Recherche"></form></div>		</li>\
-				</ul></div>\
-				<a class="screen-reader-shortcut" href="/wp-login.php?action=logout&amp;_wpnonce=9bb29c6436">Se déconnecter</a>\
-				</div>').appendTo('body');
-			$('body').css('padding-top',32);
-		} else {
-			$('#wp-admin-bar-my-account, #wp-admin-bar-updates, #wp-admin-bar-comments').remove();
-			$('body').css('padding-top',1);
-		}
+	$('#formnl').submit(function() {
+		openNl('about:blank');
+	});
+	$('.btn-nl').on('click',function(){
+	    openNl('http://devicemed.us15.list-manage1.com/subscribe?u=3e97c5daff9192e3f43c22080&id=8b91d09d5c');
+	})
 
-	}*/
+	$('#mailjet-widget-email-field-6901').on('focus keyup keydown',function() {
+		document.location.href = '/newsletter/inscription';
+	})
+
+
 	$('.menu-fournisseurs .button').each(function(){
 		_id = '#'+$(this).data('id');
 		if(!$(_id).length) {
@@ -161,4 +132,12 @@ $(window).scroll(function(){
 function read_cookie(key){
     var result;
     return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? (result[1]) : null;
+}
+
+function openNl(_url) {
+	_w=500;
+	_h=550;
+	_x = $(window).width()/2 - _w/2;
+	_y = $(window).height()/2 - _h/2;
+    window.open(_url,'formnl','toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width='+_w+',height='+_h+',left='+_x+',top='+_y);
 }
