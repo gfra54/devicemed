@@ -362,7 +362,7 @@ ob_start();
 				<tr>
 					<td width="120" valign="top" border=0>
 						<a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank">
-						<table bgcolor=#ccc cellspacing=0 cellpadding=1><tr><td><img style="display:block" width="100" height="auto" src="<?php echo $ad['image'];?>"></td></tr>tr></table></a>
+						<table bgcolor=#ccc cellspacing=0 cellpadding=1><tr><td><img style="display:block" width="100" height="auto" src="<?php echo $ad['image'];?>"></td></tr></table></a>
 					</td>
 					<td valign="top" border=0>
 						<a style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><span style="font-size:16px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;color:black;"><?php echo $ad['title'];?></span></a>
