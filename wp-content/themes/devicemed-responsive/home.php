@@ -24,12 +24,14 @@ $slider = get_posts(array(
 ?>
 <section id="last-posts-featured">
 	<div class="slider">
-<?php $featured = array(); foreach ($slider as $post): setup_postdata($post); $featured[] = $post->ID; ?>
+<?php $featured = array(); foreach ($slider as $post): setup_postdata($post); $featured[] = $post->ID; 
+$image_carousel = image_carousel($post->ID);
+?>
 		<article>
 			<a href="<?php echo get_permalink($post->ID); ?>">
 			<div class="col-md-8 col-sm-8 column-right">
 <?php if ($thumbnail = devicemed_get_post_featured_thumbnail($post->ID)): ?>
-				<figure style="background-image:url('<?php echo $thumbnail->url; ?>')">
+				<figure style="background-image:url('<?php echo $image_carousel ? $image_carousel['url'] : $thumbnail->url; ?>')">
 					<img src="<?php echo $thumbnail->url; ?>" title="<?php echo $thumbnail->post_title; ?>" />
 				</figure>
 <?php endif; ?>

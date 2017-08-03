@@ -89,7 +89,7 @@
 
 			?>
 				<div class="article-image">
-				<div class='image_clicable'><a href="<?php echo $image_au_clic; ?>" class="cboxElement"><figure style="background-image:url('<?php echo $thumbnail->url; ?>')">
+				<div class='image_clicable'><a href="<?php echo $image_au_clic; ?>"><figure style="background-image:url('<?php echo $thumbnail->url; ?>')">
 					<img src="<?php echo $thumbnail->url ?>" title="<?php echo esc_attr($thumbnail->post_title); ?>" />
 				</figure></a></div>
 				<div class='source_photo'><div class="source-content">Source : <?php echo esc_attr($thumbnail->post_title); ?></div></div>
