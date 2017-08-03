@@ -122,6 +122,13 @@
 			}
 		?>
 		
+		<section class="social">
+				Suivez l'actualité de DeviceMed sur nos réseaux sociaux:
+				<div class="social-boutons">
+				<a href="https://twitter.com/DeviceMedFr"><img src="<?php echo get_template_directory_uri(); ?>/images/twitter-couleur.png"> Twitter</a>
+				<a href="https://fr.linkedin.com/company/devicemed-france"><img src="<?php echo get_template_directory_uri(); ?>/images/linkedin-couleur.png"> LinkedIn</a>
+				</div>
+		</section>
 		<section class="relateds">
 			<!-- Encart afficher titres articles de la même catégorie -->
 			<?php

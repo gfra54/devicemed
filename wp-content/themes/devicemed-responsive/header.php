@@ -123,12 +123,6 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 <div class="bloc_top_header">
 	<div class='vogel_logo'><img src='/wp-content/uploads/vogel_logo.png' /></div>
 	<div class='contenu_droit'>
-			<div class="links">
-				<a href="/">Accueil</a>
-			</div>
-			<div class="links">
-				<a href="/feed/">RSS</a>
-			</div>
 		<?php if ($session = DM_Wordpress_Members::session()): ?>
 			<div class="links">
 				<a href="<?php echo site_url('/members/profile'); ?>">Profil de "<?php echo esc_html($session['user_nicename']); ?>"</a>
@@ -144,7 +138,14 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 <!-- 		<div class='links'>
 			<a href='/newsletter/inscription'>Archives de la newsletter</a>
 		</div>
- -->		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='/wp-content/uploads/devicemed_allemand.png' /></a></div>
+ -->
+			<div class="links social-link">
+				<a href="https://twitter.com/DeviceMedFr"><img src="<?php echo get_template_directory_uri(); ?>/images/twitter.png"></a>
+			</div>
+			<div class="links social-link">
+				<a href="https://fr.linkedin.com/company/devicemed-france"><img src="<?php echo get_template_directory_uri(); ?>/images/linkedin.png"></a>
+			</div>
+ 		<div class='devicemed_allemand'><a href='http://www.devicemed.de/' target='_blank'><img src='/wp-content/uploads/devicemed_allemand.png' /></a></div>
 	</div>
 </div>
 <header id="header">

@@ -680,3 +680,26 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
   letter-spacing: 0.5px;
 }
 
+.social-link img{
+  height: 16px;
+}
+.social-link:hover img{
+  opacity:0.7;
+}
+.social-boutons {
+  margin-top: 1em;
+}
+
+.social-boutons a{
+  display: inline-block;
+  margin-right: 1.5em;
+  font-size: 1.5em;
+  padding:5px;
+}
+.social-boutons a IMG{
+  height: 32px;
+}
+.social-boutons a:hover{
+  background:#0066b3;
+  color:white;
+}
