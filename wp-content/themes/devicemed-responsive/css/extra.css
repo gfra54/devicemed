@@ -680,6 +680,12 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
   letter-spacing: 0.5px;
 }
 
+.contenu_droit .links:nth-child(1){
+  margin-right:2em;
+}
+.devicemed_allemand {
+  margin-left: 2em;
+}
 .social-link img{
   height: 16px;
 }
