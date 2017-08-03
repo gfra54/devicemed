@@ -64,8 +64,21 @@
 					<span class="author-wrapper">par <span class="author"><?php the_author(); ?> </span></span>
 				</div>
 			<?php } 
-			if ($thumbnail = devicemed_get_post_featured_thumbnail($post->ID)): 
-
+			$image_au_clic = image_au_clic($post->ID);
+			if($image_non_recadree = image_non_recadree($post->ID)) {
+				$image_au_clic =  $image_au_clic ? $image_au_clic['url'] : $image_non_recadree['url'];?>
+				<div class="article-image article-image-non-recadree">
+					<a href="<?php echo $image_au_clic;?>"><img src="<?php echo $image_non_recadree['url'] ?>" title="<?php echo esc_attr(sinon($image_non_recadree,'description','caption')); ?>" /></a>
+					<div class='source_photo'>
+						<div class="source-content">Source : <?php echo esc_attr(sinon($image_non_recadree,'title')); ?></div>
+					</div>
+					<?php if($legende = sinon($image_non_recadree,'caption')) { ?>
+						<div class='legende_photo'><?php echo $legende; ?></div>
+					<?php } ?>
+				</div>
+				<?php } else
+			if ($thumbnail = devicemed_get_post_featured_thumbnail($post->ID)) { 
+				$image_au_clic =  $image_au_clic ? $image_au_clic['url'] : $thumbnail->url;
 /* 				if($fi = $dynamic_featured_image->get_featured_images()) {
 					$url = $fi[0]['full'];
 					?>
@@ -80,13 +93,13 @@
 					<img src="<?php echo $thumbnail->url ?>" title="<?php echo esc_attr($thumbnail->post_title); ?>" />
 				</figure></a></div>
 				<div class='source_photo'><div class="source-content">Source : <?php echo esc_attr($thumbnail->post_title); ?></div></div>
-				</div>
 				<?php if($thumbnail->post_excerpt != '') { ?>
 					<div class='legende_photo'><?php echo $thumbnail->post_excerpt; ?></div>
 				<?php } ?>
+				</div>
 			<?php //}
 
-			endif; ?>
+			} ?>
 			<div class="content">
 				<?php 
 					the_content(); 

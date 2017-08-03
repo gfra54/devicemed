@@ -71,6 +71,18 @@ function devicemed_get_post_featured_thumbnail($post_id) {
 	}
 	return false;
 }
+function image_au_clic($post_id) {
+	if($image_au_clic = get_field('image_au_clic',$post_id)) {
+		return $image_au_clic;
+	}
+}
+function image_non_recadree($post_id) {
+	if($image_non_recadree = get_field('image_non_recadree',$post_id)) {
+		return $image_non_recadree;
+	}
+}
+
+
 function devicemed_get_post_excerpt() {
 	$excerpt = get_the_excerpt();
 	return $excerpt;

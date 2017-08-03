@@ -2249,7 +2249,7 @@ section.home-subscribe .section-newsletter .icon {
     padding-left: 0px;
     padding-bottom: 5px;
     position: relative;
-  text-align: center;
+  text-align: left;
   }
 }
 .page-single .column-main section.article article .export ul {
@@ -3733,4 +3733,18 @@ body .column-main {
 }
 #header .logo:hover {
   opacity: 0.7;
+}
+
+
+.article-image {
+    background-color: #ddd;
+}
+
+.article-image-non-recadree img {
+  width: calc(100% - 2.5em);
+  display: block;
+}
+
+.article-image-non-recadree .source_photo {
+  background: transparent;
 }
