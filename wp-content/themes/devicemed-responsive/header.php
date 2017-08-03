@@ -115,7 +115,8 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 </div>
 
 <?php if(!afficher_pub('site-habillage')) {?>
-	<body>
+	<body
+	>
 <?php }?>
 
 <div class='bloc_cachepopup'></div>
