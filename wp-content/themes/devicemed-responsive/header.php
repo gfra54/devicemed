@@ -20,7 +20,7 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 	<?php include_external('css/bootstrap.min.css');?>
 	<?php include_external('css/default.css');?>
 	<?php include_external('css/extra.css');?>
-	<?php include_external('js/colorbox/example1/colorbox.css');?>
+	<?php //include_external('js/colorbox/example1/colorbox.css');?>
 	<?php include_external('js/jquery.min.js');?>
 	<?php include_external('js/jquery.bxslider.min.js');?>
 	<?php include_external('js/fancybox/jquery.fancybox.js');?>
