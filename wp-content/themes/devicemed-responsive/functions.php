@@ -76,6 +76,12 @@ function image_carousel($post_id) {
 		return $image_carousel;
 	}
 }
+
+function masquer_image_a_la_une($post_id) {
+	if($masquer_image_a_la_une = get_field('masquer_image_a_la_une',$post_id)) {
+		return true;
+	}
+}
 function image_au_clic($post_id) {
 	if($image_au_clic = get_field('image_au_clic',$post_id)) {
 		return $image_au_clic;
