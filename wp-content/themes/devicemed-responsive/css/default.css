@@ -1283,6 +1283,19 @@ footer#footer .credits {
 
 .article_numero {
   margin-bottom: 15px;
+  position: relative;
+}
+.article_numero .cta{
+  width: 60%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0.6;
+  -webkit-transition:opacity 0.5s;
+  transition:opacity 0.5s;
+}
+.article_numero:hover .cta{
+  opacity: 1;
 }
 
 #sidebar-issues .more:hover {
