@@ -1,4 +1,17 @@
 <?php
+function array_insert_after($key, array &$array, $new_key, $new_value) {
+  if (array_key_exists ($key, $array)) {
+    $new = array();
+    foreach ($array as $k => $value) {
+      $new[$k] = $value;
+      if ($k === $key) {
+        $new[$new_key] = $new_value;
+      }
+    }
+    return $new;
+  }
+  return FALSE;
+}
 
 function html_replace($find,$replace, $content) {
 	require_once plugin_dir_path( __FILE__ ).'/simple_html_dom.php';

@@ -1084,7 +1084,7 @@ if ( ! class_exists( 'Attachments' ) ) :
                     'label'         => __( 'Attachments', 'attachments' ),
 
                     // all post types to utilize (string|array)
-                    'post_type'     => array( 'post', 'page' ),
+                    'post_type'     => array( /*'post', 'page'*/ ),
 
                     // meta box position (string) (normal, side or advanced)
                     'position'      => 'normal',

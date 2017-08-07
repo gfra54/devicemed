@@ -1,4 +1,39 @@
 <?php
+function sommaire_magazine_home() {
+	$args = array( 
+		'posts_per_page'=>1,
+		'order'=>'DESC',
+		'orderby'=>'date',
+		'category_name'=> 'magazine',
+		'post__in'		=> get_option( 'sticky_posts' ),
+		'date_query' => array(
+		    'after' => date('Y-m-d', strtotime('-7 days')) 
+		)
+    );
+	if($posts = new WP_Query($args)) {
+		foreach($posts->posts as $post) {
+        	$cover = get_the_post_thumbnail_url($post->ID,'full'); 
+        	$url = get_permalink($post->ID);
+			$code = '<section class="home-last-posts" id="sommaire-magazine">';
+			$code.= '<div class="magazine-cover"><a href="'.$url.'"><img src="'.$cover.'"></a></div>';
+			$code.= '<div class="magazine-details">';
+			
+			$code.='<div class="magazine-surtitre">'.get_field('libelle_de_publication',$post->ID).'</div>';
+			$code.='<div class="magazine-titre"><a href="'.$url.'">'.get_field('intitule',$post->ID).'</a></div>';
+			$code.='<div class="magazine-texte">'.get_field('texte_home',$post->ID).'</div>';
+			$code.='<div class="magazine-libelle">'.get_field('libelle_abonnement',$post->ID).'</div>';
+			$code.='<div class="magazine-boutons">';
+			$code.='<a href="'.$url.'" class="">Lire le sommaire</a>';
+			$code.='<a href="'.get_field('fichier_pdf',$post->ID).'" class="">Télécharger en PDF</a>';
+			$code.='<a href="/magazine/abonnement" class="bouton-abo">S\'abonner gratuitement</a>';
+			$code.= '</div>';
+			$code.= '</section>';
+		}
+		echo $code;
+	}
+}
+
+
 add_theme_support('post-thumbnails');
 
 register_nav_menus(array(

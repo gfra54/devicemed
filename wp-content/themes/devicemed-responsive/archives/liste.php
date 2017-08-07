@@ -5,49 +5,46 @@
 		<h2 class="title">Tous nos numéros</h2>
 		<div id='soustitre_archives'>Pour recevoir gratuitement le magazine papier, <a href="/magazine/abonnement" target="_blank"><b>cliquez ici</b></a>.</div>
 		<div id='contenu_archives'>
-			<?php if ($session = DM_Wordpress_Members::session()) { ?>
-				<?php 
-					$urlTemp = get_bloginfo('url');
-					
-					foreach ($archives as $archive):
-						$urlImg = $urlTemp ."/wp-content/uploads/archives/apercu/". $archive['apercu_archive'];
-						$lienPdf = $urlTemp ."/wp-content/uploads/archives/pdf/". $archive['pdf_archive'];
-				?>
-				<a href='<?php echo $lienPdf; ?>' target='_blank'>
-					<article class='archive'>
-						<figure><img src='<?php echo $urlImg; ?>' /></figure>
-						<div class='nom_catalogue'><?php echo $archive['titre_archive']; ?></div>
+			<?php 
+
+				$urlTemp = get_bloginfo('url');
+				$liste = array();
+				$args = array( 
+					'order'=>'DESC',
+					'orderby'=>'date',
+					'category_name'=> 'magazine',
+					'meta_key' => 'fichier_pdf',
+					'meta_value' => '',
+					'meta_compare' => '!=',
+				);
+
+				if($posts = new WP_Query($args)) {
+					foreach($posts->posts as $post) {
+						$liste[] = array(
+							'image'=>get_the_post_thumbnail_url($post->ID,'post-thumbnail'),
+							'lien'=>get_permalink($post->ID),
+							'nom'=>get_field('intitule',$post->ID)
+						);
+					}
+				}
+
+				
+				foreach ($archives as $archive) {
+					$liste[] = array(
+						'image'=>$urlTemp ."/wp-content/uploads/archives/apercu/". $archive['apercu_archive'],
+						'lien'=>$urlTemp ."/wp-content/uploads/archives/pdf/". $archive['pdf_archive'],
+						'nom'=>$archive['titre_archive']
+					);
+				}
+			?>
+			<?php foreach($liste as $magazine){ ?>
+				<a href="<?php echo $magazine['lien']; ?>" target="_blank">
+					<article class="archive">
+						<figure><img src="<?php echo $magazine['image']; ?>" /></figure>
+						<div class="nom_catalogue"><?php echo $magazine['nom']; ?></div>
 					</article>
 				</a>
-				<?php
-					endforeach;
-				?>
-			<?php }else { ?>
-				<?php 
-					$urlTemp = get_bloginfo('url');
-					
-					foreach ($archives as $archive):
-						$urlImg = $urlTemp ."/wp-content/uploads/archives/apercu/". $archive['apercu_archive'];
-						$lienPdf = $urlTemp ."/wp-content/uploads/archives/pdf/". $archive['pdf_archive'];
-				?>
-				<?php if($archive['pdf_archive'] == '006_gesamt.pdf' || $archive['pdf_archive'] == 'novembre-decembre2015.pdf') { ?>
-					<a href='<?php echo $lienPdf; ?>' target='_blank'>
-						<article class='archive'>
-							<figure><img src='<?php echo $urlImg; ?>' /></figure>
-							<div class='nom_catalogue'><?php echo $archive['titre_archive']; ?></div>
-						</article>
-					</a>
-				<?php }else { ?>
-					<?php echo "<div style='display:none;'>lienPdf : $lienPdf</div>"; ?>
-					<article class='archive_notConnected'>
-						<figure><img src='<?php echo $urlImg; ?>' /></figure>
-						<div class='nom_catalogue'><?php echo $archive['titre_archive']; ?></div>
-					</article>
-				<?php } ?>
-				<?php
-					endforeach;
-				?>
-			<?php } ?>
+			<?php }?>
 		</div>
 	</section>
 

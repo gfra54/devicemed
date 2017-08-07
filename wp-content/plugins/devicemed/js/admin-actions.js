@@ -2,7 +2,7 @@
 	$(document).ready(function(){
 		// $('<link rel="stylesheet" href="/wp-content/plugins/devicemed/css/admin.css" type="text/css" media="all" />').appendTo('head');
 		
-		setInterval(function(){
+/*		setInterval(function(){
 			if(document.getElementById('wp-link-wrap').style.display == 'block') {
 				if(!$('#wp-link-wrap').data('ok')) {
 
@@ -39,7 +39,7 @@
 				$('#url-field').css('display','block');
 				$('.link-connexe, #tmp-url-field').remove();
 			}
-		},100);		
+		},100);	*/
 
 		if($('#wp-admin-bar-view .ab-item').length) {
 			if($('#wp-admin-bar-view .ab-item').html().indexOf('Newsletter')>0) {
