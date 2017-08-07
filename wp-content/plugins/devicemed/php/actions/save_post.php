@@ -75,9 +75,7 @@ function save_post_action($post_id) {
 		}
 
 	} else {
-		if(in_category('magazine',$post_id)) {
-			set_transient('sommaire_magazine_home','');
-		}
+		set_transient('sommaire_magazine_home','');
 		update_post_meta($post_id,'content_parsed','');
 	}
 
