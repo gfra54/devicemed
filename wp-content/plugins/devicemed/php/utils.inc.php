@@ -1,4 +1,12 @@
 <?php
+function urlToPath($url) {
+	if($url) {
+		list($pre) = explode('/wp-content',get_stylesheet_directory());
+		
+		$path = str_replace( site_url(), $pre, $url);
+		return realpath($path);
+	}
+}
 function array_insert_after($key, array &$array, $new_key, $new_value) {
   if (array_key_exists ($key, $array)) {
     $new = array();

@@ -1,0 +1,1 @@
+convert F:\dev\devicemed\devicemed\wp-content\uploads\2017\08\devicemed-juillet-2017.pdf F:\dev\devicemed\devicemed\wp-content\uploads\2017\08devicemed-juillet-2017.pdf.jpgsdevicemed-juillet-2017.pdf.%04d.jpg
