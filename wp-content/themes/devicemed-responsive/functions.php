@@ -11,7 +11,7 @@ function sommaire_magazine_home() {
 			'category_name'=> 'magazine',
 			'post__in'		=> get_option( 'sticky_posts' ),
 			'date_query' => array(
-			    'after' => date('Y-m-d', strtotime('-7 days')) 
+			    'after' => date('Y-m-d', strtotime('-13 days')) 
 			)
 	    );
 		if($posts = new WP_Query($args)) {
@@ -29,7 +29,7 @@ function sommaire_magazine_home() {
 				$code.='<div class="magazine-boutons">';
 				$code.='<a href="'.$url.'" class="">Lire le sommaire</a>';
 				$code.='<a href="'.get_field('fichier_pdf',$post->ID).'" class="">Télécharger en PDF</a>';
-				$code.='<a href="/magazine/abonnement" class="bouton-abo">S\'abonner gratuitement</a>';
+				$code.='<a href="/magazine/abonnement" class="bouton-abo">S\'abonner</a>';
 				$code.= '</div>';
 				$code.= '</section>';
 			}

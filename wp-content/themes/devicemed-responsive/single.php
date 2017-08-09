@@ -57,19 +57,40 @@
 			<?php } ?>
 			<?php endif; 
 			if($is_magazine=in_category('magazine',$post->ID)) {
-				$url_pdf = get_field('fichier_pdf',$post->ID);
-				$thumbnail = get_post(get_post_thumbnail_id($post->ID));
-				?>
+				$url_pdf = get_field('fichier_pdf',$post->ID);?>
 				<h1 class="title"><?php echo get_field('intitule',$post->ID); ?></h1>
 				<div class="content">
 					<p><?php echo get_field('libelle_de_publication',$post->ID); ?></p>
 				</div>
-				<a href="<?php echo $url_pdf;?>" class="magazine-cover-big">
-				<img class="cta" src="<?php echo get_template_directory_uri(); ?>/images/cta-magazine.png">
-				<img class="cover" src="<?php echo wp_get_attachment_url($thumbnail->ID);?>">
-				</a>
-				<center><a href="<?php echo $url_pdf;?>">Cliquez sur la couverture pour consulter le magazine</a></center>
+
 				<?php
+				$path_pdf = urlToPath($url_pdf);
+				$path_jpgs = $path_pdf.'.jpgs';
+				if(is_dir($path_jpgs)) {
+					$jpgs = glob($path_jpgs.'/*.jpg');
+					$book = '<div id="flipbook">';
+					foreach($jpgs as $key => $jpg) {
+						if(in_array($key, array(0,1))) {
+							$hard=true;
+						} else {
+							$hard=false;
+						}
+						$book.='<div class="'.($hard ? 'hard' : '').'">';
+						$book.='<img src="'.pathToUrl($jpg).'">';
+						$book.='</div>';
+					}
+					echo $book;
+
+				} else {
+					$thumbnail = get_post(get_post_thumbnail_id($post->ID));
+					?>
+					<a href="<?php echo $url_pdf;?>" class="magazine-cover-big">
+					<img class="cta" src="<?php echo get_template_directory_uri(); ?>/images/cta-magazine.png">
+					<img class="cover" src="<?php echo wp_get_attachment_url($thumbnail->ID);?>">
+					</a>
+					<center><a href="<?php echo $url_pdf;?>">Cliquez sur la couverture pour consulter le magazine</a></center>
+					<?php
+				}
 			} else {?>
 				<h1 class="title"><?php echo get_the_title(); ?></h1>
 				<?php if(strstr($_SERVER['REQUEST_URI'], 3671)===false) { ?>

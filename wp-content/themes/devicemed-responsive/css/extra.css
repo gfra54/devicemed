@@ -713,7 +713,7 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
 
 #sommaire-magazine {
   position: relative;
-  background:#0066b3;
+  background:#b30065;
   padding:20px;
   overflow: hidden;
   height: 200px;
@@ -761,7 +761,7 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
 .magazine-boutons a{
   display: inline-block;
   background:white;
-  color: #0066b3;
+  color: #b30065;
   border:1px solid white;
   text-transform: uppercase;
   font-family: sans-serif;
@@ -772,12 +772,12 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
 }
 
 .magazine-boutons .bouton-abo {
-  background:#b30065;
-  border-color: #b30065;
+  background:#0066b3;
+  border-color: #0066b3;
   color:white;
 }
 .magazine-boutons a:hover{
-  background:#0066b3;
+  background:#b30065;
   border-color: white;
   color:white;
 }
