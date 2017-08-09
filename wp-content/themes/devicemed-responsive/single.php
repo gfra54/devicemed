@@ -58,6 +58,7 @@
 			<?php endif; 
 			if($is_magazine=in_category('magazine',$post->ID)) {
 				$url_pdf = get_field('fichier_pdf',$post->ID);?>
+				<style>.article_numero_sidebar {display:none;}</style>
 				<h1 class="title"><?php echo get_field('intitule',$post->ID); ?></h1>
 				<div class="content">
 					<p><?php echo get_field('libelle_de_publication',$post->ID); ?></p>
