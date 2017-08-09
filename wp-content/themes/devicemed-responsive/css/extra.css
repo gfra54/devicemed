@@ -819,3 +819,28 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
  .magazine-cover-big:hover .cta{
   opacity: 1;
  }
+
+.article-image  {
+  position: relative;
+ }
+
+.article-image .image_clicable a:before {
+  display: block;
+  content:"Cliquez pour agrandir l'image";
+  position: absolute;
+  left : 5px;
+  bottom: 5px;
+  color:white;
+  background:rgba(0,0,0,0);
+  opacity: 0.5;
+  border-radius: 5px; 
+  font-size: 10px;
+  text-transform: uppercase;
+  padding: 3px;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+}
+.article-image .image_clicable a:hover:before {
+  background:rgba(0,0,0,0.5);
+  opacity: 1;
+}

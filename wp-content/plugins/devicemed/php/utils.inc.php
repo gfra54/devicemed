@@ -122,7 +122,7 @@ function get_related($id,$qte=3,$all=true) {
 		'cat' => $cats,
 		'post__not_in' => array($id),
 		'posts_per_page'=>$qte,
-		'caller_get_posts'=>1,
+		'ignore_sticky_posts'=>1,
 		'order'=>'DESC',
 		'orderby'=>'date'
 		);
