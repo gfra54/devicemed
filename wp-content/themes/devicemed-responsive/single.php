@@ -124,7 +124,7 @@
 					the_content(); 
 				?>
 			<?php if($is_magazine) {?>
-			<p>Ce numéro est <a href="<?php echo $url_pdf;?>" target="_blank">téléchargeable au format PDF, en cliquant ici</a>a>. Tout comme les numéros précédents, <a href="/archives">à partir de la page des archives</a>.</p>
+			<p>Ce numéro est <a href="<?php echo $url_pdf;?>" target="_blank">téléchargeable au format PDF, en cliquant ici</a>. Tout comme les numéros précédents, <a href="/archives">à partir de la page des archives</a>.</p>
 			<p>Pour recevoir gratuitement le magazine en version papier, <a href="/magazine/abonnement">abonnez-vous en cliquant ici</a>.</p>
 
 			<?php }?>
