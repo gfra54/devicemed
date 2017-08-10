@@ -6,7 +6,7 @@ function get_salons($nb=4,$debut=0) {
 	if(!$debut) {
 		$debut=time();
 	}
-	$salons = get_transient('!salons');
+	$salons = get_transient('salons');
 	if(!$salons) {
 		$args = array( 
 			'post_type'	=> 'salons',

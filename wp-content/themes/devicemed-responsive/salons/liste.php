@@ -68,7 +68,7 @@ if($debut) {
 			</div>-->
 		</div>
 		<hr>
-		<center><p><a class="lien-classique" href="?debut=<?=$debut-1;?>">Voir la liste des événements ultérieurs</a></p></center>
+		<center><p><a class="lien-classique" href="?debut=<?=$debut-1;?>">Voir la liste des événements antérieurs</a></p></center>
 	</section>
 
 	</div><!-- .column-main -->

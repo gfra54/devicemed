@@ -12,7 +12,10 @@ function save_post_action($post_id) {
 		update_field('url_tracking_display', $display, $post_id);
 
     
-		$clicks = bitly_shorten(get_field('url_cible',$post_id));
+    	$url_cible = get_field('url_cible',$post_id);
+    	update_field('url_cible',http($url_cible),$post_id);
+
+		$clicks = bitly_shorten($url_cible);
 		update_field('url_tracking_clicks', $clicks, $post_id);
 
 

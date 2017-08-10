@@ -143,6 +143,7 @@ function transient_key($lib,$id) {
 }
 
 function https($url) {
+	$url = http($url);
 	if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 		$url = str_replace('http://','https://',$url);
 	}
