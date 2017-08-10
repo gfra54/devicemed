@@ -67,11 +67,11 @@
 				<?php
 					$thumbnail = get_post(get_post_thumbnail_id($post->ID));
 					?>
-					<a href="<?php echo $url_pdf;?>" class="magazine-cover-big">
+					<a href="<?php echo $url_pdf;?>" target="_blank" class="magazine-cover-big">
 					<img class="cta" src="<?php echo get_template_directory_uri(); ?>/images/cta-magazine.png">
 					<img class="cover" src="<?php echo wp_get_attachment_url($thumbnail->ID);?>">
 					</a>
-					<center><a href="<?php echo $url_pdf;?>">Cliquez sur la couverture pour consulter le magazine</a></center>
+					<center><a href="<?php echo $url_pdf;?>" target="_blank">Cliquez sur la couverture pour consulter le magazine</a></center>
 					<?php
 			} else {?>
 				<h1 class="title"><?php echo get_the_title(); ?></h1>
@@ -124,8 +124,9 @@
 					the_content(); 
 				?>
 			<?php if($is_magazine) {?>
-				<p>Pour recevoir notre magazine papier gratuitement chez vous, <a href="/magazine/abonnement">abonnez-vous sur cette page</a>. Le magazine est aussi <a href="<?php echo $url_pdf;?>">téléchargeable en PDF à cette adresse</a>.</p>
-				<p>Vous pouvez aussi consulter <a href="/archives">les archives de nos anciens numéros</a>.
+			<p>Ce numéro est <a href="<?php echo $url_pdf;?>" target="_blank">téléchargeable au format PDF, en cliquant ici</a>a>. Tout comme les numéros précédents, <a href="/archives">à partir de la page des archives</a>.</p>
+			<p>Pour recevoir gratuitement le magazine en version papier, <a href="/magazine/abonnement">abonnez-vous en cliquant ici</a>.</p>
+
 			<?php }?>
 			</div>
 			<?php $images = get_children(array ('post_parent' => $post->ID, 'post_type' => 'attachment', 'post_mime_type' => 'image')); ?>
