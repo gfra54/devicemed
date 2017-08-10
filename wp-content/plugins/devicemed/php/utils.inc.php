@@ -258,7 +258,11 @@ function include_external($file,$maj=false){
 		$ext = getExtension($file);
 		if(!isUrl($file)) {
 			$path = DEVICEMED_THEME_PATH.$file;
-			$time= 'A'.date('Ymd');
+			if(file_exists($path)) {
+				$time= filemtime($path);
+			} else {
+				$time= 'A'.date('Ymd');
+			}
 			$time = $maj && $maj>$time ? $maj : $time;
 			$file = addURLParameter($file,'t',$time);
 			$file = DEVICEMED_THEME_URL.$file;
