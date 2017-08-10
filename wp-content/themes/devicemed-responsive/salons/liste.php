@@ -3,7 +3,7 @@ get_header();
 
 $debut=intval($_GET['debut']);
 if($debut) {
-	$date_debut = strtotime(date('Y').'-01-01');
+	$date_debut = strtotime($debut.'-01-01');
 } else {
 	$date_debut=false;
 	$debut = date('Y')+1;
