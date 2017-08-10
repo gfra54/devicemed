@@ -2,40 +2,27 @@
 
 setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
 
-function get_salons($nb=4) {
-	$args = array( 
-		'post_type'	=> 'salons',
-		'posts_per_page'=>1000,
-/*		'meta_query'	=> array(
-			'relation'		=> 'AND',
-			array(
-				'key'	  	=> 'date_debut',
-				'value'	  	=> date('Y-m-d'),
-				'compare' 	=> '>=',
-			),
-			array(
-				'key'	  	=> 'date_fin',
-				'value'	  	=> date('Y-m-d'),
-				'compare' 	=> '>=',
-			),
-		),*/		
-/*		'meta_key'=>'date_debut',
-		'orderby' => 'meta_value_num',
-		'order' => 'ASC'*/
-	);
-	if($salons = new WP_Query($args)) {
-		$sort=array();
-		foreach($salons->posts as $key => $salon) {
-			if(strtotime(get_field('date_debut',$salon->ID)) > time() || strtotime(get_field('date_fin',$salon->ID)) > time()) {
-				$sort[$key]=get_field('date_debut',$salon->ID);
+function get_salons($nb=4,$debut=0) {
+	if(!$debut) {
+		$debut=time();
+	}
+	$salons = get_transient('!salons');
+	if(!$salons) {
+		$args = array( 
+			'post_type'	=> 'salons',
+			'posts_per_page'=>1000,
+		);
+		if($q = new WP_Query($args)) {
+			$sort = array();
+			foreach($q->posts as $key => $salon) {
+				if((strtotime(get_field('date_debut',$salon->ID)) > $debut || strtotime(get_field('date_fin',$salon->ID)) > $debut)) {
+					$sort[$key]=get_field('date_debut',$salon->ID);
+				}
 			}
-		}
-		asort($sort);
-//		$sort = array_reverse($sort,true);
-		$out=array();
-		foreach($sort as $key=>$val) {
-			if(count($out) <= $nb) {
-				$salon = $salons->posts[$key];
+			asort($sort);
+			$salons=array();
+			foreach($sort as $key=>$val) {
+				$salon = $q->posts[$key];
 				$tmp = array('titre'=>get_the_title($salon->ID));
 				foreach(array('url','date_debut','date_fin','description','lieu','dates') as $champ) {
 					$tmp[$champ]=get_field($champ,$salon->ID);
@@ -43,12 +30,22 @@ function get_salons($nb=4) {
 						$tmp[$champ]= http($tmp[$champ]);
 					}
 				}
-				$out[]= $tmp;
-
+				$salons[]=$tmp;
 			}
+			set_transient('salons',$salons);
 		}
-		return $out;
+
 	}
+	$out=array();
+	$cpt=0;
+	foreach($salons as $salon) {
+		if(count($out) <= $nb+$debut) {
+			$out[]= $salon;
+
+		}
+		$cpt++;
+	}
+	return $out;
 }
 $GLOBALS['salons'] = array(
 	array(

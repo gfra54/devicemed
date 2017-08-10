@@ -2,7 +2,9 @@
 
 function save_post_action($post_id) {
     global $post; 
-    if ($post->post_type == 'pubs'){
+    if ($post->post_type == 'salons'){
+		set_transient('salons','');
+    }else if ($post->post_type == 'pubs'){
 		
 		
 

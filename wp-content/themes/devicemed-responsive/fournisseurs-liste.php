@@ -63,9 +63,9 @@ get_header(); ?>
 					<?php }?>
 				
 					<label for="terme">
-						<h3 class='title5'>Recherche rapide d'un fournisseur</h3>
+						<h3 class='title5'>Recherche rapide d'un fournisseur dans cette page</h3>
 						<input id="terme" type="text" value="<?php echo htmlspecialchars($terme);?>">
-					<label>
+					</label>
 
 				<div class="liste-fournisseurs">
 					<div id='bloc_supplier_search'>

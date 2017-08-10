@@ -1,7 +1,13 @@
 <?php 
 get_header(); 
 
-
+$debut=intval($_GET['debut']);
+if($debut) {
+	$date_debut = strtotime(date('Y').'-01-01');
+} else {
+	$date_debut=false;
+	$debut = date('Y')+1;
+}
 ?>
 <div class='notConnected'>
 	<span>Vous devez être connecté(e) pour accéder au contenu de cette page.</span>
@@ -14,13 +20,18 @@ get_header();
 		<div id='contenu_archives'>
 			
 		
-			<?php foreach(get_salons(20) as $salon) { $mois = ((strftime("%B %Y",strtotime($salon['date_debut']))));?>
+			<?php 
+				$date_ref=false;
+				foreach(get_salons(20,$date_debut) as $salon) { 
+				$mois = ((strftime("%B %Y",strtotime($salon['date_debut']))));
+				$date_ref=$date_ref ? $date_ref : $salon['date_debut'];
+				?>
 			<div class='bloc_manif'>
 				<?php if(!isset($mois_prec) || $mois != $mois_prec) {?>
 					<div class='mois_salons'><?php echo $mois;?></div>
 				<?php }?>
 				<div class='bloc_description_salons'>
-					<div class='titre_manif'><a href='<?php echo $salon['url'];?>' target='_blank'><?php echo $salon['titre'];?></a></div>
+					<div class='titre_manif'><?=svg('fleche-droite');?> <a href='<?php echo $salon['url'];?>' target='_blank'><?php echo $salon['titre'];?></a></div>
 					<div class='description_manif'><?php echo $salon['description'];?></div>
 					<div class='date_salon'><?php echo $salon['dates'];?> - <?php echo $salon['lieu'];?></div>
 				</div>
@@ -56,6 +67,8 @@ get_header();
 				</div>
 			</div>-->
 		</div>
+		<hr>
+		<center><p><a class="lien-classique" href="?debut=<?=$debut-1;?>">Voir la liste des événements ultérieurs</a></p></center>
 	</section>
 
 	</div><!-- .column-main -->

@@ -844,3 +844,54 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
   background:rgba(0,0,0,0.5);
   opacity: 1;
 }
+
+.svg-image {
+  display: inline-block;
+  position: relative;
+}
+.svg-image svg{
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill:inherit;
+}
+
+.bloc_manif .svg-fleche-droite, .agenda-salons .svg-fleche-droite{
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+}
+.bloc_manif .svg-fleche-droite svg, .agenda-salons .svg-fleche-droite svg{
+  fill:#0066b3;
+}
+.agenda-salon {
+  margin-bottom: 1em;
+}
+.agenda-salon a{
+  display: block;
+  font-family: 'opensans-condbold';
+  font-weight: 100;
+  color: #0066b3;
+  line-height: 1em;
+  font-size: 16px;
+}
+.titre_manif:hover, .agenda-salon a:hover{
+  color:#b30065;
+}
+.titre_manif:hover svg, .agenda-salon a:hover svg{
+  fill:#b30065;
+}
+
+
+.lien-classique {
+    color: #0066b3;
+    text-decoration: none;
+}
+
+.lien-classique:hover {
+    color: #b30065;
+    text-decoration: underline;
+}
