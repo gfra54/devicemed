@@ -83,7 +83,7 @@ if($arts = new WP_Query($args)) {
   <title><?php echo $newsletter->post_title;?></title>
 </head>
 <body>
-<center><a href="[[PERMALINK]]" style="font-family:sans-serif;font-size:10px;">Si vous ne visualisez pas bien cet email, cliquez ici pour voir la version en ligne.</a></center>
+<center><a href="*|ARCHIVE|*" style="font-family:sans-serif;font-size:10px;">Si vous ne visualisez pas bien cet email, cliquez ici pour voir la version en ligne.</a></center>
 <p></p>
 
   <table border="0" cellspacing="0" width="100%">
