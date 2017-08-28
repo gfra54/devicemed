@@ -7,6 +7,7 @@
 	$categories=$all || in_array('categories',$_SERVER['argv'])!==false;
 
 	require_once("../../../../wp-load.php");
+	$wp_upload_dir = wp_upload_dir();
 
 
 	if($categories) {
@@ -158,8 +159,8 @@
 					$supplier_media_metas = unserialize($media['supplier_media_metas']);
 					if($supplier_media_metas['filename']) {
 						$photo_base = 'suppliers/galleries/'.$gallerie['ID'].'/'.$supplier_media_metas['filename'];
-						$photo = wp_upload_dir()['basedir'].'/'.$photo_base;
-						$photo_url = wp_upload_dir()['baseurl'].'/'.$photo_base;
+						$photo = $wp_upload_dir['basedir'].'/'.$photo_base;
+						$photo_url = $wp_upload_dir['baseurl'].'/'.$photo_base;
 						if($attach_id = get_attachment_id_by_url($photo_url)) {
 							$new_photos[] = $attach_id;
 						} else {
