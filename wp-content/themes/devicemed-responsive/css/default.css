@@ -941,7 +941,6 @@ DIV.search {
 .devicemed_allemand {
   position: relative;
   display: inline-block;
-  margin-left: 20px;
 }
 
 #menu-item-1039 {
@@ -1284,6 +1283,19 @@ footer#footer .credits {
 
 .article_numero {
   margin-bottom: 15px;
+  position: relative;
+}
+.article_numero .cta{
+  width: 60%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0.6;
+  -webkit-transition:opacity 0.5s;
+  transition:opacity 0.5s;
+}
+.article_numero:hover .cta{
+  opacity: 1;
 }
 
 #sidebar-issues .more:hover {
@@ -2250,7 +2262,7 @@ section.home-subscribe .section-newsletter .icon {
     padding-left: 0px;
     padding-bottom: 5px;
     position: relative;
-  text-align: center;
+  text-align: left;
   }
 }
 .page-single .column-main section.article article .export ul {
@@ -3731,4 +3743,21 @@ body .column-main {
     height: 2.5em;
     line-height: 1.6em;
   }
+}
+#header .logo:hover {
+  opacity: 0.7;
+}
+
+
+.article-image {
+    background-color: #ddd;
+}
+
+.article-image-non-recadree img {
+  width: calc(100% - 2.5em);
+  display: block;
+}
+
+.article-image-non-recadree .source_photo {
+  background: transparent;
 }

@@ -19,17 +19,21 @@ get_header();
 $slider = get_posts(array(
 	'numberposts'	=> 6,
 	'post_type'		=> 'post',
+	'category__not_in' => get_cat_ID('magazine'),
 	'post__in'		=> get_option( 'sticky_posts' )
 ));
 ?>
+
 <section id="last-posts-featured">
 	<div class="slider">
-<?php $featured = array(); foreach ($slider as $post): setup_postdata($post); $featured[] = $post->ID; ?>
+<?php $featured = array(); foreach ($slider as $post): setup_postdata($post); $featured[] = $post->ID; 
+$image_carousel = image_carousel($post->ID);
+?>
 		<article>
 			<a href="<?php echo get_permalink($post->ID); ?>">
 			<div class="col-md-8 col-sm-8 column-right">
 <?php if ($thumbnail = devicemed_get_post_featured_thumbnail($post->ID)): ?>
-				<figure style="background-image:url('<?php echo $thumbnail->url; ?>')">
+				<figure style="background-image:url('<?php echo $image_carousel ? $image_carousel['url'] : $thumbnail->url; ?>')">
 					<img src="<?php echo $thumbnail->url; ?>" title="<?php echo $thumbnail->post_title; ?>" />
 				</figure>
 <?php endif; ?>
@@ -46,6 +50,7 @@ $slider = get_posts(array(
 <?php endforeach; ?>
 	</div>
 </section>
+
 <script type="text/javascript">
 $(document).ready(function() {
 
@@ -61,6 +66,11 @@ $('#last-posts-featured .slider').bxSlider({
 
 <div class="row column-content page-home">
 	<div class="col-md-9 col-sm-8 column-main">
+
+
+<?php
+sommaire_magazine_home();
+?>
 			
 <?php
 

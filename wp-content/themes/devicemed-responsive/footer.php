@@ -12,7 +12,7 @@
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <?php include_external('js/bootstrap.min.js');?>
 <?php include_external('js/jquery.bxslider.min.js');?>
-<?php include_external('js/colorbox/jquery.colorbox-min.js');?>
+<?php //include_external('js/colorbox/jquery.colorbox-min.js');?>
 <?php 
 	extrajs('nl');
 	

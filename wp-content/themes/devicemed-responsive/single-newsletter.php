@@ -82,8 +82,7 @@ if($arts = new WP_Query($args)) {
   <meta charset="UTF-8">
   <title><?php echo $newsletter->post_title;?></title>
 </head>
-<body
->
+<body>
 <center><a href="*|ARCHIVE|*" style="font-family:sans-serif;font-size:10px;">Si vous ne visualisez pas bien cet email, cliquez ici pour voir la version en ligne.</a></center>
 <p></p>
 

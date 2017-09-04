@@ -680,3 +680,218 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
   letter-spacing: 0.5px;
 }
 
+.contenu_droit .links:nth-child(1){
+  margin-right:2em;
+}
+.devicemed_allemand {
+  margin-left: 2em;
+}
+.social-link img{
+  height: 16px;
+}
+.social-link:hover img{
+  opacity:0.7;
+}
+.social-boutons {
+  margin-top: 1em;
+}
+
+.social-boutons a{
+  display: inline-block;
+  margin-right: 1.5em;
+  font-size: 1.5em;
+  padding:5px;
+}
+.social-boutons a IMG{
+  height: 32px;
+}
+.social-boutons a:hover{
+  background:#0066b3;
+  color:white;
+}
+
+
+#sommaire-magazine {
+  position: relative;
+  background:#b30065;
+  padding:20px;
+  overflow: hidden;
+  height: 200px;
+}
+.magazine-cover img{
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+.magazine-cover {
+  float: left;
+  width: 113px;
+  height: calc(100%);
+  margin-right: 20px;
+  overflow: hidden;
+}
+.magazine-details {
+  float: left;
+  width: calc(100% - 137px);
+  height: calc(100%);
+  /*max-width: 750px;*/
+  position: relative;
+  color: white;
+}
+
+.magazine-titre {
+    font-family: 'opensans-condbold';
+    font-weight: 200;
+    color: white;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+
+.magazine-surtitre{
+}
+.magazine-texte {
+    font-family: 'opensans-condbold';
+    font-size: 20px;
+}
+.magazine-boutons {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.magazine-boutons a{
+  display: inline-block;
+  background:white;
+  color: #b30065;
+  border:1px solid white;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 15px;
+  margin-left: 30px;
+}
+
+.magazine-boutons .bouton-abo {
+  background:#0066b3;
+  border-color: #0066b3;
+  color:white;
+}
+.magazine-boutons a:hover{
+  background:#b30065;
+  border-color: white;
+  color:white;
+}
+
+
+ .magazine-cover-big {
+  display: block;
+  margin-top: 30px;
+  text-align: center;
+  position: relative;
+  max-width: 500px;
+  width:calc(100% - 90px);
+  margin: 0 auto;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  overflow: hidden;
+  -webkit-box-shadow: 0px 0px 5px 4px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 0px 5px 4px rgba(0,0,0,0.2);
+  box-shadow: 0px 0px 5px 4px rgba(0,0,0,0.2); 
+}
+
+ .magazine-cover-big .cta {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0.6;
+  -webkit-transition:opacity 0.5s;
+  transition:opacity 0.5s;
+ }
+
+ .magazine-cover-big .cover {
+  width: 100%;
+ }
+ .magazine-cover-big:hover {
+      -webkit-box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.3);
+    box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.3);
+  }
+ .magazine-cover-big:hover .cta{
+  opacity: 1;
+ }
+
+.article-image  {
+  position: relative;
+ }
+
+.article-image .image_clicable a:before {
+  display: block;
+  content:"Cliquez pour agrandir l'image";
+  position: absolute;
+  left : 5px;
+  bottom: 5px;
+  color:white;
+  background:rgba(0,0,0,0);
+  opacity: 0.5;
+  border-radius: 5px; 
+  font-size: 10px;
+  text-transform: uppercase;
+  padding: 3px;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+}
+.article-image .image_clicable a:hover:before {
+  background:rgba(0,0,0,0.5);
+  opacity: 1;
+}
+
+.svg-image {
+  display: inline-block;
+  position: relative;
+}
+.svg-image svg{
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill:inherit;
+}
+
+.bloc_manif .svg-fleche-droite, .agenda-salons .svg-fleche-droite{
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+}
+.bloc_manif .svg-fleche-droite svg, .agenda-salons .svg-fleche-droite svg{
+  fill:#0066b3;
+}
+.agenda-salon {
+  margin-bottom: 1em;
+}
+.agenda-salon a{
+  display: block;
+  font-family: 'opensans-condbold';
+  font-weight: 100;
+  color: #0066b3;
+  line-height: 1em;
+  font-size: 16px;
+}
+.titre_manif:hover, .agenda-salon a:hover{
+  color:#b30065;
+}
+.titre_manif:hover svg, .agenda-salon a:hover svg{
+  fill:#b30065;
+}
+
+
+.lien-classique {
+    color: #0066b3;
+    text-decoration: none;
+}
+
+.lien-classique:hover {
+    color: #b30065;
+    text-decoration: underline;
+}

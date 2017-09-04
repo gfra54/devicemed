@@ -5,7 +5,7 @@ function fournisseur_parse_liens($id, $content) {
 	$GLOBALS['b64']=array();
 	$content_parsed=false;
 	$content_parsed = get_post_meta( $id, 'content_parsed', true );
-	if(empty($content_parsed) || isLocal()) {
+	if(true || empty($content_parsed) || isLocal()) {
 		$GLOBALS['noms_fournisseurs'] = get_transient('noms_fournisseurs');
 		foreach($GLOBALS['noms_fournisseurs'] as $id=>$fournisseur) {
 			foreach($fournisseur['alternatives'] as $alternative) {
@@ -53,8 +53,6 @@ function telecharger_fournisseurs($params = array()) {
 	$id_sous_categorie = sinon($params,'sous_categorie');
 	$cat_ref=false;
 	$sous_cat_ref=false;
-	
-
 	foreach($categories as $categorie) {
 		if($categorie['term_id'] == $id_categorie || empty($id_categorie)) {
 			if($categorie['term_id'] == $id_categorie) {
@@ -71,7 +69,7 @@ function telecharger_fournisseurs($params = array()) {
 								
 								}
 
-								$ligne_categorie[$sous_sous_categorie['term_id']] = str_replace('’',"'",$sous_categorie['name'].' '.$sous_sous_categorie['name']);
+								$ligne_categorie[$sous_sous_categorie['term_id']] = $sous_categorie['name'].' '.$sous_sous_categorie['name'];
 							}
 						}
 					} else {
@@ -90,7 +88,7 @@ function telecharger_fournisseurs($params = array()) {
 
 			foreach($fournisseurs as $fournisseur) {
 				$ligne_fournisseur = array();
-				$ligne_fournisseur[] = $fournisseur['post_title'];
+				$ligne_fournisseur[] = $fournisseur['post_title'].$fournisseur['ID'];
 				$ligne_fournisseur[] = $fournisseur['pays'];
 				$ligne_fournisseur[] = $fournisseur['url'];
 				$debut = count($ligne_fournisseur);

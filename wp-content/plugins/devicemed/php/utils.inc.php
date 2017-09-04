@@ -1,4 +1,31 @@
 <?php
+function urlToPath($url) {
+	if($url) {
+		list($pre) = explode('/wp-content',get_stylesheet_directory());
+		
+		$path = str_replace( site_url(), $pre, $url);
+		return realpath($path);
+	}
+}
+function pathToUrl($path) {
+	if($path) {
+		list(,$url) = explode('wp-content',$path);
+		return site_url().str_replace('//','/','/wp-content/'.str_replace('\\','/',$url));
+	}
+}
+function array_insert_after($key, array &$array, $new_key, $new_value) {
+  if (array_key_exists ($key, $array)) {
+    $new = array();
+    foreach ($array as $k => $value) {
+      $new[$k] = $value;
+      if ($k === $key) {
+        $new[$new_key] = $new_value;
+      }
+    }
+    return $new;
+  }
+  return FALSE;
+}
 
 function html_replace($find,$replace, $content) {
 	require_once plugin_dir_path( __FILE__ ).'/simple_html_dom.php';
@@ -95,7 +122,7 @@ function get_related($id,$qte=3,$all=true) {
 		'cat' => $cats,
 		'post__not_in' => array($id),
 		'posts_per_page'=>$qte,
-		'caller_get_posts'=>1,
+		'ignore_sticky_posts'=>1,
 		'order'=>'DESC',
 		'orderby'=>'date'
 		);
@@ -116,6 +143,7 @@ function transient_key($lib,$id) {
 }
 
 function https($url) {
+	$url = http($url);
 	if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 		$url = str_replace('http://','https://',$url);
 	}
@@ -231,7 +259,11 @@ function include_external($file,$maj=false){
 		$ext = getExtension($file);
 		if(!isUrl($file)) {
 			$path = DEVICEMED_THEME_PATH.$file;
-			$time= 'A'.date('Ymd');
+			if(file_exists($path)) {
+				$time= filemtime($path);
+			} else {
+				$time= 'A'.date('Ymd');
+			}
 			$time = $maj && $maj>$time ? $maj : $time;
 			$file = addURLParameter($file,'t',$time);
 			$file = DEVICEMED_THEME_URL.$file;

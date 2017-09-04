@@ -1,5 +1,4 @@
 <?php 
-
 	get_header(); ?>
 
 
@@ -56,43 +55,80 @@
 				?>
 			</div>
 			<?php } ?>
-			<?php endif; ?>
-			<h1 class="title"><?php echo get_the_title(); ?></h1>
-			<?php if(strstr($_SERVER['REQUEST_URI'], 3671)===false) { ?>
-				<div class="metas">
-					<span class="date-wrapper">Publié le <span class="date"><?php echo get_the_date('d F Y'); ?></span></span>
-					<span class="author-wrapper">par <span class="author"><?php the_author(); ?> </span></span>
+			<?php endif; 
+			if($is_magazine=in_category('magazine',$post->ID)) {
+				$url_pdf = get_field('fichier_pdf',$post->ID);?>
+				<style>.article_numero_sidebar {display:none;}</style>
+				<h1 class="title"><?php echo get_field('intitule',$post->ID); ?></h1>
+				<div class="content">
+					<p><?php echo get_field('libelle_de_publication',$post->ID); ?></p>
 				</div>
-			<?php } 
-			if ($thumbnail = devicemed_get_post_featured_thumbnail($post->ID)): 
 
-/* 				if($fi = $dynamic_featured_image->get_featured_images()) {
-					$url = $fi[0]['full'];
+				<?php
+					$thumbnail = get_post(get_post_thumbnail_id($post->ID));
 					?>
-					<a class="lien-photo" href="<?php echo $thumbnail->url; ?>"><img src="<?php echo $url;?>" style="width:100%"></a>
-					<div class='source_photo_horizontale'><div class="source-content">Source : <?php echo esc_attr($thumbnail->post_title); ?></div></div>
+					<a href="<?php echo $url_pdf;?>" target="_blank" class="magazine-cover-big">
+					<img class="cta" src="<?php echo get_template_directory_uri(); ?>/images/cta-magazine.png">
+					<img class="cover" src="<?php echo wp_get_attachment_url($thumbnail->ID);?>">
+					</a>
+					<center><a href="<?php echo $url_pdf;?>" target="_blank">Cliquez sur la couverture pour consulter le magazine</a></center>
 					<?php
-				} else {*/
+			} else {?>
+				<h1 class="title"><?php echo get_the_title(); ?></h1>
+				<?php if(strstr($_SERVER['REQUEST_URI'], 3671)===false) { ?>
+					<div class="metas">
+						<span class="date-wrapper">Publié le <span class="date"><?php echo get_the_date('d F Y'); ?></span></span>
+						<span class="author-wrapper">par <span class="author"><?php the_author(); ?> </span></span>
+					</div>
+				<?php } 
+					if(!masquer_image_a_la_une($post->ID)) {
+					$image_au_clic = image_au_clic($post->ID);
+					if($image_non_recadree = image_non_recadree($post->ID)) {
+						$image_au_clic =  $image_au_clic ? $image_au_clic['url'] : $image_non_recadree['url'];?>
+						<div class="article-image article-image-non-recadree">
+							<a href="<?php echo $image_au_clic;?>"><img src="<?php echo $image_non_recadree['url'] ?>" title="<?php echo esc_attr(sinon($image_non_recadree,'description','caption')); ?>" /></a>
+							<div class='source_photo'>
+								<div class="source-content">Source : <?php echo esc_attr(sinon($image_non_recadree,'title')); ?></div>
+							</div>
+							<?php if($legende = sinon($image_non_recadree,'caption')) { ?>
+								<div class='legende_photo'><?php echo $legende; ?></div>
+							<?php } ?>
+						</div>
+						<?php } else
+					if ($thumbnail = devicemed_get_post_featured_thumbnail($post->ID)) { 
+						$image_au_clic =  $image_au_clic ? $image_au_clic['url'] : $thumbnail->url;
+		/* 				if($fi = $dynamic_featured_image->get_featured_images()) {
+							$url = $fi[0]['full'];
+							?>
+							<a class="lien-photo" href="<?php echo $thumbnail->url; ?>"><img src="<?php echo $url;?>" style="width:100%"></a>
+							<div class='source_photo_horizontale'><div class="source-content">Source : <?php echo esc_attr($thumbnail->post_title); ?></div></div>
+							<?php
+						} else {*/
 
-			?>
-				<div class="article-image">
-				<div class='image_clicable'><a href="<?php echo $thumbnail->url; ?>" class="cboxElement"><figure style="background-image:url('<?php echo $thumbnail->url; ?>')">
-					<img src="<?php echo $thumbnail->url ?>" title="<?php echo esc_attr($thumbnail->post_title); ?>" />
-				</figure></a></div>
-				<div class='source_photo'><div class="source-content">Source : <?php echo esc_attr($thumbnail->post_title); ?></div></div>
-				</div>
-				<?php if($thumbnail->post_excerpt != '') { ?>
-					<div class='legende_photo'><?php echo $thumbnail->post_excerpt; ?></div>
-				<?php } ?>
-			<?php //}
-
-			endif; ?>
+					?>
+						<div class="article-image">
+						<div class='image_clicable'><a href="<?php echo $image_au_clic; ?>"><figure style="background-image:url('<?php echo $thumbnail->url; ?>')">
+							<img src="<?php echo $thumbnail->url ?>" title="<?php echo esc_attr($thumbnail->post_title); ?>" />
+						</figure></a></div>
+						<div class='source_photo'><div class="source-content">Source : <?php echo esc_attr($thumbnail->post_title); ?></div></div>
+						<?php if($thumbnail->post_excerpt != '') { ?>
+							<div class='legende_photo'><?php echo $thumbnail->post_excerpt; ?></div>
+						<?php } ?>
+						</div>
+					<?php //}
+					}
+				}
+			} ?>
 			<div class="content">
 				<?php 
 					the_content(); 
 				?>
-			</div>
+			<?php if($is_magazine) {?>
+			<p>Ce numéro est <a href="<?php echo $url_pdf;?>" target="_blank">téléchargeable au format PDF, en cliquant ici</a>. Tout comme les numéros précédents, <a href="/archives">à partir de la page des archives</a>.</p>
+			<p>Pour recevoir gratuitement le magazine en version papier, <a href="/magazine/abonnement">abonnez-vous en cliquant ici</a>.</p>
 
+			<?php }?>
+			</div>
 			<?php $images = get_children(array ('post_parent' => $post->ID, 'post_type' => 'attachment', 'post_mime_type' => 'image')); ?>
 			<?php if (empty($images)): ?>
 			<?php else: ?>
@@ -122,6 +158,14 @@
 			}
 		?>
 		
+		<section class="social">
+				Suivez l'actualité de DeviceMed sur les réseaux sociaux :
+				<div class="social-boutons">
+				<a href="https://twitter.com/DeviceMedFr"><img src="<?php echo get_template_directory_uri(); ?>/images/twitter-couleur.png"> Twitter</a>
+				<a href="https://fr.linkedin.com/company/devicemed-france"><img src="<?php echo get_template_directory_uri(); ?>/images/linkedin-couleur.png"> LinkedIn</a>
+				</div>
+		</section>
+		<?php if(!$is_magazine) {?>
 		<section class="relateds">
 			<!-- Encart afficher titres articles de la même catégorie -->
 			<?php
@@ -148,6 +192,7 @@
 			  </div>
 			<!-- fin encart afficher titres articles de la même catégorie en cours -->
 		</section>
+		<?php } ?>
 	<?php } ?>
 	<?php endwhile; ?>
 		</div><!-- .column-main -->

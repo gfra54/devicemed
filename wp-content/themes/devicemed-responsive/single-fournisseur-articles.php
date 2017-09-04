@@ -1,5 +1,5 @@
 <?php if($fournisseur['premium']) {?>
-<?php query_posts("tag=".sanitize_title($fournisseur['nom'])); ?>
+<?php query_posts("tag=".$fournisseur['nom']); ?>
 <?php if (have_posts()){ ?>
 	<section class="posts read-more">
 			<?php while (have_posts()){ the_post(); ?>
