@@ -5,7 +5,7 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 <head>
 	<meta charset="<?php bloginfo('charset'); ?>">
 	<meta name="viewport" content="width=device-width">
-	<title><?php wp_title(' Ã¢ÂÂ ', true, 'right'); ?><?php bloginfo('name'); ?></title>
+	<title><?php wp_title(' - ', true, 'right'); ?><?php bloginfo('name'); ?></title>
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link href="/wp-content/themes/devicemed-responsive/images/favicon.ico" rel="SHORTCUT ICON">
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
