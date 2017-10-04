@@ -86,7 +86,7 @@ casper.then(function() {
 	ameTest.addNewItem({
 		'menu_title' : 'Plugin Submenu',
 		'template_id': '',
-		'file'       : 'http://www.iana.org/domains/example', //Anyone got a better example URL?
+		'file'       : 'http://example.com/?third', //Anyone got a better example URL?
 		'open_in'    : 'iframe'
 	});
 
@@ -146,7 +146,7 @@ casper.then(function() {
 	casper.test.assertExists('#ws-framed-page', 'Setting a menu to open in an frame generates an IFrame');
 	casper.test.assertEvalEquals(function() {
 		return jQuery('#ws-framed-page').attr('src');
-	}, 'http://www.iana.org/domains/example', 'IFrame source matches the menu URL');
+	}, 'http://example.com/?third', 'IFrame source matches the menu URL');
 
 	//Verify that the second item that's set to open in an frame has the right height.
 	casper.click('#menu-media .wp-submenu a[href*="?page=framed-menu-item-"]');

@@ -47,6 +47,16 @@ add_action('admin_menu', function() {
 		'amt_output_page'
 	);
 
+	//A menu with hard-coded role requirements.
+	add_submenu_page(
+		'dummy-top-menu',
+		'Administrator Required',
+		'Administrator Required',
+		'administrator',
+		'dummy-submenu-3-a',
+		'amt_output_page'
+	);
+
 	add_dashboard_page(
 		'Dummy Dashboard',
 		'Dummy Dashboard',
@@ -109,6 +119,26 @@ add_action('admin_menu', function() {
 		'Pages Submenu',
 		'read',
 		'dummy-pages-submenu',
+		'amt_output_page'
+	);
+
+	//A top level menu with no slug! Surprisingly, it works as long as it has at least one submenu.
+	add_menu_page(
+		'No Slug',
+		'No Slug',
+		'read',
+		'',
+		'amt_output_page',
+		'dashicons-dismiss',
+		50
+	);
+
+	add_submenu_page(
+		'',
+		'Submenu With Slug',
+		'Submenu With Slug',
+		'read',
+		'parent-has-no-slug',
 		'amt_output_page'
 	);
 });

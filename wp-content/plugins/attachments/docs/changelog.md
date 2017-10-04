@@ -3,17 +3,6 @@ This is a WordPress plugin. [Official download available on WordPress.org](http:
 ## [Docs TOC](TOC.md) / Changelog
 
 <dl>
-    <dt>3.5.7</dt>
-    <dd>Fixed a regression that prevented attaching multiple files at once</dd>
-    <dt>3.5.6</dt>
-    <dd>Fixed an issue where changing an Attachment on more than one Attachment would continually update the first Attachment</dd>
-    <dd>Media modal now includes filters (props marcochiesi)</dd>
-    <dd>Added German translation (props bessl)</dd>
-    <dd>Added filter to manipulate Attachments metadata before it's saved: <code>attachments_meta_before_save</code></dd>
-    <dd>Underscores are no longer enforced over hyphens</dd>
-    <dd>More entropy for Attachments uid's to prevent collisions (props sketchpad)</dd>
-    <dt>3.5.5</dt>
-    <dd>Fixed an issue where field values were improperly overwritten when the instance was set to prepend in some cases</dd>
 	<dt>3.5.4</dt>
 	<dd>Fixed assumption of field keys (props bukka)</dd>
 	<dd>Improved documentation (props Lane Goldberg, Roman Kokarev, Ore Landau)</dd>

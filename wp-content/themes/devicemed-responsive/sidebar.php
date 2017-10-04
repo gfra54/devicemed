@@ -25,7 +25,7 @@
 
 		<header>
 			<div class="right-side">
-				<h1 class="title"><a href='<?php echo $url;?>'>Dernier numéro</a></h1>
+				<h1 class="title"><a href='<?php echo $url;?>'>Dernier numÃÂ©ro</a></h1>
 			</div>
 		</header>	
 		<a href="<?php echo $url;?>" target="_blank" title="<?php echo $titre;?>">
@@ -37,7 +37,7 @@
 			}
 		}
 		?>
-		<a href="/archives" class="more">Consulter d'autres numéros</a>
+		<a href="/archives" class="more">Consulter d'autres numÃÂ©ros</a>
 	</section>
 	
 	<section id="sidebar-fiches">
@@ -81,7 +81,7 @@
 				echo "<h3 class='title2'><a href=\"/tag/salle-blanche\" target='_blank'>Salle blanche</a></h3><br />";
 				echo "<h3 class='title2'><a href=\"/tag/instrument-chirurgical\" target='_blank'>Instruments chirurgicaux</a></h3><br />";
 				echo "<h3 class='title2'><a href=\"/tag/mesure-3d\" target='_blank'>Mesure 3D</a></h3><br />";
-				echo "<h3 class='title2'><a href=\"/tag/tracabilite\" target='_blank'>Traçabilité</a></h3><br />";
+				echo "<h3 class='title2'><a href=\"/tag/tracabilite\" target='_blank'>TraÃÂ§abilitÃÂ©</a></h3><br />";
 			?>
 		</article>
 	</section>

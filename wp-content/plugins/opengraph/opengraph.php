@@ -149,7 +149,7 @@ add_action( 'wp', 'opengraph_default_metadata' );
 /**
  * Default title property, using the page title.
  */
-function opengraph_default_title( $title ) {
+function opengraph_default_title( $title='' ) {
 	if ( $title ) {
 		return $title;
 	}
@@ -194,7 +194,7 @@ function opengraph_default_type( $type ) {
 /**
  * Default image property, using the post-thumbnail and any attached images.
  */
-function opengraph_default_image( $image ) {
+function opengraph_default_image( $image='' ) {
 	if ( $image ) {
 		return $image;
 	}
@@ -305,7 +305,7 @@ function opengraph_default_sitename( $name ) {
  * Default description property, using the excerpt or content for posts, or the
  * bloginfo description.
  */
-function opengraph_default_description( $description ) {
+function opengraph_default_description( $description='' ) {
 	if ( $description ) {
 		return $description;
 	}

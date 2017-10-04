@@ -17,8 +17,10 @@ if ( ($fileExists -ne $true) -and ($fileExistsInCasperTests -eq $true) ) {
 	$file = ".\casper-tests\" + $file;
 }
 
+$pluginDir = Split-Path -Parent $PSScriptRoot
+
 # Invoke the test runner.
-casperjs test --includes="config.js,helpers.js,../js/lodash.js" $file
+casperjs test --includes="../js/lodash.js,config.js,helpers.js" --menuEditorDir="$pluginDir" $file
 
 # Switch back to the previous directory.
 Pop-Location

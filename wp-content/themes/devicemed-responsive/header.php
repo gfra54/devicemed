@@ -5,7 +5,7 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 <head>
 	<meta charset="<?php bloginfo('charset'); ?>">
 	<meta name="viewport" content="width=device-width">
-	<title><?php wp_title(' – ', true, 'right'); ?><?php bloginfo('name'); ?></title>
+	<title><?php wp_title(' Ã¢ÂÂ ', true, 'right'); ?><?php bloginfo('name'); ?></title>
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link href="/wp-content/themes/devicemed-responsive/images/favicon.ico" rel="SHORTCUT ICON">
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
@@ -102,7 +102,7 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 	<?php wp_head(); ?>
 </head>
 <div class='notConnected'>
-	Vous devez être connecté pour accéder à cette archive.
+	Vous devez ÃÂªtre connectÃÂ© pour accÃÂ©der ÃÂ  cette archive.
 	<br /><br />
 	<div id='lien_notConnected_connecter'>
 		<a href='/members/login?uri=<?php echo $_SERVER['REQUEST_URI'];?>'>Se connecter</a>
@@ -129,7 +129,7 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 				<a href="<?php echo site_url('/members/profile'); ?>">Profil de "<?php echo esc_html($session['user_nicename']); ?>"</a>
 			</div>
 			<div class="links">
-				<a href="<?php echo site_url('/members/logout'); ?>">Se déconnecter</a>
+				<a href="<?php echo site_url('/members/logout'); ?>">Se dÃÂ©connecter</a>
 			</div>
 		<?php else: ?>
 			<div class="links">

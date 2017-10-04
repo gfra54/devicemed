@@ -47,12 +47,12 @@ class QM_Util {
 
 	public static function standard_dir( $dir, $path_replace = null ) {
 
-		$dir = wp_normalize_path( $dir );
+		$dir = self::normalize_path( $dir );
 
 		if ( is_string( $path_replace ) ) {
 			if ( ! self::$abspath ) {
-				self::$abspath     = wp_normalize_path( ABSPATH );
-				self::$contentpath = wp_normalize_path( dirname( WP_CONTENT_DIR ) . '/' );
+				self::$abspath     = self::normalize_path( ABSPATH );
+				self::$contentpath = self::normalize_path( dirname( WP_CONTENT_DIR ) . '/' );
 			}
 			$dir = str_replace( array(
 				self::$abspath,
@@ -62,6 +62,17 @@ class QM_Util {
 
 		return $dir;
 
+	}
+
+	public static function normalize_path( $path ) {
+		if ( function_exists( 'wp_normalize_path' ) ) {
+			$path = wp_normalize_path( $path );
+		} else {
+			$path = str_replace( '\\', '/', $path );
+			$path = str_replace( '//', '/', $path );
+		}
+
+		return $path;
 	}
 
 	public static function get_file_dirs() {
@@ -108,8 +119,10 @@ class QM_Util {
 					$plug = basename( $plug );
 				}
 				if ( 'mu-plugin' === $type ) {
+					/* translators: %s: Plugin name */
 					$name = sprintf( __( 'MU Plugin: %s', 'query-monitor' ), $plug );
 				} else {
+					/* translators: %s: Plugin name */
 					$name = sprintf( __( 'Plugin: %s', 'query-monitor' ), $plug );
 				}
 				$context = $plug;
@@ -124,6 +137,7 @@ class QM_Util {
 				} else {
 					$plug = basename( $plug );
 				}
+				/* translators: %s: Plugin name */
 				$name    = sprintf( __( 'VIP Plugin: %s', 'query-monitor' ), $plug );
 				$context = $plug;
 				break;
@@ -180,6 +194,7 @@ class QM_Util {
 				if ( is_a( $callback['function'], 'Closure' ) ) {
 					$ref  = new ReflectionFunction( $callback['function'] );
 					$file = QM_Util::standard_dir( $ref->getFileName(), '' );
+					/* translators: 1: Line number, 2: File name */
 					$callback['name'] = sprintf( __( 'Closure on line %1$d of %2$s', 'query-monitor' ), $ref->getStartLine(), $file );
 				} else {
 					// the object should have a __invoke() method
@@ -206,6 +221,7 @@ class QM_Util {
 					$callback['file'] = $matches['file'];
 					$callback['line'] = $matches['line'];
 					$file = trim( QM_Util::standard_dir( $callback['file'], '' ), '/' );
+					/* translators: 1: Line number, 2: File name */
 					$callback['name'] = sprintf( __( 'Anonymous function on line %1$d of %2$s', 'query-monitor' ), $callback['line'], $file );
 				} else {
 					// https://github.com/facebook/hhvm/issues/5807
@@ -217,6 +233,12 @@ class QM_Util {
 
 			if ( ! empty( $callback['file'] ) ) {
 				$callback['component'] = self::get_file_component( $callback['file'] );
+			} else {
+				$callback['component'] = (object) array(
+					'type'    => 'php',
+					'name'    => 'PHP',
+					'context' => '',
+				);
 			}
 
 		} catch ( ReflectionException $e ) {

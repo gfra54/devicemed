@@ -3,7 +3,6 @@
 //wp_register_style( 'pubs', plugins_url().'/custom-functions/css/pubs.css');
 //wp_enqueue_style( 'pubs' );
 
-
 //require_once(dirname(__FILE__).'/widgets/pubs_300x250.widget.php');
 
 $GLOBALS['PUBS'] = false;
@@ -51,9 +50,11 @@ function afficher_pub($type,$attr=array()) {
 	$pubs = get_pubs($type);
 	if($type=="cadre-video") {
 		$pub=false;
-		foreach($pubs as $tmp_pub) {
-			if(!$pub && $tmp_pub['post_status'] == 'publish') {
-				$pub = $tmp_pub;
+		if(is_array($pubs)) {
+			foreach($pubs as $tmp_pub) {
+				if(!$pub && $tmp_pub['post_status'] == 'publish') {
+					$pub = $tmp_pub;
+				}
 			}
 		}
 	} else {
@@ -79,7 +80,28 @@ function display_pub($pub,$attr=array(),$type=false) {
 	if(is_numeric($pub)) {
 		$pub = get_post($pub);
 	}
+
+	$extra=false;
+	if($pub->ID == 14187) {
+
+		$args = array( 
+			'posts_per_page'=>1,
+			'order'=>'DESC',
+			'orderby'=>'date',
+			'category_name'=> 'magazine'
+		);
+		if($posts = new WP_Query($args)) {
+			$magazine = $posts->posts[0];
+			update_post_meta($pub->ID, 'url_tracking_clicks', get_permalink($magazine->ID));
+			update_post_meta($pub->ID, 'url_tracking_display', get_post_thumbnail_url($magazine->ID));
+//			set_post_thumbnail($pub,get_post_thumbnail_id($magazine->ID));
+			$extra='<img src="'.site_url().'/wp-content/themes/devicemed-responsive/images/lire-numero.jpg">';
+		}
+
+	}
+
 	$PUB = pub_metrics($pub);
+
 	if(check_espace('newsletter-textad',$pub)) {
 		  $textad = pub_metrics($pub);
 		  return render_textad(array(
@@ -121,6 +143,8 @@ function display_pub($pub,$attr=array(),$type=false) {
 		$cadre=false;
 
 	} else {
+
+
 		$cadre=true;
 //			if($PUB['ID'] == 5067) mse($PUB);
 		if($PUB['url_tracking_display']) {
@@ -137,7 +161,7 @@ function display_pub($pub,$attr=array(),$type=false) {
 			if($style){
 				$style = 'style="'.$style.'"';
 			}
-			$out = '<a href="'.addURLParameter($PUB['url_tracking_clicks'],'t',time()).'" target="_blank"><img '.$style.' src="'.addURLParameter($PUB['url_tracking_display'],'t',time()).'"></a>';
+			$out = '<a href="'.addURLParameter($PUB['url_tracking_clicks'],'t',time()).'" target="_blank"><img '.$style.' src="'.addURLParameter($PUB['url_tracking_display'],'t',time()).'">'.$extra.'</a>';
 		}
 	}
 	$ret='';
@@ -159,58 +183,60 @@ function get_selected_pub($type, $pubs, $all=false) {
 	$pubs_sort=array();
 	$tochange=array();
 	$change=false;
-	foreach($pubs as $key => $pub) {
-		if(check_espace($type,$pub)) {
-			$public = $pub['post_status'] == 'publish';
-			if($date_debut = $pub['date_debut']) {
-				$date_debut.=' 00:00:00';
-			}
-			if($date_fin = $pub['date_fin']) {
-				$date_fin.=' 23:59:59';
-			}
-			$ok=true;
-			if(!empty($date_debut)) {
-				if(time()<strtotime($date_debut)) {
-					if($public) {
-						change_post_status($pub['ID'],'draft');
-						$change=true;
-						// m('1 on est avant publication. Si la pub est public, on la met en draft',$pub);
-						$public=false;
-					}
-					$ok=false;
-				} else if(!$public){
-					if(!$date_fin || time()<strtotime($date_fin)) {
-						change_post_status($pub['ID'],'publish');
-						$change=true;
-						// m('2 on est apres le debut de publication. Si la pub est draft, on la met en public',$pub);
-						$public=true;
+	if(is_array($pubs)) {
+		foreach($pubs as $key => $pub) {
+			if(check_espace($type,$pub)) {
+				$public = $pub['post_status'] == 'publish';
+				if($date_debut = $pub['date_debut']) {
+					$date_debut.=' 00:00:00';
+				}
+				if($date_fin = $pub['date_fin']) {
+					$date_fin.=' 23:59:59';
+				}
+				$ok=true;
+				if(!empty($date_debut)) {
+					if(time()<strtotime($date_debut)) {
+						if($public) {
+							change_post_status($pub['ID'],'draft');
+							$change=true;
+							// m('1 on est avant publication. Si la pub est public, on la met en draft',$pub);
+							$public=false;
+						}
+						$ok=false;
+					} else if(!$public){
+						if(!$date_fin || time()<strtotime($date_fin)) {
+							change_post_status($pub['ID'],'publish');
+							$change=true;
+							// m('2 on est apres le debut de publication. Si la pub est draft, on la met en public',$pub);
+							$public=true;
+						}
 					}
 				}
-			}
 
-			if(!empty($date_fin)) {
-				if(time()>strtotime($date_fin)) {
-					if($public) {
-						change_post_status($pub['ID'],'draft');
-						$change=true;
-						// m('3 on est apres la date de fin. Si la pub est public, on la met en draft',$pub);
-						$public=false;
-					}
-					$ok=false;
-				} else if(!$public){
-					if(!$date_debut || time()>strtotime($date_debut)) {
-						change_post_status($pub['ID'],'publish');
-						$change=true;
-						// m('4 on est avant la date de fin et apres la date de debut. Si la pub est pas public, on la met en public',$pub);
-						$public=true;
+				if(!empty($date_fin)) {
+					if(time()>strtotime($date_fin)) {
+						if($public) {
+							change_post_status($pub['ID'],'draft');
+							$change=true;
+							// m('3 on est apres la date de fin. Si la pub est public, on la met en draft',$pub);
+							$public=false;
+						}
+						$ok=false;
+					} else if(!$public){
+						if(!$date_debut || time()>strtotime($date_debut)) {
+							change_post_status($pub['ID'],'publish');
+							$change=true;
+							// m('4 on est avant la date de fin et apres la date de debut. Si la pub est pas public, on la met en public',$pub);
+							$public=true;
+						}
 					}
 				}
-			}
-			if(!$public) {
-				$ok=false;
-			}
-			if($ok) {
-				$pubs_sort[$key] = $pub['pages'];
+				if(!$public) {
+					$ok=false;
+				}
+				if($ok) {
+					$pubs_sort[$key] = $pub['pages'];
+				}
 			}
 		}
 	}
@@ -299,7 +325,7 @@ function pub_metrics($pub) {
 	$url_tracking_clicks=false;
 	$url_tracking_display=false;
 	if($url_cible = get_field('url_cible',$id)) {
-		if(!$url_tracking_clicks = get_field('url_tracking_clicks',$id)) {
+		if(!($url_tracking_clicks = get_field('url_tracking_clicks',$id))) {
 			$url = addURLParameter($url_cible,$id);
 			$url_tracking_clicks = bitly_shorten($url);
 			if(!$url_tracking_clicks) {
@@ -313,8 +339,8 @@ function pub_metrics($pub) {
 	foreach($pub as $k=>$v) {
 		$out[$k]=$v;
 	}
-	if($out['image'] = get_post_thumbnail_url($id)) {
-		if(!$url_tracking_display = get_field('url_tracking_display',$id)) {
+	if(($out['image'] = get_post_thumbnail_url($id)) || $id == 14187) {
+		if(!($url_tracking_display = get_field('url_tracking_display',$id))) {
 			if($url_tracking_display = bitly_shorten($out['image'])) {
 				update_post_meta($pub->ID, 'url_tracking_display', $url_tracking_display);
 			} else {
@@ -438,3 +464,12 @@ function store_pubs($force=false) {
 		}
 	}
 }
+
+
+
+
+
+
+
+
+//

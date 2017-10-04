@@ -1,9 +1,9 @@
 /* This is just a template for testing. */
 
-$base-color: #aa524c;
-$highlight-color: #ff2e46;
-$notification-color: #9ea476;
-$text-color: #fff;
+$base-color: #1e73be;
+$highlight-color: #81d742;
+$text-color: #dd9933;
+$icon-color: #dd9933;
 
 // assign default value to all undefined variables
 // core variables
@@ -40,10 +40,10 @@ $menu-bubble-background: $notification-color !default;
 $menu-bubble-current-text: $text-color !default;
 $menu-bubble-current-background: $menu-submenu-background !default;
 
-$menu-id: test-hook-name;
+$menu-id: "";//  #test-hook-name;
 
 /* Admin Menu */
-li##{$menu-id} {
+#adminmenu > li#{$menu-id} {
 	background: $menu-background;
 
 	a {
@@ -59,14 +59,19 @@ li##{$menu-id} {
 	&.opensub > a.menu-top,
 	& > a.menu-top:focus {
 		color: $menu-highlight-text;
+	}
+
+	&.menu-top:hover,
+	&.opensub > a.menu-top,
+	& > a.menu-top:focus {
 		background-color: $menu-highlight-background;
 	}
 
 	&.menu-top:hover div.wp-menu-image:before,
+	&.menu-top > a:focus div.wp-menu-image:before,
 	&.opensub > a.menu-top div.wp-menu-image:before {
 		color: $menu-highlight-icon;
 	}
-
 
 	/* Admin Menu: submenu */
 
@@ -78,7 +83,7 @@ li##{$menu-id} {
 		background: $menu-submenu-background;
 	}
 
-	#adminmenu &.wp-has-submenu.wp-not-current-submenu.opensub:hover:after {
+	&.wp-has-submenu.wp-not-current-submenu.opensub:hover:after {
 		border-right-color: $menu-submenu-background;
 	}
 
@@ -140,4 +145,10 @@ li##{$menu-id} {
 		background: $menu-bubble-current-background;
 	}
 
+}
+
+@if $menu-id == "" {
+	#adminmenuback, #adminmenuwrap, #adminmenu {
+		background-color: $menu-background;
+	}
 }

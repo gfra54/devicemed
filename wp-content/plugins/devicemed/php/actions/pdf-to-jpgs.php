@@ -13,7 +13,7 @@ if(isset($_GET['pdf-to-jpgs'])) {
 		if($posts = new WP_Query($args)) {
 
 			foreach($posts->posts as $post) {
-				if(!get_field('pdf-to-jpgs',$post->ID)) {
+				if(true || !get_field('pdf-to-jpgs',$post->ID)) {
 					$pdf = urlToPath(get_field('fichier_pdf',$post->ID));
 					if(file_exists($pdf)) {
 						$name = basename($pdf);
@@ -31,7 +31,7 @@ if(isset($_GET['pdf-to-jpgs'])) {
 							file_put_contents($commands_dir.'index.php', '<?php'.PHP_EOL.'// Silence is golden.'.PHP_EOL);
 						}
 						$file = $commands_dir.$slash.$name.'.command';
-						if(file_put_contents($file,'convert '.$pdf.' '.$dir.$slash.$name.'.%04d.jpg')) {
+						if(file_put_contents($file,'echo "'.$name.'";convert '.$pdf.' '.$dir.$slash.$name.'.%04d.jpg')) {
 							update_post_meta($post->ID,'pdf-to-jpgs','yes');
 							$files[]=$file;
 						}

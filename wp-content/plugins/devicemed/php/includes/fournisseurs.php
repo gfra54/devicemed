@@ -6,13 +6,14 @@ function fournisseur_parse_liens($id, $content) {
 	$content_parsed=false;
 	$content_parsed = get_post_meta( $id, 'content_parsed', true );
 	if(true || empty($content_parsed) || isLocal()) {
-		$GLOBALS['noms_fournisseurs'] = get_transient('noms_fournisseurs');
-		foreach($GLOBALS['noms_fournisseurs'] as $id=>$fournisseur) {
-			foreach($fournisseur['alternatives'] as $alternative) {
-				if($alternative) {
-					if(stristr($content,$alternative)!==false) {
+		if(is_array($GLOBALS['noms_fournisseurs'] = get_transient('noms_fournisseurs'))) {
+			foreach($GLOBALS['noms_fournisseurs'] as $id=>$fournisseur) {
+				foreach($fournisseur['alternatives'] as $alternative) {
+					if($alternative) {
+						if(stristr($content,$alternative)!==false) {
 
-						$content = html_replace($alternative, 'liens_fournisseurs_eval("'.$id.'","$1")',$content);
+							$content = html_replace($alternative, 'liens_fournisseurs_eval("'.$id.'","$1")',$content);
+						}
 					}
 				}
 			}

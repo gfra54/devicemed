@@ -69,22 +69,11 @@ casper.waitForSelector('#message.updated', function() {
 });
 
 casper.then(function() {
-	casper.test.comment('Test Dashicons and the More/Less button');
+	casper.test.comment('Test Dashicons');
 
 	ameTest.selectItemByTitle('Posts', null, true);
 	casper.click('.ws_menu.ws_active .ws_toggle_advanced_fields');
 	casper.click('.ws_menu.ws_active .ws_select_icon');
-
-	casper.test.assertNotVisible(
-		'#ws_icon_selector .ws_icon_option.ws_icon_extra',
-		'Extra menu icons start out invisible.'
-	);
-
-	casper.click('#ws_show_more_icons');
-	casper.test.assertVisible(
-		'#ws_icon_selector .ws_icon_option.ws_icon_extra',
-		'Clicking "More" reveals extra icons.'
-	);
 
 	//Select the "Search" dashicon.
 	casper.click('#ws_icon_selector .ws_icon_option[data-icon-url="dashicons-search"]');
@@ -96,6 +85,27 @@ casper.waitForSelector('#message.updated', function() {
 	casper.test.assertExists(
 		'#menu-posts .wp-menu-image.dashicons-search',
 		'The menu icon was successfully changed to a Dashicon using the icon selector'
+	);
+});
+
+casper.then(function() {
+	casper.test.comment('Test Font Awesome icons');
+
+	ameTest.selectItemByTitle('Posts', null, true);
+	casper.click('.ws_menu.ws_active .ws_toggle_advanced_fields');
+	casper.click('.ws_menu.ws_active .ws_select_icon');
+
+	//Select the "Heart" icon.
+	casper.click('#ws_icon_selector .ws_tool_tab_nav li:nth-child(2) a'); //Select the "Font Awesome" tab.
+	casper.click('#ws_icon_selector .ws_icon_option[data-icon-url="ame-fa-heart"]');
+
+	casper.click('#ws_save_menu');
+});
+
+casper.waitForSelector('#message.updated', function() {
+	casper.test.assertExists(
+		'#menu-posts.ame-menu-fa-heart',
+		'The menu icon was successfully changed to a Font Awesome icon using the icon selector'
 	);
 });
 
@@ -156,7 +166,7 @@ casper.waitForSelector('#message.updated', function() {
 
 casper.then(function() {
 	casper.test.comment('Change submenu icon visibility to "always".');
-	casper.click('#ws_plugin_settings_button');
+	casper.click('#ws_ame_settings_tab');
 });
 
 //Select the "Show submenu icons": "Always" option and save changes.

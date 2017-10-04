@@ -1,8 +1,5 @@
 <?php  
-
-if(check('source')) {
-  ob_start();
-}
+ob_start();
 
 if($newsletter = $wp_query->post){
 
@@ -55,8 +52,11 @@ if($arts = new WP_Query($args)) {
     if(!$content) {
       $content = couper(cleantext($art->post_content),300);
     }
-    $image = wp_get_attachment_url(get_post_thumbnail_id($art->ID));
-    $title = $art->post_title;
+
+//    $image = wp_get_attachment_url(get_post_thumbnail_id($art->ID));
+  $tmp = wp_get_attachment_image_src(get_post_thumbnail_id($art->ID));
+  $image = $tmp[0];
+  $title = $art->post_title;
 
     $cats = get_the_category($art->ID);
   //    $category = !empty($data['category']) ? $data['category'] : (getHtmlVal('<span class="category">','</span>',$tmp));
@@ -132,9 +132,7 @@ if($arts = new WP_Query($args)) {
       <tr>
       <td _style="border-bottom:1px solid #454545;">
       <table width="100%"><tr><td bgcolor="#0066b3">&nbsp; 
-      <a style="border:none" href=
-                  "<?php echo site_url();?>/"><img width="290" title="logo" alt="newsletter" src=
-                  "<?php echo site_url();?>/wp-content/themes/devicemed-responsive/images/devicemedbig.png" /></a>
+      <a style="border:none" href="<?php echo site_url();?>/"><img width="290" title="logo" alt="newsletter" src="<?php echo site_url();?>/wp-content/themes/devicemed-responsive/images/devicemedbig.png" /></a>
       </td>
       <td>&nbsp;</td>
       <td bgcolor="#0066b3" valing="middle" align=center width=340><a href="<?php echo site_url();?>/magazine/abonnement"><img src="<?php echo site_url();?>/wp-content/themes/devicemed-responsive/images/newsletter/nl-abonnement-magazine.png" border=0></a></td></tr></table>
@@ -178,8 +176,7 @@ if($arts = new WP_Query($args)) {
                   <a href=
                   "<?php echo $article['url'];?>"
                   target="_blank"><img style="border:solid 1px #FFFFFF;" width="120"
-                  height="auto" align="left" alt="img6" src=
-                  "<?php echo $article['image'];?>" /></a></td>
+                  height="auto" align="left" alt="img6" src="<?php echo $article['image'];?>" /></a></td>
 
                   <td style=
                   "padding-bottom:15px;padding-top:20px;"
@@ -253,8 +250,7 @@ if($arts = new WP_Query($args)) {
                                 <tr>
                                   <td align="left"><a href=
                                   "http://news.vogel.de/inxmail2/d?q00wueoq0eqfngbii000000000000000ietwqbri3277">
-                                  <img src=
-                                  "http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/newsletter/nl20/vogel_logo.gif"
+                                  <img src="http://www.devicemed.fr/wp-content/themes/devicemed-responsive/images/newsletter/nl20/vogel_logo.gif"
                                   alt="Vogel Logo" /></a></td>
 
                                   <td align="right"></td>
@@ -278,7 +274,7 @@ if($arts = new WP_Query($args)) {
                           <p style=
                           "FONT-SIZE: 11px; FONT-FAMILY: Arial, Helvetica, sans-serif; COLOR: #ffffff; LINE-HEIGHT: 18px">
                             &copy; The French language edition of DeviceMed is a
-                            publication of Evelyne Gisselbrecht, licensed by Vogel
+                            publication of Tipise SAS, licensed by Vogel
                             Business Media GmbH &amp; Co. KG, 97082
                             Wuerzburg/Germany.<br />
                             &copy; Copyright of the trademark &laquo; DeviceMed &raquo;
@@ -286,7 +282,7 @@ if($arts = new WP_Query($args)) {
                             Wuerzburg/Germany.<br />
                             Responsable du contenu r&eacute;dactionnel sur <a style=
                             "text-decoration:none;color:#fff;" href=
-                            "http://www.devicemed.fr/">www.devicemed.fr</a> : Evelyne
+                            "http://www.devicemed.fr/">www.devicemed.fr</a> : TIPISE SAS, Evelyne
                             Gisselbrecht, &eacute;ditrice de DeviceMed, 33 rue du
                             Puy-de-D&ocirc;me, 63370 Lempdes France</p>
                           </td>
@@ -318,9 +314,33 @@ if($arts = new WP_Query($args)) {
 </body>
 </html>
 <?php }
-if(check('source')) {
-  $page = ob_get_contents();
-  ob_end_clean();
+$page = ob_get_contents();
+ob_end_clean();
+/*
+$cpt=1;
+$replace=array();
+while($url = getHtmlVal('src="','"',$page,$cpt)) {
+  if(strstr($url,'http://www.devicemed.fr/')!==false) {
+    $ext = strtolower(getExtension($url));
+    if(in_array($ext,array('png','jpg','jpeg','gif'))!==false) {
+      if(file_exists($file)) {
+        $file = urlToPath($url);
+        $imagedata = base64_encode(file_get_contents($file));
+        $data = 'data: '.mime_content_type($file).';base64,'.$imagedata;
+        $replace[$url] = $data;
+      }
+    }
+  }
+  $cpt++;
+}
+foreach($replace as $url=>$data) {
+  $page = str_replace($url,$data,$page);
+}*/
+
+$page = str_replace('src="http://www.devicemed.fr/','src="https://www.devicemed.fr/',$page);
+if(!check('source')) {
+  echo $page;
+} else {
   $page = sanitize_output($page);
   ?>
 

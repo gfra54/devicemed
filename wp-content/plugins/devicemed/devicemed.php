@@ -37,7 +37,7 @@ define( 'DEVICEMED_THEME_PATH', $pre.'wp-content/themes/devicemed-responsive/' )
 
 
 function add_admin_js(){
-    wp_enqueue_script( 'admin-actions', DEVICEMED_PLUGIN_URL . '/js/admin-actions.js' );
+    wp_enqueue_script( 'admin-actions', DEVICEMED_PLUGIN_URL . '/js/admin-actions.js?2' );
 }
 add_action( 'admin_enqueue_scripts', 'add_admin_js' );
 

@@ -134,10 +134,10 @@ function get_related($id,$qte=3,$all=true) {
 	}
 }
 
-
 function isLocal() {
 	return strstr($_SERVER['HTTP_HOST'],'.local')!==false;
 }
+
 function transient_key($lib,$id) {
 	return $lib.'_'.$id;
 }
@@ -287,6 +287,7 @@ function baliseCss($file){
 }
 
 function getExtension($f) {
+	list($f) = explode('?',$f);
 	$tmp = explode('.',$f);
 	return end($tmp);
 }

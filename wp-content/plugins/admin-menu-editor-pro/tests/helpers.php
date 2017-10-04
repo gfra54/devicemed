@@ -45,10 +45,7 @@ class ameTestUtilities {
 		self::saveHelperSettings();
 
 		//Reset all menu editor configuration.
-		delete_site_option('ws_menu_editor_pro');
-		delete_option('ws_menu_editor_pro');
-		delete_site_option('ws_menu_editor');
-		delete_option('ws_menu_editor');
+		require __DIR__ . '/server-helpers/reset-configuration.php';
 
 		if ( isset($_GET['username'], $_GET['password']) ) {
 			$user = wp_signon(array(

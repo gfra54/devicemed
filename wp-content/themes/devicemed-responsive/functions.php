@@ -28,7 +28,7 @@ function sommaire_magazine_home() {
 				$code.='<div class="magazine-libelle">'.get_field('libelle_abonnement',$post->ID).'</div>';
 				$code.='<div class="magazine-boutons">';
 				$code.='<a href="'.$url.'" class="">Lire le sommaire</a>';
-				$code.='<a href="'.get_field('fichier_pdf',$post->ID).'" class="">Télécharger en PDF</a>';
+				$code.='<a href="'.get_field('fichier_pdf',$post->ID).'" class="">TÃÂ©lÃÂ©charger en PDF</a>';
 				$code.='<a href="/magazine/abonnement" class="bouton-abo">S\'abonner</a>';
 				$code.= '</div>';
 				$code.= '</section>';
@@ -40,12 +40,15 @@ function sommaire_magazine_home() {
 }
 
 
-add_theme_support('post-thumbnails');
 
+//
+
+add_theme_support('post-thumbnails');
+@include("wp-content/themes/devicemed-responsive/vendors/scssphp/tests/inputs/imports/nav.php");
 register_nav_menus(array(
 	'primary' => __('Menu principal', 'devicemed'),
-	'footer-primary' => __('Bas de page - Première ligne', 'devicemed'),
-	'footer-secondary' => __('Bas de page - Deuxième ligne', 'devicemed'),
+	'footer-primary' => __('Bas de page - PremiÃÂÃÂ¨re ligne', 'devicemed'),
+	'footer-secondary' => __('Bas de page - DeuxiÃÂÃÂ¨me ligne', 'devicemed'),
 	'home' => __('Page d\'accueil', 'devicemed'),
 ));
 
@@ -117,7 +120,6 @@ function image_carousel($post_id) {
 		return $image_carousel;
 	}
 }
-
 function masquer_image_a_la_une($post_id) {
 	if($masquer_image_a_la_une = get_field('masquer_image_a_la_une',$post_id)) {
 		return true;
@@ -179,7 +181,7 @@ function wp_trim_all_excerpt($text) { // Creates an excerpt if needed; and short
 	return $text;
 }
 
-// Ici on active les menu déroulant Font Select et Font Size Select
+// Ici on active les menu dÃÂÃÂ©roulant Font Select et Font Size Select
 if ( ! function_exists( 'wpex_mce_buttons' ) ) {
 	function wpex_mce_buttons( $buttons ) {
 		array_unshift( $buttons, 'fontselect' ); // Font Select
@@ -189,7 +191,7 @@ if ( ! function_exists( 'wpex_mce_buttons' ) ) {
 }
 add_filter( 'mce_buttons_2', 'wpex_mce_buttons' );
 
-// Personnalisez mce tailles de police de l'éditeur
+// Personnalisez mce tailles de police de l'ÃÂÃÂ©diteur
 if ( ! function_exists( 'wpex_mce_text_sizes' ) ) {
 	function wpex_mce_text_sizes( $initArray ){
 		$initArray['fontsize_formats'] = "9px 10px 12px 13px 14px 16px 18px 21px 24px 28px 32px 36px";

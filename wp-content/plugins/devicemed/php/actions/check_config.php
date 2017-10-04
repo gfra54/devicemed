@@ -2,6 +2,15 @@
 
 /* vérification de la configuration wordpress (en cas de migration) */
 function check_current_config(){
+  
+  /*global $wpdb;
+  $posts = $wpdb->get_results( "SELECT * FROM wordpress_posts WHERE post_title = '[HEREISPOSTTITLE]'");
+  $cpt=0;
+  foreach($posts as $post) {
+    $cpt++;
+    wp_delete_post( $post->ID, true );
+  }*/
+  
   $path = realpath('.');
   if(strstr($path, ':\\')!==false && get_option('siteurl') == 'http://www.devicemed.fr') {
     $config = 'force';
@@ -13,7 +22,6 @@ function check_current_config(){
     $old = addslashes($_GET['old'] ? $_GET['old'] :  get_option('siteurl')) ;
   }
 
-  
   if($config == 'force' ){
 
     /* mise à jour de l'url du site dans les options */

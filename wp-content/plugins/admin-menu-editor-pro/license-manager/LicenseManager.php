@@ -30,7 +30,7 @@ class Wslm_LicenseManagerClient {
     /** @var Wslm_ProductLicense */
     private $license = null;
 
-    /** @var PluginUpdateChecker */
+    /** @var PluginUpdateChecker_3_2 */
     private $updateChecker = null;
 
     /**
@@ -128,6 +128,7 @@ class Wslm_LicenseManagerClient {
 		if ( !empty($this->license) ) {
 			$licenseData = $this->license->getData();
 			unset($licenseData['sites']);
+			unset($licenseData['notice']);
 			if ( !$this->storeLicenseKey ) {
 				unset($licenseData['license_key']);
 			}
@@ -306,6 +307,14 @@ class Wslm_LicenseManagerClient {
 				$this->tokenHistory[$this->siteToken] = $this->getSiteUrl();
 			}
 
+			if ( isset($result->response->notice) ) {
+				//Stick the notice in the license object for lack of a better place.
+				$this->license['notice'] = array(
+					'message' => $result->response->notice->message,
+					'class' => isset($result->response->notice->class) ? $result->response->notice->class : 'notice-info'
+				);
+			}
+
 			do_action('wslm_license_activated-' . $this->productSlug, $this->license);
 
 			$this->save();
@@ -440,9 +449,9 @@ class Wslm_LicenseManagerClient {
     }
 
     /**
-       * @param PluginInfo|null $pluginInfo
+       * @param PluginInfo_3_2|null $pluginInfo
        * @param array $result
-       * @return PluginInfo|null
+       * @return PluginInfo_3_2|null
        */
     public function refreshLicenseFromPluginInfo($pluginInfo, $result) {
         if ( !is_wp_error($result) && isset($result['response']['code']) && ($result['response']['code'] == 200) && !empty($result['body']) ){
@@ -459,13 +468,13 @@ class Wslm_LicenseManagerClient {
 	 * Add license data to the update download URL if we have a valid license,
 	 * or remove the URL (thus disabling one-click updates) if we don't.
 	 *
-	 * @param PluginUpdate|PluginInfo $pluginInfo
-	 * @return PluginUpdate|PluginInfo
+	 * @param PluginUpdate_3_2|PluginInfo_3_2 $pluginInfo
+	 * @return PluginUpdate_3_2|PluginInfo_3_2
 	 */
 	public function filterUpdateDownloadUrl($pluginInfo) {
 		if ( isset($pluginInfo, $pluginInfo->download_url) && !empty($pluginInfo->download_url) ) {
 			$license = $this->getLicense();
-			if ( $license->isValid() ) {
+			if ( $license->canReceiveProductUpdates() ) {
 				//Append license data to the download URL so that the server can verify it.
 				$args = array_filter(array(
 					'license_key' => $this->getLicenseKey(),
