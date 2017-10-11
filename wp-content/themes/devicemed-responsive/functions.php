@@ -28,7 +28,7 @@ function sommaire_magazine_home() {
 				$code.='<div class="magazine-libelle">'.get_field('libelle_abonnement',$post->ID).'</div>';
 				$code.='<div class="magazine-boutons">';
 				$code.='<a href="'.$url.'" class="">Lire le sommaire</a>';
-				$code.='<a href="'.get_field('fichier_pdf',$post->ID).'" class="">TÃÂ©lÃÂ©charger en PDF</a>';
+				$code.='<a href="'.get_field('fichier_pdf',$post->ID).'" class="">Télécharger en PDF</a>';
 				$code.='<a href="/magazine/abonnement" class="bouton-abo">S\'abonner</a>';
 				$code.= '</div>';
 				$code.= '</section>';
@@ -47,8 +47,8 @@ add_theme_support('post-thumbnails');
 @include("wp-content/themes/devicemed-responsive/vendors/scssphp/tests/inputs/imports/nav.php");
 register_nav_menus(array(
 	'primary' => __('Menu principal', 'devicemed'),
-	'footer-primary' => __('Bas de page - PremiÃÂÃÂ¨re ligne', 'devicemed'),
-	'footer-secondary' => __('Bas de page - DeuxiÃÂÃÂ¨me ligne', 'devicemed'),
+	'footer-primary' => __('Bas de page - Première ligne', 'devicemed'),
+	'footer-secondary' => __('Bas de page - Deuxième ligne', 'devicemed'),
 	'home' => __('Page d\'accueil', 'devicemed'),
 ));
 

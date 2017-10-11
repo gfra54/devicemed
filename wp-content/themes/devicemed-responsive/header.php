@@ -102,7 +102,7 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 	<?php wp_head(); ?>
 </head>
 <div class='notConnected'>
-	Vous devez ÃÂªtre connectÃÂ© pour accÃÂ©der ÃÂ  cette archive.
+	Vous devez être connecté pour accèder à cette archive.
 	<br /><br />
 	<div id='lien_notConnected_connecter'>
 		<a href='/members/login?uri=<?php echo $_SERVER['REQUEST_URI'];?>'>Se connecter</a>
@@ -129,7 +129,7 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 				<a href="<?php echo site_url('/members/profile'); ?>">Profil de "<?php echo esc_html($session['user_nicename']); ?>"</a>
 			</div>
 			<div class="links">
-				<a href="<?php echo site_url('/members/logout'); ?>">Se dÃÂ©connecter</a>
+				<a href="<?php echo site_url('/members/logout'); ?>">Se déconnecter</a>
 			</div>
 		<?php else: ?>
 			<div class="links">
