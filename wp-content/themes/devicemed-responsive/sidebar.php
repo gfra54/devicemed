@@ -36,8 +36,8 @@
 		<?php
 			}
 		}
-		?>
-		<a href="/archives" class="more">Consulter d'autres numéros</a>
+		?>	
+	<a href="/archives" class="more">Consulter d'autres numéros</a>
 	</section>
 	
 	<section id="sidebar-fiches">

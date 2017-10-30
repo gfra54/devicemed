@@ -11,7 +11,7 @@
         init : function(ed, url) {
         	var _current_ed = ed;
 			ed.addButton('liens_connexes', {
-			    title : 'Liens conneses',
+			    title : 'Liens connexes',
 			    cmd : 'liens_connexes',
 			    image : url + '/../images/liens_connexes.png'
 			});
@@ -26,7 +26,7 @@
 					},function(_data){
 		                if(!selected_text) {
 							if('title' in _data) {
-								selected_text = _data.title;
+								selected_text = (_data.title+'&#8211;').split('&#8211;')[0];
 							}
 						}
 		                return_text = '<a href="'+_url+'#lien-connexe">' + selected_text + '</a>';
