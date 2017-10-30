@@ -71,7 +71,7 @@ $(document).ready(function() {
 		});
 	}
 
-	$('.article-image a, .gallerie-photo, .lien-photo').fancybox();
+	$('.article-image a, .gallerie-photo, .lien-photo, .content a[href*="uploads/"]').fancybox();
 
 	  $('.menu-fournisseurs .menu-item').click(function(e) {
 	  	if(!$(this).hasClass('details_supplier_disabled')) {
