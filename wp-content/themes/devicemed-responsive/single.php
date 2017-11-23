@@ -1,8 +1,5 @@
 <?php 
 
-	$stickies = get_option( 'sticky_posts' );
-me($stickies);
-
 	get_header(); ?>
 
 
