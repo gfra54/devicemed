@@ -2,27 +2,33 @@
 
 /* vérification de la configuration wordpress (en cas de migration) */
 function check_current_config(){
-  
-  /*global $wpdb;
-  $posts = $wpdb->get_results( "SELECT * FROM wordpress_posts WHERE post_title = '[HEREISPOSTTITLE]'");
-  $cpt=0;
-  foreach($posts as $post) {
-    $cpt++;
-    wp_delete_post( $post->ID, true );
-  }*/
-  
-  $path = realpath('.');
-  if(strstr($path, ':\\')!==false && get_option('siteurl') == 'http://www.devicemed.fr') {
-    $config = 'force';
-    $siteurl = 'http://www.devicemed.local';
-    $old = 'http://www.devicemed.fr';
-  } else {
-    $config = isset($_GET['config']) ? $_GET['config'] : false;
-    $siteurl = addslashes($_GET['siteurl'] ? $_GET['siteurl'] :  get_option('siteurl')) ;
-    $old = addslashes($_GET['old'] ? $_GET['old'] :  get_option('siteurl')) ;
+
+  if($_GET['config'] == 'force' && !isset($_GET['old']) && !isset($_GET['siteurl'])){
+    $new = get_option('siteurl');
+    if(strstr($new, '.fr')!==false) {
+      $new = str_replace('.fr','.local', $new);
+    } else if(strstr($new, '.local')!==false) {
+      $new = str_replace('.local','.fr', $new);
+    }
+
+    ?>
+    <form method="get">
+      <input type="hidden" name=config value=force>
+      <p>Ancienne Url<br><input type="text" name="old" size="100" placeholder="Ancienne url" value="<?php echo get_option('siteurl');?>"></p>
+
+      <p>Nouvelle Url<br><input type="text" name="siteurl" size="100" placeholder="Nouvelle url" value="<?php echo $new;?>"></p>
+      <input type="submit">
+    </form>
+    <?php
+    exit;
   }
 
-  if($config == 'force' ){
+  $path = realpath('.');
+  $config = isset($_GET['config']) ? $_GET['config'] : false;
+  $siteurl = addslashes($_GET['siteurl']) ;
+  $old = addslashes($_GET['old']) ;
+
+  if($config == 'force' && $old && $siteurl){
 
     /* mise à jour de l'url du site dans les options */
     update_option('home',$siteurl);

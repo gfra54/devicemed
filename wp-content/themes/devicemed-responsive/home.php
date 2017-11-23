@@ -89,27 +89,18 @@ foreach(wp_get_nav_menu_items('page-daccueil') as $menuitem):
 	</div>
 	<div class="section-column-left">
 <?php
-	$qte=1;
+	$qte=3;
 	while((list(,$post) = each($posts)) && $qte) {
-		if(empty($deja[$post->ID])) {
-			$deja[$post->ID]=true;
-			$qte--;
-			setup_postdata($post);
-			get_template_part('home/last-posts');
-		}
-	}
+		setup_postdata($post);
+		get_template_part('home/last-posts');
+		if($qte == 3) {
 ?>
 	</div>
 	<div class="section-column-right">
 <?php
-	$qte=2;
-	while((list(,$post) = each($posts)) && $qte) {
-		if(empty($deja[$post->ID])) {
-			$deja[$post->ID]=true;
-			$qte--;
-			setup_postdata($post);
-			get_template_part('home/last-posts');
-		} 
+			
+		}
+		$qte--;
 	}
 ?>
 	</div>

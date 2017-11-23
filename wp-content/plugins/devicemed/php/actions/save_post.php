@@ -7,7 +7,9 @@ function save_post_action($post_id) {
     global $post; 
 
 
-    file_get_contents("https://waf.sucuri.net/api?v2&k=a1691d9eb844117a444359abb20b72ee&s=8ce3581bca2880c3bd31354222325762&a=clear_cache");
+    	if(strstr($_SERVER['HTTP_HOST'],'.local') === false) {
+		    file_get_contents("https://waf.sucuri.net/api?v2&k=a1691d9eb844117a444359abb20b72ee&s=8ce3581bca2880c3bd31354222325762&a=clear_cache");
+		}
 
     if ($post->post_type == 'salons'){
 		set_transient('salons','');
@@ -88,14 +90,26 @@ function save_post_action($post_id) {
 
 	} else {
 		if($post = get_post($post_id)) {
-			if(strstr($post->post_content,'<a href=')!==false && strstr($post->post_content,'target="_blank"')===false) {
+
+
+			if(strstr($post->post_content,'<a href=')!==false) {
 				$post_content = str_replace('<a href=','<a target="_blank" href=',$post->post_content);
+
 				if($post_content != $post->post_content) {
 					wp_update_post(array(
 						'ID'=>$post_id,
 						'post_content'=>$post_content
 					));
 				}
+			}
+
+			if(!get_post_meta($post_id,'set_sticky')) {
+				$stickies = get_option( 'sticky_posts' );
+				if(!in_array($post_id, $stickies)) {
+					$stickies[]=$post_id;
+					update_option('sticky_posts', $stickies);
+				}
+				update_post_meta($post_id,'set_sticky',true);
 			}
 		}
 		set_transient('sommaire_magazine_home','');

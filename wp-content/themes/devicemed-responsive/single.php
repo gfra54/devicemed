@@ -1,4 +1,8 @@
 <?php 
+
+	$stickies = get_option( 'sticky_posts' );
+me($stickies);
+
 	get_header(); ?>
 
 
@@ -106,7 +110,7 @@
 						} else {*/
 
 					?>
-						<div class="article-image">
+						<div class="article-image <?php echo $thumbnail->post_excerpt ? 'avec-legende' : '';?>">
 						<div class='image_clicable'><a href="<?php echo $image_au_clic; ?>"><figure style="background-image:url('<?php echo $thumbnail->url; ?>')">
 							<img src="<?php echo $thumbnail->url ?>" title="<?php echo esc_attr($thumbnail->post_title); ?>" />
 						</figure></a></div>
@@ -122,6 +126,24 @@
 			<div class="content">
 				<?php 
 					the_content(); 
+				?>
+
+				<?php if($liens_du_bas = get_field('liens_du_bas')) {
+					echo '<hr><p>';
+					foreach($liens_du_bas as $cle=>$lien) {
+						if($cle) {
+							echo ', ';
+						}
+						$lib = $lien['libelle'];
+						if(!$lib) {
+							$url = parse_url($lien['url']);
+							$lib = $url['host'];
+						}
+						echo '<a target="_blank" href="'.$lien['url'].'" rel="noopener"><strong>'.$lib.'</strong></span></a>';
+
+					}
+					echo '</p>';
+				}
 				?>
 			<?php if($is_magazine) {?>
 			<p>Ce numéro est <a href="<?php echo $url_pdf;?>" target="_blank">téléchargeable au format PDF, en cliquant ici</a>. Tout comme les numéros précédents, <a href="/archives">à partir de la page des archives</a>.</p>

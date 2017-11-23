@@ -609,7 +609,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
   padding-right: 27px;
 }
 body .container .article .content a {
-  color:#0066b3;
+  color:#3366ff;
   text-decoration: underline;
 }
 body .container .article .content a:hover {
@@ -839,6 +839,10 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
   padding: 3px;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
+}
+.article-image.avec-legende .image_clicable a:before {
+  bottom: auto;
+  top:5px;
 }
 .article-image .image_clicable a:hover:before {
   background:rgba(0,0,0,0.5);
