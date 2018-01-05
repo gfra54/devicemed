@@ -103,12 +103,8 @@ function save_post_action($post_id) {
 				}
 			}
 
-			if(!get_post_meta($post_id,'set_sticky')) {
-				$stickies = get_option( 'sticky_posts' );
-				if(!in_array($post_id, $stickies)) {
-					$stickies[]=$post_id;
-					update_option('sticky_posts', $stickies);
-				}
+			if(get_post_meta($post_id,'set_sticky') != 'true') {
+				stick_post( $post_id );
 				update_post_meta($post_id,'set_sticky',true);
 			}
 		}
