@@ -47,6 +47,10 @@
 
 	$lignes[] = '- - - - - -';
 	$lignes[] = 'Si vous ne visualisez pas bien cet email, cliquez sur le lien suivant pour voir la version en ligne: *|ARCHIVE|*';
+
+	$lignes[] = 'Cet email a été envoyé par DeviceMed à *|EMAIL|*, Suivez le lien suivant pour vous désabonner *|UNSUB|*';
+
+
 	$lignes[] = '- - - - - -';
 	$lignes[] = '© The French language edition of DeviceMed is a publication of Tipise SAS, licensed by Vogel Business Media GmbH & Co. KG, 97082 Wuerzburg/Germany.';
 $lignes[] = '© Copyright of the trademark « DeviceMed » by Vogel Business Media GmbH & Co. KG, 97082 Wuerzburg/Germany. Responsable du contenu rédactionnel sur www.devicemed.fr : TIPISE SAS, Evelyne Gisselbrecht, éditrice de DeviceMed, 33 rue du Puy-de-Dôme, 63370 Lempdes France';
@@ -100,13 +104,13 @@ $lignes[] = '© Copyright of the trademark « DeviceMed » by Vogel Business Med
 			if($posts = new WP_Query($args)) {
 				$magazine = $posts->posts[0];
 
-				$surtitre = 'MAGAZINE';
+				$surtitre = '';
 				$titre_texte_brut = $magazine->post_title;
 				$texte_brut = 'A la une: '.get_field('texte_home',$magazine->ID).'.'.PHP_EOL.'Consultez ce numéro et abonnez-vous en ligne au magazine DeviceMed '.SHORT_URL.$magazine->ID;
 			}
 
 		} else {
-			$surtitre = 'ANNONCE';
+			$surtitre = 'Annonce';
 			$titre_texte_brut = get_field('titre_texte_brut',$pub_id);
 			$texte_brut = get_field('texte_brut',$pub_id);
 		}
@@ -115,7 +119,7 @@ $lignes[] = '© Copyright of the trademark « DeviceMed » by Vogel Business Med
 		      $texte_brut = get_field('texte',$pub_id).PHP_EOL.'=> '.get_field('url_cible',$pub_id);
 		}
 		if($titre_texte_brut && $texte_brut) {
-			$lignes[] = ($surtitre ? '['.convertToSmallCaps($surtitre).']'.PHP_EOL : '').'== '.convertToSmallCaps($titre_texte_brut).' =='.PHP_EOL.$texte_brut;
+			$lignes[] = '== '.($surtitre ? $surtitre.' - ' : '').convertToSmallCaps($titre_texte_brut).' =='.PHP_EOL.$texte_brut;
 		}
 		return $lignes;
 	}
