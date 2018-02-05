@@ -45,7 +45,7 @@
 			if($('#wp-admin-bar-view .ab-item').html().indexOf('Newsletter')>0) {
 				// $('<li><a href="/fournisseurs_partenaires?ban&TB_iframe=false&width=300&height=300" title="Voir le bloc fournisseurs" class="thickbox ab-item">Bloc fournisseurs</a></li>').insertAfter('#wp-admin-bar-view');
 				var _view = $('#wp-admin-bar-view .ab-item').attr('href')+'?TB_iframe=false';
-				$('<li><a class="ab-item thickbox" href="'+_view+'&brut=true">Voir en texte brut</a></li><li><a href="'+$('#wp-admin-bar-view .ab-item').attr('href').replace('http:','https:')+'?source=true&TB_iframe=false&width=900&height=958" title="Code source" class="thickbox ab-item">Code source de la newsletter</a></li>').insertAfter('#wp-admin-bar-view');
+				$('<li><a class="ab-item" href="'+_view+'&brut=true" target="_blank">Voir en texte brut</a></li><li><a href="'+$('#wp-admin-bar-view .ab-item').attr('href').replace('http:','https:')+'?source=true&TB_iframe=false&width=900&height=958" title="Code source" class="thickbox ab-item">Code source de la newsletter</a></li>').insertAfter('#wp-admin-bar-view');
 				$('#wp-admin-bar-view .ab-item').attr('href',_view);
 
 
