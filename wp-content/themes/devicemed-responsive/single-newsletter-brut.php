@@ -60,7 +60,7 @@ $lignes[] = '© Copyright of the trademark « DeviceMed » by Vogel Business Med
 			$lignes[$k] = mb_wordwrap($ligne,80,PHP_EOL);
 		// }
 	}
-	echo '<pre>'.implode($break,$lignes).'</pre>';
+	echo '<pre>'.make_links_blank(implode($break,$lignes)).'</pre>';
 
   $GLOBALS['bloc_partenaires_brut']=false;
 	function bloc_partenaires_brut() {
@@ -104,7 +104,7 @@ $lignes[] = '© Copyright of the trademark « DeviceMed » by Vogel Business Med
 			if($posts = new WP_Query($args)) {
 				$magazine = $posts->posts[0];
 
-				$surtitre = '';
+				$surtitre = 'Magazine';
 				$titre_texte_brut = $magazine->post_title;
 				$texte_brut = 'A la une: '.get_field('texte_home',$magazine->ID).'.'.PHP_EOL.'Consultez ce numéro et abonnez-vous en ligne au magazine DeviceMed '.SHORT_URL.$magazine->ID;
 			}
@@ -119,7 +119,34 @@ $lignes[] = '© Copyright of the trademark « DeviceMed » by Vogel Business Med
 		      $texte_brut = get_field('texte',$pub_id).PHP_EOL.'=> '.get_field('url_cible',$pub_id);
 		}
 		if($titre_texte_brut && $texte_brut) {
-			$lignes[] = '== '.($surtitre ? $surtitre.' - ' : '').convertToSmallCaps($titre_texte_brut).' =='.PHP_EOL.$texte_brut;
+			$lignes[] = '== '.convertToSmallCaps($surtitre).' =='.PHP_EOL.mb_strtoupper($titre_texte_brut).PHP_EOL.$texte_brut;
 		}
 		return $lignes;
 	}
+
+
+function make_links_blank($text)
+{
+  return  preg_replace(
+     array(
+       '/(?(?=<a[^>]*>.+<\/a>)
+             (?:<a[^>]*>.+<\/a>)
+             |
+             ([^="\']?)((?:https?|ftp|bf2|):\/\/[^<> \n\r]+)
+         )/iex',
+       '/<a([^>]*)target="?[^"\']+"?/i',
+       '/<a([^>]+)>/i',
+       '/(^|\s)(www.[^<> \n\r]+)/iex',
+       '/(([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-]+)
+       (\\.[A-Za-z0-9-]+)*)/iex'
+       ),
+     array(
+       "stripslashes((strlen('\\2')>0?'\\1<a href=\"\\2\">\\2</a>\\3':'\\0'))",
+       '<a\\1',
+       '<a\\1 target="_blank">',
+       "stripslashes((strlen('\\2')>0?'\\1<a href=\"http://\\2\">\\2</a>\\3':'\\0'))",
+       "stripslashes((strlen('\\2')>0?'<a href=\"mailto:\\0\">\\0</a>':'\\0'))"
+       ),
+       $text
+   );
+}
