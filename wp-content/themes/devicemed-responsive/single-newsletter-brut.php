@@ -1,5 +1,5 @@
 <?php
-	define('SHORT_UR', str_replace('www.','',site_url()).'/');
+	define('SHORT_URL', str_replace('www.','',site_url()).'/');
 	$break = PHP_EOL.PHP_EOL;
 	$lignes = array();
 
@@ -21,7 +21,7 @@
 		$ligne_article=array();
 		$ligne_article[] = '== '.convertToSmallCaps($article['category']).' == ';
 		$ligne_article[] = mb_strtoupper($article['title']);
-		$ligne_article[] = strip_tags($article['text']).' // '.SHORT_UR.$article['id'];
+		$ligne_article[] = strip_tags($article['text']).PHP_EOL.'=> '.SHORT_URL.$article['id'];
 		$lignes[]=implode(PHP_EOL,$ligne_article);
 		if($cpt==2) {
 			if($pub_id = get_field('banniere_dans_articles',$newsletter->ID)) {
@@ -56,7 +56,7 @@ $lignes[] = '© Copyright of the trademark « DeviceMed » by Vogel Business Med
 			$lignes[$k] = mb_wordwrap($ligne,80,PHP_EOL);
 		// }
 	}
-	echo implode($break,$lignes);
+	echo '<pre>'.implode($break,$lignes).'</pre>';
 
   $GLOBALS['bloc_partenaires_brut']=false;
 	function bloc_partenaires_brut() {
@@ -77,9 +77,9 @@ $lignes[] = '© Copyright of the trademark « DeviceMed » by Vogel Business Med
 			$tab=array();
 			$cpt=0;foreach($data_fournisseurs as $id=>$data) {
 
-				// $ret[]=mb_str_pad(mb_strtoupper($data['nom']), 20,' ').SHORT_UR.$id;
+				// $ret[]=mb_str_pad(mb_strtoupper($data['nom']), 20,' ').SHORT_URL.$id;
 				$tab[]=mb_strtoupper($data['nom']);
-				// $ret[]=SHORT_UR.$id.PHP_EOL;
+				// $ret[]=SHORT_URL.$id.PHP_EOL;
 			}
 
 			return 'Comme chaque semaine, retrouvez notre liste de fournisseurs partenaires: '.PHP_EOL.implode(', ',$tab).PHP_EOL.'Voir la liste de nos fournisseurs partenaires en ligne http://devicemed.fr/partenaires';
@@ -100,21 +100,22 @@ $lignes[] = '© Copyright of the trademark « DeviceMed » by Vogel Business Med
 			if($posts = new WP_Query($args)) {
 				$magazine = $posts->posts[0];
 
-				$surtitre = '[MAGAZINE]';
+				$surtitre = 'MAGAZINE';
 				$titre_texte_brut = $magazine->post_title;
-				$texte_brut = 'A la une: '.get_field('texte_home',$magazine->ID).'.'.PHP_EOL.'Consultez ce numéro et abonnez-vous en ligne au magazine DeviceMed '.SHORT_UR.$magazine->ID;
+				$texte_brut = 'A la une: '.get_field('texte_home',$magazine->ID).'.'.PHP_EOL.'Consultez ce numéro et abonnez-vous en ligne au magazine DeviceMed '.SHORT_URL.$magazine->ID;
 			}
 
 		} else {
-			$surtitre = '[ANNONCE]';
+			$surtitre = 'ANNONCE';
 			$titre_texte_brut = get_field('titre_texte_brut',$pub_id);
 			$texte_brut = get_field('texte_brut',$pub_id);
 		}
+		if(!$titre_texte_brut && !$texte_brut) {
+		      $titre_texte_brut = get_field('titre_pub',$pub_id);
+		      $texte_brut = get_field('texte',$pub_id).PHP_EOL.'=> '.get_field('url_cible',$pub_id);
+		}
 		if($titre_texte_brut && $texte_brut) {
-			if($surtitre) {
-				$lignes[] = $surtitre;
-			}
-			$lignes[] = '== '.convertToSmallCaps($titre_texte_brut).' =='.PHP_EOL.$texte_brut;
+			$lignes[] = ($surtitre ? '['.convertToSmallCaps($surtitre).']'.PHP_EOL : '').'== '.convertToSmallCaps($titre_texte_brut).' =='.PHP_EOL.$texte_brut;
 		}
 		return $lignes;
 	}
