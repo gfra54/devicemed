@@ -1,4 +1,68 @@
 <?php
+function mb_str_pad($str, $pad_len, $pad_str = ' ', $dir = STR_PAD_RIGHT, $encoding = NULL)
+{
+    $encoding = $encoding === NULL ? mb_internal_encoding() : $encoding;
+    $padBefore = $dir === STR_PAD_BOTH || $dir === STR_PAD_LEFT;
+    $padAfter = $dir === STR_PAD_BOTH || $dir === STR_PAD_RIGHT;
+    $pad_len -= mb_strlen($str, $encoding);
+    $targetLen = $padBefore && $padAfter ? $pad_len / 2 : $pad_len;
+    $strToRepeatLen = mb_strlen($pad_str, $encoding);
+    $repeatTimes = ceil($targetLen / $strToRepeatLen);
+    $repeatedString = str_repeat($pad_str, max(0, $repeatTimes)); // safe if used with valid unicode sequences (any charset)
+    $before = $padBefore ? mb_substr($repeatedString, 0, floor($targetLen), $encoding) : '';
+    $after = $padAfter ? mb_substr($repeatedString, 0, ceil($targetLen), $encoding) : '';
+    return $before . $str . $after;
+}
+
+function mb_wordwrap($str, $width = 75, $break = "\n", $cut = false) {
+    $lines = explode($break, $str);
+    foreach ($lines as &$line) {
+        $line = rtrim($line);
+        if (mb_strlen($line) <= $width)
+            continue;
+        $words = explode(' ', $line);
+        $line = '';
+        $actual = '';
+        foreach ($words as $word) {
+            if (mb_strlen($actual.$word) <= $width)
+                $actual .= $word.' ';
+            else {
+                if ($actual != '')
+                    $line .= rtrim($actual).$break;
+                $actual = $word;
+                if ($cut) {
+                    while (mb_strlen($actual) > $width) {
+                        $line .= mb_substr($actual, 0, $width).$break;
+                        $actual = mb_substr($actual, $width);
+                    }
+                }
+                $actual .= ' ';
+            }
+        }
+        $line .= trim($actual);
+    }
+    return implode($break, $lines);
+}
+function convertToSmallCaps($string) {
+	$caps = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+	$smallCaps = array('ᴀ', 'ʙ', 'ᴄ', 'ᴅ', 'ᴇ', 'ꜰ', 'ɢ', 'ʜ', 'ɪ', 'ᴊ', 'ᴋ', 'ʟ', 'ᴍ', 'ɴ', 'ᴏ', 'ᴘ', 'ǫ', 'ʀ', 's', 'ᴛ', 'ᴜ', 'ᴠ', 'ᴡ', 'x', 'ʏ', 'ᴢ');
+
+	$sanitized_string = mb_strtoupper(str_replace('-',' ',remove_accents($string)));
+	$length = strlen($sanitized_string);
+	$output_string='';
+    for($i = 0; $i<$length; $i++){
+    	$char = $sanitized_string[$i];
+    	$letter_position = array_search($char,$caps);
+    	if(is_numeric($letter_position) && isset($smallCaps[$letter_position])) {
+    		$output_string.=$smallCaps[$letter_position];
+    	} else {
+    		$output_string.=$char;
+    	}
+    }
+
+    return $output_string;
+}
+
 function urlToPath($url) {
 	if($url) {
 		list($pre) = explode('/wp-content',get_stylesheet_directory());
