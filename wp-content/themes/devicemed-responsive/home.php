@@ -51,6 +51,7 @@ $image_carousel = image_carousel($post->ID);
 	</div>
 </section>
 
+
 <script type="text/javascript">
 $(document).ready(function() {
 
@@ -66,12 +67,15 @@ $('#last-posts-featured .slider').bxSlider({
 
 <div class="row column-content page-home">
 	<div class="col-md-9 col-sm-8 column-main">
+		
+<?php afficher_pub('site-textad');?>
 
 
 <?php
 sommaire_magazine_home();
 ?>
-			
+		
+		
 <?php
 
 $deja = array();

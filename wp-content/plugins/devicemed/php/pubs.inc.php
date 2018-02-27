@@ -40,7 +40,6 @@ function afficher_pub_js($type,$attr=array()) {
 }
 function afficher_pub($type,$attr=array()) {
 
-
 	if($return = sinon($attr,'return')) {
 		unset($attr['return']);
 	}
@@ -59,6 +58,12 @@ function afficher_pub($type,$attr=array()) {
 		}
 	} else {
 		$pub = get_selected_pub($type,$pubs);
+	}
+	if(isset($_GET['pub'])) {
+		$preview = get_post($_GET['pub']);
+		if(check_espace($type,$preview)) {
+			$pub = $preview;
+		}
 	}
 	if($pub) {
 		if($ret = display_pub($pub,$attr,$type)) {
@@ -110,7 +115,17 @@ function display_pub($pub,$attr=array(),$type=false) {
 		      'text'=>get_field('texte',$textad['ID']),
 		      'lien'=>get_field('libelle_lien',$textad['ID']),
 		      'url'=>get_field('url_tracking_clicks',$textad['ID'])
-		  ));
+		  ),'newsletter');
+	} else
+	if(check_espace('site-textad',$pub)) {
+		  $textad = pub_metrics($pub);
+		  return render_textad(array(
+		      'image'=>get_field('url_tracking_display',$textad['ID']),
+		      'title'=>get_field('titre_pub',$textad['ID']),
+		      'text'=>get_field('texte',$textad['ID']),
+		      'lien'=>get_field('libelle_lien',$textad['ID']),
+		      'url'=>get_field('url_tracking_clicks',$textad['ID'])
+		  ),'site');
 	} else
 	if($type == 'cadre-video') {
 		$out='<section id="sidebar-issues" class="cadre-video">';
@@ -371,9 +386,32 @@ function pub_metrics($pub) {
 */
 
 
-function render_textad($ad) {
+function render_textad($ad,$w='newsletter') {
 
 ob_start();
+if($w=='site') {
+?>
+
+<a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank" class="home-last-posts" id="textad">
+    <span class="textad-cover">
+        <img src="https://i.snag.gy/0DRzcJ.jpg">
+    </span>
+    <span class="textad-details">
+        <span class="textad-surtitre">
+        	Annonce
+        </span>
+        <span class="textad-titre">
+        	<?php echo $ad['title'];?>
+        </span>
+        <span class="textad-texte">
+        	<?php echo $ad['text'];?>
+        	<?php echo !empty($ad['lien']) ? '<span class="textad-lien">'.$ad['lien'].'</a>' : '';?>.</font>
+        
+    </span>
+</a>	
+
+<?php
+} else {
 	?>
 	<center>
   <table border="0" cellspacing="0" width="480">
@@ -407,6 +445,7 @@ ob_start();
   </table>
   </center>
 <?php	
+}
 		$content = ob_get_contents();
 		ob_end_clean();
 		return $content;

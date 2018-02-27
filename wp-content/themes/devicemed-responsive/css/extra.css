@@ -901,3 +901,63 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
     color: #b30065;
     text-decoration: underline;
 }
+
+
+
+#textad {
+  display: block;
+  position: relative;
+  padding:20px;
+  overflow: hidden;
+  margin:0;
+}
+.textad-cover img{
+  width: 100%;
+  display: block;
+}
+.textad-cover {
+  display: block;
+  float: left;
+  width: 113px;
+  height: calc(100%);
+  margin-right: 20px;
+  overflow: hidden;
+}
+.textad-details {
+  display: block;
+  float: left;
+  width: calc(100% - 137px);
+  height: calc(100%);
+  /*max-width: 750px;*/
+  position: relative;
+}
+
+.textad-titre {
+  display: block;
+    font-family: 'opensans-condbold';
+    font-weight: 200;
+    font-size: 25px;
+    text-transform: uppercase;
+    color:#0066b3;
+}
+
+.textad-surtitre{
+  display: block;
+}
+.textad-texte {
+  display: block;
+}
+.textad-lien {
+  color:#0066b3;
+}
+#textad:hover {
+  background:#0066b3;
+  color:white;
+}
+#textad:hover .textad-titre {
+  color:white;
+}
+
+#textad:hover .textad-lien{
+  color:white;
+}
