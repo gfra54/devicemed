@@ -393,13 +393,13 @@ if($w=='site') {
 ?>
 
 <a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank" class="home-last-posts" id="textad">
+        <span class="textad-surtitre">
+        	Annonce
+        </span>
     <span class="textad-cover">
         <img src="https://i.snag.gy/0DRzcJ.jpg">
     </span>
     <span class="textad-details">
-        <span class="textad-surtitre">
-        	Annonce
-        </span>
         <span class="textad-titre">
         	<?php echo $ad['title'];?>
         </span>

@@ -910,6 +910,8 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
   padding:20px;
   overflow: hidden;
   margin:0;
+  background: #0066b3;
+  position: relative;
 }
 .textad-cover img{
   width: 100%;
@@ -933,31 +935,40 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
 }
 
 .textad-titre {
+  color:white;
   display: block;
     font-family: 'opensans-condbold';
     font-weight: 200;
     font-size: 25px;
     text-transform: uppercase;
-    color:#0066b3;
 }
 
 .textad-surtitre{
   display: block;
+  position: absolute;
+    top: 5px;
+    right: 10px;
+      color:white;
 }
 .textad-texte {
+  color:white;
   display: block;
 }
 .textad-lien {
-  color:#0066b3;
+  color:white;
+  text-decoration: underline;
 }
 #textad:hover {
-  background:#0066b3;
-  color:white;
+  background:#FFFFFF;
+  color:#0066b3;
 }
 #textad:hover .textad-titre {
-  color:white;
+  color:#0066b3;
+}
+#textad:hover .textad-texte {
+  color:#0066b3;
 }
 
 #textad:hover .textad-lien{
-  color:white;
+  color:#0066b3;
 }
