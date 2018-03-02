@@ -120,7 +120,7 @@ function display_pub($pub,$attr=array(),$type=false) {
 	if(check_espace('site-textad',$pub)) {
 		  $textad = pub_metrics($pub);
 		  return render_textad(array(
-		      'image'=>get_field('url_tracking_display',$textad['ID']),
+		      'image'=>get_field('url_tracking_display',$textad['ID']).'?'.time(),
 		      'title'=>get_field('titre_pub',$textad['ID']),
 		      'text'=>get_field('texte',$textad['ID']),
 		      'lien'=>get_field('libelle_lien',$textad['ID']),
@@ -393,11 +393,11 @@ if($w=='site') {
 ?>
 
 <a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank" class="home-last-posts" id="textad">
-        <span class="textad-surtitre">
-        	Annonce
-        </span>
+    <span class="textad-surtitre">
+    	Annonce
+    </span>
     <span class="textad-cover">
-        <img src="https://i.snag.gy/0DRzcJ.jpg">
+        <img src="<?php echo $ad['image'];?>">
     </span>
     <span class="textad-details">
         <span class="textad-titre">

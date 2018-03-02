@@ -12,6 +12,10 @@ get_header(); ?>
 			<?php }?>
 			</div>
 		</p>
+					<div class='bloc_infos_fournisseurs'>
+				<div class='image_repertoire'><img src='<?php echo get_template_directory_uri(); ?>/images/sidebar-supplier-registration-icon.png' /></div>
+				<div class='texte_repertoire'>Vous êtes fournisseur des fabricants de dispositifs médicaux ?<br /><a href='/suppliers/inscription'><b>Figurez, vous aussi dans le répertoire. C'est rapide et gratuit.</b></a></div>
+			</div>
 	</section>
 </div><!-- .column-main -->
 <!-- FOOTER -->
@@ -120,6 +124,7 @@ get_header(); ?>
 			}
 		}
 	?>
+
 
 
 <?php get_footer(); ?>

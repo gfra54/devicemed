@@ -63,7 +63,7 @@ if(check('action') == 'create') {
 	}		
 
 	if(!count($errors)) {
-		if($id_fournisseur = new_fournisseur(array(
+		$data = array(
 			'nom_societe'=>check('nom_societe'),
 			'content'=>'',
 			'nom_contact_commercial'=>check('nom').' '.check('prenom'),
@@ -78,7 +78,21 @@ if(check('action') == 'create') {
 			'supplier_contact_mail'=>check('supplier_contact_mail'),
 			'email'=>check('email'),
 			'optin'=>check('contact_fiche_complete')
-		),check('categories'))) {
+		);
+		if($id_fournisseur = new_fournisseur($data,check('categories'))) {
+			$to =array('laurence.jaffeux@devicemed.fr ','jilfransoi@gmail.com','evelyne.gisselbrecht@devicemed.fr');
+			$subject='Ajout d\'un nouveau fournisseur : "'.$data['nom_societe'].'"';
+
+			$message='Voir la fiche du fournisseur : http://www.devicemed.fr/wp-admin/post.php?post='.$id_fournisseur.'&action=edit'.PHP_EOL.PHP_EOL.'<b>Détails de la saisie</b>'.PHP_EOL.'<pre>';
+			foreach($data as $k=>$v) {
+				$message.='<b>'.str_pad($k, 30,' ').'</b>'.$v.PHP_EOL;
+			}
+			$message.='</pre>';
+
+			$headers  = 'MIME-Version: 1.0' . "\r\n";
+			$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+			wp_mail($to, $subject, $message, $headers);
+
 			wp_redirect('/nouveau-fournisseur?id_fournisseur='.$id_fournisseur);
 			exit;
 		}

@@ -155,6 +155,7 @@ function array_sort_field($tab,$field,$inv=false,$field2=false,$inv2=false) {
 	} else {
 		$sort=array();
 		$sort_flag=SORT_REGULAR;
+		if(is_array($tab))
 		foreach($tab as $k=>$v) {
 			if(!is_numeric($v[$field])){
 				$sort_flag = SORT_STRING;
@@ -326,7 +327,7 @@ function include_external($file,$maj=false){
 			if(file_exists($path)) {
 				$time= filemtime($path);
 			} else {
-				$time= 'A'.date('Ymd');
+				$time= 'A'.date('dmY');
 			}
 			$time = $maj && $maj>$time ? $maj : $time;
 			$file = addURLParameter($file,'t',$time);

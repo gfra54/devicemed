@@ -275,7 +275,7 @@ function fournisseurs_filtre_categories($categories,$niveau=1,$checkboxes=false,
 	$cpt=0;
 	foreach($categories as $id_categorie => $categorie) {
 		$categories[$id_categorie]['categories'] = array_sort_field($categorie['categories'],'slug',true);
-		foreach($categorie['categories'] as $id_sous_categorie => $sous_categorie){
+		if(is_array($categorie['categories'])) foreach($categorie['categories'] as $id_sous_categorie => $sous_categorie){
 			$categories[$id_categorie][$id_sous_categorie]['categories'] = array_sort_field($sous_categorie['categories'],'slug',true);
 		}
 	}
