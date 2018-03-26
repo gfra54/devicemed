@@ -2,12 +2,10 @@
 
 setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
 
-function get_salons($nb=4,$debut=0) {
-	if(!$debut) {
-		$debut=time();
-	}
+function get_salons($nb=4,$annee=false) {
+	$debut=time();
 	$salons = get_transient('salons');
-	if(!$salons) {
+	if($annee || !$salons) {
 		$args = array( 
 			'post_type'	=> 'salons',
 			'posts_per_page'=>1000,
@@ -15,8 +13,13 @@ function get_salons($nb=4,$debut=0) {
 		if($q = new WP_Query($args)) {
 			$sort = array();
 			foreach($q->posts as $key => $salon) {
-				if((strtotime(get_field('date_debut',$salon->ID)) > $debut || strtotime(get_field('date_fin',$salon->ID)) > $debut)) {
-					$sort[$key]=get_field('date_debut',$salon->ID);
+				$date_debut=get_field('date_debut',$salon->ID);
+				if($annee) {
+					if(strstr($date_debut, $annee)!==false) {
+						$sort[$key]=$date_debut;
+					}
+				} else if(strtotime(get_field('date_fin',$salon->ID)) > $debut) {
+					$sort[$key]=$date_debut;
 				}
 			}
 			asort($sort);
@@ -32,7 +35,9 @@ function get_salons($nb=4,$debut=0) {
 				}
 				$salons[]=$tmp;
 			}
-			set_transient('salons',$salons);
+			if(!$annee) {
+				set_transient('salons',$salons);
+			}
 		}
 
 	}

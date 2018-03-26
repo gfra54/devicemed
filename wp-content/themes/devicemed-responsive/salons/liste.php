@@ -3,9 +3,9 @@ get_header();
 
 $debut=intval($_GET['debut']);
 if($debut) {
-	$date_debut = strtotime($debut.'-01-01');
+	$annee = ''.$debut;
 } else {
-	$date_debut=false;
+	$annee = false;
 	$debut = date('Y')+1;
 }
 ?>
@@ -13,13 +13,13 @@ if($debut) {
 <div class="row column-content page-members">
 	<div class="col-md-9 col-sm-8 column-main">
 	<section class="catalogues">
-		<h2 class="title">Salons et manifestations</h2>
+		<h2 class="title">Salons et manifestations <?php echo $annee ? ' en '.$annee : '';?></h2>
 		<div id='contenu_archives'>
 			
 		
 			<?php 
 				$date_ref=false;
-				foreach(get_salons(20,$date_debut) as $salon) { 
+				foreach(get_salons(20,$annee) as $salon) { 
 				$mois = ((strftime("%B %Y",strtotime($salon['date_debut']))));
 				$date_ref=$date_ref ? $date_ref : $salon['date_debut'];
 				?>
@@ -65,7 +65,8 @@ if($debut) {
 			</div>-->
 		</div>
 		<hr>
-		<center><p><a class="lien-classique" href="?debut=<?=$debut-1;?>">Voir la liste des événements antérieurs</a></p></center>
+		<center><p><a class="lien-classique" href="?debut=<?=$debut-1;?>">
+			<?php if($debut) {echo 'Voir les salons en '.($debut-1);  } else { echo 'Voir la liste des événements antérieurs'; }?></a></p></center>
 	</section>
 
 	</div><!-- .column-main -->

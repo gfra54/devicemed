@@ -108,6 +108,7 @@ function save_post_action($post_id) {
 				update_post_meta($post_id,'set_sticky',true);
 			}
 		}
+		set_transient('salons','');
 		set_transient('sommaire_magazine_home','');
 		update_post_meta($post_id,'content_parsed','');
 	}
