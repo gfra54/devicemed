@@ -18,24 +18,51 @@ function get_pubs($type=false) {
 		return $out;
 	}
 }
+function is_textad($pub) {
+	$id = $pub['ID'];
+	$title = get_field('titre_pub',$id);
+	$text = get_field('texte',$id);
+	$lien = get_field('libelle_lien',$id);
+	if($id && $title && $text && $lien) {
+		return true;
+	}
+}
 function afficher_pub_js($type,$attr=array()) {
 	$pubs = get_selected_pub($type,get_pubs($type),true);
 	if(count($pubs)) {
 		$pubs_final = array();
 		foreach($pubs as $k=>$pub) {
 			$pub = pub_metrics($pub);
-//			$pub = get_object_vars($pub);
+
 			$tmp=array();
 			$tmp['id'] = $pub['ID'];
-			$tmp['largeur_maximale'] = get_field('largeur_maximale',$pub['ID']);
-			$tmp['bordure'] = get_field('bordure',$pub['ID']);
-			$tmp['url_tracking_clicks'] = https(get_field('url_tracking_clicks',$pub['ID']));
-			$tmp['url_tracking_display'] = https(get_field('url_tracking_display',$pub['ID']));
-			$tmp['image'] = https($pub['image']);
-			$tmp['time'] = time();
+			if(is_textad($pub)) {
+			  $tmp['textad'] = render_textad(array(
+			      'image'=>get_field('url_tracking_display',$pub['ID']).'?'.time(),
+			      'title'=>get_field('titre_pub',$pub['ID']),
+			      'text'=>get_field('texte',$pub['ID']),
+			      'lien'=>get_field('libelle_lien',$pub['ID']),
+			      'url'=>get_field('url_tracking_clicks',$pub['ID'])
+			  ),'site');
+			} else {
+				$tmp['largeur_maximale'] = get_field('largeur_maximale',$pub['ID']);
+				$tmp['bordure'] = get_field('bordure',$pub['ID']);
+				$tmp['url_tracking_clicks'] = https(get_field('url_tracking_clicks',$pub['ID']));
+				$tmp['url_tracking_display'] = https(get_field('url_tracking_display',$pub['ID']));
+				$tmp['image'] = https($pub['image']);
+				$tmp['time'] = time();
+				$tmp['textad']=false;
+			}
 			$pubs_final[]=$tmp;
 		}
-		?><script>randomPub(<?php echo json_encode($pubs_final);?>);</script><?php
+	// if($type == 'site-textad') {
+	// 	mse($pubs_final);		
+	// }
+		$cible = 'cible-'.$type;
+		?>
+		<div class="cible-pub-js" id="<?php echo $cible;?>"></div>
+		<script>randomPub(<?php echo json_encode($pubs_final);?>,'#<?php echo $cible;?>');</script>
+		<?php
 	}
 }
 function afficher_pub($type,$attr=array()) {
@@ -255,8 +282,6 @@ function get_selected_pub($type, $pubs, $all=false) {
 			}
 		}
 	}
-
-
 
 	if($change) {
 		//store_pubs(true);

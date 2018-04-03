@@ -972,3 +972,9 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
 #textad:hover .textad-lien{
   color:#0066b3;
 }
+
+
+#cible-site-textad section{
+  text-align: center;
+  padding: 15px;
+}

@@ -13,26 +13,32 @@ $(document).ready(function(){
 	});
 });
 
-function randomPub(_pubs) {
+function randomPub(_pubs,_cible) {
 
 	if(_pub = _pubs[Math.floor(Math.random()*_pubs.length)]) {
 
 		_style='';
-
-		if(_pub.bordure) {
-			_style+='border:1px solid #ccc;';
-			_pub.largeur_maximale-=2;
+		if(_pub.textad) {
+			_code = _pub.textad;
+		} else {
+			if(_pub.bordure) {
+				_style+='border:1px solid #ccc;';
+				_pub.largeur_maximale-=2;
+			}
+			if(_pub.largeur_maximale>0) {
+				_style+='max-width:'+_pub.largeur_maximale+'px;';
+			}
+			if(_style){
+				_style = 'style="'+_style+'"';
+			}
+			// console.log(_pub);
+			_code = '<section data-id="'+_pub.id+'"><a class="pub-js" href="'+addURLParameter(_pub.url_tracking_clicks,'t',_pub.time)+'" target="_blank"><img '+_style+' src="'+_pub.image+'"><img width=0 height=0 src="'+_pub.url_tracking_display+'"></a></section>';
 		}
-		if(_pub.largeur_maximale>0) {
-			_style+='max-width:'+_pub.largeur_maximale+'px;';
+		if(typeof _cible == 'undefined') {
+			document.write(_code);
+		} else {
+			document.querySelector(_cible).innerHTML = _code;
 		}
-		if(_style){
-			_style = 'style="'+_style+'"';
-		}
-		// console.log(_pub);
-
-		
-		document.write('<section data-id="'+_pub.id+'"><a href="'+addURLParameter(_pub.url_tracking_clicks,'t',_pub.time)+'" target="_blank"><img '+_style+' src="'+_pub.image+'"><img width=0 height=0 src="'+_pub.url_tracking_display+'"></a></section>');
 	}
 
 }
