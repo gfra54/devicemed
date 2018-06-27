@@ -802,3 +802,31 @@ function get_fournisseurs($params=array()) {
 		return $ret;
 	}
 }
+
+function fournisseurs_partenaires() {
+	?>
+	<section id="sidebar-fiches">
+		<header>
+			<div class="right-side">
+				<h1 class="title">Fournisseurs partenaires</h1>
+			</div>
+		</header>	
+		<article>
+			<?php
+				$cpt=0;
+				foreach(get_fournisseurs(array('premium'=>true)) as $fournisseur) {?>
+					<a title="<?php echo $fournisseur['nom'];?>" href="<?php echo $fournisseur['permalink'];?>" style="background-image:url(<?php echo $fournisseur['logo'] ?>)" class='logo_supplier'>
+						<img src="<?php echo $fournisseur['logo'] ?>" />
+					</a>
+				<?php $cpt++;}
+				if($cpt%2) {?>
+					<a title="Voir la liste des fournisseurs" href="/suppliers/" class='logo_supplier'>
+						Voir tous les fournisseurs &raquo;
+					</a>
+
+				<?php }
+			?>
+		</article>
+	</section>	
+	<?php
+}

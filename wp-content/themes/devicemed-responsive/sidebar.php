@@ -1,6 +1,21 @@
 <?php
 
+$blocs = wp_get_nav_menu_items('ordre-de-la-colonne-de-droite');
+
+if(count($blocs))  {
 ?>
+
+<div id="sidebar" class="column col-md-3 col-sm-4 column-sidebar">
+<?php
+
+foreach($blocs as $bloc) {
+	if($code = get_field('code',$bloc->object_id)) {
+		eval('?>'.$code);
+	}
+}
+?>
+</div>
+<?php } else {?>
 <div id="sidebar" class="column col-md-3 col-sm-4 column-sidebar">
 	<?php afficher_pub_js('site-colonne');?>
 
@@ -89,3 +104,4 @@
 		<?php wp_tag_cloud('number=10'); ?>
 	</section>-->
 </div>
+<?php }

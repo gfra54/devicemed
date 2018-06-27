@@ -50,6 +50,7 @@ register_nav_menus(array(
 	'footer-primary' => __('Bas de page - Première ligne', 'devicemed'),
 	'footer-secondary' => __('Bas de page - Deuxième ligne', 'devicemed'),
 	'home' => __('Page d\'accueil', 'devicemed'),
+	'side' => __('Ordre de la colonne de droite', 'devicemed'),
 ));
 
 function devicemed_header_menu($id) {
