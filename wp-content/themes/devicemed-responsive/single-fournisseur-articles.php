@@ -1,16 +1,18 @@
 <?php if($fournisseur['premium']) {?>
+		<section class="posts read-more">
 <?php 
+$deja=array();
 $alternatives = explode("\n",$fournisseur['alternatives_nom']);
 $alternatives[] = $fournisseur['nom'];
-foreach($alternatives as $alternative) {
+foreach($alternatives as $alternative) { $alternative = sanitize_title(trim($alternative));if($alternative) {
+
 	query_posts("tag=".$alternative); ?>
 	<?php if (have_posts()){ ?>
-		<section class="posts read-more">
-				<?php while (have_posts()){ the_post(); ?>
+				<?php while (have_posts()){ the_post(); $pid = get_the_ID();if(!isset($deja[$pid])) { $deja[$pid]=true;?>
 					<article>
-						<a href="<?php echo get_permalink($post->ID); ?>">
+						<a href="<?php echo get_permalink($pid); ?>">
 							<span class="left">
-								<?php if ($thumbnail = devicemed_get_post_featured_thumbnail($post->ID)): ?>
+								<?php if ($thumbnail = devicemed_get_post_featured_thumbnail($pid)): ?>
 								<figure style="background-image:url('<?php echo $thumbnail->url; ?>')">
 									<img src="<?php echo $thumbnail->url; ?>" title="<?php echo $thumbnail->post_title; ?>" />
 								</figure>
@@ -40,8 +42,11 @@ foreach($alternatives as $alternative) {
 							</span>
 						</a>
 					</article>
-				<?php } ?>
+				<?php }} ?>
+	<?php } ?>
+	<?php } ?>
+<?php }?>
 		</section>
-	<?php } ?>
-	<?php } ?>
-<?php } ?>
+<?php }
+
+

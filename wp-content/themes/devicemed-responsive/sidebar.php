@@ -25,7 +25,7 @@
 
 		<header>
 			<div class="right-side">
-				<h1 class="title"><a href='<?php echo $url;?>'>Dernier numÃÂ©ro</a></h1>
+				<h1 class="title"><a href='<?php echo $url;?>'>Dernier numéro</a></h1>
 			</div>
 		</header>	
 		<a href="<?php echo $url;?>" target="_blank" title="<?php echo $titre;?>">

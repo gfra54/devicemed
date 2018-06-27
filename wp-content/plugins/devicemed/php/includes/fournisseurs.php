@@ -48,7 +48,8 @@ function liens_fournisseurs_decode($lien) {
 function telecharger_fournisseurs($params = array()) {
 	$categories = fournisseur_categories();
 //	$fournisseurs = get_fournisseurs(array('enrichir'=>true,'cache'=>'extraction_excel'));
-	$fournisseurs = get_fournisseurs(array('enrichir'=>true));
+	$fournisseurs = get_fournisseurs(array('enrichir'=>true,'cache'=>false));
+//	me($fournisseurs);
 	$data = array();
 	$id_categorie = sinon($params,'categorie');
 	$id_sous_categorie = sinon($params,'sous_categorie');
@@ -726,7 +727,6 @@ function get_fournisseurs($params=array()) {
 	if($cache && ($data = get_transient($cache))) {
 		return $data;
 	} else {
-
 		if($initiale = sinon($params,'initiale')) {
 			global $wpdb;
 			if($initiale == '*') {
@@ -761,7 +761,6 @@ function get_fournisseurs($params=array()) {
 			}
 
 
-
 			if(sinon($params,'categorie')) {
 				$args['categorie']=sinon($params,'categorie');
 		/*		$args['tax_query']=array(
@@ -780,8 +779,7 @@ function get_fournisseurs($params=array()) {
 			$args['order'] = 'ASC';
 			$args['post_status'] = 'publish';
 			$args['offset']	= sinon($params,'debut','default:0');
-			$args['posts_per_page'] = sinon($params,'parpage','default:500');
-
+			$args['posts_per_page'] = sinon($params,'parpage','default:2000');
 			$query = new WP_Query($args);
 			$fournisseurs = $query->posts;
 		}
