@@ -3,9 +3,24 @@
 Template Name: fournisseurs
 */
 
+
+
+
 if(check('excel')) {
 	telecharger_fournisseurs(array('categorie'=>check('categorie'),'sous_categorie'=>check('sous_categorie')));
 }
+
+
+		$query = new WP_Query(array(
+			'tag' => 'guide-acheteur'
+		));
+
+		$guide=false;
+		if($query->have_posts()) {
+			list($guide) = $query->posts;
+		}
+
+
 get_header(); 
 ?>
 <div class="row column-content page-members">
@@ -41,10 +56,12 @@ get_header();
 			</div>
 			<div class='bloc_infos_fournisseurs'>
 				<div class='image_repertoire'><img src='<?php echo get_template_directory_uri(); ?>/images/sidebar-issues-icon.png' /></div>
+				<?php if($guide){?>
 				<div class='texte_repertoire'>
-					Le répertoire existe en version papier au sein du Guide de l'acheteur.<br />
-						<a href='/wp-content/uploads/archives/pdf/devicemed-guide-acheteur-2016.pdf' target='_blank'><b>Accéder au PDF du guide.</b></a>
+					Le répertoire existe en version papier au sein du <b>Guide de l'acheteur</b>.<br />
+					<a href='<?php echo get_permalink($guide->ID);?>' target='_blank'><b><?php echo $guide->post_title.' - '.get_field('texte_home',$guide->ID);?>.</b></a>
 				</div>
+			<?php }?>
 			</div>
 			<div class='bloc_infos_fournisseurs'>
 				<div class='image_repertoire'><img src='<?php echo get_template_directory_uri(); ?>/images/sidebar-supplier-registration-icon.png' /></div>

@@ -45,6 +45,7 @@ function afficher_pub_js($type,$attr=array()) {
 			      'url'=>get_field('url_tracking_clicks',$pub['ID'])
 			  ),'site');
 			} else {
+
 				$tmp['largeur_maximale'] = get_field('largeur_maximale',$pub['ID']);
 				$tmp['bordure'] = get_field('bordure',$pub['ID']);
 				$tmp['url_tracking_clicks'] = https(get_field('url_tracking_clicks',$pub['ID']));
@@ -52,6 +53,17 @@ function afficher_pub_js($type,$attr=array()) {
 				$tmp['image'] = https($pub['image']);
 				$tmp['time'] = time();
 				$tmp['textad']=false;
+				if($type == 'site-colonne' && $pub['w'] == 300) {
+					echo '<style>@media (min-width: 992px) {
+						  body .column-main {
+						    width: calc(100% - 330px);
+						  }
+						  body #sidebar {
+						    width:315px;
+						  }
+						}</style>';
+				}	
+
 			}
 			$pubs_final[]=$tmp;
 		}
@@ -378,6 +390,10 @@ function pub_metrics($pub) {
 	$out=array();
 	foreach($pub as $k=>$v) {
 		$out[$k]=$v;
+	}
+	if($image_data = wp_get_attachment_image_src( get_post_thumbnail_id( $id ), "full" )) {	
+		$out['w'] = $image_data[1];
+		$out['h'] = $image_data[2];
 	}
 	if(($out['image'] = get_post_thumbnail_url($id)) || $id == 14187) {
 		if(!($url_tracking_display = get_field('url_tracking_display',$id))) {

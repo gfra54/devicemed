@@ -978,3 +978,8 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
   text-align: center;
   padding: 15px;
 }
+
+
+.column-sidebar .cible-pub-js section {
+  padding:0;
+}
