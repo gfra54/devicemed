@@ -99,6 +99,8 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 		});
 	  });
 	</script>
+	<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bfd05d99b95fc00123f9c34&product=inline-share-buttons' async='async'></script>
+
 	<?php wp_head(); ?>
 </head>
 <div class='notConnected'>
