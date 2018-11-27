@@ -155,6 +155,13 @@
 		</article>
 	</section>
 
+		<section>
+			Partagez cet article sur les réseaux sociaux ou par mail:
+			<div style="margin-top: 30px">
+				<div class="sharethis-inline-share-buttons"></div>
+			</div>
+		</section>
+
 	<?php if(strstr($_SERVER['REQUEST_URI'], 3671)===false) { ?>
 		
 		<?php
@@ -175,14 +182,6 @@
 
 			}
 		?>
-		
-		<section class="social">
-				Suivez l'actualité de DeviceMed sur les réseaux sociaux :
-				<div class="social-boutons">
-				<a href="https://twitter.com/DeviceMedFr"><img src="<?php echo get_template_directory_uri(); ?>/images/twitter-couleur.png"> Twitter</a>
-				<a href="https://fr.linkedin.com/company/devicemed-france"><img src="<?php echo get_template_directory_uri(); ?>/images/linkedin-couleur.png"> LinkedIn</a>
-				</div>
-		</section>
 		<?php if(!$is_magazine) {?>
 		<section class="relateds">
 			<!-- Encart afficher titres articles de la même catégorie -->
@@ -211,6 +210,15 @@
 			<!-- fin encart afficher titres articles de la même catégorie en cours -->
 		</section>
 		<?php } ?>
+
+		<section class="social">
+				Suivez l'actualité de DeviceMed sur les réseaux sociaux :
+				<div class="social-boutons">
+				<a href="https://twitter.com/DeviceMedFr"><img src="<?php echo get_template_directory_uri(); ?>/images/twitter-couleur.png"> Twitter</a>
+				<a href="https://fr.linkedin.com/company/devicemed-france"><img src="<?php echo get_template_directory_uri(); ?>/images/linkedin-couleur.png"> LinkedIn</a>
+				</div>
+		</section>
+
 	<?php } ?>
 	<?php endwhile; ?>
 		</div><!-- .column-main -->
