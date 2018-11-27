@@ -156,7 +156,7 @@
 	</section>
 
 		<section>
-			Partagez cet article sur les réseaux sociaux ou par mail:
+			Partagez cet article sur les réseaux sociaux ou par email :
 			<div style="margin-top: 30px">
 				<div class="sharethis-inline-share-buttons"></div>
 			</div>
