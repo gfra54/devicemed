@@ -463,20 +463,44 @@ if($w=='site') {
 	</tr>
 	<tr>
 		<td style="border:1px solid #333">
-				<table cellspacing=0 cellpadding="8">
+				<table cellspacing=0 cellpadding="0">
 				<tr>
-					<td width="120" valign="top" border=0>
-						<a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank">
-						<table bgcolor=#ccc cellspacing=0 cellpadding=0><tr><td><img style="display:block" width="100" height="auto" src="<?php echo $ad['image'];?>"></td></tr></table></a>
+					<td width="130" valign="top" border=0>
+						<table cellspacing=0 cellpadding=0>
+						<tr>
+							<td height="15" border=0></td>
+						</tr>
+						<tr>
+							<td width="15" border=0></td>
+							<td>
+							<a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><img style="display:block" width="100" height="auto" src="<?php echo $ad['image'];?>"></a>
+							</td>
+							<td width="15" border=0></td>
+						</tr>
+					</table>
 					</td>
 					<td valign="top" border=0>
-						<a style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><span style="font-size:16px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;color:black;"><?php echo $ad['title'];?></span></a>
+						<table cellspacing=0 cellpadding="0">
+							<tr>
+								<td height="15" border=0></td>
+							</tr>
+							<tr>
+								<td>
+
+									<a style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><span style="font-size:16px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;color:black;"><?php echo $ad['title'];?></span></a>
 
 
-						<div>
-						<font size=2 face="sans-serif" color="#333"><?php echo $ad['text'];?></font><a target="_blank" style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?>><font face="sans-serif" size=2 color="#005ea8"><?php echo !empty($ad['lien']) ? $ad['lien'] : 'Lire la suite';?>.</font></a>
-						</font>
-						</div>
+									<div>
+									<font size=2 face="sans-serif" color="#333"><?php echo $ad['text'];?></font><a target="_blank" style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?>><font face="sans-serif" size=2 color="#005ea8"><?php echo !empty($ad['lien']) ? $ad['lien'] : 'Lire la suite';?>.</font></a>
+									</font>
+									</div>
+								</td>
+								<td width="15" border=0></td>
+							</tr>
+							<tr>
+								<td height="15" border=0></td>
+							</tr>
+						</table>
 					</td>
 
 				</tr>
