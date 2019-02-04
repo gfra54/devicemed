@@ -2,6 +2,9 @@
 get_header(); 
 
 $debut=intval($_GET['debut']);
+if(!$debut) {
+	$debut = date('Y');
+}
 if($debut) {
 	$annee = ''.$debut;
 } else {
