@@ -1,7 +1,7 @@
 <?php if($fournisseur['documentation']) {?>
 	<section class="liste-documents">
 		<?php foreach ($fournisseur['documentation'] as $url => $titre){ 
-			$icone = gen_icone_pdf(urlToPath($url));
+			$icone = gen_icone_pdf($url);
 			?>
 			<a class="liste-document-item"  href="<?php echo $url;?>">
 					<img src="<?php echo $icone;?>"/>

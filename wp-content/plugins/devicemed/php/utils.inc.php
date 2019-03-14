@@ -1,11 +1,12 @@
 <?php
-function gen_icone_pdf($file) {
+function gen_icone_pdf($url) {
+	$url = str_replace('http://','https://',$url);
+	$file = urlToPath($url);
 	if(file_exists($file)) {
 
 		$path = wp_upload_dir()['basedir'].'/icones_pdf/';
 		$destination = $path.sanitize_title(basename($file)).'.png';
 		if(!file_exists($destination) || current_user_can('administrator')) {
-			$url = pathTourl($file);
 			if($image = file_get_contents('https://admin.sopress.net/pdf-to-image/?pdf='.urlencode($url))) {
 				file_put_contents($destination, $image); 
 			}
