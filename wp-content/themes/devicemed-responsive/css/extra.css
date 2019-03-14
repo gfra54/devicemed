@@ -376,13 +376,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
   margin-top: 1em;
 }
 .liste-document-item IMG{
-  -webkit-transition: all 0.5s ease;
-  transition: all 0.5s ease;
+  -webkit-transition: all 0.1s ease;
+  transition: all 0.1s ease;
+}
+
+.liste-document-item IMG[src*="icones_pdf"]{
+  box-shadow: 2px 2px 10px #ccc;
+  max-height: 128px;
 }
 
 .liste-document-item:hover IMG{
-  -webkit-transform:scale(1.1);
-  transform:scale(1.1);
+  -webkit-transform:scale(1.05);
+  transform:scale(1.05);
 }
 
 .liste-categorie, .liste-categorie li {
