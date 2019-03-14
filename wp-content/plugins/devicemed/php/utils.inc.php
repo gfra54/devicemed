@@ -1,31 +1,21 @@
 <?php
 function gen_icone_pdf($file) {
 	if(file_exists($file)) {
+
 		$path = wp_upload_dir()['basedir'].'/icones_pdf/';
-		@mkdir($path, 0775, true);
-
-		$destination = $path.sanitize_title(basename($file)).'.jpg';
-		if(!file_exists($destination)) {
-			if($im = new imagick($file.'[0]')) {
-
-
-				$im->setResolution(150, 150);
-				$im = $im->flattenImages(); 
-
-				$im->scaleImage(128, 128, true);
-				$im->setImageFormat('jpg');
-
-				file_put_contents($destination, $im); 
-
+		$destination = $path.sanitize_title(basename($file)).'.png';
+		if(!file_exists($destination) || current_user_can('administrator')) {
+			$url = pathTourl($file);
+			if($image = file_get_contents('https://admin.sopress.net/pdf-to-image/?pdf='.urlencode($url))) {
+				file_put_contents($destination, $image); 
 			}
 		}
 		if(file_exists($destination)) {
 			return pathToUrl($destination);
 		}
-		
+
 	}
 	return get_template_directory_uri().'/images/pdf.png';
-
 }
 
 function mb_str_pad($str, $pad_len, $pad_str = ' ', $dir = STR_PAD_RIGHT, $encoding = NULL)
