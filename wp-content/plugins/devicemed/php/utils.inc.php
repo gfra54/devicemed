@@ -2,12 +2,15 @@
 function gen_icone_pdf($url) {
 	$url = str_replace('http://','https://',$url);
 	$file = urlToPath($url);
+	ms($file);
 	if(file_exists($file)) {
 
 		$path = wp_upload_dir()['basedir'].'/icones_pdf/';
 		$destination = $path.sanitize_title(basename($file)).'.png';
 		if(!file_exists($destination) || current_user_can('administrator')) {
-			if($image = file_get_contents('https://admin.sopress.net/pdf-to-image/?pdf='.urlencode($url))) {
+			$api = 'https://admin.sopress.net/pdf-to-image/?pdf='.urlencode($url);
+			ms($api);
+			if($image = file_get_contents($api)) {
 				file_put_contents($destination, $image); 
 			}
 		}
