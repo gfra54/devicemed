@@ -991,7 +991,7 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
 
 
 
-
+/*
 div[id^="attachment"].wp-caption {
   position: relative;
 }
@@ -1004,4 +1004,4 @@ div[id^="attachment"].wp-caption .wp-caption-text{
     width: initial;
     transform-origin: bottom right;
     font-size: 8px;
-}
+}*/

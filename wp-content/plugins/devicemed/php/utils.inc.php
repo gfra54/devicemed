@@ -1,26 +1,33 @@
 <?php
+
 function gen_icone_pdf($url) {
+	error_reporting(-1);
+	ini_set('display_errors', 'On');
+
 	$url = str_replace('http://','https://',$url);
 	$file = urlToPath($url);
-	ms($file);
-	if(file_exists($file)) {
 
-		$path = wp_upload_dir()['basedir'].'/icones_pdf/';
-		$destination = $path.sanitize_title(basename($file)).'.png';
-		if(!file_exists($destination) || current_user_can('administrator')) {
+	$path = wp_upload_dir()['basedir'].'/icones_pdf/';
+	$destination = $path.sanitize_title(basename($file)).'.png';
+	if(isset($_GET['refresh'])) {
+		unlink($destination);
+	}
+	if(!file_exists($destination)) {
+		if(file_exists($file)) {
 			$api = 'https://admin.sopress.net/pdf-to-image/?pdf='.urlencode($url);
-			ms($api);
 			if($image = file_get_contents($api)) {
 				file_put_contents($destination, $image); 
 			}
 		}
-		if(file_exists($destination)) {
-			return pathToUrl($destination);
-		}
-
 	}
-	return get_template_directory_uri().'/images/pdf.png';
+
+	if(file_exists($destination)) {
+		return pathToUrl($destination);
+	} else {
+		return get_template_directory_uri().'/images/pdf.png';
+	}
 }
+
 
 function mb_str_pad($str, $pad_len, $pad_str = ' ', $dir = STR_PAD_RIGHT, $encoding = NULL)
 {
