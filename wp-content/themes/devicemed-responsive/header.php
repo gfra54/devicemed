@@ -124,7 +124,7 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 <div class='bloc_cachepopup'></div>
 <div class="container">
 <div class="bloc_top_header">
-	<div class='vogel_logo'><img src='/wp-content/uploads/vogel_logo.png' /></div>
+	<div class='vogel_logo'><img src='/wp-content/themes/devicemed-responsive/images/vogel_logo_2019.png' /></div>
 	<div class='contenu_droit'>
 		<?php if ($session = DM_Wordpress_Members::session()): ?>
 			<div class="links">

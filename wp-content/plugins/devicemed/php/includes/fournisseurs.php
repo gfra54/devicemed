@@ -149,11 +149,21 @@ function telecharger_fournisseurs($params = array()) {
 	} else if($cat_ref) {
 		$file = '-'.$cat_ref['slug'];
 	}
-	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-	header("Content-Length: " . strlen($out));
-	header("Content-type: text/x-csv");
+
+
+
+
+
+	header('Content-Type: application/octet-stream');
+	header("Content-Transfer-Encoding: Binary"); 
 	header("Content-Disposition: attachment; filename=extraction-fournisseurs".$file."-".date('Y-m-d-h-i-s').'.csv');
 	echo utf8_decode(trim($out));
+
+
+/*	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+	header("Content-Length: " . strlen($out));
+	header("Content-type: text/x-csv");
+	header("Content-Disposition: attachment; filename=extraction-fournisseurs".$file."-".date('Y-m-d-h-i-s').'.csv');*/
 	exit;	
 }
 function new_fournisseur($fournisseur,$categories=array()) {

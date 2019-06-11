@@ -349,22 +349,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
 }
 @media (min-width: 700px) {
   .salon-case {
-    width: 46.5%;
+/*    width: 46.5%;
     float: left;
-  }
+*/  }
   .salon-case:nth-child(2n+1) {
-    margin-right: 3.5%;
+    /*margin-right: 3.5%;*/
   }
 }
 @media (min-width: 992px) {
   .salon-case {
-    width: 31%;
+    /*width: 31%;*/
   }
   .salon-case:nth-child(2n+1) {
     margin-right: 0;
   }
   .salon-case:nth-child(3n+1) {
-    margin-right: 3.5%;
+    /*margin-right: 3.5%;*/
   }
 }
 
@@ -376,13 +376,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
   margin-top: 1em;
 }
 .liste-document-item IMG{
-  -webkit-transition: all 0.5s ease;
-  transition: all 0.5s ease;
+  -webkit-transition: all 0.1s ease;
+  transition: all 0.1s ease;
+}
+
+.liste-document-item IMG[src*="icones_pdf"]{
+  box-shadow: 2px 2px 10px #ccc;
+  max-height: 128px;
 }
 
 .liste-document-item:hover IMG{
-  -webkit-transform:scale(1.1);
-  transform:scale(1.1);
+  -webkit-transform:scale(1.05);
+  transform:scale(1.05);
 }
 
 .liste-categorie, .liste-categorie li {
@@ -983,3 +988,20 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
 .column-sidebar .cible-pub-js section {
   padding:0;
 }
+
+
+
+/*
+div[id^="attachment"].wp-caption {
+  position: relative;
+}
+div[id^="attachment"].wp-caption .wp-caption-text{
+    background: transparent;
+    transform: rotate(90deg);
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: initial;
+    transform-origin: bottom right;
+    font-size: 8px;
+}*/
