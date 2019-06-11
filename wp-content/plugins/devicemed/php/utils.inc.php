@@ -1,13 +1,43 @@
 <?php
+
+function gen_icone_pdf($url) {
+//	error_reporting(-1);
+//	ini_set('display_errors', 'On');
+
+	$url = str_replace('http://','https://',$url);
+	$file = urlToPath($url);
+
+	$path = wp_upload_dir()['basedir'].'/icones_pdf/';
+	$destination = $path.sanitize_title(basename($file)).'.png';
+	if(isset($_GET['refresh'])) {
+		@unlink($destination);
+	}
+	if(!file_exists($destination)) {
+		if(file_exists($file)) {
+			$api = 'https://admin.sopress.net/pdf-to-image/?pdf='.urlencode($url);
+			if($image = file_get_contents($api)) {
+				file_put_contents($destination, $image); 
+			}
+		}
+	}
+
+	if(file_exists($destination)) {
+		return pathToUrl($destination);
+	} else {
+		return get_template_directory_uri().'/images/pdf.png';
+	}
+}
+
+
 function mb_str_pad($str, $pad_len, $pad_str = ' ', $dir = STR_PAD_RIGHT, $encoding = NULL)
 {
-    $encoding = $encoding === NULL ? mb_internal_encoding() : $encoding;
-    $padBefore = $dir === STR_PAD_BOTH || $dir === STR_PAD_LEFT;
-    $padAfter = $dir === STR_PAD_BOTH || $dir === STR_PAD_RIGHT;
-    $pad_len -= mb_strlen($str, $encoding);
-    $targetLen = $padBefore && $padAfter ? $pad_len / 2 : $pad_len;
-    $strToRepeatLen = mb_strlen($pad_str, $encoding);
-    $repeatTimes = ceil($targetLen / $strToRepeatLen);
+	$encoding = $encoding === NULL ? mb_internal_encoding() : $encoding;
+	$padBefore = $dir === STR_PAD_BOTH || $dir === STR_PAD_LEFT;
+	$padAfter = $dir === STR_PAD_BOTH || $dir === STR_PAD_RIGHT;
+	$pad_len -= mb_strlen($str, $encoding);
+	$targetLen = $padBefore && $padAfter ? $pad_len / 2 : $pad_len;
+	$strToRepeatLen = mb_strlen($pad_str, $encoding);
+	$repeatTimes = ceil($targetLen / $strToRepeatLen);
     $repeatedString = str_repeat($pad_str, max(0, $repeatTimes)); // safe if used with valid unicode sequences (any charset)
     $before = $padBefore ? mb_substr($repeatedString, 0, floor($targetLen), $encoding) : '';
     $after = $padAfter ? mb_substr($repeatedString, 0, ceil($targetLen), $encoding) : '';
@@ -15,33 +45,33 @@ function mb_str_pad($str, $pad_len, $pad_str = ' ', $dir = STR_PAD_RIGHT, $encod
 }
 
 function mb_wordwrap($str, $width = 75, $break = "\n", $cut = false) {
-    $lines = explode($break, $str);
-    foreach ($lines as &$line) {
-        $line = rtrim($line);
-        if (mb_strlen($line) <= $width)
-            continue;
-        $words = explode(' ', $line);
-        $line = '';
-        $actual = '';
-        foreach ($words as $word) {
-            if (mb_strlen($actual.$word) <= $width)
-                $actual .= $word.' ';
-            else {
-                if ($actual != '')
-                    $line .= rtrim($actual).$break;
-                $actual = $word;
-                if ($cut) {
-                    while (mb_strlen($actual) > $width) {
-                        $line .= mb_substr($actual, 0, $width).$break;
-                        $actual = mb_substr($actual, $width);
-                    }
-                }
-                $actual .= ' ';
-            }
-        }
-        $line .= trim($actual);
-    }
-    return implode($break, $lines);
+	$lines = explode($break, $str);
+	foreach ($lines as &$line) {
+		$line = rtrim($line);
+		if (mb_strlen($line) <= $width)
+			continue;
+		$words = explode(' ', $line);
+		$line = '';
+		$actual = '';
+		foreach ($words as $word) {
+			if (mb_strlen($actual.$word) <= $width)
+				$actual .= $word.' ';
+			else {
+				if ($actual != '')
+					$line .= rtrim($actual).$break;
+				$actual = $word;
+				if ($cut) {
+					while (mb_strlen($actual) > $width) {
+						$line .= mb_substr($actual, 0, $width).$break;
+						$actual = mb_substr($actual, $width);
+					}
+				}
+				$actual .= ' ';
+			}
+		}
+		$line .= trim($actual);
+	}
+	return implode($break, $lines);
 }
 function convertToSmallCaps($string) {
 	$caps = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
@@ -50,17 +80,17 @@ function convertToSmallCaps($string) {
 	$sanitized_string = mb_strtoupper(str_replace('-',' ',remove_accents($string)));
 	$length = strlen($sanitized_string);
 	$output_string='';
-    for($i = 0; $i<$length; $i++){
-    	$char = $sanitized_string[$i];
-    	$letter_position = array_search($char,$caps);
-    	if(is_numeric($letter_position) && isset($smallCaps[$letter_position])) {
-    		$output_string.=$smallCaps[$letter_position];
-    	} else {
-    		$output_string.=$char;
-    	}
-    }
+	for($i = 0; $i<$length; $i++){
+		$char = $sanitized_string[$i];
+		$letter_position = array_search($char,$caps);
+		if(is_numeric($letter_position) && isset($smallCaps[$letter_position])) {
+			$output_string.=$smallCaps[$letter_position];
+		} else {
+			$output_string.=$char;
+		}
+	}
 
-    return $output_string;
+	return $output_string;
 }
 
 function urlToPath($url) {
@@ -78,17 +108,17 @@ function pathToUrl($path) {
 	}
 }
 function array_insert_after($key, array &$array, $new_key, $new_value) {
-  if (array_key_exists ($key, $array)) {
-    $new = array();
-    foreach ($array as $k => $value) {
-      $new[$k] = $value;
-      if ($k === $key) {
-        $new[$new_key] = $new_value;
-      }
-    }
-    return $new;
-  }
-  return FALSE;
+	if (array_key_exists ($key, $array)) {
+		$new = array();
+		foreach ($array as $k => $value) {
+			$new[$k] = $value;
+			if ($k === $key) {
+				$new[$new_key] = $new_value;
+			}
+		}
+		return $new;
+	}
+	return FALSE;
 }
 
 function html_replace($find,$replace, $content) {
@@ -128,26 +158,27 @@ function mise_en_avant_recherche($s,$txt) {
 	$len=150;
 	$tab = preg_split("/".$s."/i", $txt);
 	if(isset($tab[1])) {
-		if(strlen($tab[0])>$len) {
-			$ret = '[...] '.substr($tab[0],-$len);
+		if(mb_strlen($tab[0])>$len) {
+			$ret = '[...] '.mb_substr($tab[0],-$len);
 		} else {
 			$ret = $tab[0];
 		}
-		$ret.='<strong>'.(substr($txt,strlen($tab[0]),strlen($s))).'</strong>';
-		if(strlen($tab[1])>$len) {
-			$ret.= substr($tab[1],0,$len).' [...]';
+		$ret.='<strong>'.(mb_substr($txt,mb_strlen($tab[0]),mb_strlen($s))).'</strong>';
+		if(mb_strlen($tab[1])>$len) {
+			$ret.= mb_substr($tab[1],0,$len).' [...]';
 		} else {
 			$ret.= $tab[1];
 		}
 	}	
-	return $ret;
+
+	return $ret ? $ret : wp_trim_words($txt);
 }
 function array_sort_field($tab,$field,$inv=false,$field2=false,$inv2=false) {
 	if($field2){
 		$t1=$t2=array();
 		foreach ($tab as $key => $row) {
-		    $t1[$key]  = $row[$field];
-		    $t2[$key] = $row[$field2];
+			$t1[$key]  = $row[$field];
+			$t2[$key] = $row[$field2];
 		}
 		
 		array_multisort($t1, ($inv ? SORT_DESC : SORT_ASC), $t2, ($inv2 ? SORT_DESC : SORT_ASC), $tab);	
@@ -156,64 +187,64 @@ function array_sort_field($tab,$field,$inv=false,$field2=false,$inv2=false) {
 		$sort=array();
 		$sort_flag=SORT_REGULAR;
 		if(is_array($tab))
-		foreach($tab as $k=>$v) {
-			if(!is_numeric($v[$field])){
-				$sort_flag = SORT_STRING;
+			foreach($tab as $k=>$v) {
+				if(!is_numeric($v[$field])){
+					$sort_flag = SORT_STRING;
+				}
+				$sort[$k] = strtolower($v[$field]);
 			}
-			$sort[$k] = strtolower($v[$field]);
+			asort($sort,$sort_flag);
+			if(!$inv) {
+				$sort = array_reverse($sort,true);
+			}
+			$out = array();
+			foreach($sort as $k=>$v) {
+				$out[$k] = $tab[$k];
+			}
+			return $out;
 		}
-		asort($sort,$sort_flag);
-		if(!$inv) {
-			$sort = array_reverse($sort,true);
-		}
-		$out = array();
-		foreach($sort as $k=>$v) {
-			$out[$k] = $tab[$k];
-		}
-		return $out;
 	}
-}
 
-function get_related($id,$qte=3,$all=true) {
-	$categories = wp_get_post_terms($id,'category');
-	if ($categories) {
-		$cats = array();
-		foreach($categories as $cpt=>$cat) {
-			if($all || $cpt == 0) {
-				$cats[]=$cat->term_id;
+	function get_related($id,$qte=3,$all=true) {
+		$categories = wp_get_post_terms($id,'category');
+		if ($categories) {
+			$cats = array();
+			foreach($categories as $cpt=>$cat) {
+				if($all || $cpt == 0) {
+					$cats[]=$cat->term_id;
+				}
+			}
+			$args=array(
+				'cat' => $cats,
+				'post__not_in' => array($id),
+				'posts_per_page'=>$qte,
+				'ignore_sticky_posts'=>1,
+				'order'=>'DESC',
+				'orderby'=>'date'
+			);
+			$my_query = new WP_Query($args);
+			if( $my_query->have_posts() ) {
+				wp_reset_query();
+				return $my_query->posts;
 			}
 		}
-		$args=array(
-		'cat' => $cats,
-		'post__not_in' => array($id),
-		'posts_per_page'=>$qte,
-		'ignore_sticky_posts'=>1,
-		'order'=>'DESC',
-		'orderby'=>'date'
-		);
-		$my_query = new WP_Query($args);
-		if( $my_query->have_posts() ) {
-			wp_reset_query();
-			return $my_query->posts;
+	}
+
+	function isLocal() {
+		return strstr($_SERVER['HTTP_HOST'],'.local')!==false;
+	}
+
+	function transient_key($lib,$id) {
+		return $lib.'_'.$id;
+	}
+
+	function https($url) {
+		$url = http($url);
+		if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+			$url = str_replace('http://','https://',$url);
 		}
+		return $url;
 	}
-}
-
-function isLocal() {
-	return strstr($_SERVER['HTTP_HOST'],'.local')!==false;
-}
-
-function transient_key($lib,$id) {
-	return $lib.'_'.$id;
-}
-
-function https($url) {
-	$url = http($url);
-	if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
-		$url = str_replace('http://','https://',$url);
-	}
-	return $url;
-}
 /*define('DOCUSTOMCACHE',false);
 define('CACHETAG','<!-- CACHETAG -->');
 $GLOBALS['pagecache-name']=false;
@@ -388,63 +419,63 @@ function creerCategorie($nom,$id_ancien,$souscategorie=false, $parent=0,$parent_
 	));
 
 	if(is_array($ret)) {
-			mysql_query('INSERT INTO legacy_categories (
-				nom,
-				id_nouveau,
-				id_ancien,
-				parent_nouveau,
-				parent_ancien,
-				souscategorie
+		mysql_query('INSERT INTO legacy_categories (
+			nom,
+			id_nouveau,
+			id_ancien,
+			parent_nouveau,
+			parent_ancien,
+			souscategorie
 			) VALUES (
-				"'.addslashes($nom).'",
-				"'.$ret['term_id'].'",
-				"'.$id_ancien.'",
-				"'.$parent.'",
-				"'.$parent_ancien.'",
-				"'.($souscategorie ? '1' : '0').'"
-			)');
-			return $ret['term_id'];
+			"'.addslashes($nom).'",
+			"'.$ret['term_id'].'",
+			"'.$id_ancien.'",
+			"'.$parent.'",
+			"'.$parent_ancien.'",
+			"'.($souscategorie ? '1' : '0').'"
+		)');
+		return $ret['term_id'];
 	} else {
 		mse($ret);
 	}
 }
 
 function Generate_Featured_Image( $image, $post_id  ){
-    $filename = basename($image);
-    $path = dirname($image);
-    $clean = $path.'/'.sanitize_title($filename);
-    if(is_file($image)) {
-    	if($clean != $image) {
-		    copy($image,$clean);
+	$filename = basename($image);
+	$path = dirname($image);
+	$clean = $path.'/'.sanitize_title($filename);
+	if(is_file($image)) {
+		if($clean != $image) {
+			copy($image,$clean);
 		}
-	    list(,$fragment) = explode('wp-content/',$clean);
-	    $file = $clean;
-	    $file_url = site_url().'/wp-content/'.$fragment;
+		list(,$fragment) = explode('wp-content/',$clean);
+		$file = $clean;
+		$file_url = site_url().'/wp-content/'.$fragment;
 
-	    if($attach_id = get_attachment_id_by_url($file_url)) {
-	    	set_post_thumbnail( $post_id, $attach_id );
-	    } else {
-		    $wp_filetype = wp_check_filetype($filename);
-		    $attachment = array(
+		if($attach_id = get_attachment_id_by_url($file_url)) {
+			set_post_thumbnail( $post_id, $attach_id );
+		} else {
+			$wp_filetype = wp_check_filetype($filename);
+			$attachment = array(
 				'guid' => $file_url, 
-		        'post_mime_type' => $wp_filetype['type'],
-		        'post_title' => sanitize_file_name($filename),
-		        'post_content' => '',
-		        'post_status' => 'inherit'
-		    );
-		    $attach_id = wp_insert_attachment_meta( $attachment, $file, $post_id);
+				'post_mime_type' => $wp_filetype['type'],
+				'post_title' => sanitize_file_name($filename),
+				'post_content' => '',
+				'post_status' => 'inherit'
+			);
+			$attach_id = wp_insert_attachment_meta( $attachment, $file, $post_id);
 		}
-	    return $attach_id;
+		return $attach_id;
 	}
 }
 
 function wp_insert_attachment_meta( $attachment, $file=false, $post_id=0) {
-    if($attach_id = wp_insert_attachment( $attachment, $file, $post_id)) {
-	    require_once(ABSPATH . 'wp-admin/includes/image.php');
-	    $attach_data = wp_generate_attachment_metadata( $attach_id, $file );
-	    $res1= wp_update_attachment_metadata( $attach_id, $attach_data );
-	    $res2= set_post_thumbnail( $post_id, $attach_id );
-	    return $attach_id;
+	if($attach_id = wp_insert_attachment( $attachment, $file, $post_id)) {
+		require_once(ABSPATH . 'wp-admin/includes/image.php');
+		$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+		$res1= wp_update_attachment_metadata( $attach_id, $attach_data );
+		$res2= set_post_thumbnail( $post_id, $attach_id );
+		return $attach_id;
 	}
 }
 function datefr($date) {
@@ -505,21 +536,21 @@ function http($url){
 }
 function sanitize_output($buffer) {
 
-    $search = array(
+	$search = array(
         '/\>[^\S ]+/s',  // strip whitespaces after tags, except space
         '/[^\S ]+\</s',  // strip whitespaces before tags, except space
         '/(\s)+/s'       // shorten multiple whitespace sequences
     );
 
-    $replace = array(
-        '>',
-        '<',
-        '\\1'
-    );
+	$replace = array(
+		'>',
+		'<',
+		'\\1'
+	);
 
-    $buffer = preg_replace($search, $replace, $buffer);
+	$buffer = preg_replace($search, $replace, $buffer);
 
-    return $buffer;
+	return $buffer;
 }
 
 setlocale(LC_TIME, "fr_FR");
@@ -555,22 +586,22 @@ function addURLParameter ($url, $paramName=false, $paramValue=false) {
 		}
 		return $url;
 	} else {
-	     $url_data = parse_url($url);
-	     $params = array();
-		 if(isset($url_data['query'])) {
-		     parse_str($url_data['query'], $params);
-		 }
-	     if($paramName == '#'){
-		     $params_str = http_build_query($params);
-		     $url =  http_build_url($url, array('query' => $params_str));
-		     
-		     list($url) = explode('#',$url);
-		     return $url.'#'.$paramValue;
-	     } else {
-	    	 $params[$paramName] = $paramValue;   
-		     $params_str = http_build_query($params);
-		     return http_build_url($url, array('query' => $params_str));
-	     }
+		$url_data = parse_url($url);
+		$params = array();
+		if(isset($url_data['query'])) {
+			parse_str($url_data['query'], $params);
+		}
+		if($paramName == '#'){
+			$params_str = http_build_query($params);
+			$url =  http_build_url($url, array('query' => $params_str));
+
+			list($url) = explode('#',$url);
+			return $url.'#'.$paramValue;
+		} else {
+			$params[$paramName] = $paramValue;   
+			$params_str = http_build_query($params);
+			return http_build_url($url, array('query' => $params_str));
+		}
 	}
 }
 
@@ -589,15 +620,15 @@ function cleantext($txt) {
 }
 
 function extracss($w) {
-?><link rel="stylesheet" href="<?php echo DEVICEMED_THEME_URL;?>/css/extra/<?php echo $w;?>.css" /><?php 
+	?><link rel="stylesheet" href="<?php echo DEVICEMED_THEME_URL;?>/css/extra/<?php echo $w;?>.css" /><?php 
 }
 function extrajs($w) {
-include_external('js/extra/'.$w.'.js');
+	include_external('js/extra/'.$w.'.js');
 }
 function addToURL($url,  $key, $value) {
-    $info = parse_url( $url );
-    parse_str( $info['query'], $query );
-    return $info['scheme'] . '://' . $info['host'] . $info['path'] . '?' . http_build_query( $query ? array_merge( $query, array($key => $value ) ) : array( $key => $value ) );
+	$info = parse_url( $url );
+	parse_str( $info['query'], $query );
+	return $info['scheme'] . '://' . $info['host'] . $info['path'] . '?' . http_build_query( $query ? array_merge( $query, array($key => $value ) ) : array( $key => $value ) );
 }
 function check_tag($tag, $post=false) {
 	if(!$post) {
@@ -885,10 +916,10 @@ function couper($texte, $taille=50, $suite = '...') {
 	while ($offset<$length
 		AND strlen(preg_replace(",<[^>]+>,Uims","",substr($texte,0,$offset)))<$taille)
 		$offset = 2*$offset;
-	if (	$offset<$length
-		&& ($p_tag_ouvrant = strpos($texte,'<',$offset))!==NULL){
-		$p_tag_fermant = strpos($texte,'>',$offset);
-	if ($p_tag_fermant<$p_tag_ouvrant)
+		if (	$offset<$length
+			&& ($p_tag_ouvrant = strpos($texte,'<',$offset))!==NULL){
+			$p_tag_fermant = strpos($texte,'>',$offset);
+			if ($p_tag_fermant<$p_tag_ouvrant)
 			$offset = $p_tag_fermant+1; // prolonger la coupe jusqu'au tag fermant suivant eventuel
 	}
 	$texte = substr($texte, 0, $offset); /* eviter de travailler sur 10ko pour extraire 150 caracteres */
@@ -958,8 +989,8 @@ function quote_amp($u) {
 }
 
 
-	if (!function_exists('http_build_url'))
-	{
+if (!function_exists('http_build_url'))
+{
 		define('HTTP_URL_REPLACE', 1);				// Replace every part of the first URL when there's one of the second URL
 		define('HTTP_URL_JOIN_PATH', 2);			// Join relative paths
 		define('HTTP_URL_JOIN_QUERY', 4);			// Join query strings
@@ -995,84 +1026,84 @@ function quote_amp($u) {
 * 
 */
 function http_build_url($url, $parts=array(), $flags=HTTP_URL_REPLACE, &$new_url=false)
-		{
-			$keys = array('user','pass','port','path','query','fragment');
-			
+{
+	$keys = array('user','pass','port','path','query','fragment');
+
 			// HTTP_URL_STRIP_ALL becomes all the HTTP_URL_STRIP_Xs
-			if ($flags & HTTP_URL_STRIP_ALL)
-			{
-				$flags |= HTTP_URL_STRIP_USER;
-				$flags |= HTTP_URL_STRIP_PASS;
-				$flags |= HTTP_URL_STRIP_PORT;
-				$flags |= HTTP_URL_STRIP_PATH;
-				$flags |= HTTP_URL_STRIP_QUERY;
-				$flags |= HTTP_URL_STRIP_FRAGMENT;
-			}
+	if ($flags & HTTP_URL_STRIP_ALL)
+	{
+		$flags |= HTTP_URL_STRIP_USER;
+		$flags |= HTTP_URL_STRIP_PASS;
+		$flags |= HTTP_URL_STRIP_PORT;
+		$flags |= HTTP_URL_STRIP_PATH;
+		$flags |= HTTP_URL_STRIP_QUERY;
+		$flags |= HTTP_URL_STRIP_FRAGMENT;
+	}
 			// HTTP_URL_STRIP_AUTH becomes HTTP_URL_STRIP_USER and HTTP_URL_STRIP_PASS
-			else if ($flags & HTTP_URL_STRIP_AUTH)
-			{
-				$flags |= HTTP_URL_STRIP_USER;
-				$flags |= HTTP_URL_STRIP_PASS;
-			}
-			
+	else if ($flags & HTTP_URL_STRIP_AUTH)
+	{
+		$flags |= HTTP_URL_STRIP_USER;
+		$flags |= HTTP_URL_STRIP_PASS;
+	}
+
 			// Parse the original URL
-			$parse_url = parse_url($url);
-			
+	$parse_url = parse_url($url);
+
 			// Scheme and Host are always replaced
-			if (isset($parts['scheme']))
-				$parse_url['scheme'] = $parts['scheme'];
-			if (isset($parts['host']))
-				$parse_url['host'] = $parts['host'];
-			
+	if (isset($parts['scheme']))
+		$parse_url['scheme'] = $parts['scheme'];
+	if (isset($parts['host']))
+		$parse_url['host'] = $parts['host'];
+
 			// (If applicable) Replace the original URL with it's new parts
-			if ($flags & HTTP_URL_REPLACE)
-			{
-				foreach ($keys as $key)
-				{
-					if (isset($parts[$key]))
-						$parse_url[$key] = $parts[$key];
-				}
-			}
-			else
-			{
-				// Join the original URL path with the new path
-				if (isset($parts['path']) && ($flags & HTTP_URL_JOIN_PATH))
-				{
-					if (isset($parse_url['path']))
-						$parse_url['path'] = rtrim(str_replace(basename($parse_url['path']), '', $parse_url['path']), '/') . '/' . ltrim($parts['path'], '/');
-					else
-						$parse_url['path'] = $parts['path'];
-				}
-				
-				// Join the original query string with the new query string
-				if (isset($parts['query']) && ($flags & HTTP_URL_JOIN_QUERY))
-				{
-					if (isset($parse_url['query']))
-						$parse_url['query'] .= '&' . $parts['query'];
-					else
-						$parse_url['query'] = $parts['query'];
-				}
-			}
-				
-			// Strips all the applicable sections of the URL
-			// Note: Scheme and Host are never stripped
-			foreach ($keys as $key)
-			{
-				if ($flags & (int)constant('HTTP_URL_STRIP_' . strtoupper($key)))
-					unset($parse_url[$key]);
-			}
-			
-			
-			$new_url = $parse_url;
-			
-			return 
-				 ((isset($parse_url['scheme'])) ? $parse_url['scheme'] . '://' : '')
-				.((isset($parse_url['user'])) ? $parse_url['user'] . ((isset($parse_url['pass'])) ? ':' . $parse_url['pass'] : '') .'@' : '')
-				.((isset($parse_url['host'])) ? $parse_url['host'] : '')
-				.((isset($parse_url['port'])) ? ':' . $parse_url['port'] : '')
-				.((isset($parse_url['path'])) ? $parse_url['path'] : '')
-				.((isset($parse_url['query'])) ? '?' . $parse_url['query'] : '')
-				.((isset($parse_url['fragment'])) ? '#' . $parse_url['fragment'] : '')
-			;
+	if ($flags & HTTP_URL_REPLACE)
+	{
+		foreach ($keys as $key)
+		{
+			if (isset($parts[$key]))
+				$parse_url[$key] = $parts[$key];
 		}
 	}
+	else
+	{
+				// Join the original URL path with the new path
+		if (isset($parts['path']) && ($flags & HTTP_URL_JOIN_PATH))
+		{
+			if (isset($parse_url['path']))
+				$parse_url['path'] = rtrim(str_replace(basename($parse_url['path']), '', $parse_url['path']), '/') . '/' . ltrim($parts['path'], '/');
+			else
+				$parse_url['path'] = $parts['path'];
+		}
+
+				// Join the original query string with the new query string
+		if (isset($parts['query']) && ($flags & HTTP_URL_JOIN_QUERY))
+		{
+			if (isset($parse_url['query']))
+				$parse_url['query'] .= '&' . $parts['query'];
+			else
+				$parse_url['query'] = $parts['query'];
+		}
+	}
+
+			// Strips all the applicable sections of the URL
+			// Note: Scheme and Host are never stripped
+	foreach ($keys as $key)
+	{
+		if ($flags & (int)constant('HTTP_URL_STRIP_' . strtoupper($key)))
+			unset($parse_url[$key]);
+	}
+
+
+	$new_url = $parse_url;
+
+	return 
+	((isset($parse_url['scheme'])) ? $parse_url['scheme'] . '://' : '')
+	.((isset($parse_url['user'])) ? $parse_url['user'] . ((isset($parse_url['pass'])) ? ':' . $parse_url['pass'] : '') .'@' : '')
+	.((isset($parse_url['host'])) ? $parse_url['host'] : '')
+	.((isset($parse_url['port'])) ? ':' . $parse_url['port'] : '')
+	.((isset($parse_url['path'])) ? $parse_url['path'] : '')
+	.((isset($parse_url['query'])) ? '?' . $parse_url['query'] : '')
+	.((isset($parse_url['fragment'])) ? '#' . $parse_url['fragment'] : '')
+	;
+}
+}
