@@ -1,8 +1,8 @@
 <?php
 
 function gen_icone_pdf($url) {
-	error_reporting(-1);
-	ini_set('display_errors', 'On');
+//	error_reporting(-1);
+//	ini_set('display_errors', 'On');
 
 	$url = str_replace('http://','https://',$url);
 	$file = urlToPath($url);
@@ -10,7 +10,7 @@ function gen_icone_pdf($url) {
 	$path = wp_upload_dir()['basedir'].'/icones_pdf/';
 	$destination = $path.sanitize_title(basename($file)).'.png';
 	if(isset($_GET['refresh'])) {
-		unlink($destination);
+		@unlink($destination);
 	}
 	if(!file_exists($destination)) {
 		if(file_exists($file)) {
@@ -158,19 +158,20 @@ function mise_en_avant_recherche($s,$txt) {
 	$len=150;
 	$tab = preg_split("/".$s."/i", $txt);
 	if(isset($tab[1])) {
-		if(strlen($tab[0])>$len) {
-			$ret = '[...] '.substr($tab[0],-$len);
+		if(mb_strlen($tab[0])>$len) {
+			$ret = '[...] '.mb_substr($tab[0],-$len);
 		} else {
 			$ret = $tab[0];
 		}
-		$ret.='<strong>'.(substr($txt,strlen($tab[0]),strlen($s))).'</strong>';
-		if(strlen($tab[1])>$len) {
-			$ret.= substr($tab[1],0,$len).' [...]';
+		$ret.='<strong>'.(mb_substr($txt,mb_strlen($tab[0]),mb_strlen($s))).'</strong>';
+		if(mb_strlen($tab[1])>$len) {
+			$ret.= mb_substr($tab[1],0,$len).' [...]';
 		} else {
 			$ret.= $tab[1];
 		}
 	}	
-	return $ret;
+
+	return $ret ? $ret : wp_trim_words($txt);
 }
 function array_sort_field($tab,$field,$inv=false,$field2=false,$inv2=false) {
 	if($field2){

@@ -55,13 +55,23 @@
 								<?php endif; ?>
 								<h2 class="title"><?php the_title(); ?></h2>
 							</header>
-							<p class="excerpt"><?php 
+							<p class="excerpt">
+							<b class="date-wrapper">Publié le <span class="date"><?php echo get_the_date('d F Y'); ?></span></b>
+							
+							
+							<?php 
 
 							$txt = get_the_excerpt(); 
 
 							if(stristr($txt, $s)===false) {
-								$txt = mise_en_avant_recherche($s, get_the_content());
+								$txt = mise_en_avant_recherche($s, strip_shortcodes(wp_strip_all_tags(get_the_content())));
+
+						
 							} 
+
+
+
+
 
 							echo $txt;
 							?></p>

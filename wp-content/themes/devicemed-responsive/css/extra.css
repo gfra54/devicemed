@@ -533,6 +533,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
     margin-top: 0em;
     float: right;
 }
+.page-single .column-main section .entry-exergue img.aligncenter {
+  margin: 1em auto;
+}
 
 .page-single .column-main section.relateds {
   overflow: hidden;
