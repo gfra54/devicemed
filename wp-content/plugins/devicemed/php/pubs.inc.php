@@ -33,23 +33,31 @@ function afficher_pub_js($type,$attr=array()) {
 		$pubs_final = array();
 		foreach($pubs as $k=>$pub) {
 			$pub = pub_metrics($pub);
-
 			$tmp=array();
 			$tmp['id'] = $pub['ID'];
+			$url_tracking_display = $pub['url_tracking_display'];
+			if(!$url_tracking_display) {
+				$url_tracking_display = get_field('url_tracking_display',$pub['ID']);
+			}
+			$url_tracking_clicks = $pub['url_tracking_clicks'];
+			if(!$url_tracking_clicks) {
+				$url_tracking_clicks = get_field('url_tracking_clicks',$pub['ID']);
+			}
 			if(is_textad($pub)) {
 			  $tmp['textad'] = render_textad(array(
-			      'image'=>get_field('url_tracking_display',$pub['ID']).'?'.time(),
+			      'image'=>$url_tracking_display.'?'.time(),
 			      'title'=>get_field('titre_pub',$pub['ID']),
 			      'text'=>get_field('texte',$pub['ID']),
 			      'lien'=>get_field('libelle_lien',$pub['ID']),
-			      'url'=>get_field('url_tracking_clicks',$pub['ID'])
+			      'url'=>$url_tracking_clicks
 			  ),'site');
+			 // ms($tmp['textad']);
 			} else {
 
 				$tmp['largeur_maximale'] = get_field('largeur_maximale',$pub['ID']);
 				$tmp['bordure'] = get_field('bordure',$pub['ID']);
-				$tmp['url_tracking_clicks'] = https(get_field('url_tracking_clicks',$pub['ID']));
-				$tmp['url_tracking_display'] = https(get_field('url_tracking_display',$pub['ID']));
+				$tmp['url_tracking_clicks'] = https($url_tracking_clicks);
+				$tmp['url_tracking_display'] = https($url_tracking_display);
 				$tmp['image'] = https($pub['image']);
 				$tmp['time'] = time();
 				$tmp['textad']=false;
@@ -428,7 +436,6 @@ function pub_metrics($pub) {
 
 
 function render_textad($ad,$w='newsletter') {
-
 ob_start();
 if($w=='site') {
 ?>
