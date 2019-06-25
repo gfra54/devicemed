@@ -4,13 +4,12 @@ define('BITLY_API','9e2e1b854350b95abe574561d875ce919da8f888');
 define('BITLY_URL','https://api-ssl.bitly.com/v3/');
 function bitly_shorten($url) {
 	if($data = bitly_get('shorten',array('longUrl'=>$url))) {
-		return $data['data']['url'];
+		return empty($data['data']['url']) ? $url : $data['data']['url'];
 	}
 }
 function is_bitly($url) {
 	return strstr($url, 'bit.ly')!==false;
 }
-
 
 function bitly_get($w,$params=array()) {
 	$url = BITLY_URL.$w.'?access_token='.BITLY_API;

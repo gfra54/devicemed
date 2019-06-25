@@ -13,27 +13,8 @@ function save_post_action($post_id) {
 
     if ($post->post_type == 'salons'){
 		set_transient('salons','');
-    }else if ($post->post_type == 'pubs'){
-		
 		
 
-    	$display = bitly_shorten(get_post_thumbnail_url($post_id));
-		update_field('url_tracking_display', $display, $post_id);
-
-    
-    	$url_cible = get_field('url_cible',$post_id);
-    	update_field('url_cible',http($url_cible),$post_id);
-
-		$clicks = bitly_shorten($url_cible);
-		update_field('url_tracking_clicks', $clicks, $post_id);
-
-
-
-    	store_pubs(true);
-
-
-
-    	store_pub($post);
 	} else if ($post->post_type == 'fournisseur'){
 		fournisseur_enrichir($post,true);
 
