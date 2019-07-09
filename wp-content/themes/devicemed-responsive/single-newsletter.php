@@ -253,7 +253,7 @@ if(!empty($_GET['brut'])) {
                                   <tr>
                                     <td align="left"><a href=
                                     "http://news.vogel.de/inxmail2/d?q00wueoq0eqfngbii000000000000000ietwqbri3277">
-                                    <img src="/wp-content/themes/devicemed-responsive/images/vogel.png"
+                                    <img src="<?php echo site_url();?>/wp-content/themes/devicemed-responsive/images/vogel.png"
                                     alt="Vogel Logo" /></a></td>
 
                                     <td align="right"></td>
