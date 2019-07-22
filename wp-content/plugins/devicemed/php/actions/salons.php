@@ -15,7 +15,7 @@ function get_salons($nb=4,$annee=false) {
 			foreach($q->posts as $key => $salon) {
 				$date_debut=get_field('date_debut',$salon->ID);
 				if($annee) {
-					if(strstr($date_debut, $annee)!==false) {
+					if(strstr($date_debut, $annee)!==false || strstr($date_debut, $annee+1)!==false) {
 						$sort[$key]=$date_debut;
 					}
 				} else if(strtotime(get_field('date_fin',$salon->ID)) > $debut) {
