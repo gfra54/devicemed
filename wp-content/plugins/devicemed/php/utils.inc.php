@@ -1,5 +1,11 @@
 <?php
 
+function delete_transients($lib) {
+	global $wpdb;
+	$lib = sanitize_title($lib);
+	$wpdb->query( "DELETE FROM `$wpdb->options` WHERE `option_name` LIKE ('_transient_".$lib."%')" );
+}
+
 function gen_icone_pdf($url) {
 //	error_reporting(-1);
 //	ini_set('display_errors', 'On');

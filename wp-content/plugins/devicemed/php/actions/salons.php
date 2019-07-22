@@ -4,8 +4,10 @@ setlocale (LC_TIME, 'fr_FR.utf8','fra');
 
 function get_salons($nb=4,$annee=false) {
 	$debut=time();
-	$salons = get_transient('salons');
-	if($annee || !$salons) {
+	$cle = 'salons-'.$nb.'-'.$annee;
+	$salons = get_transient($cle);
+
+	if(!is_array($salons)) {
 		$args = array( 
 			'post_type'	=> 'salons',
 			'posts_per_page'=>1000,
@@ -18,7 +20,8 @@ function get_salons($nb=4,$annee=false) {
 					if(strstr($date_debut, $annee)!==false) {
 						$sort[$key]=$date_debut;
 					} else if($annee == date('Y')) {
-						if(strstr($date_debut, $annee+1)!==false) {
+						$annee2=''.($annee+1);
+						if(strstr($date_debut, $annee2)!==false) {
 							$sort[$key]=$date_debut;
 						}
 					}
@@ -39,9 +42,7 @@ function get_salons($nb=4,$annee=false) {
 				}
 				$salons[]=$tmp;
 			}
-			if(!$annee) {
-				set_transient('salons',$salons);
-			}
+			set_transient($cle, $salons);
 		}
 
 	}

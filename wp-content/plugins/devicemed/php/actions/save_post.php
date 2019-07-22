@@ -12,8 +12,7 @@ function save_post_action($post_id) {
 		}
 
     if ($post->post_type == 'salons'){
-		set_transient('salons','');
-		
+		delete_transients('salons');		
 
 	} else if ($post->post_type == 'fournisseur'){
 		fournisseur_enrichir($post,true);
