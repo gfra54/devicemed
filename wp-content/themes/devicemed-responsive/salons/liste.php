@@ -25,6 +25,9 @@ if($debut) {
 				foreach(get_salons(20,$annee) as $salon) { 
 				$mois = ((strftime("%B %Y",strtotime($salon['date_debut']))));
 				$date_ref=$date_ref ? $date_ref : $salon['date_debut'];
+					if(!$debut) {
+						// me($date_ref);
+					}
 				?>
 			<div class='bloc_manif'>
 				<?php if(!isset($mois_prec) || $mois != $mois_prec) {?>
