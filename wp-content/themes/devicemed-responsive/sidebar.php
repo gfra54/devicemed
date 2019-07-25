@@ -1,11 +1,12 @@
 <?php
 
 $blocs = wp_get_nav_menu_items('ordre-de-la-colonne-de-droite');
-if(!count($blocs))  {
+if(!is_array($blocs) || !count($blocs))  {
 	$blocs = get_transient('ordre-de-la-colonne-de-droite');
+} else {
+	set_transient('ordre-de-la-colonne-de-droite',$blocs)
 }
 if(count($blocs))  {
-	set_transient('ordre-de-la-colonne-de-droite',$blocs)
 	?>
 
 	<div id="sidebar" class="column col-md-3 col-sm-4 column-sidebar">
