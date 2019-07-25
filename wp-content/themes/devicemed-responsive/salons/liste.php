@@ -15,7 +15,15 @@ if($debut) {
 
 $target = $main ? $debut : $debut-1;
 ?>
-
+<style>
+	.liste-annees a {
+		text-decoration: underline;
+		color:#0066b3;
+	}
+	.liste-annees a.selected {
+		text-decoration: none;
+	}
+</style>
 <div class="row column-content page-members">
 	<div class="col-md-9 col-sm-8 column-main">
 		<section class="catalogues">
@@ -49,13 +57,26 @@ $target = $main ? $debut : $debut-1;
 					</div>
 					<?php $mois_prec=$mois;}?>
 					<?php if(!$affiches) {?>
-						<p><i>Il n'y a pas d'événements prévus.</i></p>
+						<p><i>Il n'y a pas d'événements à affiche.</i></p>
 					<?php }?>
 				</div>
 				<hr>
-				<center><p><a class="lien-classique" href="?debut=<?=$target;?>">
+			<div class="liste-annees">Choisir une année :
+				<?php 
+				$d = date('Y')+1;
+
+				for($i=$d;$i>2015;$i--) {
+					$class = $i == $debut ? 'selected' : '';
+					?>
+					<a class="<?php echo $class;?>" href="?debut=<?php echo $i;?>"><?php 
+						echo $i;
+
+					?></a>
+				<?php }?>
+			</div>
+<!-- 				<center><p><a class="lien-classique" href="?debut=<?=$target;?>">
 					<?php if($debut) {echo 'Voir les salons passés en '.($target);  } else { echo 'Voir la liste des événements antérieurs'; }?></a></p></center>
-				</section>
+ -->				</section>
 
 			</div><!-- .column-main -->
 			<?php get_footer(); ?>
