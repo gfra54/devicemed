@@ -30,7 +30,7 @@ $target = $main ? $debut : $debut-1;
 					$mois = ((strftime("%B %Y",strtotime($salon['date_debut']))));
 					$date_ref=$date_ref ? $date_ref : $salon['date_debut'];
 					if($main) {
-						$t = strtotime($date_ref);
+						$t = strtotime($salon['date_debut']);
 						if($t < time()) {
 							continue;
 						}
