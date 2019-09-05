@@ -28,6 +28,11 @@ function is_textad($pub) {
 	}
 }
 function afficher_pub_js($type,$attr=array()) {
+
+	if( function_exists('the_ad_placement') ) { 
+		return the_ad_placement($type); 
+	}
+
 	$pubs = get_selected_pub($type,get_pubs($type),true);
 	if(count($pubs)) {
 		$pubs_final = array();
