@@ -116,10 +116,11 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 	<div id='close_popup_video_home'>X</div>
 </div>
 
-<?php if(!afficher_pub('site-habillage')) {?>
+<?php /*if(!afficher_pub('site-habillage')) {?>
 	<body
 	>
-<?php }?>
+<?php } désactivé lors du passage a dvanced ads car pas utilisé jusque la*/?>
+<body>
 
 <div class='bloc_cachepopup'></div>
 <div class="container">
@@ -189,5 +190,7 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 	</nav><!-- #menu -->
 </header><!-- #header -->
 <section class="ad header-ad">
-	<?php afficher_pub_js('site-banniere-horizontale');?>
+	<?php //afficher_pub_js('site-banniere-horizontale');
+		the_ad_group(3787);
+	?>
 </section>

@@ -68,7 +68,10 @@ $('#last-posts-featured .slider').bxSlider({
 <div class="row column-content page-home">
 	<div class="col-md-9 col-sm-8 column-main">
 		
-<?php afficher_pub_js('site-textad');?>
+<?php 
+//afficher_pub_js('site-textad');
+the_ad_group(3788); //TODO
+?>
 
 
 <?php

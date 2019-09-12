@@ -218,7 +218,6 @@ class Advanced_Ads_Group {
 
 				// load the ad object
 				$ad = $ad_select->get_ad_by_method( $_ad_id, Advanced_Ads_Select::AD, $this->ad_args );
-
 				if ( $ad !== null ) {
 					$output[] = $ad;
 					$ads_displayed++;
@@ -229,7 +228,6 @@ class Advanced_Ads_Group {
 				}
 			}
 		}
-
 		if ( ! isset( $this->ad_args['global_output'] ) || $this->ad_args['global_output'] ) {
 			// add the group to the global output array
 			$advads = Advanced_Ads::get_instance();
