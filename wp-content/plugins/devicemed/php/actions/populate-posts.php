@@ -26,6 +26,9 @@ function acf_load_bannieres_verticales( $field ) {
             $field['choices'][$post['ID']]=$post['post_title'];
         }
     }
+    asort($field['choices']);
+
+
     return $field;
     
 }
@@ -51,9 +54,12 @@ function acf_load_bannieres_horizontales( $field ) {
         }
     }
 
+    asort($field['choices']);
     return $field;
     
 }
+
+
 add_filter('acf/load_field/name=banniere_horizontale_en_haut', 'acf_load_bannieres_horizontales');
 add_filter('acf/load_field/name=banniere_dans_articles', 'acf_load_bannieres_horizontales');
 add_filter('acf/load_field/name=banniere_horizontale_en_bas', 'acf_load_bannieres_horizontales');
