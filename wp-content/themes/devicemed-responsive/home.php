@@ -70,9 +70,11 @@ $('#last-posts-featured .slider').bxSlider({
 		
 <?php 
 //afficher_pub_js('site-textad');
-the_ad_group(3788); //TODO
+//the_ad_group(3788); 
 ?>
-
+<script>
+document.write('<script src="/textad?'+Math.random()+'"></'+'script>');
+</script>
 
 <?php
 sommaire_magazine_home();
