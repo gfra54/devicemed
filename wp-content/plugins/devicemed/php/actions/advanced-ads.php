@@ -4,21 +4,19 @@ add_filter('advanced-ads-ad-select-override-by-group',function($nope, $adgroup, 
 	$ads = $adgroup->get_all_ads();
 	$final = array();
 	$prioritaire=false;
-	if(is_array($ordered_ad_ids)) {
-		foreach($ordered_ad_ids as $id) {
-			$ad = $ads[$id];
-			if($condition = advanced_ads_ok_page($ad->ID)) {
-				if(!$prioritaire && get_field('pub_prioritaire',$ad->ID)) {
-					$prioritaire = $id;
-				}
-				$final[] = $id;
+	foreach($ordered_ad_ids as $id) {
+		$ad = $ads[$id];
+		if($condition = advanced_ads_ok_page($ad->ID)) {
+			if(!$prioritaire && get_field('pub_prioritaire',$ad->ID)) {
+				$prioritaire = $id;
 			}
+			$final[] = $id;
 		}
-		if($prioritaire) {
-			$final = array($prioritaire);
-		}
-		return $adgroup->output( $final );
 	}
+	if($prioritaire) {
+		$final = array($prioritaire);
+	}
+	return $adgroup->output( $final );
 }, 10, 3);
 
 function advanced_ads_ok_page($id) {
@@ -71,7 +69,7 @@ function advanced_ads_ok_page($id) {
 add_filter('advanced-ads-output-final',function($output, $ad, $output_options) {
 
 	$options = $ad->options();
-	// if($condition = advanced_ads_ok_page($ad->id)) {
+	if($condition = advanced_ads_ok_page($ad->id)) {
 		if($options['group_info']['id']==3788) { //Site - Text Ad ou bannière
 
 			if(get_field('afficher_en_text_ad',$ad->id)) {
@@ -98,7 +96,7 @@ add_filter('advanced-ads-output-final',function($output, $ad, $output_options) {
 
 			}
 
-		// }
+		}
 
 
 		$comment = 'Ad ID '.$ad->id;

@@ -279,7 +279,6 @@ class Advanced_Ads_Ad {
 	 */
 	public function output( $output_options = array() ){
 		if ( ! $this->is_ad ) { return ''; }
-
 		$output_options['global_output'] = $this->global_output = isset( $output_options['global_output'] ) ? $output_options['global_output'] : $this->global_output;
 
 		// switch between normal and debug mode
@@ -305,8 +304,10 @@ class Advanced_Ads_Ad {
 			$advads->current_ads[] = $new_ad;
 		}
 
+
 		// action when output is created
 		do_action( 'advanced-ads-output', $this, $output, $output_options );
+
 		
 		return apply_filters( 'advanced-ads-output-final', $output, $this, $output_options );
 	}
