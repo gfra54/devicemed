@@ -31,9 +31,18 @@ function advanced_ads_ok_page($id) {
 						foreach($ciblage as $cible) {
 							if(!$ok && $cible['url']) {
 								if($cible['condition'] == 'contient') {
-									$ok = strstr($_SERVER['REQUEST_URI'],$cible['url'])!==false;
+									if($cible['url'] == 'home') {
+										$ok = $_SERVER['REQUEST_URI']=='/';
+									} else {
+										$ok = strstr($_SERVER['REQUEST_URI'],$cible['url'])!==false;
+									}
 								} else {
-									$ok = strstr($_SERVER['REQUEST_URI'],$cible['url'])===false;
+									if($cible['url'] == 'home') {
+										$ok = $_SERVER['REQUEST_URI']!='/';
+									} else {
+										$ok = strstr($_SERVER['REQUEST_URI'],$cible['url'])===false;
+
+									}
 								}
 								if(!$condition && $ok) {
 									$condition=print_r($cible,true);
