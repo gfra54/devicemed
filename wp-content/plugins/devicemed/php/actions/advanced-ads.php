@@ -4,13 +4,15 @@ add_filter('advanced-ads-ad-select-override-by-group',function($nope, $adgroup, 
 	$ads = $adgroup->get_all_ads();
 	$final = array();
 	$prioritaire=false;
-	foreach($ordered_ad_ids as $id) {
-		$ad = $ads[$id];
-		if($condition = advanced_ads_ok_page($ad->ID)) {
-			if(!$prioritaire && get_field('pub_prioritaire',$ad->ID)) {
-				$prioritaire = $id;
+	if(is_array($ordered_ad_ids)) {
+		foreach($ordered_ad_ids as $id) {
+			$ad = $ads[$id];
+			if($condition = advanced_ads_ok_page($ad->ID)) {
+				if(!$prioritaire && get_field('pub_prioritaire',$ad->ID)) {
+					$prioritaire = $id;
+				}
+				$final[] = $id;
 			}
-			$final[] = $id;
 		}
 	}
 	if($prioritaire) {

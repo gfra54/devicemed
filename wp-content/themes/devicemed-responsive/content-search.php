@@ -63,7 +63,7 @@
 
 							$txt = get_the_excerpt(); 
 
-							if(stristr($txt, $s)===false) {
+							if($txt && stristr($txt, $s)===false) {
 								$txt = mise_en_avant_recherche($s, strip_shortcodes(wp_strip_all_tags(get_the_content())));
 
 						
