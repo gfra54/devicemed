@@ -852,22 +852,21 @@ function fournisseurs_partenaires() {
 			</div>
 		</header>	
 
-		<?php foreach($sections as $section) {
+		<?php foreach($sections as $key => $section) {
 			if(count($section['fournisseurs'])) {
 				$cpt=0;
 				?>
 			<article>
-				<div align="left"><b><?php echo $section['titre'];?></b></div>
+				<!-- <div align="left"><b><?php echo $section['titre'];?></b></div> -->
 					<?php
 					foreach($section['fournisseurs'] as $fournisseur) {
 						case_logo_fournisseur($fournisseur,$cpt%2 ? '' : 'left');
 						$cpt++;
 					}
-					if($cpt%2) {?>
+					if($key && $cpt%2) {?>
 						<a title="Voir la liste des fournisseurs" href="/fournisseurs/" class='logo_supplier'>
 							Voir tous les fournisseurs &raquo;
 						</a>
-
 					<?php }
 				?>
 			</article>
