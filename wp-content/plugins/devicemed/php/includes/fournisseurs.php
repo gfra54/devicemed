@@ -841,7 +841,7 @@ function fournisseurs_partenaires() {
 		],
 		[
 			'titre'=> 'Nos autres partenaires',
-			'fournisseurs'=>get_fournisseurs(array('premium'=>true))
+			'fournisseurs'=>get_fournisseurs(array('premium'=>true,'mis-en-avant'=>false))
 		]
 	];
 	?>
