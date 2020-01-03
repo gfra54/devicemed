@@ -12,6 +12,24 @@ iframe[src*="youtube.com"] {
   color: #0066B3;
   background:white;
 }
+.case-fournisseur-logo.mis-en-avant, .logo_supplier.mis-en-avant  {
+  position: relative;
+  overflow: visible;
+}
+.case-fournisseur-logo.mis-en-avant::after, .logo_supplier.mis-en-avant::after {
+    /*content: 'mis à jour';*/
+    content: attr(data-lib_mea);
+    text-transform: uppercase;
+    display: block;
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    background: red;
+    color:white;
+    padding: 0 5px;
+    font-family:'opensans-condbold'
+}
+
   #sidebar-fiches .logo_supplier {
     float: left;
     width: 49%;
@@ -40,7 +58,7 @@ iframe[src*="youtube.com"] {
   #sidebar-fiches .logo_supplier:hover {
     opacity: 0.5;
   }
-  #sidebar-fiches .logo_supplier:nth-child(2n+1) {
+  #sidebar-fiches .logo_supplier.left {
     margin-right: 2%;
   }
   #sidebar-fiches .logo_supplier IMG{

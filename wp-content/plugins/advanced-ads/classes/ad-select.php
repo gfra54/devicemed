@@ -119,7 +119,7 @@ class Advanced_Ads_Select {
 		
 		// check conditions
 		if ( $ad->can_display() ) {
-if($args['id']==20284) me($ad->output());
+//if($args['id']==20284) me($ad->output());
 			return $ad->output();
 		}
 	}

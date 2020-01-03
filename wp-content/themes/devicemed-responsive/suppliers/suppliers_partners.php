@@ -7,8 +7,13 @@ get_header(); ?>
 		<h2 class="title">Liste de nos fournisseurs partenaires</h2>
 		<p>
 			<div class="mosaique-fournisseurs" id='bloc_supplier_search'>
-			<?php foreach(get_fournisseurs(array('premium'=>true)) as $fournisseur) {?>
-				<div class="case-fournisseur-logo"><a href="<?php echo $fournisseur['permalink'];?>" style="background-image: url(<?php echo $fournisseur['logo'];?>)" title="<?php echo $fournisseur['nom'];?>"><img src="<?php echo $fournisseur['logo'];?>" alt="Logo <?php echo $fournisseur['nom'];?>"></a></div>
+			<?php foreach(get_fournisseurs(array('premium'=>true)) as $fournisseur) {
+				$css='';
+				if($lib_mea = fournisseur_mis_en_avant($fournisseur)) {
+					$css='mis-en-avant';
+				}
+				?>
+				<div class="case-fournisseur-logo <?php echo $css;?>" data-lib_mea="<?php echo $lib_mea;?>"><a href="<?php echo $fournisseur['permalink'];?>" style="background-image: url(<?php echo $fournisseur['logo'];?>)" title="<?php echo $fournisseur['nom'];?>"><img src="<?php echo $fournisseur['logo'];?>" alt="Logo <?php echo $fournisseur['nom'];?>"></a></div>
 			<?php }?>
 			</div>
 		</p>

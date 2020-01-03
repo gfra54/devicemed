@@ -806,6 +806,25 @@ function get_fournisseurs($params=array()) {
 		} else {
 			$ret = array_map('get_object_vars',$fournisseurs);
 		}
+
+		if(isset($params['mis-en-avant'])) {
+			$en_avant = sinon($params,'mis-en-avant');
+			$tmp_liste = [];
+			foreach($ret as $fournisseur) {
+				$est_en_avant = fournisseur_mis_en_avant($fournisseur);
+				if($en_avant) {
+					if($est_en_avant) {
+						$tmp_liste[]=$fournisseur;
+					}
+				} else {
+					if(!$est_en_avant) {
+						$tmp_liste[]=$fournisseur;
+					}
+				}
+			}
+			$ret = $tmp_liste;
+		}
+
 		if($cache) {
 			set_transient($cache,$ret);
 		}
@@ -814,6 +833,17 @@ function get_fournisseurs($params=array()) {
 }
 
 function fournisseurs_partenaires() {
+
+	$sections = [
+		[
+			'titre'=> 'Récemment mis à jour',
+			'fournisseurs'=>get_fournisseurs(array('premium'=>true,'mis-en-avant'=>true)),
+		],
+		[
+			'titre'=> 'Nos autres partenaires',
+			'fournisseurs'=>get_fournisseurs(array('premium'=>true))
+		]
+	];
 	?>
 	<section id="sidebar-fiches">
 		<header>
@@ -821,22 +851,58 @@ function fournisseurs_partenaires() {
 				<h1 class="title">Fournisseurs partenaires</h1>
 			</div>
 		</header>	
-		<article>
-			<?php
-				$cpt=0;
-				foreach(get_fournisseurs(array('premium'=>true)) as $fournisseur) {?>
-					<a title="<?php echo $fournisseur['nom'];?>" href="<?php echo $fournisseur['permalink'];?>" style="background-image:url(<?php echo $fournisseur['logo'] ?>)" class='logo_supplier'>
-						<img src="<?php echo $fournisseur['logo'] ?>" />
-					</a>
-				<?php $cpt++;}
-				if($cpt%2) {?>
-					<a title="Voir la liste des fournisseurs" href="/suppliers/" class='logo_supplier'>
-						Voir tous les fournisseurs &raquo;
-					</a>
 
-				<?php }
-			?>
-		</article>
+		<?php foreach($sections as $section) {
+			if(count($section['fournisseurs'])) {
+				$cpt=0;
+				?>
+			<article>
+				<div align="left"><b><?php echo $section['titre'];?></b></div>
+					<?php
+					foreach($section['fournisseurs'] as $fournisseur) {
+						case_logo_fournisseur($fournisseur,$cpt%2 ? '' : 'left');
+						$cpt++;
+					}
+					if($cpt%2) {?>
+						<a title="Voir la liste des fournisseurs" href="/fournisseurs/" class='logo_supplier'>
+							Voir tous les fournisseurs &raquo;
+						</a>
+
+					<?php }
+				?>
+			</article>
+			<?php }?>
+		<?php }?>
 	</section>	
 	<?php
+}
+
+function case_logo_fournisseur($fournisseur,$css) {
+	$css = $css && !is_array($css) ? [$css] : [];
+	if($lib_mea = fournisseur_mis_en_avant($fournisseur)) {
+		$css[]='mis-en-avant';
+	}
+
+	?>
+		<a title="<?php echo $fournisseur['nom'];?>" data-lib_mea="<?php echo $lib_mea;?>"	href="<?php echo $fournisseur['permalink'];?>" style="background-image:url(<?php echo $fournisseur['logo'] ?>)" class='logo_supplier <?php echo implode(' ',$css);?>'>
+			<img src="<?php echo $fournisseur['logo'] ?>" />
+		</a>
+<?php
+}
+$GLOBALS['fournisseur_mis_en_avant']=[];
+function fournisseur_mis_en_avant($fournisseur) {
+	if(isset($GLOBALS['fournisseur_mis_en_avant'][$fournisseur['ID']])) {
+		return $GLOBALS['fournisseur_mis_en_avant'][$fournisseur['ID']];
+	} else {
+
+		$lib_mea = false;
+		if($est_en_avant = get_field('fournisseur_mis_en_avant',$fournisseur['ID'])) {
+			$lib_mea = get_field('lib_mea',$fournisseur['ID']);
+			if(empty($lib_mea)) {
+				$lib_mea='Mis à jour';
+			}
+		}
+		$GLOBALS['fournisseur_mis_en_avant'][$fournisseur['ID']] = $lib_mea;
+		return $lib_mea;
+	}
 }
