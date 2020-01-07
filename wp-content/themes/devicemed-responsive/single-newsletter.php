@@ -391,15 +391,21 @@ if(!empty($_GET['brut'])) {
   function bloc_partenaires() {
     global $afficher_le_bloc_partenaire;
     if($afficher_le_bloc_partenaire && !$GLOBALS['bloc_partenaires']) {
-      $fournisseurs = get_fournisseurs(array('premium'=>true));
-      foreach($fournisseurs as $fournisseur) {
-        $nom = wp_trim_words($fournisseur['post_title'],2,'');
-        $nom = str_replace('Composites','Comp.',$nom);
-        $nom = str_replace('Medical','Med.',$nom);
-        $nom = str_replace('Medical','Med.',$nom);
-        $nom = str_replace('Balzers','',$nom);
-        $nom = str_replace('Technologies','Tech.',$nom);
-        $data_fournisseurs[$fournisseur['ID']]=array('nom'=>$nom,'url'=>$fournisseur['permalink']);
+      $sections =[
+          get_fournisseurs(array('premium'=>true,'mis-en-avant'=>true)),
+          get_fournisseurs(array('premium'=>true,'mis-en-avant'=>false))
+      ];
+      foreach($sections as $fournisseurs) {
+        foreach($fournisseurs as $fournisseur) {
+          $nom = wp_trim_words($fournisseur['post_title'],2,'');
+          $nom = str_replace('Composites','Comp.',$nom);
+          $nom = str_replace('Medical','Med.',$nom);
+          $nom = str_replace('Medical','Med.',$nom);
+          $nom = str_replace('Balzers','',$nom);
+          $nom = str_replace('Technologies','Tech.',$nom);
+          $data_fournisseurs[$fournisseur['ID']]=array('nom'=>$nom,'url'=>$fournisseur['permalink'],'lib_mea'=>fournisseur_mis_en_avant($fournisseur));
+        }
+        $data_fournisseurs['break']=true;
       }
 
       $GLOBALS['bloc_partenaires']=true;
@@ -412,21 +418,33 @@ if(!empty($_GET['brut'])) {
       </font>
       </td>
       </tr>
-      <?php $cpt=0;foreach($data_fournisseurs as $id=>$data) {?>
+      <?php $cpt=0;foreach($data_fournisseurs as $id=>$data) {
+          if($id == 'break') {
+            echo '<tr><td>&nbsp;</td></tr>';
+          } else {
+        ?>
         <tr>
         <td bgcolor="white" align=center>    
           <table width="100%" cellpadding="3"><tr><td color=white align=center>
           <a style="text-decoration:none;" href="<?php echo $data['url'];?>">
-            <font face="sans-serif"  color="#0066b3" style="font-size:11px;text-decoration:none;">
+            <font face="sans-serif"  color="#0066b3" style="font-size:12px;text-decoration:none;">
               <b style="text-decoration:none;">
                 <?php echo $data['nom'];?>
               </b>
             </font>
+            <?php if($data['lib_mea']) {?>
+              <table width="100%"><tr><td width="50%"></td><td bgcolor="red">
+              <font face="sans-serif"  color="#ffffff" style="font-size:8px;text-decoration:none;">
+                  <center>&nbsp;<?php echo str_replace(' ','&nbsp;',mb_strtoupper($data['lib_mea']));?>&nbsp;</center>
+              </font>
+              </td></tr></table>
+            <?php }?>
+
           </a>
           </td></tr></table>
         </td>
         </tr>
-      <?php $cpt++;}?>
+      <?php $cpt++;}}?>
       </table>
       <?php espace(8);?>
 
