@@ -433,7 +433,7 @@ if(!empty($_GET['brut'])) {
               </b>
             </font>
             <?php if($data['lib_mea']) {?>
-              <table width="100%"><tr><td width="50%"></td><td bgcolor="red" align=center><font face="sans-serif"  color="#ffffff" style="font-size:8px;text-decoration:none;">&nbsp;<?php echo str_replace(' ','&nbsp;',mb_strtoupper($data['lib_mea']));?>&nbsp;</font></td></tr></table>
+              <table width="100%"><tr><td width="50%"></td><td bgcolor="red" style="font-size:8px;" align="center"><font face="sans-serif"  color="#ffffff">&nbsp;<?php echo str_replace(' ','&nbsp;',mb_strtoupper($data['lib_mea']));?>&nbsp;</font></td></tr></table>
             <?php }?>
 
           </a>
