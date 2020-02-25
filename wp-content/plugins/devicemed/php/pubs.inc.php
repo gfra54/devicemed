@@ -126,6 +126,7 @@ function afficher_pub($type,$attr=array()) {
 	return false;
 }
 
+$GLOBALS['pub_speciale']=false;
 function display_pub($pub,$attr=array(),$type=false) {
 	if(empty($pub)){
 		return false;
@@ -135,7 +136,17 @@ function display_pub($pub,$attr=array(),$type=false) {
 	}
 
 	$extra=false;
-	if($pub->ID == 14187) {
+	
+	if($pub->ID == 22159) {
+	// if($pub->ID == 20531) {
+		$GLOBALS['pub_speciale']=true;
+		if($post = get_post_on()) {
+			update_post_meta($pub->ID, 'url_tracking_clicks', get_permalink($post));
+			update_post_meta($pub->ID, 'url_tracking_display', site_url().'/wp-content/themes/devicemed-responsive/images/quels-on.png');
+
+		}
+	} else if($pub->ID == 14187) {
+		$GLOBALS['pub_speciale']=true;
 
 		$args = array( 
 			'posts_per_page'=>1,
@@ -404,7 +415,7 @@ function pub_metrics($pub) {
 		$out['w'] = $image_data[1];
 		$out['h'] = $image_data[2];
 	}
-	if(($out['image'] = get_post_thumbnail_url($id)) || $id == 14187) {
+	if(($out['image'] = get_post_thumbnail_url($id)) || $GLOBALS['pub_speciale']) {
 		if(!($url_tracking_display = get_field('url_tracking_display',$id))) {
 			if($url_tracking_display = bitly_shorten($out['image'])) {
 				update_post_meta($pub->ID, 'url_tracking_display', $url_tracking_display);
