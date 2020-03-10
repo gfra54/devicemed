@@ -137,13 +137,11 @@ function display_pub($pub,$attr=array(),$type=false) {
 
 	$extra=false;
 	
-	if($pub->ID == 22159) {
-	// if($pub->ID == 20531) {
+	if($pub->ID == 22159 || $pub->ID == 20531) {
 		$GLOBALS['pub_speciale']=true;
 		if($post = get_post_on()) {
 			update_post_meta($pub->ID, 'url_tracking_clicks', get_permalink($post));
 			update_post_meta($pub->ID, 'url_tracking_display', site_url().'/wp-content/themes/devicemed-responsive/images/quels-on.png');
-
 		}
 	} else if($pub->ID == 14187) {
 		$GLOBALS['pub_speciale']=true;
