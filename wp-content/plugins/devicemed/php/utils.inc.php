@@ -102,8 +102,11 @@ function convertToSmallCaps($string) {
 function urlToPath($url) {
 	if($url) {
 		list($pre) = explode('/wp-content',get_stylesheet_directory());
-		
-		$path = str_replace( site_url(), $pre, $url);
+		$surl = site_url();
+		$surls = [$surl,str_replace('http://','https://',$surl)];
+		foreach($surls as $site_url) {
+			$path = str_replace( $site_url, $pre, $url);
+		}
 		return realpath($path);
 	}
 }

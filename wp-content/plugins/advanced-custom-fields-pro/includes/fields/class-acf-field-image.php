@@ -26,7 +26,7 @@ class acf_field_image extends acf_field {
 		$this->category = 'content';
 		$this->defaults = array(
 			'return_format'	=> 'array',
-			'preview_size'	=> 'thumbnail',
+			'preview_size'	=> 'medium',
 			'library'		=> 'all',
 			'min_width'		=> 0,
 			'min_height'	=> 0,
@@ -36,21 +36,37 @@ class acf_field_image extends acf_field {
 			'max_size'		=> 0,
 			'mime_types'	=> ''
 		);
-		$this->l10n = array(
-			'select'		=> __("Select Image",'acf'),
-			'edit'			=> __("Edit Image",'acf'),
-			'update'		=> __("Update Image",'acf'),
-			'uploadedTo'	=> __("Uploaded to this post",'acf'),
-			'all'			=> __("All images",'acf'),
-		);
-		
 		
 		// filters
 		add_filter('get_media_item_args',				array($this, 'get_media_item_args'));
-		add_filter('wp_prepare_attachment_for_js',		array($this, 'wp_prepare_attachment_for_js'), 10, 3);
     
     }
     
+    
+    /*
+	*  input_admin_enqueue_scripts
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	16/12/2015
+	*  @since	5.3.2
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function input_admin_enqueue_scripts() {
+		
+		// localize
+		acf_localize_text(array(
+		   	'Select Image'	=> __('Select Image', 'acf'),
+			'Edit Image'	=> __('Edit Image', 'acf'),
+			'Update Image'	=> __('Update Image', 'acf'),
+			'All images'	=> __('All images', 'acf'),
+	   	));
+	}
+	
 	
 	/*
 	*  render_field()
@@ -72,9 +88,7 @@ class acf_field_image extends acf_field {
 		
 		// enqueue
 		if( $uploader == 'wp' ) {
-			
 			acf_enqueue_uploader();
-			
 		}
 		
 		
@@ -104,9 +118,7 @@ class acf_field_image extends acf_field {
 			
 			// url exists
 			if( $url ) {
-				
 				$div['class'] .= ' has-value';
-			
 			}
 						
 		}
@@ -118,29 +130,30 @@ class acf_field_image extends acf_field {
 ?>
 <div <?php acf_esc_attr_e( $div ); ?>>
 	<?php acf_hidden_input(array( 'name' => $field['name'], 'value' => $field['value'] )); ?>
-	<div class="view show-if-value acf-soh" <?php if( $size['width'] ) echo 'style="max-width: '.$size['width'].'px"'; ?>>
-		<img data-name="image" src="<?php echo $url; ?>" alt="<?php echo $alt; ?>"/>
-		<ul class="acf-hl acf-soh-target">
-			<?php if( $uploader != 'basic' ): ?>
-				<li><a class="acf-icon -pencil dark" data-name="edit" href="#" title="<?php _e('Edit', 'acf'); ?>"></a></li>
-			<?php endif; ?>
-			<li><a class="acf-icon -cancel dark" data-name="remove" href="#" title="<?php _e('Remove', 'acf'); ?>"></a></li>
-		</ul>
+	<div class="show-if-value image-wrap" <?php if( $size['width'] ): ?>style="<?php echo esc_attr('max-width: '.$size['width'].'px'); ?>"<?php endif; ?>>
+		<img data-name="image" src="<?php echo esc_url($url); ?>" alt="<?php echo esc_attr($alt); ?>"/>
+		<div class="acf-actions -hover">
+			<?php 
+			if( $uploader != 'basic' ): 
+			?><a class="acf-icon -pencil dark" data-name="edit" href="#" title="<?php _e('Edit', 'acf'); ?>"></a><?php 
+			endif;
+			?><a class="acf-icon -cancel dark" data-name="remove" href="#" title="<?php _e('Remove', 'acf'); ?>"></a>
+		</div>
 	</div>
-	<div class="view hide-if-value">
+	<div class="hide-if-value">
 		<?php if( $uploader == 'basic' ): ?>
 			
 			<?php if( $field['value'] && !is_numeric($field['value']) ): ?>
-				<div class="acf-error-message"><p><?php echo $field['value']; ?></p></div>
+				<div class="acf-error-message"><p><?php echo acf_esc_html($field['value']); ?></p></div>
 			<?php endif; ?>
 			
 			<label class="acf-basic-uploader">
-				<input type="file" name="<?php echo $field['name']; ?>" id="<?php echo $field['id']; ?>" />
+				<?php acf_file_input(array( 'name' => $field['name'], 'id' => $field['id'] )); ?>
 			</label>
 			
 		<?php else: ?>
 			
-			<p style="margin:0;"><?php _e('No image selected','acf'); ?> <a data-name="add" class="acf-button button" href="#"><?php _e('Add Image','acf'); ?></a></p>
+			<p><?php _e('No image selected','acf'); ?> <a data-name="add" class="acf-button button" href="#"><?php _e('Add Image','acf'); ?></a></p>
 			
 		<?php endif; ?>
 	</div>
@@ -188,8 +201,8 @@ class acf_field_image extends acf_field {
 		
 		// return_format
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Return Value','acf'),
-			'instructions'	=> __('Specify the returned value on front end','acf'),
+			'label'			=> __('Return Format','acf'),
+			'instructions'	=> '',
 			'type'			=> 'radio',
 			'name'			=> 'return_format',
 			'layout'		=> 'horizontal',
@@ -204,7 +217,7 @@ class acf_field_image extends acf_field {
 		// preview_size
 		acf_render_field_setting( $field, array(
 			'label'			=> __('Preview Size','acf'),
-			'instructions'	=> __('Shown when entering data','acf'),
+			'instructions'	=> '',
 			'type'			=> 'select',
 			'name'			=> 'preview_size',
 			'choices'		=> acf_get_image_sizes()
@@ -360,65 +373,6 @@ class acf_field_image extends acf_field {
 	    $vars['send'] = true;
 	    return($vars);
 	    
-	}
-		
-	
-	/*
-	*  wp_prepare_attachment_for_js
-	*
-	*  this filter allows ACF to add in extra data to an attachment JS object
-	*  This sneaky hook adds the missing sizes to each attachment in the 3.5 uploader. 
-	*  It would be a lot easier to add all the sizes to the 'image_size_names_choose' filter but 
-	*  then it will show up on the normal the_content editor
-	*
-	*  @type	function
-	*  @since:	3.5.7
-	*  @date	13/01/13
-	*
-	*  @param	{int}	$post_id
-	*  @return	{int}	$post_id
-	*/
-	
-	function wp_prepare_attachment_for_js( $response, $attachment, $meta ) {
-		
-		// only for image
-		if( $response['type'] != 'image' ) {
-		
-			return $response;
-			
-		}
-		
-		
-		// make sure sizes exist. Perhaps they dont?
-		if( !isset($meta['sizes']) ) {
-		
-			return $response;
-			
-		}
-		
-		
-		$attachment_url = $response['url'];
-		$base_url = str_replace( wp_basename( $attachment_url ), '', $attachment_url );
-		
-		if( isset($meta['sizes']) && is_array($meta['sizes']) ) {
-		
-			foreach( $meta['sizes'] as $k => $v ) {
-			
-				if( !isset($response['sizes'][ $k ]) ) {
-				
-					$response['sizes'][ $k ] = array(
-						'height'      => $v['height'],
-						'width'       => $v['width'],
-						'url'         => $base_url .  $v['file'],
-						'orientation' => $v['height'] > $v['width'] ? 'portrait' : 'landscape',
-					);
-				}
-				
-			}
-			
-		}
-
-		return $response;
 	}
 	
 	
