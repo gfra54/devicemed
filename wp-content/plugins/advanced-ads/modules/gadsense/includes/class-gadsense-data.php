@@ -92,4 +92,12 @@ class Advanced_Ads_AdSense_Data {
         };
         return false;
     }
+    // load stats from AdSense account.
+	public function is_hide_stats(){
+		if ( isset( $this->options ) && is_array( $this->options ) && isset( $this->options['hide-stats'] ) ){
+			return true;
+		};
+		return false;
+	}
+
 }

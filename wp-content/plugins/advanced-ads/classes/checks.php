@@ -202,19 +202,19 @@ class Advanced_Ads_Checks {
 
 		$conflicting_plugins = array();
 
-		if( defined( 'Publicize_Base' ) ){ // JetPack Publicize module
+		if( defined( 'Publicize_Base' ) ){ // JetPack Publicize module.
 			$conflicting_plugins[] = 'Jetpack – Publicize';
 		}
-		if( defined( 'PF__PLUGIN_DIR' ) ){ // Facebook Instant Articles & Google AMP Pages by PageFrog
+		if( defined( 'PF__PLUGIN_DIR' ) ){ // Facebook Instant Articles & Google AMP Pages by PageFrog.
 			$conflicting_plugins[] = 'Facebook Instant Articles & Google AMP Pages by PageFrog';
 		}
 		if( defined( 'GT_VERSION' ) ){ // GT ShortCodes
 			$conflicting_plugins[] = 'GT ShortCodes';
 		}
-		if( class_exists( 'ITSEC_Core', false ) && defined ( 'AAP_VERSION' ) ){ // iThemes Security, but only if Pro is enabled
+		if( class_exists( 'ITSEC_Core', false ) && defined ( 'AAP_VERSION' ) ){ // iThemes Security, but only if Pro is enabled.
 			$conflicting_plugins[] = 'iThemes Security';
 		}
-		if( class_exists( 'SimilarPosts', false ) ){ // Similar Posts, https://de.wordpress.org/plugins/similar-posts/
+		if( class_exists( 'SimilarPosts', false ) ){ // Similar Posts, https://de.wordpress.org/plugins/similar-posts/.
 			$conflicting_plugins[] = 'Similar Posts';
 		}
 
@@ -245,7 +245,7 @@ class Advanced_Ads_Checks {
 	 * check for required php extensions
 	 *
 	 * @since 1.8.21
-	 * @return bool
+	 * @return array
 	 */
 	public static function php_extensions(){
 
@@ -255,8 +255,8 @@ class Advanced_Ads_Checks {
 		    $missing_extensions[] = 'dom';
 		}
 
-		if( !extension_loaded('xml') ){
-		    $missing_extensions[] = 'xml';
+		if ( ! extension_loaded( 'mbstring' ) ) {
+		    $missing_extensions[] = 'mbstring';
 		}
 
 		return $missing_extensions;
@@ -331,9 +331,9 @@ class Advanced_Ads_Checks {
 	 */
 	public static function jquery_ui_conflict(){
 	    ?>
-	    <script>// string from jquery-ui source code
+	    <script>
 		jQuery(document).ready(function(){
-		    var needle = 'var g="string"==typeof f,h=c.call(arguments,1)';
+			var needle = 'prior to initialization;' // A string from jquery-ui source code.
 		    if ( jQuery.fn.button.toString().indexOf( needle ) === -1 || jQuery.fn.tooltip.toString().indexOf( needle ) === -1 ) {
 			    advads_push_notice( 'jquery_ui_conflict' );
 		    }

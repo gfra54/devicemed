@@ -7,8 +7,13 @@ jQuery( document ).ready(function () {
 	 * ADMIN NOTICES
 	 */
 	// close button
+	// remove duplicate close buttons
+	jQuery(window).on('load', function () {
+		jQuery('a.notice-dismiss').next('button.notice-dismiss').remove();
+	});
 	// .advads-notice-dismiss class can be used to add a custom close button (e.g., link)
-	jQuery(document).on('click', '.advads-admin-notice button.notice-dismiss, .advads-admin-notice .advads-notice-dismiss', function(){
+	jQuery(document).on('click', '.advads-admin-notice .notice-dismiss, .advads-notice-dismiss', function(event){
+		event.preventDefault();
 	    var messagebox = jQuery(this).parents('.advads-admin-notice');
 	    if( messagebox.attr('data-notice') === undefined) return;
 
@@ -37,28 +42,39 @@ jQuery( document ).ready(function () {
 		messagebox.fadeOut();
 	    });
 	});
+
 	// autoresponder button
-	jQuery('.advads-notices-button-subscribe').click(function(){
-	    if(this.dataset.notice === undefined) return;
-	    var messagebox = jQuery(this).parents('.advads-admin-notice');
-	    messagebox.find('p').append( '<span class="spinner advads-spinner"></span>' );
-
-	    var query = {
-		action: 'advads-subscribe-notice',
-		notice: this.dataset.notice,
-		nonce: advadsglobal.ajax_nonce
-	    };
-	    // send and close message
-	    jQuery.post(ajaxurl, query, function (r) {
-		if(r === '1'){
-		    messagebox.fadeOut();
-		} else {
-		    messagebox.find('p').html(r);
-		    messagebox.removeClass('updated').addClass('error');
+	jQuery('.advads-notices-button-subscribe').on('click', function () {
+		if (this.dataset.notice === undefined) {
+			return;
 		}
-	    });
+		var messageboxes = jQuery(this).parents('.advads-admin-notice');
+		if (!messageboxes.length) {
+			return;
+		}
+		var $messagebox = jQuery(messageboxes[0]);
+		jQuery('<span class="spinner advads-spinner"></span>').insertAfter(this);
 
+		var query = {
+			action: 'advads-subscribe-notice',
+			notice: this.dataset.notice,
+			nonce: advadsglobal.ajax_nonce
+		};
+		// send and replace with server message
+		jQuery.post(ajaxurl, query)
+			.success(function (response) {
+				$messagebox.children('p').html(response.data.message);
+				$messagebox.addClass('notice-success notice');
+			})
+			.fail(function (response) {
+				$messagebox.children('p').html(response.responseJSON.data.message);
+				$messagebox.addClass('notice-error notice');
+			})
+			.always(function () {
+				$messagebox.removeClass('notice-info');
+			});
 	});
+
 	/**
 	 * Functions for Ad Health Notifications in the backend
 	 */
@@ -113,7 +129,7 @@ jQuery( document ).ready(function () {
 	advads_deactivate_link.click(function ( e ) {
 		e.preventDefault();
 		// only show feedback form once per 30 days
-		var c_value = advads_admin_get_cookie( "advads_hide_deactivate_feedback" );
+		var c_value = advads_admin_get_cookie( "advanced_ads_hide_deactivate_feedback" );
 		if (c_value === undefined){
 		    jQuery( '#advanced-ads-feedback-overlay' ).show();
 		} else {
@@ -138,7 +154,7 @@ jQuery( document ).ready(function () {
 		// set cookie for 30 days
 		var exdate = new Date();
 		exdate.setSeconds( exdate.getSeconds() + 2592000 );
-		document.cookie = "advads_hide_deactivate_feedback=1; expires=" + exdate.toUTCString() + "; path=/";
+		document.cookie = "advanced_ads_hide_deactivate_feedback=1; expires=" + exdate.toUTCString() + "; path=/";
 		// save if plugin should be disabled
 		var disable_plugin = self.hasClass('advanced-ads-feedback-not-deactivate') ? false : true;
 			
@@ -266,7 +282,7 @@ function advads_display_ad_health_notices(){
 function advads_push_notice( key, attr = '' ){
 
 	var query = {
-	    action: 'advads-ad-health-notice-push',
+	    action: 'advads-ad-health-notice-push-adminui',
 	    key: key,
 	    attr: attr,
 	    nonce: advadsglobal.ajax_nonce

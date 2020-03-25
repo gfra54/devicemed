@@ -11,8 +11,6 @@ class Advanced_Ads_AdSense_MAPI {
 	
 	const CALL_PER_24H = 20;
 	
-	const UNSUPPORTED_TYPE_LINK = 'https://wpadvancedads.com/adsense-ad-type-not-available/';
-	
 	private static $instance = null;
 	
 	private static $default_options = array();
@@ -45,6 +43,7 @@ class Advanced_Ads_AdSense_MAPI {
 		add_action( 'wp_ajax_advads_gadsense_mapi_select_account', array( $this, 'ajax_account_selected' ) );
 		add_action( 'wp_ajax_advads_mapi_get_adCode', array( $this, 'ajax_get_adCode' ) );
 		add_action( 'wp_ajax_advads-mapi-reconstructed-code', array( $this, 'ajax_save_reconstructed_code' ) );
+		add_action( 'wp_ajax_advads-mapi-save-manual-code', array( $this, 'ajax_save_manual_code' ) );
 		add_action( 'wp_ajax_advads-mapi-revoke-token', array( $this, 'ajax_revoke_tokken' ) );
 		add_action( 'wp_ajax_advads-mapi-get-alerts', array( $this, 'ajax_get_account_alerts' ) );
 		add_action( 'wp_ajax_advads-mapi-dismiss-alert', array( $this, 'ajax_dismiss_alert' ) );
@@ -348,7 +347,13 @@ class Advanced_Ads_AdSense_MAPI {
 						isset( $adCode['error']['errors'][0]['reason'] ) &&
 						'doesNotSupportAdUnitType' == $adCode['error']['errors'][0]['reason']
 						) {
-							$options['unsupported_units'][ $adUnit ] = 1;
+							if ( array_key_exists( $adUnit, $options['ad_codes'] ) ) {
+								if ( array_key_exists( $adUnit, $options['unsupported_units'] ) ) {
+									unset( $options['unsupported_units'][ $adUnit ] );
+								}
+							} else {
+								$options['unsupported_units'][ $adUnit ] = 1;
+							}
 							update_option( self::OPTNAME, $options );
 							return array(
 								'status' => false,
@@ -617,7 +622,62 @@ class Advanced_Ads_AdSense_MAPI {
 		die;
 		
 	}
-	
+
+	/**
+	 * When a user manually adds an ad code, save it
+	 */
+	public function ajax_save_manual_code() {
+		if ( ! current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_edit_ads' ) ) ) {
+			die();
+		}
+
+		if ( ! wp_verify_nonce( isset( $_POST['nonce'] ) ? $_REQUEST['nonce'] : '', 'advads-mapi' ) ) {
+			die();
+		}
+
+		$publisher_id = sanitize_text_field( wp_unslash( isset( $_POST['parsed_code']['pubId'] ) ? $_POST['parsed_code']['pubId'] : '' ) );
+		if ( ! $this->check_valid_publisher( $publisher_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'This ad code is from a different AdSense Account', 'advanced-ads' ),
+				),
+				400
+			);
+		}
+
+		if ( empty( $_POST['parsed_code']['slotId'] ) || empty( $_POST['raw_code'] ) ) {
+			die();
+		}
+
+		static $options;
+		if ( is_null( $options ) ) {
+			$options = self::get_option();
+		}
+
+		$slot_id = 'ca-' . $publisher_id . ':' . sanitize_text_field( wp_unslash( $_POST['parsed_code']['slotId'] ) );
+
+		// phpcs:disable WordPress.Security
+		$options['ad_codes'][ $slot_id ] = urldecode( $_POST['raw_code'] );
+		// phpcs:enable
+
+		if ( array_key_exists( $slot_id, $options['unsupported_units'] ) ) {
+			unset( $options['unsupported_units'][ $slot_id ] );
+		}
+
+		wp_send_json_success( array( 'updated' => update_option( self::OPTNAME, $options ) ) );
+	}
+
+	/**
+	 * Check if the provided AdSense Publisher ID matches the saved ID
+	 *
+	 * @param string $pub AdSense Publisher ID.
+	 *
+	 * @return bool
+	 */
+	protected function check_valid_publisher( $pub ) {
+		return Advanced_Ads_AdSense_Data::get_instance()->get_adsense_id() === $pub;
+	}
+
 	/**
 	 * Save ad code reconstructed from ad parameters
 	 */
@@ -675,9 +735,18 @@ class Advanced_Ads_AdSense_MAPI {
 			 * Ad code is returned as string. Otherwise it's an error
 			 */
 			if ( is_string( $code ) ) {
-				
-				$response = array( 'code' => $code );
-				
+				$ad_units = array_filter(
+					Advanced_Ads_Network_Adsense::get_instance()->get_external_ad_units(),
+					function ( Advanced_Ads_Ad_Network_Ad_Unit $ad_unit ) use ( $unit ) {
+						return $ad_unit->id === $unit;
+					}
+				);
+				$ad_unit  = reset( $ad_units );
+				$response = array(
+					'code' => $code,
+					'type' => self::format_ad_data( $ad_unit, 'type' ),
+				);
+
 				/**
 				 *  Add quota info for default API creds
 				 */
@@ -701,6 +770,7 @@ class Advanced_Ads_AdSense_MAPI {
 		}
 		die;
 	}
+
     /**
      *  Dismiss an account alert
      */
@@ -1223,19 +1293,55 @@ class Advanced_Ads_AdSense_MAPI {
 
 	/**
 	 * Format ad type and size strings from Google for display
+	 *
+	 * @param Advanced_Ads_Ad_Network_Ad_Unit $ad_unit the ad unit for which to format the details.
+	 * @param string                          $format takes either type or size.
+	 *
+	 * @return string
 	 */
-	public static function format_ad_data( $str = '', $format = 'type' ) {
-		if ( 'type' == $format ) {
-			$str = str_replace( '_', ', ', $str );
-			$str = strtolower( $str );
-			$str = ucwords( $str );
-		} else {
+	public static function format_ad_data( Advanced_Ads_Ad_Network_Ad_Unit $ad_unit, $format = 'type' ) {
+		if ( 'type' === $format ) {
+			$str     = $ad_unit->display_type;
+			$options = self::get_option();
+			if ( array_key_exists( $ad_unit->id, $options['ad_codes'] ) ) {
+				preg_match_all( '/data-ad-format="(?<format>.+?)"|data-ad-layout="(?<layout>.+?)"/', $options['ad_codes'][ $ad_unit->id ], $matches );
+				$format = array_filter( $matches['format'] );
+				$layout = array_filter( $matches['layout'] );
+				$format = reset( $format );
+				$layout = reset( $layout );
+				if ( empty( $format ) ) {
+					$format = '';
+				}
+				if ( empty( $layout ) ) {
+					$layout = '';
+				}
+
+				if ( 'autorelaxed' === $format ) {
+					$str = _x( 'Matched Content', 'AdSense ad type', 'advanced-ads' );
+				} elseif ( 'fluid' === $format ) {
+					if ( 'in-article' === $layout ) {
+						$str = _x( 'In-article', 'AdSense ad type', 'advanced-ads' );
+					} else {
+						$str = _x( 'In-feed', 'AdSense ad type', 'advanced-ads' );
+					}
+				}
+			}
+			if ( strpos( $str, 'TEXT' ) !== false ) {
+				$str = _x( 'Display', 'AdSense ad type', 'advanced-ads' );
+			} elseif ( 'LINK' === $str ) {
+				$str = _x( 'Link', 'AdSense ad type', 'advanced-ads' );
+			}
+		} elseif ( 'size' === $format ) {
 			// size.
+			$str = $ad_unit->display_size;
 			$str = str_replace( 'SIZE_', '', $str );
 			$str = str_replace( '_', 'x', $str );
 			$str = strtolower( $str );
 			$str = ucwords( $str );
+		} else {
+			$str = '';
 		}
+
 		return $str;
 	}
 

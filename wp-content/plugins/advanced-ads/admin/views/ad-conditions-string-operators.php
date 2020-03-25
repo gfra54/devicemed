@@ -3,10 +3,10 @@
  * Render select field for matching-technique of string-based Display Conditions
  *
  * @package   Advanced_Ads_Admin
- * @author    Thomas Maier <thomas.maier@webgilde.com>
+ * @author    Thomas Maier <support@wpadvancedads.com>
  * @license   GPL-2.0+
  * @link      https://wpadvancedads.com
- * @copyright since 2013 Thomas Maier, webgilde GmbH
+ * @copyright since 2013 Thomas Maier, Advanced Ads GmbH
  */
 ?><select name="<?php echo $name; ?>[operator]">
 	<option value="contain" <?php selected( 'contain', $operator ); ?>><?php esc_attr_e( 'contains', 'advanced-ads' ); ?></option>

@@ -44,9 +44,9 @@ window.advadsGAPassiveAds = {};
 					event.ad_ids = {};
 				}
 				
-				if ( 'ga' == advads_tracking_methods[ blogID ] ) {
+				for ( var blogID in event.ad_ids ) {
 					
-					for ( var blogID in event.ad_ids ) {
+					if ( 'ga' == advads_tracking_methods[ blogID ] ) {
 						
 						for ( var i in event.ad_ids[ blogID ] ) {
 							
@@ -56,13 +56,13 @@ window.advadsGAPassiveAds = {};
 								if ( 'undefined' != typeof advads_items.showed && -1 !== advads_items.showed.indexOf( HTMLID ) ) {
 									// this is a trigger-able ad. will be tracked on display if using frontend or ga method
 									continue;
-								} else {
-									if ( 'undefined' == typeof advadsGAAjaxAds[ blogID ] ) {
-										advadsGAAjaxAds[ blogID ] = [];
-									}
-									advadsGAAjaxAds[ blogID ].push( event.ad_ids[ blogID ][ i ] );
 								}
 								
+							} else {
+								if ( 'undefined' == typeof advadsGAAjaxAds[ blogID ] ) {
+									advadsGAAjaxAds[ blogID ] = [];
+								}
+								advadsGAAjaxAds[ blogID ].push( event.ad_ids[ blogID ][ i ] );
 							}
 							
 						}
@@ -72,22 +72,45 @@ window.advadsGAPassiveAds = {};
 				}
 				
 			}
+			
         } );
     }
 	
 	function triggerTrack( ev ) {
-		
 		var bid = $( ev.target ).attr( 'data-advadstrackbid' );
 		var id = parseInt( $( ev.target ).attr( 'data-advadstrackid' ) );
+		
 		if ( ! bid ) {
-			return;
+			if ( $( ev.target ).find( '[data-advadstrackbid]' ).length ) {
+				var ads = {};
+				$( ev.target ).find( '[data-advadstrackbid]' ).each( function() {
+					bid = $( this ).attr( 'data-advadstrackbid' );
+					id = parseInt( $( this ).attr( 'data-advadstrackid' ) );
+					if ( 'undefined' == typeof ads[ bid ] ) {
+						ads[ bid ] = [];
+					}
+					ads[ bid ].push( id );
+				} );
+				for ( var bid in ads ) {
+					
+					if ( 'ga' == advads_tracking_methods[ bid ] || advads_tracking_parallel[ bid ] ) {
+						advads_gadelayed_track_event( ev );
+					} else {
+						$.post( advads_tracking_urls[ bid ],{action:advadsTracking.ajaxActionName,ads:ads[ bid ]}, function(response) {} );
+					}
+					
+				}
+			} else {
+				return;
+			}
+		} else {
+			if ( 'ga' == advads_tracking_methods[ bid ] || advads_tracking_parallel[ bid ] ) {
+				advads_gadelayed_track_event( ev );
+			} else {
+				$.post( advads_tracking_urls[ bid ],{action:advadsTracking.ajaxActionName,ads:[ id ]}, function(response) {} );
+			}
 		}
 		
-		if ( 'ga' == advads_tracking_methods[ bid ] || advads_tracking_parallel[ bid ] ) {
-			advads_gadelayed_track_event( ev );
-		} else {
-			$.post( advads_tracking_urls[bid],{ads:[id]}, function(response) {} );
-		}
 	}
 	
 	/**
@@ -217,7 +240,7 @@ function advads_tracking_utils() {
 					if ( 'undefined' == typeof result[j] ) {
 						result[j] = args[i][j];
 					} else {
-						if ( 'function'== typeof result[j].concat ) {
+						if ( 'function' == typeof result[j].concat ) {
 							result[j] = result[j].concat( args[i][j] );
 						}
 					}
@@ -298,7 +321,7 @@ function advads_track_ads( advads_ad_ids, server ) {
 							for( var j in passiveDelayed[bid] ) {
 								advadsGAPassiveAds[bid].splice( advadsGAPassiveAds[bid].indexOf( passiveDelayed[j] ), 1 );
 							}
-							jQuery.post( advads_tracking_urls[bid], {ads:passiveDelayed[bid]}, function(response) {} );
+							jQuery.post( advads_tracking_urls[bid], {ads:passiveDelayed[bid],action:advadsTracking.ajaxActionName}, function(response) {} );
 						}
 					}
 					
@@ -310,6 +333,7 @@ function advads_track_ads( advads_ad_ids, server ) {
 						advads_tracking_utils( 'hasAd', advads_tracking_utils( 'adsByBlog', advads_ad_ids, bid ) ) &&
 						-1 != ['onrequest','shutdown'].indexOf( advads_tracking_methods[bid] )
 					) {
+						data.action = advadsTracking.ajaxActionName;
 						jQuery.post( advads_tracking_urls[bid], data, function(response) {} );
 					}
 					
@@ -342,13 +366,14 @@ function advads_track_ads( advads_ad_ids, server ) {
 				}
 				
 				if ( data.ads.length ) {
+					data.action = advadsTracking.ajaxActionName;
 					jQuery.post( advads_tracking_urls[bid], data, function(response) {} );
 				}
 			}
 		} else {
 			if ( 'analytics' != server ) {
 				// just send tracking data to the server
-				jQuery.post( advads_tracking_urls[bid], {ads:data.ads}, function(response) {} );
+				jQuery.post( advads_tracking_urls[bid], {ads:data.ads,action:advadsTracking.ajaxActionName}, function(response) {} );
 			}
 		}
 		

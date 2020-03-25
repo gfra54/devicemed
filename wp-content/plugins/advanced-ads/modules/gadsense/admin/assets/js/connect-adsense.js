@@ -52,10 +52,10 @@
             
             var that = this;
             
-            // Close the modal.
+            // Close the modal and hide errors.
             $( document ).on( 'click', '#gadsense-modal .dashicons-dismiss', function(){
                 $( '#mapi-code' ).val( '' );
-                $( '#gadsense-modal' ).css( 'display', 'none' );
+                $( '#gadsense-modal, #gadsense-modal-error' ).css( 'display', 'none' );
             } );
             
             // Confirm code for account connection.
@@ -64,6 +64,7 @@
                 var code = $( '#mapi-code' ).val();
                 if ( '' == code ) return;
                 $( '.gadsense-overlay' ).css( 'display', 'block' );
+                $( '#gadsense-modal-error' ).hide();
                 var data = {
                     action: 'advads_gadsense_mapi_confirm_code',
                     code: code,
@@ -90,6 +91,15 @@
                             $( '#mapi-code' ).val( '' );
                             $( '#mapi-autoads' ).prop( 'checked', false );
                             $( '#gadsense-modal-content-inner .dashicons-dismiss' ).trigger( 'click' );
+                            if ($.parseJSON(response.response_body).error === 'invalid_grant') {
+                                $('#gadsense-modal-error').show();
+
+                                $('#gadsense-reopen-connect').one('click', function (event) {
+                                    event.preventDefault();
+                                    $('#gadsense-modal-error').hide();
+                                    that.show();
+                                });
+                            }
                         }
                     },
                     error:function(request, status, error){
@@ -124,9 +134,12 @@
                         nonce: AdsenseMAPI.nonce,
                         account : details[ adsenseID ],
                         'token_data': tokenData,
-                        autoads: $( '#mapi-autoads' ).prop( 'checked' ),
                     };
                     
+					if ( $( '#mapi-autoads' ).prop( 'checked' ) ) {
+						data['autoads'] = 1;
+					}
+					
                     $.ajax({
                         url: ajaxurl,
                         type: 'post',
@@ -156,7 +169,7 @@
             };
             data['token_data'] = tokenData;
             if ( $( '#mapi-autoads' ).prop( 'checked' ) ) {
-                data['autoads'] = true;
+                data['autoads'] = 1;
             }
             
             $.ajax({

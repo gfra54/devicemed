@@ -124,7 +124,7 @@ class Advanced_Ads_Pro_Placement_Tests {
 				}
 			}
 			// save test if it contains > 1 placements
-			if ( count( $new_placements > 1 ) ) {
+			if ( count( $new_placements ) > 1 ) {
 				$placement_tests[ $test_id ] = array(
 					'user_id' => get_current_user_id(),
 					'placements' => $new_placements,

@@ -82,7 +82,7 @@ class Advanced_Ads_Groups_List {
 	}
 
 	/**
-	 * render list rows
+	 * Render list rows
 	 */
 	public function render_rows() {
 		foreach ( $this->groups as $_group ) {
@@ -355,7 +355,7 @@ class Advanced_Ads_Groups_List {
 
 		echo '<div class="row-actions">';
 		foreach ( $actions as $action => $link ) {
-			echo "<span class='$action'>$link</span>";
+			echo "<span class='" . esc_attr( $action ) . "'>" . wp_kses( $link, array( 'a' => array( 'class' => array(), 'href' => array() ) ) ) . '</span>';
 		}
 		echo '</div>';
 	}
@@ -378,7 +378,7 @@ class Advanced_Ads_Groups_List {
 
 		if ( isset( $_POST['advads-group-name'] ) && '' !== $_POST['advads-group-name'] ) {
 
-			$title     = sanitize_text_field( $_POST['advads-group-name'] );
+			$title     = sanitize_text_field( wp_unslash( $_POST['advads-group-name'] ) );
 			$new_group = wp_create_term( $title, Advanced_Ads::AD_GROUP_TAXONOMY );
 
 			if ( is_wp_error( $new_group ) ) {
@@ -390,11 +390,13 @@ class Advanced_Ads_Groups_List {
 				$group = new Advanced_Ads_Group( $new_group['term_id'] );
 
 				// allow other add-ons to save their own group attributes.
-				$atts = apply_filters( 'advanced-ads-group-save-atts', array(
-					'type'     => 'default',
-					'ad_count' => 1,
-					'options'  => array(),
-				),
+				$atts = apply_filters(
+					'advanced-ads-group-save-atts',
+					array(
+						'type'     => 'default',
+						'ad_count' => 1,
+						'options'  => array(),
+					),
 					$group
 				);
 
@@ -453,14 +455,13 @@ class Advanced_Ads_Groups_List {
 
 		$all_weights = get_option( 'advads-ad-weights', array() );
 
-		// ad_id => group_ids
 		$ad_groups_assoc = array();
 
 		if ( isset( $_POST['advads-groups-removed-ads'] ) && is_array( $_POST['advads-groups-removed-ads'] ) && isset( $_POST['advads-groups-removed-ads-gid'] ) ) {
 			$len = count( $_POST['advads-groups-removed-ads'] );
 			for ( $i = 0; $i < $len; $i ++ ) {
-				$ad_id                     = $_POST['advads-groups-removed-ads'][ $i ];
-				$group_id                  = $_POST['advads-groups-removed-ads-gid'][ $i ];
+				$ad_id                     = absint( wp_unslash( $_POST['advads-groups-removed-ads'][ $i ] ) );
+				$group_id                  = absint( wp_unslash( $_POST['advads-groups-removed-ads-gid'][ $i ] ) );
 				$ad_groups_assoc[ $ad_id ] = array();
 				// remove it from the weights.
 				if ( isset( $all_weights[ $group_id ] ) && isset( $all_weights[ $group_id ][ $ad_id ] ) ) {
@@ -469,7 +470,7 @@ class Advanced_Ads_Groups_List {
 				// we need to load all the group ids, that are allocated to this ad and then remove the right one only.
 				$group_ids = $this->get_groups_by_ad_id( $ad_id );
 				foreach ( $group_ids as $gid ) {
-					if ( $gid != $group_id ) {
+					if ( $gid !== $group_id ) {
 						$ad_groups_assoc[ $ad_id ][] = $gid;
 					}
 				}
@@ -478,9 +479,10 @@ class Advanced_Ads_Groups_List {
 
 
 		// iterate through groups.
-		if ( isset( $_POST['advads-groups'] ) && count( $_POST['advads-groups'] ) ) {
+		$post_ad_groups = isset( $_POST['advads-groups'] ) ? wp_unslash( $_POST['advads-groups'] ) : array();
+		if ( count( $post_ad_groups ) ) {
 
-			foreach ( $_POST['advads-groups'] as $_group_id => $_group ) {
+			foreach ( $post_ad_groups as $_group_id => $_group ) {
 
 				// save basic wp term.
 				wp_update_term( $_group_id, Advanced_Ads::AD_GROUP_TAXONOMY, $_group );
@@ -513,7 +515,6 @@ class Advanced_Ads_Groups_List {
 
 					// save ad weights.
 					$all_weights[ $group->id ] = $group->sanitize_ad_weights( $_group['ads'] );
-					//$group->save_ad_weights( $_group['ads'] );
 				}
 
 				// save other attributes.
@@ -522,11 +523,14 @@ class Advanced_Ads_Groups_List {
 				$options  = isset( $_group['options'] ) ? $_group['options'] : array();
 
 				// allow other add-ons to save their own group attributes.
-				$atts = apply_filters( 'advanced-ads-group-save-atts', array(
-					'type'     => $type,
-					'ad_count' => $ad_count,
-					'options'  => $options,
-				), $_group );
+				$atts = apply_filters( 'advanced-ads-group-save-atts',
+					array(
+						'type'     => $type,
+						'ad_count' => $ad_count,
+						'options'  => $options,
+					),
+					$_group
+				);
 
 				$group->save( $atts );
 			}
@@ -556,10 +560,10 @@ class Advanced_Ads_Groups_List {
 	public static function group_page_url( $args = array() ) {
 		$plugin = Advanced_Ads::get_instance();
 
-		$defaultargs = array(
+		$default_args = array(
 			'page' => 'advanced-ads-groups',
 		);
-		$args        = $args + $defaultargs;
+		$args         = $args + $default_args;
 
 		return add_query_arg( $args, admin_url( 'admin.php' ) );
 	}

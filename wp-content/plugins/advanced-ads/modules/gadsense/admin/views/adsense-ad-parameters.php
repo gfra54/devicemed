@@ -41,11 +41,6 @@ $mapi_ad_codes['length'] = count( $mapi_ad_codes );
     AdsenseMAPI.pubId = '<?php echo $pub_id ?>';
     AdsenseMAPI.adStatus = '<?php echo $ad->status ?>';
     AdsenseMAPI.unsupportedUnits = <?php echo wp_json_encode( $mapi_options['unsupported_units'] ); ?>;
-    AdsenseMAPI.unsupportedLink = '<?php echo Advanced_Ads_AdSense_MAPI::UNSUPPORTED_TYPE_LINK; ?>';
-    AdsenseMAPI.unsupportedText = '<?php /**
-         * translators: this is a label for an ad that we can currently not import from the AdSense account
-     */
-    esc_html_e( 'unsupported', 'advanced-ads' ); ?>';
 </script>
 <?php endif; // if ( $has_token ) ?>
 
@@ -115,8 +110,8 @@ if( $pub_id_errors ) : ?>
 	    <option value="matched-content" <?php selected( $unit_type, 'matched-content' ); ?>><?php _e( 'Responsive (Matched Content)', 'advanced-ads' ); ?></option>
 	    <option value="link" <?php selected( $unit_type, 'link' ); ?>><?php _e( 'Link ads', 'advanced-ads' ); ?></option>
 	    <option value="link-responsive" <?php selected( $unit_type, 'link-responsive' ); ?>><?php _e( 'Link ads (Responsive)', 'advanced-ads' ); ?></option>
-	    <option value="in-article" <?php selected( $unit_type, 'in-article' ); ?>><?php _e( 'InArticle', 'advanced-ads' ); ?></option>
-	    <option value="in-feed" <?php selected( $unit_type, 'in-feed' ); ?>><?php _e( 'InFeed', 'advanced-ads' ); ?></option>
+	    <option value="in-article" <?php selected( $unit_type, 'in-article' ); ?>><?php _e( 'In-article', 'advanced-ads' ); ?></option>
+	    <option value="in-feed" <?php selected( $unit_type, 'in-feed' ); ?>><?php _e( 'In-feed', 'advanced-ads' ); ?></option>
 	</select>
 	<a href="<?php echo ADVADS_URL . 'adsense-ads/#utm_source=advanced-ads&utm_medium=link&utm_campaign=adsense-ad-types'; ?>" target="_blank"><?php _e( 'manual', 'advanced-ads' ); ?></a>
     </div>
@@ -129,13 +124,15 @@ if( $pub_id_errors ) : ?>
 	<?php endforeach; ?>
 	</select>
     </div>
+    <hr>
     <label class="label advads-adsense-layout" <?php if ( 'in-feed' !== $unit_type ) { echo 'style="display: none;"'; } ?> id="advads-adsense-layout"><?php _e( 'Layout', 'advanced-ads' ); ?></label>
     <div <?php if ( 'in-feed' !== $unit_type ) { echo 'style="display: none;"'; } ?>>
 	<input name="ad-layout" id="ad-layout" value="<?php echo isset( $layout ) ? $layout : ''; ?>"/>
     </div>
+    <hr>
     <label class="label advads-adsense-layout-key" <?php if ( 'in-feed' !== $unit_type ) { echo 'style="display: none;"'; } ?> id="advads-adsense-layout-key"><?php _e( 'Layout-Key', 'advanced-ads' ); ?></label>
     <div <?php if ( 'in-feed' !== $unit_type ) { echo 'style="display: none;"'; } ?>>
-	<input name="ad-layout-key" id="ad-layout-key" value="<?php echo isset( $layout_key ) ? $layout_key : ''; ?>"/>
+	<input type="text" name="ad-layout-key" id="ad-layout-key" value="<?php echo isset( $layout_key ) ? $layout_key : ''; ?>"/>
     </div>
     <hr/>
 	<label class="label clearfix-before" <?php if ( ! $is_responsive ) { echo 'style="display: none;"'; } ?>><?php _e( 'Clearfix', 'advanced-ads' ); ?></label>

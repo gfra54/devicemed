@@ -1,15 +1,13 @@
 === Advanced Ads – Ad Tracking ===
-Contributors: webzunft
-Tags: ads, ad, banner, adverts, advertisement, browser, ad stats, ad tracking, ad tracker
-Requires at least: WP 4.9, Advanced Ads 1.12
-Tested up to: 5.2.2
-Stable tag: 1.8.17
+Requires at least: WP 4.9
+Tested up to: 5.3.2
+Stable tag: 1.20
 
 Track ad impressions and clicks.
 
 == Copyright ==
 
-Copyright 2015 – 2019, Thomas Maier, webgilde.com
+Copyright 2014-2020, Thomas Maier, Advanced Ads GmbH, https://wpadvancedads.com/
 
 This plugin is not to be distributed after purchase. Arrangements to use it in themes and plugins can be made individually.
 The plugin is distributed in the hope that it will be useful,
@@ -73,6 +71,27 @@ Before using this plugin download, install and activate Advanced Ads for free fr
 You can use Advanced Ads along any other ad management plugin and don’t need to switch completely.
 
 == Changelog ==
+
+= 1.20 =
+
+* fixed CTR on ad overview list
+* fixed ad stats being summed up as "Deleted ads" on the Stats page if they are from another language as set up in the WPML plugin
+
+= 1.19 =
+
+* added option to track ads that have a trigger only when they show up (applies to users of the Sticky Ads and PopUp add-ons)
+* prevent browsers from caching the click-tracking redirect
+* decrease height of ad stats graph
+* show click-through-rate on ad overview page
+* fixed bug with Google Analytics tracking + Cache Busting + Lazy Load not tracking reliably
+
+= 1.8.18 =
+
+* added debug modus under Advanced Ads > Stats > Database management
+* added option to remove stats for deleted ads on the database management page
+* some layout improvements to the graphs
+* prevent ad blockers from breaking AJAX tracking
+* fixed wrong number format in the stats graph
 
 = 1.8.17 =
 

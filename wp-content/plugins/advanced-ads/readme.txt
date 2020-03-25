@@ -1,11 +1,10 @@
 === Advanced Ads – Ad Manager & AdSense ===
 Contributors: webzunft, advancedads
-Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5RRRCEBGN3UT2
 Tags: ads, ad manager, ad rotation, adsense, banner
 Requires at least: 4.6
-Tested up to: 5.2
+Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: 1.14.8
+Stable tag: 1.17.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,12 +15,12 @@ Manage and optimize your ads. All ad codes, Google AdSense Auto ads, ad widget, 
 Are you looking for a simple ad manager plugin? These are the top arguments to use Advanced Ads:
 
 * approved in 10 years of Publishing and Ad Optimization
+* works with all ad types and networks, including Google AdSense, Google Ad Manager (DFP), Amazon ads, or media.net
 * Google AdSense Partner
 * most features to test and optimize ads
 * unlimited ad units
 * ads.txt support
 * dedicated Gutenberg block for ads
-* works with all ad types and networks (e.g. Google AdSense, Google Ad Manager, or Amazon ads)
 * the only solution with *Ad Health* integration and Google AdSense violation checks
 * best rated [free support](https://wordpress.org/support/plugin/advanced-ads)
 
@@ -32,7 +31,7 @@ This is what our users are saying about Advanced Ads:
 
 Would you like to know if there is a certain feature, what the optimized setup would be, or how to implement your client’s demands? Just [open a thread in the forum](https://wordpress.org/support/plugin/advanced-ads#new-post)!
 
-Based on my experience as a publisher with millions of monthly served ads, I've developed this ad management plugin for WordPress when no other solution offered testing and optimization features. It allowed us to grow to 100 MM monthly ad impressions. Benefit from this knowledge about advertising and monetize your website today!
+Advanced Ads allowed us to grow from 0 to 100 MM monthly ad impressions. Benefit from our experience as a publisher and monetize your website today!
 
 [Full Feature List](https://wpadvancedads.com/features/).
 
@@ -84,7 +83,7 @@ show ads based on conditions like:
 serve ads by conditions based on the visitor. [List of all visitor conditions](https://wpadvancedads.com/manual/visitor-conditions/)
 
 * display or hide a banner by device: mobile and tablet or desktop
-* display or hide a banner by role and for logged in visitors
+* display or hide a banner by role and for logged-in visitors
 * advanced visitor conditions: previously visited URL (referrer), user capability, browser language, browser and device, URL parameters included in [Pro](https://wpadvancedads.com/add-ons/advanced-ads-pro/)
 * display ads by geolocation with the [Geo Targeting add-on](https://wpadvancedads.com/add-ons/geo-targeting/)
 * display ads by browser width with the [Responsive add-on](https://wpadvancedads.com/add-ons/responsive-ads/)
@@ -131,6 +130,7 @@ Amazing features of the most powerful and easy Google AdSense plugin.
 * assistant for exact sizes of responsive Google AdSense code with the [Responsive add-on](https://wpadvancedads.com/add-ons/responsive-ads/)
 * convert Google AdSense ads into AMP ads automatically with the [Responsive add-on](https://wpadvancedads.com/add-ons/responsive-ads/)
 * ads.txt generated with the correct AdSense information automatically
+* works along Google Site Kit or can replace if it you want to [control your ad placements](https://wpadvancedads.com/place-adsense-ad-unit-manually/)
 
 Like j4ckson185, there are thousands of happy AdSense users:
 
@@ -262,6 +262,7 @@ Yes. I would add a "Manual" placement into your theme files. It would allow you 
 Yes. Advanced Ads can be combined with other ad plugins.
 Just use their shortcodes in our "Rich Media" ad type to combine both features.
 Works with AdRotate, Ad Inserter, Ad Injection, Quick AdSense, Quick AdSense Reloaded (WPQUADS), Simple Ads Manager, and other plugins.
+Advanced Ads can be used along Google Site Kit or replace it if you need more control over your ad setup.
 
 = Can I use Flash ads? =
 
@@ -303,6 +304,96 @@ Yes. Advanced Ads is based on WordPress standards and therefore easily customiza
 
 == Changelog ==
 
+= 1.17.5 =
+
+* fixed ads being injected multiple times when using the Newspaper theme or multiple the_content filters
+
+= 1.17.4 =
+
+* added option and Display Condition to disable ads in content served through the REST API
+* made error notices less obstrusive
+* code style optimizations
+* fixed ad groups form on ad edit page
+* fixed potential conflict with autoloader
+
+= 1.17.3 =
+
+* prevented content injection into specific elements where ads cause issues
+* assign `advads-stop-injection` class to any element into which you don’t want to automatically inject ads
+* fixed possible cURL error when checking existing ads.txt file locally
+
+= 1.17.2 =
+
+* replaced autoloader
+* fixed an issue where an expired ad removed HTML in the ad code
+
+= 1.17.1 =
+
+* fixed failing upload of new image ads
+* fixed Google Ad Manager debug link also showing up when other Google Publisher Tags are used
+
+= 1.17 =
+
+* improved AdSense ad unit list coming from the AdSense API
+* improved "highlight ads" option in Ad Health
+* show notice if AJAX calls are broken
+* added `com.pl` as exception for placing ads.txt files in subdomains
+* removed placeholder for AdSense ads in the Customizer and Elementor editor
+* fix for WP Smush lazy load preventing image ads from showing at all
+
+= 1.16.1 =
+
+* fixed JavaScript that broke privacy module check in the frontend
+* allow to change size of AdSense ads loaded from the AdSense account
+
+= 1.16 =
+
+* moved all users to the new content injection logic and removed opt-out option
+* use new Auto ads code for everyone who didn’t enable the "Disable top anchor ads" option
+* hide "Disable top anchor ads" option to users who didn’t enable it
+* the Ad Admin user role can now also save the plugin settings
+* hide Wizard for existing ads
+* removed warning about WP Autoterms plugin after a fix by the plugin authors
+* some work for Conditions to improve compatibility with an upcoming Pro feature
+* fixed multiple wrappers occurred as result of using nested ads
+* fixed missing index issue on 404 pages for logged-in admins
+* fixed AJAX/PHP error 403 on Settings page
+* fixed layout issue that happened when "If>So Dynamic Content" plugin was active
+* prevented Ad label from taking height of fixed sized AdSense ads
+
+= 1.15 =
+
+* please enable the new content injection method under Advanced Ads > Settings > General > Content Injection > Use new injection logic
+* rewritten content injection to prevent HTML markup modifications
+* rewritten code for Display and Visitor Condition form fields on ad edit pages
+* allow to replace existing ads.txt file with the option provided by Advanced Ads
+* prevented duplicated SQL query when a group contains no ads
+* added warning for WP AutoTerms plugin, which prevents ads from showing on category archive pages
+
+= 1.14.11 =
+
+* moved placement form above the list of existing placements
+* made "ads.txt" file available before the Settings page is saved
+* removed leading and trailing spaces from privacy options to prevent accidental misconfiguration
+* implementing coding standards in a few backend files
+* fixed welcome panel not showing up
+* fix for plugins using the "pre_option_upload_path" or "pre_option_upload_url_path" filters
+
+= 1.14.10 =
+
+* creating unique slugs for the ad post type in order to prevent conflicts like found with Beaver Builder
+* added option to disable AdSense stats in the backend
+* fixed conflicts when $ (jQuery) was not available
+* fixed potential JS conflict in Wizard script
+* added a warning suggesting to install "dom" extension in order to use "Content" placement
+
+= 1.14.9 =
+
+* fixed deprecated notices causing a warning
+* fixed possible missing class error
+* replaced AdSense in widgets with dummy ads on Elementor preview pages to prevent issues
+* removed unneeded warning about early called `advads_is_amp` function
+
 = 1.14.8 =
 
 * replaced AdSense with dummy ads on Customizer and Elementor preview pages to prevent issues
@@ -314,7 +405,6 @@ Yes. Advanced Ads is based on WordPress standards and therefore easily customiza
 * allow "Footer code" and "Sidebar Widget" placements on AMP pages created by the official AMP plugin
 * prevented AMP warnings on XMLRPC requests
 * removed unused debug function
-* made editing of AdSense ads possible in PHP < 5.5.10 (please note that Advanced Ads is recommended for PHP > 5.6)
 
 = 1.14.6 =
 
@@ -554,10 +644,9 @@ Yes. Advanced Ads is based on WordPress standards and therefore easily customiza
 
 == Upgrade Notice ==
 
-= 1.11.1 =
+= 1.15 =
 
-* fixed AdSense code field not working if AdSense connection is missing
+We have rewritten the content injection method. For the next weeks, new users opt in by default, existing ones need to opt in manually.
+As existing user, please enable the new content injection method under Advanced Ads > Settings > General > Content Injection > Use new injection logic.
 
-= 1.11 =
-
-Improves AdSense onboarding
+Please report any issues.

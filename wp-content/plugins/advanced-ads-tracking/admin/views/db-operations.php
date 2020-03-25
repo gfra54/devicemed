@@ -5,6 +5,17 @@ if ( ! defined( 'WPINC' ) ) {
 if ( !current_user_can( advanced_ads_tracking_db_cap() ) ) {
 	return;
 }
+
+$_request = wp_unslash( $_REQUEST );
+if ( isset( $_request['delete-debug-nonce'] ) ) {
+	if ( false !== wp_verify_nonce( $_request['delete-debug-nonce'], 'delete-debug-log' ) ) {
+		if ( file_exists( WP_CONTENT_DIR . '/advanced-ads-tracking.csv' ) ) {
+			require_once AAT_BASE_PATH . 'admin/views/deleted-ads-form.php';
+			return;
+		}
+	}
+}
+
 $vars = array(
 	'nonce' => wp_create_nonce( 'advads_tracking_dbop' ),
 	'adminImageUrl' => admin_url( '/images/' ),
@@ -19,6 +30,25 @@ $db_warn = array();
 if ( get_transient( Advanced_Ads_Tracking_Dbop::SIZE_TRANS ) ) {
 	$db_warn[] = Advanced_Ads_Tracking_Dbop::get_instance()->get_warning_message();
 }
+$deleted_ads = Advanced_Ads_Tracking_Dbop::get_instance()->get_deleted_ads();
+
+$debug_option = get_option( Advanced_Ads_Tracking_Util::DEBUG_OPT, false );
+
+$debug_ad = false;
+$debug_time = array(
+	'hours' => 0,
+	'mins' => 0,
+);
+
+if ( $debug_option ) {
+	$rem_time = $debug_option['time'] + ( 24 * 3600 ) - time() ;
+	$debug_time['hours'] = floor( $rem_time / 3600 );
+	$debug_time['mins'] = floor( ( $rem_time - ( 3600 * $debug_time['hours'] ) ) / 60 );
+}
+
+if ( $debug_option && is_numeric( $debug_option['id'] ) ) {
+	$debug_ad = get_post( $debug_option['id'] );
+}
 
 ?><style type="text/css">
 #db-warnings { background:#fff; border-left:4px solid #fff; box-shadow:0 1px 1px 0 rgba(0,0,0,.1);padding:1px 12px;border-left-color:#dc3232;margin: 5px 0 15px;}
@@ -29,6 +59,7 @@ if ( get_transient( Advanced_Ads_Tracking_Dbop::SIZE_TRANS ) ) {
 var advadsTrackingDbopVars = <?php echo json_encode( $vars ); ?>;
 </script>
 <div class="wrap">
+	<div id="dbop-modal"></div>
 	<h1><?php _e( 'Tracking database', 'advanced-ads-tracking' ); ?></h1>
 	<table class="widefat">
 		<thead><tr>
@@ -55,6 +86,7 @@ var advadsTrackingDbopVars = <?php echo json_encode( $vars ); ?>;
 		</tr>
 		</tbody>
 	</table>
+	
 	<?php if ( $db_size['first_impression'] ) : ?>
 		<?php
 		if ( $db_warn ) {
@@ -72,7 +104,8 @@ var advadsTrackingDbopVars = <?php echo json_encode( $vars ); ?>;
 			'period-options' => Advanced_Ads_Tracking_Dbop::get_instance()->get_export_periods(),
 		);
 		?>
-	<br/><div class="form-wrap">
+		<br/>
+		<div class="form-wrap">
 			<label><strong><?php _e( 'Export stats', 'advanced-ads-tracking' ); ?></strong></label>
 			<div class="form-field">
 				<form id="export-stats-form" action="<?php echo admin_url( 'admin.php?page=advads-tracking-db-page' ) ?>" method="post">
@@ -104,12 +137,15 @@ var advadsTrackingDbopVars = <?php echo json_encode( $vars ); ?>;
 			<label><strong><?php _e( 'Reset Stats', 'advanced-ads-tracking' ); ?></strong></label>
 			<div class="form-field">
 				<form id="reset-stats-form" action="<?php echo admin_url( 'admin.php?page=advads-tracking-db-page' ) ?>" method="post">
-					<?php $all_ads = Advanced_Ads::get_ads( array( 'post_status' => array( 'publish', 'future', 'draft', 'pending' ) ) ); ?>
+					<?php $all_ads = Advanced_Ads::get_ads( array( 'post_status' => array( 'publish', 'future', 'draft', 'pending' ), 'orderby' => 'title', 'order' => 'ASC' ) ); ?>
 					<select id="reset-stats-adID">
 					<?php if ( !empty( $all_ads ) ) : ?>
 						<option value=""><?php _e('(please choose the ad)', 'advanced-ads-tracking'); ?></option>
 					<?php endif; ?>
 						<option value="all-ads"><?php _e( '--all ads--', 'advanced-ads-tracking' ); ?></option>
+					<?php if ( ! empty( $deleted_ads['impressions'] ) || ! empty( $deleted_ads['impressions'] ) ) : ?>
+						<option value="deleted-ads"><?php esc_html_e( '--deleted ads--', 'advanced-ads-tracking' ); ?></option>
+					<?php endif; ?>
 					<?php foreach ( $all_ads as $ad ) : ?>
 							<option value="<?php echo $ad->ID; ?>"><?php echo $ad->post_title; ?></option>
 					<?php endforeach; ?>
@@ -120,7 +156,76 @@ var advadsTrackingDbopVars = <?php echo json_encode( $vars ); ?>;
 				<p id="reset-error-notice" class="advads-error-message"></p>
 			</div>
 		</div>
+
+		<?php $all_ads = Advanced_Ads::get_ads( array( 'post_status' => array( 'publish' ), 'orderby' => 'title', 'order' => 'ASC' ) ); ?>
+		<?php if ( !empty( $all_ads ) ) : ?>
+		
+		<div class="form-wrap">
+			<label><strong><?php _e( 'Debug mode', 'advanced-ads-tracking' ); ?></strong></label>
+			<div class="form-field">
+				<form id="debug-mode-form" action="<?php echo admin_url( 'admin.php?page=advads-tracking-db-page' ) ?>" method="post">
+					
+					<?php if ( $debug_option ) : ?>
+						
+						<?php if ( true === $debug_option['id'] ) {
+							$the_ad = esc_html__( '--all ads--', 'advanced-ads-tracking' );
+						} else {
+							$the_ad = '"' . $debug_ad->post_title . '"';
+						}
+						?>
+						
+						<p><strong style="color:#ff5c1e;"><?php
+							esc_html( printf(
+								__( 'Debugging %s for another %s hour(s) %s minutes(s).', 'advanced-ads-tracking' ),
+								$the_ad,
+								$debug_time['hours'],
+								$debug_time['mins']
+							) );
+						?></strong></p>
+						<input type="hidden" id="debug-mode-adID" value="cancel" />
+						<button class="button button-secondary"><?php _e( 'disable', 'advanced-ads-tracking' ); ?></button>
+						
+					<?php else : ?>
+					
+						<select id="debug-mode-adID">
+							<option value="all"><?php _e( '--all ads--', 'advanced-ads-tracking' ); ?></option>
+							<?php foreach ( $all_ads as $ad ) : ?>
+									<option value="<?php echo esc_attr( $ad->ID ); ?>"><?php echo esc_html( $ad->post_title ); ?></option>
+							<?php endforeach; ?>
+						</select>
+						<button class="button button-primary"><?php _e( 'enable', 'advanced-ads-tracking' ); ?></button>
+						<p class="description"><?php _e( 'Logs more information about tracked data for 24 hours.', 'advanced-ads-tracking' ); ?></p>
+						
+						
+					<?php endif;?>
+					
+				</form>
+			</div>
+		</div>
+		
+		<?php endif; ?>
+		
 	<?php endif; ?>
+	
+	<?php if ( file_exists( WP_CONTENT_DIR . '/advanced-ads-tracking.csv' ) ) : ?>
+	<p><?php 
+	printf(
+		__( 'View the tracking %sdebug log file%s', 'advanced-ads-tracking' ),
+		'<strong><a target="_blank" href="' . content_url( 'advanced-ads-tracking.csv' ). '">',
+		'</a></strong>'
+	);
+	?>&nbsp;|&nbsp;<?php
+	
+	$delete_debug_nonce = wp_create_nonce( 'delete-debug-log' );
+	$delete_debug_link = admin_url( 'admin.php?page=advads-tracking-db-page&delete-debug-nonce=' . $delete_debug_nonce );
+	
+	echo '<strong><a href="' . $delete_debug_link. '">';
+	esc_html_e( 'delete the file', 'advanced-ads-tracking' );
+	echo '</a></strong>';
+	?></p>
+	<?php Advanced_Ads_Filesystem::get_instance()->print_request_filesystem_credentials_modal(); ?>
+	<?php endif; ?>
+	
 	<iframe frameborder="0" hspace="0" src="" id="stats-download-frame" style="width:1px;height:1px;"></iframe>
 	<?php
 	// display current time
@@ -138,3 +243,14 @@ var advadsTrackingDbopVars = <?php echo json_encode( $vars ); ?>;
 	<li><span><?php echo $timeDb; ?> (DB)</span></li>
 	</ul></div>
 </div>
+<style type="text/css">
+#dbop-modal {
+	background-color: rgba( 255, 255, 255, .7);
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: none;
+}
+</style>

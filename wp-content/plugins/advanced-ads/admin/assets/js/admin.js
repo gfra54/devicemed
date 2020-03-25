@@ -1,9 +1,9 @@
-jQuery( document ).ready(function ($) {
-	function advads_load_ad_type_parameter_metabox(ad_type) {
-		jQuery( '#advanced-ad-type input' ).prop( 'disabled', true );
-		$( '#advanced-ads-tinymce-wrapper' ).hide();
-		$( '#advanced-ads-ad-parameters' ).html( '<span class="spinner advads-ad-parameters-spinner advads-spinner"></span>' );
-		$.ajax({
+jQuery( document ).ready( function ( $ ) {
+	function advads_load_ad_type_parameter_metabox ( ad_type ) {
+		jQuery( '#advanced-ad-type input' ).prop( 'disabled', true )
+		$( '#advanced-ads-tinymce-wrapper' ).hide()
+		$( '#advanced-ads-ad-parameters' ).html( '<span class="spinner advads-ad-parameters-spinner advads-spinner"></span>' )
+		$.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -12,546 +12,442 @@ jQuery( document ).ready(function ($) {
 				'ad_id': $( '#post_ID' ).val(),
 				'nonce': advadsglobal.ajax_nonce
 			},
-			success: function (data, textStatus, XMLHttpRequest) {
-				// toggle main content field
-				if (data) {
-					$( '#advanced-ads-ad-parameters' ).html( data ).trigger( 'paramloaded' );
-					advads_maybe_textarea_to_tinymce( ad_type );
+			success: function ( data, textStatus, XMLHttpRequest ) {
+				// toggle main content field.
+				if ( data ) {
+					$( '#advanced-ads-ad-parameters' ).html( data ).trigger( 'paramloaded' )
+					advads_maybe_textarea_to_tinymce( ad_type )
 				}
 			},
-			error: function (MLHttpRequest, textStatus, errorThrown) {
-				$( '#advanced-ads-ad-parameters' ).html( errorThrown );
+			error: function ( MLHttpRequest, textStatus, errorThrown ) {
+				$( '#advanced-ads-ad-parameters' ).html( errorThrown )
 			}
-		}).always( function ( MLHttpRequest, textStatus, errorThrown ) {
-			jQuery( '#advanced-ad-type input').prop( 'disabled', false );
-		});
-	};
+		} ).always( function ( MLHttpRequest, textStatus, errorThrown ) {
+			jQuery( '#advanced-ad-type input' ).prop( 'disabled', false )
+		} )
+	}
 
-    $( document ).on( 'click', '#switch-to-adsense-type', function( ev ) {
-        ev.preventDefault();
-		AdvancedAdsAdmin.AdImporter.adsenseCode = Advanced_Ads_Admin.get_ad_source_editor_text();
-        $( '#advanced-ad-type-adsense' ).trigger( 'click' );
-        $( this ).closest( 'li' ).addClass( 'hidden' );
-    } );
+	$( document ).on( 'click', '#switch-to-adsense-type', function ( ev ) {
+		ev.preventDefault()
+		AdvancedAdsAdmin.AdImporter.adsenseCode = Advanced_Ads_Admin.get_ad_source_editor_text()
+		$( '#advanced-ad-type-adsense' ).trigger( 'click' )
+		$( this ).closest( 'li' ).addClass( 'hidden' )
+	} )
 
-	$( document ).on('change', '#advanced-ad-type input', function () {
+	$( document ).on( 'change', '#advanced-ad-type input', function () {
 		var ad_type = $( this ).val()
-		advads_load_ad_type_parameter_metabox( ad_type );
-	});
+		advads_load_ad_type_parameter_metabox( ad_type )
+	} )
 
 	// trigger for ad injection after ad creation
-	$( '#advads-ad-injection-box .advads-ad-injection-button' ).on( 'click', function(){
+	$( '#advads-ad-injection-box .advads-ad-injection-button' ).on( 'click', function () {
 		var placement_type = this.dataset.placementType, // create new placement
-			placement_slug = this.dataset.placementSlug, // use existing placement
-			options = {};
+				placement_slug = this.dataset.placementSlug, // use existing placement
+				options        = {}
 
-		if ( ! placement_type && ! placement_slug ) { return; }
+		if ( ! placement_type && ! placement_slug ) { return }
 
 		// create new placement
 		if ( placement_type ) {
-		    // for content injection
-		    if ( 'post_content' === placement_type ) {
-				var paragraph = prompt( advadstxt.after_paragraph_promt, 1);
+			// for content injection
+			if ( 'post_content' === placement_type ) {
+				var paragraph = prompt( advadstxt.after_paragraph_promt, 1 )
 				if ( paragraph !== null ) {
-				    options.index = parseInt( paragraph, 10 );
+					options.index = parseInt( paragraph, 10 )
 				}
-		    }
-		}
-	    $( '#advads-ad-injection-box .advads-loader' ).show();
-		$( '#advads-ad-injection-box-placements' ).hide();
-	    $( 'body').animate({ scrollTop: $( '#advads-ad-injection-box' ).offset().top -40 }, 1, 'linear' );
-
-	    $.ajax({
-		type: 'POST',
-		url: ajaxurl,
-		data: {
-		    action: 'advads-ad-injection-content',
-		    placement_type: placement_type,
-		    placement_slug: placement_slug,
-		    ad_id: $( '#post_ID' ).val(),
-		    options: options,
-		    nonce: advadsglobal.ajax_nonce
-		},
-		success: function (r, textStatus, XMLHttpRequest) {
-			if ( ! r ) {
-				$( '#advads-ad-injection-box' ).html( 'an error occured'  );
-				return;
 			}
-
-		    $( '#advads-ad-injection-box *' ).hide();
-		    // append anchor to placement message
-		    $( '#advads-ad-injection-message-placement-created .advads-placement-link' ).attr( 'href', $( '#advads-ad-injection-message-placement-created a' ).attr( 'href' ) + r );
-		    $( '#advads-ad-injection-message-placement-created, #advads-ad-injection-message-placement-created *' ).show();
-		},
-		error: function (MLHttpRequest, textStatus, errorThrown) {
-			$( '#advads-ad-injection-box' ).html( errorThrown );
 		}
-	    }).always( function ( MLHttpRequest, textStatus, errorThrown ) {
-		    // jQuery( '#advanced-ad-type input').prop( 'disabled', false );
-	    });
-	});
+		$( '#advads-ad-injection-box .advads-loader' ).show()
+		$( '#advads-ad-injection-box-placements' ).hide()
+		$( 'body' ).animate( { scrollTop: $( '#advads-ad-injection-box' ).offset().top - 40 }, 1, 'linear' )
+
+		$.ajax( {
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'advads-ad-injection-content',
+				placement_type: placement_type,
+				placement_slug: placement_slug,
+				ad_id: $( '#post_ID' ).val(),
+				options: options,
+				nonce: advadsglobal.ajax_nonce
+			},
+			success: function ( r, textStatus, XMLHttpRequest ) {
+				if ( ! r ) {
+					$( '#advads-ad-injection-box' ).html( 'an error occured' )
+					return
+				}
+
+				$( '#advads-ad-injection-box *' ).hide()
+				// append anchor to placement message
+				$( '#advads-ad-injection-message-placement-created .advads-placement-link' ).attr( 'href', $( '#advads-ad-injection-message-placement-created a' ).attr( 'href' ) + r )
+				$( '#advads-ad-injection-message-placement-created, #advads-ad-injection-message-placement-created *' ).show()
+			},
+			error: function ( MLHttpRequest, textStatus, errorThrown ) {
+				$( '#advads-ad-injection-box' ).html( errorThrown )
+			}
+		} ).always( function ( MLHttpRequest, textStatus, errorThrown ) {
+			// jQuery( '#advanced-ad-type input').prop( 'disabled', false );
+		} )
+	} )
 
 	// activate general buttons
 	if ( $.fn.advads_buttonset ) {
-		$( '.advads-buttonset' ).advads_buttonset();
+		$( '.advads-buttonset' ).advads_buttonset()
 	}
 	// activate accordions
 	if ( $.fn.accordion ) {
-		$( ".advads-accordion" ).accordion({
-		    active: false,
-		    collapsible: true,
-		});
+		$( '.advads-accordion' ).accordion( {
+			active: false,
+			collapsible: true,
+		} )
 	}
 
-	$( document ).on('click', '.advads-conditions-terms-buttons .button', function (e) {
-		$( this ).remove();
-	});
-	// display input field to search for terms
-	$( document ).on('click', '.advads-conditions-terms-show-search', function (e) {
-		e.preventDefault();
-		// display input field
-		$( this ).siblings( '.advads-conditions-terms-search' ).show().focus();
-		// register autocomplete
-		advads_register_terms_autocomplete( $( this ).siblings( '.advads-conditions-terms-search' ) );
-		$( this ).next( 'br' ).show();
-		$( this ).hide();
-	});
-	// function for autocomplete
-	function advads_register_terms_autocomplete( self ){
-	    self.autocomplete({
-		    source: function(request, callback){
-			    // var searchField  = request.term;
-			    advads_term_search( self, callback );
-		    },
-		    minLength: 1,
-		    select: function( event, ui ) {
-			    // append new line with input fields
-			    $( '<label class="button ui-state-active">' + ui.item.label + '<input type="hidden" name="' + self.data('inputName') + '" value="' + ui.item.value + '"></label>' ).appendTo( self.siblings( '.advads-conditions-terms-buttons' ) );
-
-			    // show / hide other elements
-			    // $( '.advads-display-conditions-individual-post' ).hide();
-			    // $( '.advads-conditions-postids-list .show-search a' ).show();
-		    },
-		    close: function( event, ui ) {
-				    self.val( '' );
-		    }
-	    });
-	}
-	// display input field to search for post, page, etc.
-	$( document ).on( 'click', '.advads-conditions-postids-show-search', function (e) {
-		e.preventDefault();
-		// display input field
-		$( this).next().find( '.advads-display-conditions-individual-post' ).show();
-		//$( '.advads-conditions-postids-search-line .description' ).hide();
-		$( this ).hide();
-	});
-	// register autocomplete to display condition individual posts
-	$( document ).on( "focus", ".advads-display-conditions-individual-post", function(e) {
-		var self = this;
-	        if ( !$(this).data("autocomplete") ) { // If the autocomplete wasn't called yet:
-		    $( this ).autocomplete({
-			    source: function(request, callback){
-				    var searchParam  = request.term;
-				    advads_post_search( searchParam, callback );
-			    },
-			    minLength: 1,
-			    select: function( event, ui ) {
-				    // append new line with input fields
-				    var newline = $( '<label class="button ui-state-active">' + ui.item.label + '</label>' );
-				    $( '<input type="hidden" name="' + self.dataset.fieldName + '[value][]" value="' + ui.item.value + '"/>' ).appendTo( newline );
-				    newline.insertBefore( $( self ).parent( '.advads-conditions-postids-search-line' ) );
-			    },
-			    close: function( event, ui ) {
-				    $( self ).val( '' );
-			    },
-		    })
-		    .autocomplete().data("ui-autocomplete")._renderItem = function( ul, item ) {
-			ul.addClass( "advads-conditions-postids-autocomplete-suggestions" );
-			return $( "<li></li>" )
-			  .append( "<span class='left'>" + item.label + "</span>&nbsp;<span class='right'>" + item.info + "</span>" )
-			  .appendTo( ul );
-		    };
-		};
-	});
-
-	// remove individual posts from the display conditions post list
-	$( document ).on('click', '.advads-conditions-postid-buttons .button', function(e){
-		$( this ).remove();
-	});
-	// display/hide error message if no option was selected
-	// is also called on every click
-	function advads_display_condition_option_not_selected(){
-	    $( '.advads-conditions-not-selected' ).each(function(){
-		if( $( this ).siblings('input:checked').length ){
-		    $( this ).hide();
-		} else {
-		    $( this ).show();
-		}
-	    });
-	}
-	advads_display_condition_option_not_selected();
-	// update error messages when an item is clicked
-	$( document ).on( 'click', '.advads-conditions-terms-buttons input[type="checkbox"], .advads-conditions-single input[type="checkbox"]', function(){
-	    // needs a slight delay until the buttons are updated
-	    window.setTimeout( advads_display_condition_option_not_selected, 200 );
-	});
-	// activate and toggle conditions connector option
-	$('.advads-conditions-connector input').advads_button();
-	// dynamically change label
-	$(document).on('click', '.advads-conditions-connector input', function(){
-	    if( $( this ).is(':checked' ) ){
-		$( this ).advads_button( "option", "label", advadstxt.condition_or );
-		$( this ).parents( '.advads-conditions-connector' ).addClass('advads-conditions-connector-or').removeClass('advads-conditions-connector-and');
-	    } else {
-		$( this ).advads_button( "option", "label", advadstxt.condition_and );
-		$( this ).parents( '.advads-conditions-connector' ).addClass('advads-conditions-connector-and').removeClass('advads-conditions-connector-or');
-	    }
-	});
-	// remove a line with a display or visitor condition
-	$(document).on('click', '.advads-conditions-remove', function(){
-	    $(this).parents('.advads-conditions-table tr').prev('tr').remove();
-	    $(this).parents('.advads-conditions-table tr').remove();
-	});
+	/**
+	 * Logic for ad groups
+	 */
 
 	// display new ad group form
-	$( '#advads-new-ad-group-link' ).click(function(e){
-		e.preventDefault();
-		$( '#advads-new-group-form' ).show().find('input[type="text"]').focus();
-	});
+	$( '#advads-new-ad-group-link' ).click( function ( e ) {
+		e.preventDefault()
+		$( '#advads-new-group-form' ).show().find( 'input[type="text"]' ).focus()
+	} )
 
 	// display ad groups form
-	$( '#advads-ad-group-list a.edit, #advads-ad-group-list a.row-title' ).click(function(e){
-		e.preventDefault();
-		var advadsgroupformrow = $( this ).parents( '.advads-group-row' ).next( '.advads-ad-group-form' );
-		if(advadsgroupformrow.is( ':visible' )){
-			advadsgroupformrow.hide();
+	$( '#advads-ad-group-list a.edit, #advads-ad-group-list a.row-title' ).click( function ( e ) {
+		e.preventDefault()
+		var advadsgroupformrow = $( this ).parents( '.advads-group-row' ).next( '.advads-ad-group-form' )
+		if ( advadsgroupformrow.is( ':visible' ) ) {
+			advadsgroupformrow.hide()
 			// clear last edited id
-			$('#advads-last-edited-group').val('');
+			$( '#advads-last-edited-group' ).val( '' )
 		} else {
-			advadsgroupformrow.show();
-			var group_id = advadsgroupformrow.find('.advads-group-id').val();
-			$('#advads-last-edited-group').val( group_id );
+			advadsgroupformrow.show()
+			var group_id = advadsgroupformrow.find( '.advads-group-id' ).val()
+			$( '#advads-last-edited-group' ).val( group_id )
 			// remember that we opened that one
-			advadsgroupformrow.data('touched', true);
+			advadsgroupformrow.data( 'touched', true )
 		}
-	});
+	} )
 	// display ad groups usage
-	$( '#advads-ad-group-list a.usage' ).click(function(e){
-		e.preventDefault();
-		var usagediv = $( this ).parents( '.advads-group-row' ).find( '.advads-usage' );
-		if(usagediv.is( ':visible' )){
-			usagediv.hide();
+	$( '#advads-ad-group-list a.usage' ).click( function ( e ) {
+		e.preventDefault()
+		var usagediv = $( this ).parents( '.advads-group-row' ).find( '.advads-usage' )
+		if ( usagediv.is( ':visible' ) ) {
+			usagediv.hide()
 		} else {
-			usagediv.show();
+			usagediv.show()
 		}
-	});
+	} )
 	// handle the submission of the groups form
-	$ ('form#advads-form-groups').submit(function(){
-		var grouprows = jQuery( 'tr.advads-ad-group-form' );
-		jQuery( 'tr.advads-ad-group-form' ).each(function(k,v){
-			v = jQuery(v);
-			if (! v.data('touched')){
-				v.remove();
+	$( 'form#advads-form-groups' ).submit( function () {
+		var grouprows = jQuery( 'tr.advads-ad-group-form' )
+		jQuery( 'tr.advads-ad-group-form' ).each( function ( k, v ) {
+			v = jQuery( v )
+			if ( ! v.data( 'touched' ) ) {
+				v.remove()
 			}
-		});
-	});
+		} )
+	} )
 	// display placement settings form
-	$( '.advads-placements-table a.advads-placement-options-link' ).click(function(e){
-		e.preventDefault();
-		Advanced_Ads_Admin.toggle_placements_visibility(this);
-	});
+	$( '.advads-placements-table a.advads-placement-options-link' ).click( function ( e ) {
+		e.preventDefault()
+		Advanced_Ads_Admin.toggle_placements_visibility( this )
+	} )
 	// display manual placement usage
-	$( '.advads-placements-table .usage-link' ).click(function(e){
-		e.preventDefault();
-		var usagediv = $( this ).parents( 'tr' ).find( '.advads-usage' );
-		if(usagediv.is( ':visible' )){
-			usagediv.hide();
+	$( '.advads-placements-table .usage-link' ).click( function ( e ) {
+		e.preventDefault()
+		var usagediv = $( this ).parents( 'tr' ).find( '.advads-usage' )
+		if ( usagediv.is( ':visible' ) ) {
+			usagediv.hide()
 		} else {
-			usagediv.show();
+			usagediv.show()
 		}
-	});
+	} )
 	// show warning if Container ID option contains invalid characters
-    $( '#advads-output-wrapper-id' ).keyup( function(){
-            var id_value = $( this ).val();
-            if( /^[a-z-0-9]*$/.test( id_value ) ){
-                $( '.advads-output-wrapper-id-error' ).removeClass( 'advads-error-message' );
-            } else {
-                $( '.advads-output-wrapper-id-error' ).addClass( 'advads-error-message' ).css( 'display', 'block' );
-            }
-    });
+	$( '#advads-output-wrapper-id' ).keyup( function () {
+		var id_value = $( this ).val()
+		if ( /^[a-z-0-9]*$/.test( id_value ) ) {
+			$( '.advads-output-wrapper-id-error' ).removeClass( 'advads-error-message' )
+		} else {
+			$( '.advads-output-wrapper-id-error' ).addClass( 'advads-error-message' ).css( 'display', 'block' )
+		}
+	} )
 	/**
-	 * automatically open all options and show usage link when this is the placement linked in the URL
+	 * Automatically open all options and show usage link when this is the placement linked in the URL
 	 * also highlight the box with an effect for a short time
 	 */
-	if( jQuery( window.location.hash ).length ){
-		jQuery( window.location.hash ).find( '.advads-toggle-link + div, .advads-usage' ).show();
+	if ( jQuery( window.location.hash ).length ) {
+		jQuery( window.location.hash ).find( '.advads-toggle-link + div, .advads-usage' ).show()
 
 	}
 
 	// group page: add ad to group
-	$( '.advads-group-add-ad button' ).click( function() {
+	$( '.advads-group-add-ad button' ).click( function () {
 		var $settings_row = $( this ).closest( '.advads-ad-group-form' ),
-			$ad = $settings_row.find( '.advads-group-add-ad-list-ads option:selected' )
-			$weight_selector = $settings_row.find( '.advads-group-add-ad-list-weights' ).last(),
-			$ad_table = $settings_row.find( '.advads-group-ads tbody' );
+				$ad           = $settings_row.find( '.advads-group-add-ad-list-ads option:selected' )
+		$weight_selector = $settings_row.find( '.advads-group-add-ad-list-weights' ).last(),
+			$ad_table = $settings_row.find( '.advads-group-ads tbody' )
 		// add new row if does not already exist
-		if ( $ad.length && $weight_selector.length && ! $ad_table.find( '[name="' +  $ad.val() + '"]' ).length ) {
+		if ( $ad.length && $weight_selector.length && ! $ad_table.find( '[name="' + $ad.val() + '"]' ).length ) {
 			$ad_table.append(
 				$( '<tr></tr>' ).append(
 					$( '<td></td>' ).html( $ad.text() ),
 					$( '<td></td>' ).append( $weight_selector.clone().val( $weight_selector.val() ).prop( 'name', $ad.val() ) ),
 					'<td><button type="button" class="advads-remove-ad-from-group button">x</button></td>'
 				)
-			);
+			)
 		}
-	});
+	} )
 	// group page: remove ad from group
-	$( '#advads-ad-group-list' ).on( 'click', '.advads-remove-ad-from-group', function() {
-		var $ad_row = $( this ).closest( 'tr' );
+	$( '#advads-ad-group-list' ).on( 'click', '.advads-remove-ad-from-group', function () {
+		var $ad_row = $( this ).closest( 'tr' )
 
 		if ( $ad_row.data( 'ad-id' ) ) {
 			// save the ad id, it is needed when this ad is not included in any other group
 			$( '#advads-ad-group-list form' ).append(
-				'<input type="hidden" name="advads-groups-removed-ads[]" value="' +  $ad_row.data( 'ad-id' ) + '">'
-				+ '<input type="hidden" name="advads-groups-removed-ads-gid[]" value="' +  $ad_row.data( 'group-id' ) + '">'
-			);
+				'<input type="hidden" name="advads-groups-removed-ads[]" value="' + $ad_row.data( 'ad-id' ) + '">'
+				+ '<input type="hidden" name="advads-groups-removed-ads-gid[]" value="' + $ad_row.data( 'group-id' ) + '">'
+			)
 		}
-		$ad_row.remove();
-	});
+		$ad_row.remove()
+	} )
 	// group page: handle switching of group types based on a class derrived from that type
-	$('.advads-ad-group-type input').click(function(){
-		advads_show_group_options( $( this ) );
-	});
-	function advads_show_group_options( el ){
+	$( '.advads-ad-group-type input' ).click( function () {
+		advads_show_group_options( $( this ) )
+	} )
+
+	function advads_show_group_options ( el ) {
 		// first, hide all options except title and type
 		// iterate through all elements
-		el.each( function(){
-			var _this = jQuery( this );
-			_this.parents('.advads-ad-group-form').find('.advads-option:not(.static)').hide();
-			var current_type = _this.val();
+		el.each( function () {
+			var _this = jQuery( this )
+			_this.parents( '.advads-ad-group-form' ).find( '.advads-option:not(.static)' ).hide()
+			var current_type = _this.val()
 
 			// now, show only the ones corresponding with the group type
-			_this.parents('.advads-ad-group-form').find( '.advads-group-type-' + current_type  ).show();
-		});
+			_this.parents( '.advads-ad-group-form' ).find( '.advads-group-type-' + current_type ).show()
+		} )
 	}
+
 	// set default group options for earch group
 
-	advads_show_group_options( $( '.advads-ad-group-type input:checked' ) );
+	advads_show_group_options( $( '.advads-ad-group-type input:checked' ) )
 	// group page: hide ads if more than 4 – than only show 3
-	$('.advads-ad-group-list-ads').each( function(){
-		if( 5 <= $(this).find('li').length ){
-		    $(this).find('li:gt(2)').hide();
-		};
-	});
+	$( '.advads-ad-group-list-ads' ).each( function () {
+		if ( 5 <= $( this ).find( 'li' ).length ) {
+			$( this ).find( 'li:gt(2)' ).hide()
+		}
+
+	} )
 	// show more than 3 ads when clicked on a link
-	$('.advads-group-ads-list-show-more').click( function(){
-		jQuery( this ).hide().parents('.advads-ad-group-list-ads').find('li').show();
-	});
+	$( '.advads-group-ads-list-show-more' ).click( function () {
+		jQuery( this ).hide().parents( '.advads-ad-group-list-ads' ).find( 'li' ).show()
+	} )
 
 	/**
 	 * SETTINGS PAGE
 	 */
 
 	// automatically copy the first entered license key into all other empty fields
-    $('.advads-settings-tab-main-form .advads-license-key').blur( function(){
-            // get number of license fields
+	$( '.advads-settings-tab-main-form .advads-license-key' ).blur( function () {
+		// get number of license fields
 
-            var license_key = $(this).val();
+		var license_key = $( this ).val()
 
-            if( "" === license_key ){
-                return;
-            }
+		if ( '' === license_key ) {
+			return
+		}
 
-            var license_fields = $('.advads-settings-tab-main-form .advads-license-key');
-            var license_fields_without_value = [];
+		var license_fields               = $( '.advads-settings-tab-main-form .advads-license-key' )
+		var license_fields_without_value = []
 
-            // count license fields without value
-            license_fields.each( function( i, el ){
-                    if( "" === $( el ).val() ){
-                            license_fields_without_value.push( el );
-                    }
-            } );
+		// count license fields without value
+		license_fields.each( function ( i, el ) {
+			if ( '' === $( el ).val() ) {
+				license_fields_without_value.push( el )
+			}
+		} )
 
-            // if there is only one field filled then take its content (probably a license key) and add it into the other fields
-            if( license_fields.length === ( license_fields_without_value.length + 1 ) ){
-                $.each( license_fields_without_value, function( i, el ) {
-                        $( el ).val( license_key );
-                } );
-            }
+		// if there is only one field filled then take its content (probably a license key) and add it into the other fields
+		if ( license_fields.length === (license_fields_without_value.length + 1) ) {
+			$.each( license_fields_without_value, function ( i, el ) {
+				$( el ).val( license_key )
+			} )
+		}
 
-
-    });
+	} )
 
 	// activate licenses
-	$('.advads-license-activate').click(function(){
+	$( '.advads-license-activate' ).click( function () {
 
-	    var button  = $(this);
+		var button = $( this )
 
-	    if( ! this.dataset.addon ) { return }
+		if ( ! this.dataset.addon ) { return }
 
-        advads_disable_license_buttons( true );
+		advads_disable_license_buttons( true )
 
-	    var query = {
-		action: 'advads-activate-license',
-		addon: this.dataset.addon,
-		pluginname: this.dataset.pluginname,
-		optionslug: this.dataset.optionslug,
-		license: $(this).parents('td').find('.advads-license-key').val(),
-		security: $('#advads-licenses-ajax-referrer').val()
-	    };
-
-	    // show loader
-	    $( '<span class="spinner advads-spinner"></span>' ).insertAfter( button );
-
-	    // send and close message
-	    $.post(ajaxurl, query, function (r) {
-		// remove spinner
-		$('span.spinner').remove();
-		var parent = button.parents('td');
-
-		if( r === '1' ){
-		    parent.find('.advads-license-activate-error').remove();
-		    parent.find('.advads-license-deactivate').show();
-		    button.fadeOut();
-		    parent.find('.advads-license-activate-active').fadeIn();
-		    parent.find('input').prop('readonly', 'readonly');
-            advads_disable_license_buttons( false );
-		} else if( r === 'ex' ){
-			var input = parent.find('input.advads-license-key');
-			var link = parent.find('a.advads-renewal-link');
-			if (input && link){
-				var license_key = input.val();
-				var href = link.prop('href');
-				link.prop('href', href.replace("%LICENSE_KEY%", license_key));
-			}
-		    parent.find('.advads-license-activate-error').remove();
-		    parent.find('.advads-license-expired-error').show();
-            advads_disable_license_buttons( false );
-		} else {
-		    parent.find('.advads-license-activate-error').show().text( r );
-            advads_disable_license_buttons( false );
+		var query = {
+			action: 'advads-activate-license',
+			addon: this.dataset.addon,
+			pluginname: this.dataset.pluginname,
+			optionslug: this.dataset.optionslug,
+			license: $( this ).parents( 'td' ).find( '.advads-license-key' ).val(),
+			security: $( '#advads-licenses-ajax-referrer' ).val()
 		}
-	    });
-	});
+
+		// show loader
+		$( '<span class="spinner advads-spinner"></span>' ).insertAfter( button )
+
+		// send and close message
+		$.post( ajaxurl, query, function ( r ) {
+			// remove spinner
+			$( 'span.spinner' ).remove()
+			var parent = button.parents( 'td' )
+
+			if ( r === '1' ) {
+				parent.find( '.advads-license-activate-error' ).remove()
+				parent.find( '.advads-license-deactivate' ).show()
+				button.fadeOut()
+				parent.find( '.advads-license-activate-active' ).fadeIn()
+				parent.find( 'input' ).prop( 'readonly', 'readonly' )
+				advads_disable_license_buttons( false )
+			} else if ( r === 'ex' ) {
+				var input = parent.find( 'input.advads-license-key' )
+				var link  = parent.find( 'a.advads-renewal-link' )
+				if ( input && link ) {
+					var license_key = input.val()
+					var href        = link.prop( 'href' )
+					link.prop( 'href', href.replace( '%LICENSE_KEY%', license_key ) )
+				}
+				parent.find( '.advads-license-activate-error' ).remove()
+				parent.find( '.advads-license-expired-error' ).show()
+				advads_disable_license_buttons( false )
+			} else {
+				parent.find( '.advads-license-activate-error' ).show().html( r )
+				advads_disable_license_buttons( false )
+			}
+		} )
+	} )
 
 	// deactivate licenses
-	$('.advads-license-deactivate').click(function(){
+	$( '.advads-license-deactivate' ).click( function () {
 
-	    var button = $(this);
+		var button = $( this )
 
-	    if( ! this.dataset.addon ) { return }
+		if ( ! this.dataset.addon ) { return }
 
-        advads_disable_license_buttons( true );
+		advads_disable_license_buttons( true )
 
-	    var query = {
-		action: 'advads-deactivate-license',
-		addon: this.dataset.addon,
-		pluginname: this.dataset.pluginname,
-		optionslug: this.dataset.optionslug,
-		security: $('#advads-licenses-ajax-referrer').val()
-	    };
-
-	    // show loader
-	    $( '<span class="spinner advads-spinner"></span>' ).insertAfter( button );
-
-	    // send and close message
-	    $.post(ajaxurl, query, function (r) {
-		// remove spinner
-		$('span.spinner').remove();
-
-		if( r === '1' ){
-		    button.siblings('.advads-license-activate-error').hide();
-		    button.siblings('.advads-license-activate-active').hide();
-		    button.siblings('.advads-license-activate').show();
-		    button.siblings('input').prop('readonly', false);
-		    button.fadeOut();
-            advads_disable_license_buttons( false );
-		} else if( r === 'ex' ){
-		    button.siblings('.advads-license-activate-error').hide();
-		    button.siblings('.advads-license-activate-active').hide();
-		    button.siblings('.advads-license-expired-error').show();
-		    button.siblings('input').prop('readonly', false);
-		    button.fadeOut();
-            advads_disable_license_buttons( false );
-		} else {
-		    console.log( r );
-		    button.siblings('.advads-license-activate-error').show().html( r );
-		    button.siblings('.advads-license-activate-active').hide();
-            advads_disable_license_buttons( false );
+		var query = {
+			action: 'advads-deactivate-license',
+			addon: this.dataset.addon,
+			pluginname: this.dataset.pluginname,
+			optionslug: this.dataset.optionslug,
+			security: $( '#advads-licenses-ajax-referrer' ).val()
 		}
-	    });
-	});
+
+		// show loader
+		$( '<span class="spinner advads-spinner"></span>' ).insertAfter( button )
+
+		// send and close message
+		$.post( ajaxurl, query, function ( r ) {
+			// remove spinner
+			$( 'span.spinner' ).remove()
+
+			if ( r === '1' ) {
+				button.siblings( '.advads-license-activate-error' ).hide()
+				button.siblings( '.advads-license-activate-active' ).hide()
+				button.siblings( '.advads-license-activate' ).show()
+				button.siblings( 'input' ).prop( 'readonly', false )
+				button.fadeOut()
+				advads_disable_license_buttons( false )
+			} else if ( r === 'ex' ) {
+				button.siblings( '.advads-license-activate-error' ).hide()
+				button.siblings( '.advads-license-activate-active' ).hide()
+				button.siblings( '.advads-license-expired-error' ).show()
+				button.siblings( 'input' ).prop( 'readonly', false )
+				button.fadeOut()
+				advads_disable_license_buttons( false )
+			} else {
+				console.log( r )
+				button.siblings( '.advads-license-activate-error' ).show().html( r )
+				button.siblings( '.advads-license-activate-active' ).hide()
+				advads_disable_license_buttons( false )
+			}
+		} )
+	} )
 
 	// toggle license buttons – disable or not
-    function advads_disable_license_buttons( disable = true ) {
-        var buttons = $('button.advads-license-activate, button.advads-license-deactivate'); // all activation buttons
-        // disable all buttons to prevent issues when users try to enable multiple licenses at the same time
-        if (disable) {
-            buttons.attr('disabled', 'disabled');
-        } else {
-            buttons.removeAttr( 'disabled' );
-        }
-    }
+	function advads_disable_license_buttons ( disable = true ) {
+		var buttons = $( 'button.advads-license-activate, button.advads-license-deactivate' ) // all activation buttons
+		// disable all buttons to prevent issues when users try to enable multiple licenses at the same time
+		if ( disable ) {
+			buttons.attr( 'disabled', 'disabled' )
+		} else {
+			buttons.removeAttr( 'disabled' )
+		}
+	}
 
 	/**
-	* PLACEMENTS
-	*/
-	 // show image tooltips
+	 * PLACEMENTS
+	 */
+	// show image tooltips
 	if ( $.fn.advads_tooltip ) {
-		$( ".advads-placements-new-form .advads-placement-type" ).advads_tooltip({
-			items: "label",
-			content: function() {
-				return $( this ).parents('.advads-placement-type').find( '.advads-placement-description' ).html();
+		$( '.advads-placements-new-form .advads-placement-type' ).advads_tooltip( {
+			items: 'label',
+			content: function () {
+				return $( this ).parents( '.advads-placement-type' ).find( '.advads-placement-description' ).html()
 			}
-		});
+		} )
 	}
-	
+
 	//  keep track of placements that were changed
-	$( 'form#advanced-ads-placements-form input, #advanced-ads-placements-form select' ).on( 'change', function(){
-		var tr = $( this ).closest( 'tr.advanced-ads-placement-row' );
-		if (tr){
-			tr.data('touched', true);
+	$( 'form#advanced-ads-placements-form input, #advanced-ads-placements-form select' ).on( 'change', function () {
+		var tr = $( this ).closest( 'tr.advanced-ads-placement-row' )
+		if ( tr ) {
+			tr.data( 'touched', true )
 		}
-	});
-	
+	} )
+
 	//  some special form elements overwrite the jquery listeners (or render them unusable in some strange way)
 	//  to counter that and make it more robust in general, we now listen for mouseover events, that will
 	//  only occur, when the settings of a placement are expanded (let's just assume this means editing)
-	$( 'form#advanced-ads-placements-form .advads-placements-advanced-options' ).on( 'mouseover' , function(){
-		var tr = $( this ).closest( 'tr.advanced-ads-placement-row' );
-		if (tr){
-			tr.data('touched', true);
+	$( 'form#advanced-ads-placements-form .advads-placements-advanced-options' ).on( 'mouseover', function () {
+		var tr = $( this ).closest( 'tr.advanced-ads-placement-row' )
+		if ( tr ) {
+			tr.data( 'touched', true )
 		}
-	});
-	
+	} )
+
 	//  on submit remove placements that were untouched
-	$ ('form#advanced-ads-placements-form').submit(function(){
-		var grouprows = jQuery( 'form#advanced-ads-placements-form tr.advanced-ads-placement-row' );
-		jQuery( 'form#advanced-ads-placements-form tr.advanced-ads-placement-row' ).each(function(k,v){
-			v = jQuery(v);
-			if (! v.data('touched')){
-				v.find( 'input, select' ).each(function(k2,v2){
-					v2 = jQuery(v2);
-					v2.prop("disabled", true);
-				});
+	$( 'form#advanced-ads-placements-form' ).submit( function () {
+		var grouprows = jQuery( 'form#advanced-ads-placements-form tr.advanced-ads-placement-row' )
+		jQuery( 'form#advanced-ads-placements-form tr.advanced-ads-placement-row' ).each( function ( k, v ) {
+			v = jQuery( v )
+			if ( ! v.data( 'touched' ) ) {
+				v.find( 'input, select' ).each( function ( k2, v2 ) {
+					v2 = jQuery( v2 )
+					v2.prop( 'disabled', true )
+				} )
 			}
-		});
-	});
+		} )
+	} )
 
 	/**
-         * Image ad uploader
-         */
-	$('body').on('click', '.advads_image_upload', function(e) {
+	 * Image ad uploader
+	 */
+	$( 'body' ).on( 'click', '.advads_image_upload', function ( e ) {
 
-		e.preventDefault();
+		e.preventDefault()
 
-		var button = $(this);
+		var button = $( this )
 
 		// If the media frame already exists, reopen it.
 		if ( file_frame ) {
 			// file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
-			file_frame.open();
-			return;
+			file_frame.open()
+			return
 		}
 
 		// Create the media frame.
@@ -565,227 +461,168 @@ jQuery( document ).ready(function ($) {
 				type: 'image'
 			},
 			multiple: false // only allow one file to be selected
-		} );
+		} )
 
 		// When an image is selected, run a callback.
-		file_frame.on( 'select', function() {
+		file_frame.on( 'select', function () {
 
-			var selection = file_frame.state().get('selection');
-			selection.each( function( attachment, index ) {
-				attachment = attachment.toJSON();
+			var selection = file_frame.state().get( 'selection' )
+			selection.each( function ( attachment, index ) {
+				attachment = attachment.toJSON()
 				if ( 0 === index ) {
 					// place first attachment in field
-					$( '#advads-image-id' ).val( attachment.id );
-					$( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( attachment.width );
-					$( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( attachment.height );
+					$( '#advads-image-id' ).val( attachment.id )
+					$( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( attachment.width )
+					$( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( attachment.height )
 					// update image preview
-					var new_image = '<img width="'+ attachment.width +'" height="'+ attachment.height +
-						'" title="'+ attachment.title +'" alt="'+ attachment.alt +'" src="'+ attachment.url +'"/>';
-					$('#advads-image-preview').html( new_image );
-					$('#advads-image-edit-link').attr( 'href', attachment.editLink );
+					var new_image = '<img width="' + attachment.width + '" height="' + attachment.height +
+						'" title="' + attachment.title + '" alt="' + attachment.alt + '" src="' + attachment.url + '"/>'
+					$( '#advads-image-preview' ).html( new_image )
+					$( '#advads-image-edit-link' ).attr( 'href', attachment.editLink )
 					// process "reserve this space" checkbox
-					$( '#advanced-ads-ad-parameters-size input[type=number]:first' ).change();
+					$( '#advanced-ads-ad-parameters-size input[type=number]:first' ).change()
 				}
-			});
-		});
+			} )
+		} )
 
 		// Finally, open the modal
-		file_frame.open();
-	});
+		file_frame.open()
+	} )
 
 	// WP 3.5+ uploader
-	var file_frame;
-	window.formfield = '';
+	var file_frame
+	window.formfield = ''
 
 	// adblocker related code
-	$( '#advanced-ads-use-adblocker' ).change( function() {
-		advads_toggle_box( this, '#advads-adblocker-wrapper' );
-	});
+	$( '#advanced-ads-use-adblocker' ).change( function () {
+		advads_toggle_box( this, '#advads-adblocker-wrapper' )
+	} )
 
 	// processing of the rebuild asset form and the FTP/SSH credentials form
-	var $advads_adblocker_wrapper = $( '#advads-adblocker-wrapper' );
-	$advads_adblocker_wrapper.find( 'input[type="submit"]' ).prop( 'disabled', false );
-	$advads_adblocker_wrapper.on( 'submit', 'form', function( event ) {
-		event.preventDefault();
-		var $form = $( '#advanced-ads-rebuild-assets-form' );
-		$form.prev( '.error' ).remove();
-		$form.find( 'input[type="submit"]' ).prop( 'disabled', true ).after( '<span class="spinner advads-spinner"></span>' );
+	var $advads_adblocker_wrapper = $( '#advads-adblocker-wrapper' )
+	$advads_adblocker_wrapper.find( 'input[type="submit"]' ).prop( 'disabled', false )
+	$advads_adblocker_wrapper.on( 'submit', 'form', function ( event ) {
+		event.preventDefault()
+		var $form = $( '#advanced-ads-rebuild-assets-form' )
+		$form.prev( '.error' ).remove()
+		$form.find( 'input[type="submit"]' ).prop( 'disabled', true ).after( '<span class="spinner advads-spinner"></span>' )
 
 		var args = {
 			data: {
 				action: 'advads-adblock-rebuild-assets',
 				nonce: advadsglobal.ajax_nonce,
 			},
-			done: function( data, textStatus, jqXHR ) {
-				var $advads_adblocker_wrapper = $( '#advads-adblocker-wrapper' );
-				$advads_adblocker_wrapper.html( data );
+			done: function ( data, textStatus, jqXHR ) {
+				var $advads_adblocker_wrapper = $( '#advads-adblocker-wrapper' )
+				$advads_adblocker_wrapper.html( data )
 			},
-			fail: function( jqXHR, textStatus, errorThrown ) {
-				$form.before( '<div class="error"><p>' + textStatus  + ': ' + errorThrown + '</p></div>' );
-				$form.find( 'input[type="submit"]' ).prop( 'disabled', false ).next( '.advads-spinner' ).remove();
+			fail: function ( jqXHR, textStatus, errorThrown ) {
+				$form.before( '<div class="error"><p>' + textStatus + ': ' + errorThrown + '</p></div>' )
+				$form.find( 'input[type="submit"]' ).prop( 'disabled', false ).next( '.advads-spinner' ).remove()
 			},
-			on_modal_close: function() {
-				var $form = $( '#advanced-ads-rebuild-assets-form' );
-				$form.find( 'input[type="submit"]' ).prop( 'disabled', false ).next( '.advads-spinner' ).remove();
+			on_modal_close: function () {
+				var $form = $( '#advanced-ads-rebuild-assets-form' )
+				$form.find( 'input[type="submit"]' ).prop( 'disabled', false ).next( '.advads-spinner' ).remove()
 			}
 		}
 
-		$.each( $form.serializeArray(), function( i, o ) {
-			args.data[ o.name ] = o.value;
-		});
+		$.each( $form.serializeArray(), function ( i, o ) {
+			args.data[ o.name ] = o.value
+		} )
 
-		advanced_ads_admin.filesystem.ajax( args );
-	});
+		advanced_ads_admin.filesystem.ajax( args )
+	} )
 
 	// process "reserve this space" checkbox
-	$( '#advanced-ads-ad-parameters' ).on( 'change', '#advanced-ads-ad-parameters-size input[type=number]', function() {
-		if ( $( '#advanced-ads-ad-parameters-size input[type=number]' ).filter( function() {
-			return parseInt( this.value, 10 ) > 0;
-		}).length === 2 ) {
-			$( '#advads-wrapper-add-sizes' ).prop( 'disabled', false );
+	$( '#advanced-ads-ad-parameters' ).on( 'change', '#advanced-ads-ad-parameters-size input[type=number]', function () {
+		if ( $( '#advanced-ads-ad-parameters-size input[type=number]' ).filter( function () {
+			return parseInt( this.value, 10 ) > 0
+		} ).length === 2 ) {
+			$( '#advads-wrapper-add-sizes' ).prop( 'disabled', false )
 		} else {
-			$( '#advads-wrapper-add-sizes' ).prop( 'disabled', true ).prop( 'checked', false );
+			$( '#advads-wrapper-add-sizes' ).prop( 'disabled', true ).prop( 'checked', false )
 		}
-	});
+	} )
 	// process "reserve this space" checkbox - ad type changed
-	$( '#advanced-ads-ad-parameters' ).on( 'paramloaded', function() {
-		$( '#advanced-ads-ad-parameters-size input[type=number]:first' ).change();
-	})
+	$( '#advanced-ads-ad-parameters' ).on( 'paramloaded', function () {
+		$( '#advanced-ads-ad-parameters-size input[type=number]:first' ).change()
+	} )
 	// process "reserve this space" checkbox - on load
-	$( '#advanced-ads-ad-parameters-size input[type=number]:first' ).change();
-	
+	$( '#advanced-ads-ad-parameters-size input[type=number]:first' ).change()
+
 	// move meta box markup to hndle headline
-	$('.advads-hndlelinks').each(function(){
-	    $(this).removeClass('hidden');
-	    $(this).appendTo( $(this).parent('.inside').siblings('h2.hndle') );
-	});
+	$( '.advads-hndlelinks' ).each( function () {
+		$( this ).removeClass( 'hidden' )
+		$( this ).appendTo( $( this ).parent( '.inside' ).siblings( 'h2.hndle' ) )
+	} )
 	// open tutorial link when clicked on it
-	$('.advads-video-link').click(function( el ){
-	    el.preventDefault();
-	    var video_container = $(this).parents('h2').siblings('.inside').find('.advads-video-link-container');
-	    video_container.html( video_container.data('videolink') );
-	});
+	$( '.advads-video-link' ).click( function ( el ) {
+		el.preventDefault()
+		var video_container = $( this ).parents( 'h2' ).siblings( '.inside' ).find( '.advads-video-link-container' )
+		video_container.html( video_container.data( 'videolink' ) )
+	} )
 	// open inline tutorial link when clicked on it
-	$('.advads-video-link-inline').click(function( el ){
-	    el.preventDefault();
-	    var video_container = $(this).parents('div').siblings('.advads-video-link-container');
-	    video_container.html( video_container.data('videolink') );
-	});
+	$( '.advads-video-link-inline' ).click( function ( el ) {
+		el.preventDefault()
+		var video_container = $( this ).parents( 'div' ).siblings( '.advads-video-link-container' )
+		video_container.html( video_container.data( 'videolink' ) )
+	} )
 	// switch import type
-	jQuery( '.advads_import_type' ).change( function() {
+	jQuery( '.advads_import_type' ).change( function () {
 		if ( this.value === 'xml_content' ) {
-			jQuery( '#advads_xml_file' ).hide();
-			jQuery( '#advads_xml_content' ).show();
+			jQuery( '#advads_xml_file' ).hide()
+			jQuery( '#advads_xml_content' ).show()
 		} else {
-			jQuery( '#advads_xml_file' ).show();
-			jQuery( '#advads_xml_content' ).hide();
+			jQuery( '#advads_xml_file' ).show()
+			jQuery( '#advads_xml_content' ).hide()
 		}
-	});
+	} )
 
 	// Find Adsense Auto Ads inside ad content.
-	var ad_content = jQuery('textarea[name=advanced_ad\\[content\\]]').html();
-	if ( ad_content && ad_content.indexOf( 'enable_page_level_ads' ) !== -1 ) {
-		advads_show_adsense_auto_ads_warning();
+	var ad_content = jQuery( 'textarea[name=advanced_ad\\[content\\]]' ).html()
+	if (
+		(ad_content && ad_content.indexOf('enable_page_level_ads') !== -1)
+		|| /script[^>]+data-ad-client=/.test(ad_content)
+	) {
+		advads_show_adsense_auto_ads_warning()
 	}
 
-
 	//advads_ads_txt_check_third_party();
-	advads_ads_txt_find_issues();
-	
-	jQuery( '.advanced-ads-adsense-dashboard' ).each( function(key,elm) {
-		Advanced_Ads_Adsense_Helper.process_dashboard(elm);
-	});
-});
+	advads_ads_txt_find_issues()
 
+	jQuery( '.advanced-ads-adsense-dashboard' ).each( function ( key, elm ) {
+		Advanced_Ads_Adsense_Helper.process_dashboard( elm )
+	} )
+} )
 
 /**
- * store the action hash in settings form action
+ * Store the action hash in settings form action
  * thanks for Yoast SEO for this idea
  */
-function advads_set_tab_hashes() {
+function advads_set_tab_hashes () {
 	// iterate through forms
-	jQuery( '#advads-tabs' ).find( 'a' ).each(function () {
-		var id = jQuery( this ).attr( 'id' ).replace( '-tab', '' );
-		var optiontab = jQuery( '#' + id );
+	jQuery( '#advads-tabs' ).find( 'a' ).each( function () {
+		var id        = jQuery( this ).attr( 'id' ).replace( '-tab', '' )
+		var optiontab = jQuery( '#' + id )
 
-		var form = optiontab.children( '.advads-settings-tab-main-form' );
+		var form = optiontab.children( '.advads-settings-tab-main-form' )
 		if ( form.length ) {
-			var currentUrl = form.attr( 'action' ).split( '#' )[ 0 ];
-			form.attr( 'action', currentUrl + jQuery( this ).attr( 'href' ) );
+			var currentUrl = form.attr( 'action' ).split( '#' )[ 0 ]
+			form.attr( 'action', currentUrl + jQuery( this ).attr( 'href' ) )
 		}
-	});
+	} )
 }
 
 /**
- * callback for term search autocomplete
+ * Scroll to position in backend minus admin bar height
  *
- * @param {type} search term
- * @param {type} callback
- * @returns {obj} json object with labels and values
+ * @param selector jQuery selector
  */
-function advads_term_search(field, callback) {
-
-	// return ['post', 'poster'];
-	var query = {
-		action: 'advads-terms-search',
-		nonce: advadsglobal.ajax_nonce
-	};
-	
-	query.search = field.val();
-	query.tax = field.data('tagName');
-
-	var querying = true;
-
-	var results = {};
-	jQuery.post(ajaxurl, query, function (r) {
-		querying = false;
-		var results = [];
-		if(r){
-			r.map(function(element, index){
-				results[index] = {
-					value: element.term_id,
-					label: element.name
-				};
-			});
-		}
-		callback( results );
-	}, 'json');
-}
-
-/**
- * callback for post search autocomplete
- *
- * @param {str} searchParam
- * @param {type} callback
- * @returns {obj} json object with labels and values
- */
-function advads_post_search( searchParam, callback ) {
-
-	// return ['post', 'poster'];
-	var query = {
-		action: 'advads-post-search',
-		_ajax_linking_nonce: jQuery( '#_ajax_linking_nonce' ).val(),
-		'search': searchParam,
-		nonce: advadsglobal.ajax_nonce
-	};
-
-	var querying = true;
-
-	var results = {};
-	jQuery.post(ajaxurl, query, function (r) {
-		querying = false;
-		var results = [];
-		if(r){
-			r.map(function(element, index){
-				results[index] = {
-					label: element.title,
-					value: element.ID,
-					info: element.info
-				};
-			});
-		}
-		callback( results );
-	}, 'json');
+function advads_scroll_to_element ( selector ) {
+	var height_of_admin_bar = jQuery( '#wpadminbar' ).height()
+	jQuery( 'html, body' ).animate( {
+		scrollTop: jQuery( selector ).offset().top - height_of_admin_bar
+	}, 1000 )
 }
 
 /**
@@ -793,8 +630,8 @@ function advads_post_search( searchParam, callback ) {
  *
  * @param selector jquery selector
  */
-function advads_toggle(selector) {
-	jQuery( selector ).slideToggle();
+function advads_toggle ( selector ) {
+	jQuery( selector ).slideToggle()
 }
 
 /**
@@ -802,11 +639,11 @@ function advads_toggle(selector) {
  *
  * @param selector jquery selector
  */
-function advads_toggle_box(e, selector) {
-	if (jQuery( e ).is( ':checked' )) {
-		jQuery( selector ).slideDown();
+function advads_toggle_box ( e, selector ) {
+	if ( jQuery( e ).is( ':checked' ) ) {
+		jQuery( selector ).slideDown()
 	} else {
-		jQuery( selector ).slideUp();
+		jQuery( selector ).slideUp()
 	}
 }
 
@@ -816,81 +653,81 @@ function advads_toggle_box(e, selector) {
  *
  * @param selector jquery selector
  */
-function advads_toggle_box_enable(e, selector) {
-	if (jQuery( e ).is( ':checked' )) {
-		jQuery( selector ).find( 'input' ).removeAttr( 'disabled', '' );
+function advads_toggle_box_enable ( e, selector ) {
+	if ( jQuery( e ).is( ':checked' ) ) {
+		jQuery( selector ).find( 'input' ).removeAttr( 'disabled', '' )
 	} else {
-		jQuery( selector ).find( 'input' ).attr( 'disabled', 'disabled' );
+		jQuery( selector ).find( 'input' ).attr( 'disabled', 'disabled' )
 	}
 }
 
 /**
  * validate placement form on submit
  */
-function advads_validate_placement_form(){
+function advads_validate_placement_form () {
 	// check if placement type was selected
-	if( ! jQuery('.advads-placement-type input:checked').length){
-		jQuery('.advads-placement-type-error').show();
-		return false;
+	if ( ! jQuery( '.advads-placement-type input:checked' ).length ) {
+		jQuery( '.advads-placement-type-error' ).show()
+		return false
 	} else {
-		jQuery('.advads-placement-type-error').hide();
+		jQuery( '.advads-placement-type-error' ).hide()
 	}
 	// check if placement name was entered
-	if( jQuery('.advads-new-placement-name').val() == '' ){
-		jQuery('.advads-placement-name-error').show();
-		return false;
+	if ( jQuery( '.advads-new-placement-name' ).val() == '' ) {
+		jQuery( '.advads-placement-name-error' ).show()
+		return false
 	} else {
-		jQuery('.advads-placement-name-error').hide();
+		jQuery( '.advads-placement-name-error' ).hide()
 	}
-	return true;
+	return true
 }
 
 /**
  * replace textarea with TinyMCE editor for Rich Content ad type
  */
-function advads_maybe_textarea_to_tinymce( ad_type ) {
+function advads_maybe_textarea_to_tinymce ( ad_type ) {
 	var textarea            = jQuery( '#advads-ad-content-plain' ),
-		textarea_html       = textarea.val(),
-		tinymce_id          = 'advanced-ads-tinymce',
-		tinymce_id_ws       = jQuery( '#' + tinymce_id ),
-		tinymce_wrapper_div = jQuery ( '#advanced-ads-tinymce-wrapper' );
+			textarea_html       = textarea.val(),
+			tinymce_id          = 'advanced-ads-tinymce',
+			tinymce_id_ws       = jQuery( '#' + tinymce_id ),
+			tinymce_wrapper_div = jQuery( '#advanced-ads-tinymce-wrapper' )
 
 	if ( ad_type !== 'content' ) {
-		tinymce_id_ws.prop('name', tinymce_id );
-		tinymce_wrapper_div.hide();
-		return false;
+		tinymce_id_ws.prop( 'name', tinymce_id )
+		tinymce_wrapper_div.hide()
+		return false
 	}
 
 	if ( typeof tinyMCE === 'object' && tinyMCE.get( tinymce_id ) !== null ) {
 		// visual mode
 		if ( textarea_html ) {
 			// see BeforeSetContent in the wp-includes\js\tinymce\plugins\wordpress\plugin.js
-			var wp = window.wp,
-			hasWpautop = ( wp && wp.editor && wp.editor.autop && tinyMCE.get( tinymce_id ).getParam( 'wpautop', true ) );
+			var wp         = window.wp,
+					hasWpautop = (wp && wp.editor && wp.editor.autop && tinyMCE.get( tinymce_id ).getParam( 'wpautop', true ))
 			if ( hasWpautop ) {
-				textarea_html = wp.editor.autop( textarea_html );
+				textarea_html = wp.editor.autop( textarea_html )
 			}
-			tinyMCE.get( tinymce_id ).setContent( textarea_html );
+			tinyMCE.get( tinymce_id ).setContent( textarea_html )
 		}
-		textarea.remove();
-		tinymce_id_ws.prop('name', textarea.prop( 'name' ) );
-		tinymce_wrapper_div.show();
+		textarea.remove()
+		tinymce_id_ws.prop( 'name', textarea.prop( 'name' ) )
+		tinymce_wrapper_div.show()
 	} else if ( tinymce_id_ws.length ) {
 		// text mode
-		tinymce_id_ws.val( textarea_html );
-		textarea.remove();
-		tinymce_id_ws.prop('name', textarea.prop( 'name' ) );
-		tinymce_wrapper_div.show();
+		tinymce_id_ws.val( textarea_html )
+		textarea.remove()
+		tinymce_id_ws.prop( 'name', textarea.prop( 'name' ) )
+		tinymce_wrapper_div.show()
 	}
 }
 
 /**
  * Show a message depending on whether Adsense Auto ads are enabled.
  */
-function advads_show_adsense_auto_ads_warning() {
-	$msg = jQuery( '.advads-auto-ad-in-ad-content' ).show();
-	$msg.on( 'click', 'button', function() {
-		$msg.hide();
+function advads_show_adsense_auto_ads_warning () {
+	$msg = jQuery( '.advads-auto-ad-in-ad-content' ).show()
+	$msg.on( 'click', 'button', function () {
+		$msg.hide()
 		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
@@ -898,70 +735,130 @@ function advads_show_adsense_auto_ads_warning() {
 				action: 'advads-adsense-enable-pla',
 				nonce: advadsglobal.ajax_nonce
 			},
-		} ).done(function( data ) {
-			$msg.show().html( advadstxt.page_level_ads_enabled );
-		} ).fail(function( jqXHR, textStatus ) {
-			$msg.show();
-		} );
-	});
+		} ).done( function ( data ) {
+			$msg.show().html( advadstxt.page_level_ads_enabled )
+		} ).fail( function ( jqXHR, textStatus ) {
+			$msg.show()
+		} )
+	} )
 }
 
 /**
  * Check if a third-party ads.txt file exists.
  */
-function advads_ads_txt_find_issues() {
-	var $wrapper = jQuery( '#advads-ads-txt-notice-wrapper' );
-	var $refresh = jQuery( '#advads-ads-txt-notice-refresh' );
+function advads_ads_txt_find_issues () {
+	var $wrapper = jQuery( '#advads-ads-txt-notice-wrapper' )
+	var $refresh = jQuery( '#advads-ads-txt-notice-refresh' )
+	var $actions = jQuery( '.advads-ads-txt-action' )
+
+	/**
+	 * Toggle the visibility of the spinner.
+	 *
+	 * @param {Bool} state True to show, False to hide.
+	 */
+	function set_loading ( state ) {
+		$actions.toggle( ! state )
+		if ( state ) {
+			$wrapper.html( '<span class="spinner advads-spinner"></span>' )
+		}
+	}
 
 	if ( ! $wrapper.length ) {
-		return;
+		return
 	}
 
 	if ( ! $wrapper.find( 'ul' ).length ) {
-		load();
+		// There are no notices. Fetch them using ajax.
+		load( 'get_notices' )
 	}
 
-	$refresh.click( function() {
-		load();
-	} );
+	$refresh.click( function () {
+		load( 'get_notices' )
+	} )
 
-	function load() {
-		$wrapper.empty().append( jQuery( '<span class="spinner advads-spinner"></span>' ) );
-		$refresh.hide();
+	function done ( response ) {
+		$wrapper.html( response.notices )
+		set_loading( false )
+	}
+
+	function fail ( jqXHR ) {
+		$wrapper.html( '<p class="advads-error-message">'
+			+ jQuery( '#advads-ads-txt-notice-error' ).text().replace( '%s', parseInt( jqXHR.status, 10 ) ),
+			+'</p>'
+		)
+		set_loading( false )
+	}
+
+	function load ( type ) {
+		set_loading( true )
 
 		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
-			dataType: 'html',
 			data: {
 				action: 'advads-ads-txt',
-				nonce: advadsglobal.ajax_nonce
+				nonce: advadsglobal.ajax_nonce,
+				type,
 			},
-		} ).done(function( response ) {
-			$wrapper.html( response );
-			$refresh.show();
-		} ).fail(function( jqXHR ) {
-			$wrapper.html( '<p class="advads-error-message">'
-				+ jQuery( '#advads-ads-txt-notice-error' ).text().replace( '%s', parseInt( jqXHR.status, 10 ) ),
-				+ '</p>'
-			);
-			$refresh.show();
-		} );
+		} ).done( done ).fail( fail )
 	}
+
+	jQuery( document ).on( 'click', '#advads-ads-txt-remove-real', function ( event ) {
+		event.preventDefault()
+
+		var args = {
+			data: {
+				action: 'advads-ads-txt',
+				nonce: advadsglobal.ajax_nonce,
+				type: 'remove_real_file',
+			},
+			done: function ( response ) {
+				if ( response.additional_content ) {
+					jQuery( '#advads-ads-txt-additional-content' ).val( response.additional_content )
+				}
+				done( response )
+			},
+			fail: fail,
+			before_send: function () {
+				set_loading( true )
+			},
+		}
+
+		advanced_ads_admin.filesystem.ajax( args )
+	} )
+
+	jQuery( document ).on( 'click', '#advads-ads-txt-create-real', function ( event ) {
+		event.preventDefault()
+
+		var args = {
+			data: {
+				action: 'advads-ads-txt',
+				nonce: advadsglobal.ajax_nonce,
+				type: 'create_real_file',
+			},
+			done: done,
+			fail: fail,
+			before_send: function () {
+				set_loading( true )
+			},
+		}
+
+		advanced_ads_admin.filesystem.ajax( args )
+	} )
 
 }
 
-jQuery.fn.advads_tooltip = function() {
-	return _advads_apply_jqueryui_widget.call( this, 'tooltip', ['tooltip'], arguments );
-};
+jQuery.fn.advads_tooltip = function () {
+	return _advads_apply_jqueryui_widget.call( this, 'tooltip', [ 'tooltip' ], arguments )
+}
 
-jQuery.fn.advads_button = function() {
-	return _advads_apply_jqueryui_widget.call( this, 'button', ['button'], arguments );
-};
+jQuery.fn.advads_button = function () {
+	return _advads_apply_jqueryui_widget.call( this, 'button', [ 'button' ], arguments )
+}
 
-jQuery.fn.advads_buttonset = function() {
-	return _advads_apply_jqueryui_widget.call( this, 'buttonset', ['button', 'buttonset'], arguments );
-};
+jQuery.fn.advads_buttonset = function () {
+	return _advads_apply_jqueryui_widget.call( this, 'buttonset', [ 'button', 'buttonset' ], arguments )
+}
 
 /**
  * Apply jQueryUI widget.
@@ -970,25 +867,25 @@ jQuery.fn.advads_buttonset = function() {
  * @param arr revoke Names of Twitter Bootstrap widgets to revoke.
  * @param arguments_ mixed Widget arguments.
  */
-function _advads_apply_jqueryui_widget( name, revoke, args ) {
-	var can_apply = true;
+function _advads_apply_jqueryui_widget ( name, revoke, args ) {
+	var can_apply = true
 
-	jQuery.each( revoke, function( _index, _name ) {
+	jQuery.each( revoke, function ( _index, _name ) {
 		if ( jQuery.fn[ _name ].noConflict ) {
 			// Revoke Twitter Bootstrap, assign jQuery UI.
-			jQuery.fn[ _name ].noConflict();
+			jQuery.fn[ _name ].noConflict()
 		}
-		can_apply = _advads_can_apply_jqueryui_widget( _name );
-	});
+		can_apply = _advads_can_apply_jqueryui_widget( _name )
+	} )
 
 	if ( ! can_apply ) {
 		// The culprit is not Bootstrap, we haven't been able to assign jQuery UI.
-		jQuery( '.advads-jqueryui-error').show();
-		return;
+		jQuery( '.advads-jqueryui-error' ).show()
+		return
 	}
 
-	var r = this[ name ].apply( this, args );
-	return r;
+	var r = this[ name ].apply( this, args )
+	return r
 }
 
 /**
@@ -997,18 +894,18 @@ function _advads_apply_jqueryui_widget( name, revoke, args ) {
  * @param name Widget name.
  * @return bool
  */
-var _advads_can_apply_jqueryui_widget = ( function( name ) {
-	var r = {};
+var _advads_can_apply_jqueryui_widget = (function ( name ) {
+	var r = {}
 	return function ( name ) {
 		if ( ! r.hasOwnProperty( name ) ) {
-			var needle = 'prior to initialization;'; // A string from jquery-ui source code.
-			r[ name ] = jQuery.fn[ name ].toString().indexOf( needle ) !== -1;
+			var needle = 'prior to initialization;' // A string from jquery-ui source code.
+			r[ name ]  = jQuery.fn[ name ].toString().indexOf( needle ) !== -1
 		}
-		return r[ name ];
-	};
-})();
+		return r[ name ]
+	}
+})()
 
-window.advanced_ads_admin = window.advanced_ads_admin || {};
+window.advanced_ads_admin     = window.advanced_ads_admin || {}
 advanced_ads_admin.filesystem = {
 	/**
 	 * Holds the current job while the user writes data in the 'Connection Information' modal.
@@ -1020,37 +917,37 @@ advanced_ads_admin.filesystem = {
 	/**
 	 * Toggle the 'Connection Information' modal.
 	 */
-	_requestForCredentialsModalToggle: function() {
-		this.$filesystemModal.toggle();
-		jQuery( 'body' ).toggleClass( 'modal-open' );
+	_requestForCredentialsModalToggle: function () {
+		this.$filesystemModal.toggle()
+		jQuery( 'body' ).toggleClass( 'modal-open' )
 	},
 
-	_init: function() {
-		this._init = function() {}
-		var self = this;
+	_init: function () {
+		this._init = function () {}
+		var self   = this
 
-		self.$filesystemModal = jQuery( '#advanced-ads-rfc-dialog' );
+		self.$filesystemModal = jQuery( '#advanced-ads-rfc-dialog' )
 		/**
 		 * Sends saved job.
 		 */
-		self.$filesystemModal.on( 'submit', 'form', function( event ) {
-			event.preventDefault();
+		self.$filesystemModal.on( 'submit', 'form', function ( event ) {
+			event.preventDefault()
 
-			self.ajax( self._locked_job, true );
+			self.ajax( self._locked_job, true )
 			self._requestForCredentialsModalToggle()
-		} );
+		} )
 
 		/**
 		 * Closes the request credentials modal when clicking the 'Cancel' button.
 		 */
-		self.$filesystemModal.on( 'click', '[data-js-action="close"]', function() {
+		self.$filesystemModal.on( 'click', '[data-js-action="close"]', function () {
 			if ( jQuery.isPlainObject( self._locked_job ) && self._locked_job.on_modal_close ) {
-				self._locked_job.on_modal_close();
+				self._locked_job.on_modal_close()
 			}
 
-			self._locked_job = false;
-			self._requestForCredentialsModalToggle();
-		} );
+			self._locked_job = false
+			self._requestForCredentialsModalToggle()
+		} )
 	},
 
 	/**
@@ -1059,278 +956,314 @@ advanced_ads_admin.filesystem = {
 	 * @param {object} args
 	 * @param {bool} skip_modal
 	 */
-	ajax: function( args, skip_modal ) {
-		this._init();
+	ajax: function ( args, skip_modal ) {
+		this._init()
 
 		if ( ! skip_modal && this.$filesystemModal.length > 0 ) {
-			this._requestForCredentialsModalToggle();
-			this.$filesystemModal.find( 'input:enabled:first' ).focus();
+			this._requestForCredentialsModalToggle()
+			this.$filesystemModal.find( 'input:enabled:first' ).focus()
 
 			// Do not send request.
-			this._locked_job = args;
-			return;
+			this._locked_job = args
+			return
 		}
 
 		var options = {
 			method: 'POST',
 			url: window.ajaxurl,
 			data: {
-				username:        jQuery( '#username' ).val(),
-				password:        jQuery( '#password' ).val(),
-				hostname:        jQuery( '#hostname' ).val(),
+				username: jQuery( '#username' ).val(),
+				password: jQuery( '#password' ).val(),
+				hostname: jQuery( '#hostname' ).val(),
 				connection_type: jQuery( 'input[name="connection_type"]:checked' ).val(),
-				public_key:      jQuery( '#public_key' ).val(),
-				private_key:     jQuery( '#private_key' ).val(),
-				_fs_nonce:       jQuery( '#_fs_nonce' ).val()
+				public_key: jQuery( '#public_key' ).val(),
+				private_key: jQuery( '#private_key' ).val(),
+				_fs_nonce: jQuery( '#_fs_nonce' ).val()
 
 			}
-		};
+		}
 
-		options.data = jQuery.extend( options.data, args.data );
-		var request = jQuery.ajax( options );
+		if ( args.before_send ) {
+			args.before_send()
+		}
+
+		options.data = jQuery.extend( options.data, args.data )
+		var request  = jQuery.ajax( options )
 
 		if ( args.done ) {
-			request.done( args.done );
+			request.done( args.done )
 		}
 
 		if ( args.fail ) {
-			request.fail( args.fail );
+			request.fail( args.fail )
 		}
 	}
 }
 
 window.Advanced_Ads_Admin = window.Advanced_Ads_Admin || {
-	init_ad_source_editor: function(){
-		
+	init_ad_source_editor: function () {
+
 	},
-	get_ad_source_editor_text: function(){
-		var text = undefined;
-		if (Advanced_Ads_Admin.editor){
-    		if (Advanced_Ads_Admin.editor.codemirror){
-    			text = Advanced_Ads_Admin.editor.codemirror.getValue();
-    		}
-    	}
-    	if (! text){
-    		var ta = jQuery('#advads-ad-content-plain');
-    		if (ta) text = ta.val();
-    	}
-    	return text;
-	},
-	set_ad_source_editor_text: function(text){
-		if (Advanced_Ads_Admin.editor && Advanced_Ads_Admin.editor.codemirror){
-			Advanced_Ads_Admin.editor.codemirror.setValue(text);
-    	}
-		else {
-    		jQuery('#advads-ad-content-plain').val(text);
-    	}
-	},
-    check_ad_source: function(){
-    	var text = Advanced_Ads_Admin.get_ad_source_editor_text();
-    	var enabled_php = jQuery('#advads-parameters-php').prop('checked');
-    	var enabled_sc = jQuery('#advads-parameters-shortcodes').prop('checked');
-    	if (enabled_php && ! /\<\?php/.test(text)){
-            jQuery('#advads-parameters-php-warning').show();
-        }
-        else{
-        	jQuery('#advads-parameters-php-warning').hide();
-        }
-        if (enabled_sc && ! /\[[^\]]+\]/.test(text)){
-        	jQuery('#advads-parameters-shortcodes-warning').show();
-        }
-        else{
-        	jQuery('#advads-parameters-shortcodes-warning').hide();
-        }
-    },
-    toggle_placements_visibility: function(elm){
-    	var advadsplacementformrow = jQuery( elm ).next( '.advads-placements-advanced-options' );
-		if( advadsplacementformrow.is( ':visible' ) ){
-			advadsplacementformrow.hide();
-			// clear last edited id
-			jQuery('#advads-last-edited-placement').val('');
-		} else {
-			var placement_id = jQuery( elm ).parents( '.advads-placements-table-options' ).find('.advads-placement-slug').val();
-			advadsplacementformrow.show();
-			jQuery('#advads-last-edited-placement').val( placement_id );
-			//  some special elements (color picker) may not be detected with jquery
-			var tr = jQuery( elm ).closest( 'tr.advanced-ads-placement-row' );
-			if (tr){
-				tr.data('touched', true);
+	get_ad_source_editor_text: function () {
+		var text = undefined
+		if ( Advanced_Ads_Admin.editor ) {
+			if ( Advanced_Ads_Admin.editor.codemirror ) {
+				text = Advanced_Ads_Admin.editor.codemirror.getValue()
 			}
 		}
-    }
-};
+		if ( ! text ) {
+			var ta = jQuery( '#advads-ad-content-plain' )
+			if ( ta ) text = ta.val()
+		}
+		return text
+	},
+	set_ad_source_editor_text: function ( text ) {
+		if ( Advanced_Ads_Admin.editor && Advanced_Ads_Admin.editor.codemirror ) {
+			Advanced_Ads_Admin.editor.codemirror.setValue( text )
+		} else {
+			jQuery( '#advads-ad-content-plain' ).val( text )
+		}
+	},
+	check_ad_source: function () {
+		var text        = Advanced_Ads_Admin.get_ad_source_editor_text()
+		var enabled_php = jQuery( '#advads-parameters-php' ).prop( 'checked' )
+		var enabled_sc  = jQuery( '#advads-parameters-shortcodes' ).prop( 'checked' )
+		if ( enabled_php && ! /\<\?php/.test( text ) ) {
+			jQuery( '#advads-parameters-php-warning' ).show()
+		} else {
+			jQuery( '#advads-parameters-php-warning' ).hide()
+		}
+		if ( enabled_sc && ! /\[[^\]]+\]/.test( text ) ) {
+			jQuery( '#advads-parameters-shortcodes-warning' ).show()
+		} else {
+			jQuery( '#advads-parameters-shortcodes-warning' ).hide()
+		}
+	},
+	toggle_placements_visibility: function ( elm ) {
+		var advadsplacementformrow = jQuery( elm ).next( '.advads-placements-advanced-options' )
+		if ( advadsplacementformrow.is( ':visible' ) ) {
+			advadsplacementformrow.hide()
+			// clear last edited id
+			jQuery( '#advads-last-edited-placement' ).val( '' )
+		} else {
+			var placement_id = jQuery( elm ).parents( '.advads-placements-table-options' ).find( '.advads-placement-slug' ).val()
+			advadsplacementformrow.show()
+			jQuery( '#advads-last-edited-placement' ).val( placement_id )
+			//  some special elements (color picker) may not be detected with jquery
+			var tr = jQuery( elm ).closest( 'tr.advanced-ads-placement-row' )
+			if ( tr ) {
+				tr.data( 'touched', true )
+			}
+		}
+	}
+}
 
-
-if (! window.AdvancedAdsAdmin) window.AdvancedAdsAdmin = {};
-if (! window.AdvancedAdsAdmin.AdImporter) window.AdvancedAdsAdmin.AdImporter = {
+if ( ! window.AdvancedAdsAdmin ) window.AdvancedAdsAdmin = {}
+if ( ! window.AdvancedAdsAdmin.AdImporter ) window.AdvancedAdsAdmin.AdImporter = {
 	/**
 	 * will highlight the currently selected ads in the list
 	 * @param hideInactive when true will hide inactive ad units
 	 * @returns the selector of the selected row or false if no row was selected.
 	 */
-	highlightSelectedRowInExternalAdsList: function(hideInactive){
-		if (typeof(hideInactive) == 'undefined') hideInactive = AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle;
-		const tbody = $( '#mapi-table-wrap tbody' );
-		const btn = $('#mapi-toggle-idle');
+	highlightSelectedRowInExternalAdsList: function ( hideInactive ) {
+		if ( typeof (hideInactive) == 'undefined' ) hideInactive = AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle
+		const tbody = jQuery( '#mapi-table-wrap tbody' )
+		const btn   = jQuery( '#mapi-toggle-idle' )
 
 		//  count the ad units to determine if there's a need for the overflow class (scrolling)
 		const nbUnits = hideInactive
-			? $( '#mapi-table-wrap tbody tr[data-active=1]' ).length
-			: $( '#mapi-table-wrap tbody tr' ).length;
-		if (nbUnits > 8) $( '#mapi-table-wrap' ).addClass('overflow');
-		else $( '#mapi-table-wrap' ).removeClass('overflow');
+			? jQuery( '#mapi-table-wrap tbody tr[data-active=1]' ).length
+			: jQuery( '#mapi-table-wrap tbody tr' ).length
+		if ( nbUnits > 8 ) jQuery( '#mapi-table-wrap' ).addClass( 'overflow' )
+		else jQuery( '#mapi-table-wrap' ).removeClass( 'overflow' )
 
 		//  hide inactive ads, but always show the selected one (if any)
-		if (hideInactive) {
-			btn.removeClass('dashicons-hidden');
-			btn.addClass('dashicons-visibility');
-			btn.attr('title', advadstxt.show_inactive_ads);
-			tbody.find('tr[data-slotid]').each(function (k, v) {
-				v = $(v);
-				if (v.data("active")) v.show();
-				else v.hide();
-			});
-		}
-		else{
-			btn.removeClass('dashicons-visibility');
-			btn.addClass('dashicons-hidden');
-			btn.attr('title', advadstxt.hide_inactive_ads);
-			tbody.find('tr[data-slotid]').show();
+		if ( hideInactive ) {
+			btn.removeClass( 'dashicons-hidden' )
+			btn.addClass( 'dashicons-visibility' )
+			btn.attr( 'title', advadstxt.show_inactive_ads )
+			tbody.find( 'tr[data-slotid]' ).each( function ( k, v ) {
+				v = jQuery( v )
+				if ( v.data( 'active' ) ) v.show()
+				else v.hide()
+			} )
+		} else {
+			btn.removeClass( 'dashicons-visibility' )
+			btn.addClass( 'dashicons-hidden' )
+			btn.attr( 'title', advadstxt.hide_inactive_ads )
+			tbody.find( 'tr[data-slotid]' ).show()
 		}
 
-		const selectedRow = AdvancedAdsAdmin.AdImporter.getSelectedRow();
-		tbody.find( 'tr' ).removeClass( 'selected' );
-		if (selectedRow){
+		const selectedRow = AdvancedAdsAdmin.AdImporter.getSelectedRow()
+		tbody.find( 'tr' ).removeClass( 'selected error' );
+		if ( selectedRow ) {
 			//make sure, it is visible before applying the zebra stripes
-			selectedRow.show();
+			selectedRow.show()
 		}
 
 		//  make the table's rows striped.
-		const visible = tbody.find( 'tr:visible' );
-		visible.filter( ':odd' ).css('background-color', '#FFFFFF');
-		visible.filter( ':even' ).css('background-color', '#F9F9F9');
+		const visible = tbody.find( 'tr:visible' )
+		visible.filter( ':odd' ).css( 'background-color', '#FFFFFF' )
+		visible.filter( ':even' ).css( 'background-color', '#F9F9F9' )
 
 		//  highlight the selected row
-		if (selectedRow){
+		if ( selectedRow ) {
 			//  highlight the selected row
-			selectedRow.css('background-color', '');
-			selectedRow.addClass( 'selected' );
-		}
-		return selectedRow || false;
-	},
-	getSelectedRow(){
-		const selectedId = AdvancedAdsAdmin.AdImporter.adNetwork.getSelectedId();
-		const tbody = $( '#mapi-table-wrap tbody' );
+			selectedRow.css( 'background-color', '' )
+			selectedRow.addClass( 'selected' )
 
-		if (selectedId){
-			const selectedRows = tbody.find( 'tr[data-slotid="' + selectedId + '"]' );
+			this.scrollToSelectedRow(selectedRow);
+		}
+
+		return selectedRow || false
+	},
+
+	scrollToSelectedRow($selectedRow) {
+		const $wrap = jQuery('#mapi-table-wrap'),
+			wrapHeight = $wrap.height(),
+			wrapScrolled = $wrap.scrollTop();
+
+		// just in case this does not get passed a selected row, scroll to top of the table
+		if (!$selectedRow) {
+			$wrap.animate({scrollTop: 0}, 200);
+			return;
+		}
+
+		// get the position of the selectedRow within the table wrap
+		let scroll = $selectedRow.position().top,
+			bottom = +scroll + $selectedRow.height();
+		// if the (top of the) element is not yet visible scroll to it
+		if (scroll < wrapScrolled || bottom > wrapScrolled || scroll > wrapScrolled + wrapHeight) {
+			// scrolled element is below current scroll position, i.e. we need to scroll past it not to top
+			if (bottom > $wrap.children('table').height() - wrapHeight) {
+				scroll = bottom;
+			}
+
+			// if the selected element is on the "first page" let's scroll all the way to the top
+			if (scroll < wrapHeight) {
+				scroll = 0;
+			}
+
+			$wrap.animate({scrollTop: scroll}, 200);
+		}
+	},
+
+	getSelectedRow () {
+		const selectedId = AdvancedAdsAdmin.AdImporter.adNetwork.getSelectedId()
+		const tbody      = jQuery( '#mapi-table-wrap tbody' )
+
+		if ( selectedId ) {
+			const selectedRows = tbody.find( 'tr[data-slotid="' + selectedId + '"]' )
 			if ( selectedRows.length ) {
-				return selectedRows;
+				return selectedRows
 			}
 		}
-		return null;
+		return null
 	},
-    openExternalAdsList: function(){
-		const network = AdvancedAdsAdmin.AdImporter.adNetwork;
-        network.openSelector();
+	openExternalAdsList: function () {
+		const network = AdvancedAdsAdmin.AdImporter.adNetwork
+		network.openSelector()
 
-        $( '#mapi-insert-code' ).css( 'display', 'inline' );
-		$( '#mapi-open-selector' ).css( 'display', 'none' );
-		$( '#mapi-close-selector-link' ).css( 'display', 'inline' );
-        $( '.advads-adsense-code' ).css( 'display', 'none' );
-        $( '#remote-ad-unsupported-ad-type' ).css( 'display', 'none' );
+		jQuery( '.mapi-insert-code' ).css( 'display', 'inline' )
+		jQuery( '.mapi-open-selector' ).css( 'display', 'none' )
+		jQuery( '.mapi-close-selector-link' ).css( 'display', 'inline' )
+		jQuery( '.advads-adsense-code' ).css( 'display', 'none' )
+		jQuery( '#remote-ad-unsupported-ad-type' ).css( 'display', 'none' )
 
-		AdvancedAdsAdmin.AdImporter.highlightSelectedRowInExternalAdsList(network.hideIdle);
+		AdvancedAdsAdmin.AdImporter.highlightSelectedRowInExternalAdsList( network.hideIdle )
 
+		var SNT = network.getCustomInputs()
+		SNT.css( 'display', 'none' )
 
+		jQuery( '#mapi-wrap' ).css( 'display', 'block' )
 
-
-        var SNT = network.getCustomInputs();
-        SNT.css( 'display', 'none' );
-
-        $( '#mapi-wrap' ).css( 'display', 'block' );
-
-		if (! network.fetchedExternalAds){
-			network.fetchedExternalAds = true;
-			const nbUnits = $( '#mapi-table-wrap tbody tr[data-slotid]' ).length;
-			if (nbUnits == 0) {
+		if ( ! network.fetchedExternalAds ) {
+			network.fetchedExternalAds = true
+			const nbUnits              = jQuery( '#mapi-table-wrap tbody tr[data-slotid]' ).length
+			if ( nbUnits == 0 ) {
 				//usually we start with a preloaded list.
 				//only reload, when the count is zero (true for new accounts).
-				AdvancedAdsAdmin.AdImporter.refreshAds();
+				AdvancedAdsAdmin.AdImporter.refreshAds()
 			}
 		}
-        AdvancedAdsAdmin.AdImporter.resizeAdListHeader();
-    },
+		AdvancedAdsAdmin.AdImporter.resizeAdListHeader()
+	},
 	/**
 	 * will be called every time the ad type is changed.
 	 * required for onBlur detection
 	 */
-	onChangedAdType: function(){
-		if (AdvancedAdsAdmin.AdImporter.adNetwork){
-			AdvancedAdsAdmin.AdImporter.adNetwork.onBlur();
-			AdvancedAdsAdmin.AdImporter.adNetwork = null;
+	onChangedAdType: function () {
+		if ( AdvancedAdsAdmin.AdImporter.adNetwork ) {
+			AdvancedAdsAdmin.AdImporter.adNetwork.onBlur()
+			AdvancedAdsAdmin.AdImporter.adNetwork = null
 		}
 	},
-	setup: function (adNetwork) {
-		AdvancedAdsAdmin.AdImporter.adNetwork = adNetwork;
-		adNetwork.onSelected();
-		if (AdvancedAdsAdmin.AdImporter.isSetup) {
-			AdvancedAdsAdmin.AdImporter.highlightSelectedRowInExternalAdsList();
-			return;
+	setup: function ( adNetwork ) {
+		AdvancedAdsAdmin.AdImporter.adNetwork = adNetwork
+		adNetwork.onSelected()
+		if ( AdvancedAdsAdmin.AdImporter.isSetup ) {
+			AdvancedAdsAdmin.AdImporter.highlightSelectedRowInExternalAdsList()
+			return
 		}
-		AdvancedAdsAdmin.AdImporter.isSetup = true;
+		AdvancedAdsAdmin.AdImporter.isSetup = true
 
-		$( document ).on( 'click', '.prevent-default', function( ev ) { ev.preventDefault() } );
+		jQuery( document ).on( 'click', '.prevent-default', function ( ev ) { ev.preventDefault() } )
 
 		//  handle clicks for the "insert new ... code" anchor
-		$( document ).on('click', '#mapi-insert-code', function(e){
-			e.preventDefault();
-			$( '.advads-adsense-code' ).show();
-			$( '#mapi-open-selector' ).css( 'display', 'inline' );
-			$( '#mapi-close-selector-link' ).css( 'display', 'inline' );
-			$( '#mapi-wrap' ).css( 'display', 'none' );
-			var SNT = AdvancedAdsAdmin.AdImporter.adNetwork.getCustomInputs();
-			SNT.css( 'display', 'none' );
-			$( this ).hide();
-		});
+		jQuery( document ).on( 'click', '.mapi-insert-code', function ( e ) {
+			e.preventDefault()
+			jQuery( '#remote-ad-unsupported-ad-type' ).css( 'display', 'none' );
+			jQuery( '.advads-adsense-code' ).show()
+			jQuery( '.mapi-open-selector' ).css( 'display', 'inline' )
+			jQuery( '.mapi-close-selector-link' ).css( 'display', 'inline' )
+			jQuery( '.mapi-insert-code' ).css( 'display', 'none' );
+			jQuery( '#mapi-wrap' ).css( 'display', 'none' )
+			var SNT = AdvancedAdsAdmin.AdImporter.adNetwork.getCustomInputs()
+			SNT.css( 'display', 'none' )
+		} )
 
 		//  handle clicks for the "get ad code from your linked account" anchor
-		$( document ).on( 'click', '#mapi-open-selector a', function(){
-            AdvancedAdsAdmin.AdImporter.openExternalAdsList();
-		});
+		jQuery( document ).on( 'click', '.mapi-open-selector a', function () {
+			AdvancedAdsAdmin.AdImporter.openExternalAdsList()
+		} )
 
 		//  the close button of the ad unit list
-		$( document ).on( 'click', '#mapi-close-selector,#mapi-close-selector-link', function(){
-			AdvancedAdsAdmin.AdImporter.manualSetup();
-		} );
+		jQuery( document ).on( 'click', '#mapi-close-selector,.mapi-close-selector-link', function () {
+			jQuery( '#remote-ad-unsupported-ad-type' ).css( 'display', 'none' );
+			AdvancedAdsAdmin.AdImporter.manualSetup()
+		} )
 
 		//the individual rows of the ad units may contain elements with the mapiaction class
-		$( document ).on( 'click', '.mapiaction', function( ev ) {
-			var action = $( this ).attr( 'data-mapiaction' );
+		jQuery( document ).on( 'click', '.mapiaction', function ( ev ) {
+			var action = jQuery( this ).attr( 'data-mapiaction' )
 			switch ( action ) {
 				case 'updateList':
-					AdvancedAdsAdmin.AdImporter.refreshAds();
-					break;
+					AdvancedAdsAdmin.AdImporter.refreshAds()
+					break
 				case 'getCode':
-					if ( $( this ).hasClass( 'disabled' ) ) {
-						break;
+					if ( jQuery( this ).hasClass( 'disabled' ) ) {
+						break
 					}
-					var slotId = $( this ).attr( 'data-slotid' );
-                    AdvancedAdsAdmin.AdImporter.adNetwork.selectAdFromList(slotId);
-					break;
+					var slotId = jQuery( this ).attr( 'data-slotid' )
+					AdvancedAdsAdmin.AdImporter.adNetwork.selectAdFromList( slotId )
+					break
 				case 'updateCode':
-					var slotId = $( this ).attr( 'data-slotid' );
-					AdvancedAdsAdmin.AdImporter.adNetwork.updateAdFromList(slotId);
-					break;
+					var slotId = jQuery( this ).attr( 'data-slotid' )
+					AdvancedAdsAdmin.AdImporter.adNetwork.updateAdFromList( slotId )
+					break
 				case 'toggleidle':
-					AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle = !AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle;
-					AdvancedAdsAdmin.AdImporter.toggleIdleAds( AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle );
+					AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle = ! AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle
+					AdvancedAdsAdmin.AdImporter.toggleIdleAds( AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle )
+					const $inactiveNotice = jQuery('#mapi-notice-inactive');
+					if ($inactiveNotice.length) {
+						$inactiveNotice.toggle(AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle);
+					}
 					break;
 				default:
 			}
-		} );
+		} )
 
-		AdvancedAdsAdmin.AdImporter.adNetwork.onDomReady();
+		AdvancedAdsAdmin.AdImporter.adNetwork.onDomReady()
 		// AdvancedAdsAdmin.AdImporter.openExternalAdsList();
 
 	},
@@ -1339,62 +1272,65 @@ if (! window.AdvancedAdsAdmin.AdImporter) window.AdvancedAdsAdmin.AdImporter = {
 	 * call this method to display the manual setup (if available for the current ad network)
 	 * this method is an equivalent to the close ad list button.
 	 */
-	manualSetup(){
-		$( '#mapi-open-selector,.advads-adsense-show-code' ).css( 'display', 'inline' );
-		$( '#mapi-insert-code' ).css( 'display', 'inline' );
-		$( '#mapi-close-selector-link' ).css( 'display', 'none' );
-		$( '#mapi-wrap' ).css( 'display', 'none' );
+	manualSetup () {
+		jQuery( '.mapi-open-selector,.advads-adsense-show-code' ).css( 'display', 'inline' )
+		jQuery( '.mapi-insert-code' ).css( 'display', 'inline' )
+		jQuery( '.mapi-close-selector-link' ).css( 'display', 'none' )
+		jQuery( '#mapi-wrap' ).css( 'display', 'none' )
 
-		var SNT = AdvancedAdsAdmin.AdImporter.adNetwork.getCustomInputs();
-		SNT.css( 'display', 'block' );
-		AdvancedAdsAdmin.AdImporter.adNetwork.onManualSetup();
+		var SNT = AdvancedAdsAdmin.AdImporter.adNetwork.getCustomInputs()
+		SNT.css( 'display', 'block' )
+		// hide custom layout key if type is not in-feed
+		if (jQuery('#unit-type').val() !== 'in-feed') {
+			jQuery('.advads-adsense-layout-key').css('display', 'none')
+				.next('div').css('display', 'none');
+		}
+		AdvancedAdsAdmin.AdImporter.adNetwork.onManualSetup()
 	},
 
-	setRemoteErrorMessage(msg){
-		if (! msg) jQuery('#remote-ad-code-msg').empty();
-		else jQuery('#remote-ad-code-msg').html(msg);
+	setRemoteErrorMessage ( msg ) {
+		if ( ! msg ) jQuery( '#remote-ad-code-msg' ).empty()
+		else jQuery( '#remote-ad-code-msg' ).html( msg )
 	},
 
 	// another legacy method
-	resizeAdListHeader: function() {
-		var th = $( '#mapi-list-header span' );
-		var tb = $( '#mapi-table-wrap tbody tr:visible' );
-		var w = [];
+	resizeAdListHeader: function () {
+		var th = jQuery( '#mapi-list-header span' )
+		var tb = jQuery( '#mapi-table-wrap tbody tr:visible' )
+		var w  = []
 
-		tb.first().find( 'td' ).each(function(){
-			w.push( $( this ).width() );
-		});
+		tb.first().find( 'td' ).each( function () {
+			w.push( jQuery( this ).width() )
+		} )
 
-		th.each(function(i){
+		th.each( function ( i ) {
 			if ( i != w.length - 1 ) {
-				$( this ).width( w[i] );
+				jQuery( this ).width( w[ i ] )
 			}
-		});
+		} )
 	},
-
-
 
 	/**
 	 * legacy method
 	 */
-	closeAdSelector: function() {
+	closeAdSelector: function () {
 		// close the ad unit selector
-		setTimeout(function(){
-			$( '#mapi-wrap' ).animate(
+		setTimeout( function () {
+			jQuery( '#mapi-wrap' ).animate(
 				{ height: 0, },
 				360,
-				function(){
-					$( '#mapi-open-selector,.advads-adsense-show-code' ).css( 'display', 'inline' );
-					$( '#mapi-close-selector-link' ).css( 'display', 'none' );
-					$( '#mapi-wrap' ).css({
+				function () {
+					jQuery( '.mapi-open-selector,.advads-adsense-show-code' ).css( 'display', 'inline' )
+					jQuery( '.mapi-close-selector-link' ).css( 'display', 'none' )
+					jQuery( '#mapi-wrap' ).css( {
 						display: 'none',
 						height: 'auto',
-					});
-					const SNT = AdvancedAdsAdmin.AdImporter.adNetwork.getCustomInputs();
-					SNT.css( 'display', 'block' );
+					} )
+					const SNT = AdvancedAdsAdmin.AdImporter.adNetwork.getCustomInputs()
+					SNT.css( 'display', 'block' )
 				}
-			);
-		}, 80);
+			)
+		}, 80 )
 
 	},
 
@@ -1402,44 +1338,37 @@ if (! window.AdvancedAdsAdmin.AdImporter) window.AdvancedAdsAdmin.AdImporter = {
 	 * legacy method
 	 * updates the UI, (call if the selected unit is supported)
 	 */
-	unitIsNotSupported: function( slotID ) {
-		$( '#remote-ad-unsupported-ad-type' ).css( 'display', 'block' );
-		AdsenseMAPI.unsupportedUnits[slotID] = 1;
-		$( 'i[data-mapiaction="getCode"][data-slotid="' + slotID + '"]' ).addClass( 'disabled' );
-		$( 'tr[data-slotid="' + slotID + '"] .unitcode > span' ).addClass( 'unsupported' );
-		if ( ! $( 'tr[data-slotid="' + slotID + '"] .unittype a' ).length ) {
-			var td = $( 'tr[data-slotid="' + slotID + '"] .unittype' );
-			var content = td.text();
-			td.html( '<a target="_blank" href="' + AdsenseMAPI.unsupportedLink + '" data-type="' + content + '">' + AdsenseMAPI.unsupportedText + '</a>' );
-		}
-		if ( ! $( 'tr[data-slotid="' + slotID + '"] .unitsize a' ).length ) {
-			var td = $( 'tr[data-slotid="' + slotID + '"] .unitsize' );
-			var content = td.text();
-			td.html( '<a target="_blank" href="' + AdsenseMAPI.unsupportedLink + '" data-size="' + content + '">' + AdsenseMAPI.unsupportedText + '</a>' );
-		}
-
+	unitIsNotSupported: function ( slotID ) {
+		jQuery( '#remote-ad-unsupported-ad-type' ).css( 'display', 'block' );
+		AdsenseMAPI.unsupportedUnits[ slotID ] = 1;
+		jQuery( '#unit-code' ).val( '' );
+		jQuery( '#unit-type' ).val( 'normal' );
+		jQuery( '#ad-layout-key' ).val( '' );
+		jQuery( 'tr[data-slotid^="ca-"]' ).removeClass( 'selected error' );
+		var $selectedRow = jQuery('tr[data-slotid="' + slotID + '"]');
+		$selectedRow.addClass('selected error').css('background-color', '');
+		this.scrollToSelectedRow($selectedRow);
 	},
 
 	/**
 	 * legacy method
 	 * updates the UI, (call if the selected unit is NOT supported)
 	 */
-	unitIsSupported: function( slotID ) {
-		$( '#remote-ad-unsupported-ad-type' ).css( 'display', 'none' );
-		if ( 'undefined' != typeof AdsenseMAPI.unsupportedUnits[slotID] ) {
-			delete AdsenseMAPI.unsupportedUnits[slotID];
+	unitIsSupported: function ( slotID ) {
+		jQuery( '#remote-ad-unsupported-ad-type' ).css( 'display', 'none' )
+		if ( 'undefined' != typeof AdsenseMAPI.unsupportedUnits[ slotID ] ) {
+			delete AdsenseMAPI.unsupportedUnits[ slotID ]
 		}
-		$( 'i[data-mapiaction="getCode"][data-slotid="' + slotID + '"]' ).removeClass( 'disabled' );
-		$( 'tr[data-slotid="' + slotID + '"] .unitcode > span' ).removeClass( 'unsupported' );
-		if ( $( 'tr[data-slotid="' + slotID + '"] .unittype a' ).length ) {
-			var td = $( 'tr[data-slotid="' + slotID + '"] .unittype' );
-			var content = $( 'tr[data-slotid="' + slotID + '"] .unittype a' ).attr( 'data-type' );
-			td.text( content );
+		jQuery( 'i[data-mapiaction="getCode"][data-slotid="' + slotID + '"]' ).removeClass( 'disabled' )
+		if ( jQuery( 'tr[data-slotid="' + slotID + '"] .unittype a' ).length ) {
+			var td      = jQuery( 'tr[data-slotid="' + slotID + '"] .unittype' )
+			var content = jQuery( 'tr[data-slotid="' + slotID + '"] .unittype a' ).attr( 'data-type' )
+			td.text( content )
 		}
-		if ( $( 'tr[data-slotid="' + slotID + '"] .unitsize a' ).length ) {
-			var td = $( 'tr[data-slotid="' + slotID + '"] .unitsize' );
-			var content = $( 'tr[data-slotid="' + slotID + '"] .unitsize a' ).attr( 'data-size' );
-			td.text( content );
+		if ( jQuery( 'tr[data-slotid="' + slotID + '"] .unitsize a' ).length ) {
+			var td      = jQuery( 'tr[data-slotid="' + slotID + '"] .unitsize' )
+			var content = jQuery( 'tr[data-slotid="' + slotID + '"] .unitsize a' ).attr( 'data-size' )
+			td.text( content )
 		}
 	},
 
@@ -1447,48 +1376,48 @@ if (! window.AdvancedAdsAdmin.AdImporter) window.AdvancedAdsAdmin.AdImporter = {
 	 * legacy method
 	 * updates the UI, (call if the selected unit is NOT supported)
 	 */
-	emptyMapiSelector: function( msg ) {
-		const nag = '<div class="notice notice-error" style="font-size:1.1em;padding:.6em 1em;font-weight:bold;">' + msg + '</div>';
-		$( '#mapi-loading-overlay' ).css( 'display', 'none' );
-		$( '#mapi-wrap' ).html( $( nag ) );
+	emptyMapiSelector: function ( msg ) {
+		const nag = '<div class="notice notice-error" style="font-size:1.1em;padding:.6em 1em;font-weight:bold;">' + msg + '</div>'
+		jQuery( '#mapi-loading-overlay' ).css( 'display', 'none' )
+		jQuery( '#mapi-wrap' ).html( jQuery( nag ) )
 	},
 
 	/**
 	 * legacy method
 	 */
-	refreshAds: function() {
-		const adNetwork = AdvancedAdsAdmin.AdImporter.adNetwork;
-		$( '#mapi-loading-overlay' ).css( 'display', 'block' );
-		$.ajax({
+	refreshAds: function () {
+		const adNetwork = AdvancedAdsAdmin.AdImporter.adNetwork
+		jQuery( '#mapi-loading-overlay' ).css( 'display', 'block' )
+		jQuery.ajax( {
 			type: 'post',
 			url: ajaxurl,
 			data: adNetwork.getRefreshAdsParameters(),
-			success: function(response,status,XHR){
+			success: function ( response, status, XHR ) {
 				if ( 'undefined' != typeof response.html ) {
-					$( '#mapi-wrap' ).replaceWith( $( response.html ) );
-                    AdvancedAdsAdmin.AdImporter.openExternalAdsList();
+					jQuery( '#mapi-wrap' ).replaceWith( jQuery( response.html ) )
+					AdvancedAdsAdmin.AdImporter.openExternalAdsList()
 				} else if ( 'undefined' != typeof response.msg ) {
-					AdvancedAdsAdmin.AdImporter.emptyMapiSelector( response.msg );
+					AdvancedAdsAdmin.AdImporter.emptyMapiSelector( response.msg )
 				}
 				if ( 'undefined' != typeof response.raw ) {
-					console.log( response.raw );
+					console.log( response.raw )
 				}
-				$( '#mapi-loading-overlay' ).css( 'display', 'none' );
+				jQuery( '#mapi-loading-overlay' ).css( 'display', 'none' )
 			},
-			error: function(request,status,err){
-				$( '#mapi-loading-overlay' ).css( 'display', 'none' );
+			error: function ( request, status, err ) {
+				jQuery( '#mapi-loading-overlay' ).css( 'display', 'none' )
 			},
-		});
+		} )
 
 	},
 
 	toggleIdleAds: function ( hide ) {
 		if ( 'undefined' == typeof hide ) {
-			hide = true;
+			hide = true
 		}
-		AdvancedAdsAdmin.AdImporter.highlightSelectedRowInExternalAdsList(hide);
+		AdvancedAdsAdmin.AdImporter.highlightSelectedRowInExternalAdsList( hide )
 	}
-};
+}
 
 /**
  * The "abstract" base class for handling external ad units
@@ -1504,52 +1433,52 @@ if (! window.AdvancedAdsAdmin.AdImporter) window.AdvancedAdsAdmin.AdImporter = {
  * hideIdle Remembers, wheter idle ads should be displayed in the list;
  * fetchedExternalAds Remembers if the external ads list has already been loaded to prevent unneccesary requests
  */
-class AdvancedAdsAdNetwork{
+class AdvancedAdsAdNetwork {
 	/**
 	 * @param id string representing the id of this network. has to match the identifier of the PHP class
 	 */
-	constructor(id){
-		this.id = id;
-		this.units = [];
-		this.vars = window[id + 'AdvancedAdsJS'];
-		this.hideIdle = true;
-		this.fetchedExternalAds = false;
+	constructor ( id ) {
+		this.id                 = id
+		this.units              = []
+		this.vars               = window[ id + 'AdvancedAdsJS' ]
+		this.hideIdle           = true
+		this.fetchedExternalAds = false
 	}
 
 	/**
 	 * will be called when an ad network is selected (ad type in edit ad)
 	 */
-	onSelected(){
-		console.error("Please override onSelected.");
+	onSelected () {
+		console.error( 'Please override onSelected.' )
 	}
 
 	/**
 	 * will be called when an ad network deselected (ad type in edit ad)
 	 */
-	onBlur(){
-		console.error("Please override onBlur.");
+	onBlur () {
+		console.error( 'Please override onBlur.' )
 	}
 
 	/**
 	 * opens the selector list containing the external ad units
 	 */
-	openSelector(){
-		console.error("Please override openSelector.");
+	openSelector () {
+		console.error( 'Please override openSelector.' )
 	}
 
 	/**
 	 * returns the network specific id of the currently selected ad unit
 	 */
-	getSelectedId(){
-		console.error("Please override getSelectedId.");
+	getSelectedId () {
+		console.error( 'Please override getSelectedId.' )
 	}
 
 	/**
 	 * will be called when an external ad unit has been selected from the selector list
 	 * @param slotId string the external ad unit id
 	 */
-	selectAdFromList(slotId){
-		console.error("Please override selectAdFromList.");
+	selectAdFromList ( slotId ) {
+		console.error( 'Please override selectAdFromList.' )
 	}
 
 	/**
@@ -1557,41 +1486,40 @@ class AdvancedAdsAdNetwork{
 	 * TODO: decide wheter to remove this method. not required anymore - the button was removed.
 	 * @param slotId string the external ad unit id
 	 */
-	updateAdFromList(slotId){
-		console.error("Please override updateAdFromList.");
+	updateAdFromList ( slotId ) {
+		console.error( 'Please override updateAdFromList.' )
 	}
-
 
 	/**
 	 * return the POST params that you want to send to the server when requesting a refresh of the external ad units
 	 * (like nonce and action and everything else that is required)
 	 */
-	getRefreshAdsParameters(){
-		console.error("Please override getRefreshAdsParameters.");
+	getRefreshAdsParameters () {
+		console.error( 'Please override getRefreshAdsParameters.' )
 	}
 
 	/**
 	 * return the jquery objects for all the custom html elements of this ad type
 	 */
-	getCustomInputs(){
-		console.error("Please override getCustomInputs.");
+	getCustomInputs () {
+		console.error( 'Please override getCustomInputs.' )
 	}
 
 	/**
 	 * what to do when the DOM is ready
 	 */
-	onDomReady(){
-		console.error("Please override onDomReady.");
+	onDomReady () {
+		console.error( 'Please override onDomReady.' )
 	}
 
 	/**
 	 * when you need custom behaviour for ad networks that support manual setup of ad units, override this method
 	 */
-	onManualSetup(){
+	onManualSetup () {
 		//no console logging. this is optional
 	}
 }
 
-class AdvancedAdsExternalAdUnit{
+class AdvancedAdsExternalAdUnit {
 
 }

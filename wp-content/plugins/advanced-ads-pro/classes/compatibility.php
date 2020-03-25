@@ -2,6 +2,15 @@
 class Advanced_Ads_Pro_Compatibility {
 	public function __construct() {
 		add_action( 'after_setup_theme', array( $this, 'after_setup_theme' ) );
+
+		// Set WPML Language.
+		// Note: the "Language filtering for AJAX operations" feature of WPML does not work
+		// because it sets cookie later then our ajax requests are sent.
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX
+			&& defined( 'ICL_SITEPRESS_VERSION' )
+			&& ! empty( $_REQUEST[ 'wpml_lang' ] ) ) {
+			do_action( 'wpml_switch_language', $_REQUEST[ 'wpml_lang' ] );
+		}
 	}
 
 	/**

@@ -65,7 +65,7 @@ var advads_wizard = {
     },
     close: function(){ // close the wizard by showing all elements again
 	this.status = false;
-	jQuery('*').removeClass('advads-hide');
+	jQuery('.advads-hide').removeClass('advads-hide');
 	jQuery('#advads-stop-wizard, #advads-wizard-controls').addClass('hidden');
 	if( this.one_column !== true ){
 	    jQuery( '#post-body').addClass( 'columns-2' ).removeClass( 'columns-1' );

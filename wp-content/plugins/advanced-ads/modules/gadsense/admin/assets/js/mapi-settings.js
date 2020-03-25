@@ -1,10 +1,10 @@
 /**
  * Advanced Ads.
  *
- * @author    Thomas Maier <thomas.maier@webgilde.com>
+ * @author    Thomas Maier <support@wpadvancedads.com>
  * @license   GPL-2.0+
- * @link      http://webgilde.com
- * @copyright 2013-2018 Thomas Maier, webgilde GmbH
+ * @link      https://wpadvancedads.com
+ * @copyright 2013-2018 Thomas Maier, Advanced Ads GmbH
  */
 ;(function($){
 
@@ -79,12 +79,7 @@
 		$( '#adsense #auto-adsense-settings-div' ).css( 'display', 'none' );
 		$( '#adsense #full-adsense-settings-div' ).css( 'display', 'block' );
 		$( '#adsense-id' ).after( $( '#connect-adsense' ) );
-	} );
-
-	$( document ).on( 'change', '#adsense-id', function(){
-		if ( '' != $( this ).val().trim() ) {
-			$( '#adsense #submit' ).parent().css( 'display', 'block' );
-		}
+		$( '#adsense #submit' ).parent().show();
 	} );
 
     // Open the code confirmation modal.
@@ -142,7 +137,7 @@
     } );
     
 	$( function(){
-		if ( '' == $( '#adsense-id' ).val().trim() ) {
+		if ( '' === $( '#adsense-id' ).val().trim() && $('#adsense-manual-config').is(':visible') ) {
 			$( '#adsense #submit' ).parent().css( 'display', 'none' );
 		}
 	} );

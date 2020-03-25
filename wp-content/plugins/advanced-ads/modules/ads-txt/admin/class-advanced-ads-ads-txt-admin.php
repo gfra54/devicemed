@@ -15,11 +15,12 @@ class Advanced_Ads_Ads_Txt_Admin {
 	 *
 	 * @param obj $strategy Advanced_Ads_Ads_Txt_Strategy.
 	 */
-	public function __construct( $strategy ) {
+	public function __construct( Advanced_Ads_Ads_Txt_Strategy $strategy, Advanced_Ads_Ads_Txt_Public $public ) {
 		$this->strategy = $strategy;
+		$this->public = $public;
 
 		add_filter( 'advanced-ads-sanitize-settings', array( $this, 'toggle' ), 10, 1 );
-		add_action( 'update_option_advanced-ads-adsense', array( $this, 'update_adsense_option' ), 10, 2 );
+		add_action( 'pre_update_option_advanced-ads-adsense', array( $this, 'update_adsense_option' ), 10, 2 );
 		add_action( 'advanced-ads-settings-init', array( $this, 'add_settings' ) );
 		add_action( self::ACTION, array( $this, 'ajax_refresh_notices' ) );
 	}
@@ -55,11 +56,16 @@ class Advanced_Ads_Ads_Txt_Admin {
 
 	/**
 	 * Update the 'ads.txt' file every time the AdSense settings are saved.
+	 * The reason for not using `update_option_*` filter is that the function
+	 * should also get called for newly added AdSense options.
 	 *
 	 * @param array $prev Previous options.
 	 * @return array $new New options.
 	 */
-	public function update_adsense_option( $prev, $new ) {
+	public function update_adsense_option( $new, $prev ) {
+		if ( $new === $prev ) {
+			return $new;
+		}
 		$content = $this->get_adsense_blog_data( $new );
 		$this->strategy->add_network_data( self::adsense, $content );
 		$r = $this->strategy->save_options();
@@ -72,6 +78,7 @@ class Advanced_Ads_Ads_Txt_Admin {
 				'error'
 			);
 		}
+		return $new;
 	}
 
 	/**
@@ -132,6 +139,7 @@ class Advanced_Ads_Ads_Txt_Admin {
 	public function render_setting_additional_content() {
 		$content = $this->strategy->get_additional_content();
 		$notices = $this->get_notices();
+		$notices = $this->get_notices_markup( $notices );
 		include dirname( __FILE__ ) . '/views/setting-additional-content.php';
 	}
 
@@ -161,6 +169,7 @@ class Advanced_Ads_Ads_Txt_Admin {
 
 		$notices = array();
 		$link = sprintf( '<a href="%1$s" target="_blank">%1$s</a>', esc_url( $url . 'ads.txt' ) );
+		$button = ' <button type="button" class="advads-ads-txt-action button" style="vertical-align: middle;" id="%s">%s</button>';
 
 		if ( Advanced_Ads_Ads_Txt_Utils::is_subdir() ) {
 			$notices[] = array( 'advads-error-message', sprintf(
@@ -193,10 +202,15 @@ class Advanced_Ads_Ads_Txt_Admin {
 				}
 
 				if ( $file['is_third_party'] ) {
-					$notices[] = array( 'advads-error-message', sprintf(
-						esc_html__( 'A third-party file exists: %s' ),
-						$link
-					) );
+					$message = sprintf( esc_html__( 'A third-party file exists: %s' ), $link);
+
+					if ( $this->can_edit_real_file() ) {
+						$message .= sprintf( $button, 'advads-ads-txt-remove-real', __( 'Import & Replace', 'advanced-ads' ) );
+						$message .= '<p class="description">'
+							. __( 'Move the content of the existing ads.txt file into Advanced Ads and remove it.', 'advanced-ads' )
+						. '</p>';
+					}
+					$notices['is_third_party'] = array( 'advads-error-message', $message );
 				}
 			} else {
 				$notices[] = array( 'advads-error-message', sprintf(
@@ -220,12 +234,24 @@ class Advanced_Ads_Ads_Txt_Admin {
 			}
 		}
 
+		return $notices;
+	}
+
+	/**
+	 * Get HTML markup of the notices.
+	 *
+	 * @param array $notices Notices.
+	 * @return string $r HTML markup.
+	 */
+	private function get_notices_markup( $notices ) {
+		if ( ! $notices ) {
+			return;
+		}
 		$r = '<ul id="advads-ads-txt-notices">';
 		foreach( $notices as $notice ) {
 			$r .= sprintf( '<li class="%s">%s</li>', $notice[0], $notice[1] );
 		}
 		$r .= '</ul>';
-
 		return $r;
 	}
 
@@ -308,9 +334,103 @@ class Advanced_Ads_Ads_Txt_Admin {
 			return;
 		}
 
-		echo $this->get_notices();
+		$response = array();
+		$action_notices = array();
+		if ( isset( $_REQUEST['type'] ) ) {
+			if (  'remove_real_file' === $_REQUEST['type'] ) {
+				$remove = $this->remove_real_file();
+				if ( is_wp_error( $remove ) ) {
+					$action_notices[] = array( 'advads-ads-txt-updated advads-error-message', $remove->get_error_message() );
+				} else {
+					$action_notices[] = array( 'advads-ads-txt-updated', __( 'The ads.txt is now managed with Advanced Ads.', 'advanced-ads' ) );
+					$options = $this->strategy->get_options();
+					$response['additional_content'] = esc_textarea( $options['custom'] );
+				}
+			}
+			if ( 'create_real_file' === $_REQUEST['type'] ) {
+				$action_notices[] = $this->create_real_file();
+			}
+		}
+
+
+		$notices = $this->get_notices();
+		$notices = array_merge( $notices, $action_notices );
+		$response['notices'] = $this->get_notices_markup( $notices );
+
+		echo wp_send_json( $response );
 		exit;
 	}
+
+	/**
+	 * Connect to the filesystem.
+	 */
+	private function fs_connect() {
+		global $wp_filesystem;
+		$fs_connect = Advanced_Ads_Filesystem::get_instance()->fs_connect( array( ABSPATH ) );
+
+		if ( false === $fs_connect || is_wp_error( $fs_connect ) ) {
+			$message = __( 'Unable to connect to the filesystem. Please confirm your credentials.', 'advanced-ads' );
+
+			if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+				$message = esc_html( $wp_filesystem->errors->get_error_message() );
+			}
+			if ( is_wp_error( $fs_connect ) && $fs_connect->get_error_code() ) {
+				$message = esc_html( $fs_connect->get_error_message() );
+			}
+			return new WP_Error( 'can_not_connect', $message );
+		}
+		return true;
+	}
+
+	/**
+	 * Remove existing real ads.txt file.
+	 */
+	function remove_real_file() {
+		if ( ! $this->can_edit_real_file() ) {
+			new WP_Error( 'not_main_site', __( 'Not the main blog', 'advanced-ads' ) );
+		}
+
+		if ( is_wp_error( $this->fs_connect() ) ) {
+			return $fs_connect;
+		}
+
+		global $wp_filesystem;
+		$abspath = trailingslashit( $wp_filesystem->abspath() );
+		$file = $abspath . 'ads.txt';
+		if ( $wp_filesystem->exists( $file ) && $wp_filesystem->is_file( $file ) ) {
+			$data = $wp_filesystem->get_contents( $file );
+
+			$tp_file = new Advanced_Ads_Ads_Txt_Real_File();
+			$tp_file->parse_file( $data );
+
+			$aa_data = $this->public->get_frontend_output();
+			$aa_file = new Advanced_Ads_Ads_Txt_Real_File();
+			$aa_file->parse_file( $aa_data );
+
+			$tp_file->subtract( $aa_file );
+			$output = $tp_file->output();
+			$this->strategy->set_additional_content( $output );
+			$this->strategy->save_options();
+
+
+			if ( $wp_filesystem->delete( $file ) ) {
+				return true;
+			} else {
+				return new WP_Error( 'could_not_delete', __( 'Could not delete the existing ads.txt file', 'advanced-ads' ) );
+			}
+		} else {
+			return new WP_Error( 'not_found', __( 'Could not find the existing ads.txt file', 'advanced-ads' ) );
+		}
+	}
+
+
+	/**
+	 * Check if the user is alowed to edit real file.
+	 */
+	private function can_edit_real_file() {
+		return is_super_admin();
+	}
+
 
 	/**
 	 * Get transient key.

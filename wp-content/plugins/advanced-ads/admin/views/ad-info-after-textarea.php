@@ -4,10 +4,10 @@
  * currently "plain text" and "rich content" ad types
  *
  * @package   Advanced_Ads_Admin
- * @author    Thomas Maier <thomas.maier@webgilde.com>
+ * @author    Thomas Maier <support@wpadvancedads.com>
  * @license   GPL-2.0+
  * @link      https://wpadvancedads.com
- * @copyright since 2013 Thomas Maier, webgilde GmbH
+ * @copyright since 2013 Thomas Maier, Advanced Ads GmbH
  *
  */
 

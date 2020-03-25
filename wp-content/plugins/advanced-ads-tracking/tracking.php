@@ -5,8 +5,8 @@
  * Plugin Name:       Advanced Ads – Ad Tracking
  * Plugin URI:        https://wpadvancedads.com/add-ons/tracking/
  * Description:       Track ad impressions and clicks.
- * Version:           1.8.17
- * Author:            Thomas Maier
+ * Version:           1.20
+ * Author:            Advanced Ads GmbH
  * Author URI:        https://wpadvancedads.com
  * Text Domain:       advanced-ads-tracking
  * Domain Path:       /languages
@@ -23,7 +23,7 @@ define( 'AAT_BASE_URL', plugin_dir_url( __FILE__) );
 define( 'AAT_BASE_DIR', dirname( plugin_basename( __FILE__ ) ) );
 // used as prefix for wp options; used as gettext domain; used as script/ admin namespace
 define( 'AAT_SLUG', 'advads-tracking' );
-define( 'AAT_VERSION', '1.8.17' );
+define( 'AAT_VERSION', '1.20' );
 
 define( 'AAT_PLUGIN_URL', 'https://wpadvancedads.com' );
 define( 'AAT_PLUGIN_NAME', 'Tracking' );
@@ -57,7 +57,7 @@ function advanced_ads_tracking_init_plugin () {
 
      // external click tracking feature is enabled
     if( defined('ADVANCED_ADS_TRACK_EXTERNAL_EVENTS') ){
-	new Advanced_Ads_Tracking_External_Clicks;
+        new Advanced_Ads_Tracking_External_Clicks;
     }
 
     // only admin, not ajax (which is always admin)

@@ -4,17 +4,17 @@
  * Advanced Ads
  *
  * @package   Advanced_Ads_Group
- * @author    Thomas Maier <thomas.maier@webgilde.com>
+ * @author    Thomas Maier <support@wpadvancedads.com>
  * @license   GPL-2.0+
- * @link      http://webgilde.com
- * @copyright 2014 Thomas Maier, webgilde GmbH
+ * @link      https://wpadvancedads.com
+ * @copyright 2014 Thomas Maier, Advanced Ads GmbH
  */
 
 /**
  * an ad group object
  *
  * @package Advanced_Ads_Group
- * @author  Thomas Maier <thomas.maier@webgilde.com>
+ * @author  Thomas Maier <support@wpadvancedads.com>
  */
 class Advanced_Ads_Group {
 
@@ -142,6 +142,7 @@ class Advanced_Ads_Group {
 		$this->post_type = Advanced_Ads::POST_TYPE_SLUG;
 		$this->ad_args = $ad_args;
 		$this->is_head_placement = isset( $this->ad_args['placement_type'] ) && $this->ad_args['placement_type'] === 'header';
+		$this->ad_args['is_top_level'] = ! isset( $this->ad_args['is_top_level'] );
 
 		$this->load_additional_attributes();
 
@@ -218,6 +219,7 @@ class Advanced_Ads_Group {
 
 				// load the ad object
 				$ad = $ad_select->get_ad_by_method( $_ad_id, Advanced_Ads_Select::AD, $this->ad_args );
+
 				if ( $ad !== null ) {
 					$output[] = $ad;
 					$ads_displayed++;
@@ -228,6 +230,7 @@ class Advanced_Ads_Group {
 				}
 			}
 		}
+
 		if ( ! isset( $this->ad_args['global_output'] ) || $this->ad_args['global_output'] ) {
 			// add the group to the global output array
 			$advads = Advanced_Ads::get_instance();
@@ -254,6 +257,10 @@ class Advanced_Ads_Group {
 			. $output_string
 			. apply_filters( 'advanced-ads-output-wrapper-after-content-group', '', $this )
 			. '</div>';
+		}
+
+		if ( ! empty( $this->ad_args['is_top_level'] ) && ! empty( $this->ad_args['placement_clearfix'] ) ) {
+			$output_string .= '<br style="clear: both; display: block; float: none;"/>';
 		}
 
 		// filter final group output
@@ -355,8 +362,8 @@ class Advanced_Ads_Group {
 
 			if ( $ads->have_posts() ) {
 				$this->ads = $this->add_post_ids( $ads->posts );
-				wp_cache_set( $key, $this->ads, Advanced_Ads_Model::OBJECT_CACHE_GROUP, Advanced_Ads_Model::OBJECT_CACHE_TTL);
 			}
+			wp_cache_set( $key, $this->ads, Advanced_Ads_Model::OBJECT_CACHE_GROUP, Advanced_Ads_Model::OBJECT_CACHE_TTL);
 		}
 
 		return $this->ads;
@@ -597,23 +604,26 @@ class Advanced_Ads_Group {
 		$placement_state = isset( $this->ad_args['ad_label'] ) ? $this->ad_args['ad_label'] : 'default';
 		$this->label = Advanced_Ads::get_instance()->get_label( $placement_state );
 
-		// Add placement class.
-		if ( isset( $this->ad_args['output']['class'] ) && is_array( $this->ad_args['output']['class'] ) ) {
-			$this->wrapper['class'] = $this->ad_args['output']['class'];
-		}
 
-		if ( ! empty( $this->ad_args['placement_position'] ) ) {
-			switch ( $this->ad_args['placement_position'] ) {
-				case 'left' :
-					$this->wrapper['style']['float'] = 'left';
-					break;
-				case 'right' :
-					$this->wrapper['style']['float'] = 'right';
-					break;
-				case 'center' :
-					// We don't know whether the 'add_wrapper_sizes' option exists.
-					$this->wrapper['style']['text-align'] = 'center';
-					break;
+		if ( $this->ad_args['is_top_level'] ) {
+			// Add placement class.
+			if ( isset( $this->ad_args['output']['class'] ) && is_array( $this->ad_args['output']['class'] ) ) {
+				$this->wrapper['class'] = $this->ad_args['output']['class'];
+			}
+
+			if ( ! empty( $this->ad_args['placement_position'] ) ) {
+				switch ( $this->ad_args['placement_position'] ) {
+					case 'left' :
+						$this->wrapper['style']['float'] = 'left';
+						break;
+					case 'right' :
+						$this->wrapper['style']['float'] = 'right';
+						break;
+					case 'center' :
+						// We don't know whether the 'add_wrapper_sizes' option exists.
+						$this->wrapper['style']['text-align'] = 'center';
+						break;
+				}
 			}
 		}
 
@@ -631,13 +641,19 @@ class Advanced_Ads_Group {
 	 * 
 	 * @param   int	$num_ads    number of ads in the group
 	 * @since   1.8.22
+	 *
+	 * @return  max weight used in group settings
 	 */
 	public static function get_max_ad_weight( $num_ads = 1 ){
 	    
-		// use default if lower than default
+		// use default if lower than default.
 		$num_ads = absint( $num_ads );
-		
-		return $num_ads < self::MAX_AD_GROUP_DEFAULT_WEIGHT ? self::MAX_AD_GROUP_DEFAULT_WEIGHT : $num_ads;
+
+		// use number of ads or max ad weight value, whatever is higher
+		$max_weight = $num_ads < self::MAX_AD_GROUP_DEFAULT_WEIGHT ? self::MAX_AD_GROUP_DEFAULT_WEIGHT : $num_ads;
+
+		// allow users to manipulate max ad weight
+		return apply_filters( 'advanced-ads-max-ad-weight', $max_weight, $num_ads );
 	}
 	
 

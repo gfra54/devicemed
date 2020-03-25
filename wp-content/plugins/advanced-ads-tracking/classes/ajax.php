@@ -1,6 +1,6 @@
 <?php
 class Advanced_Ads_Tracking_Ajax {
-    const TRACK_IMPRESSION = 'advanced-ads-tracking-track';
+    const TRACK_IMPRESSION = 'aatrack-records';
 
     public function __construct() {
         // register callback
@@ -334,12 +334,13 @@ class Advanced_Ads_Tracking_Ajax {
 			
             if ( $impr || $clicks ) {
 				
-				// If clicks only are present, fill impressions with zero.
-				if ( ! $impr ) {
-					$impr = $clicks;
-					foreach ( $impr as $date => $_stats ) {
+				// fill impressions with zero if there are only clicks, or clicks without impressions.
+				if ( ! $impr || ( is_array( $impr ) && is_array( $clicks ) && key( $impr ) !== key( $clicks ) ) ) {
+					foreach ( $clicks as $date => $_stats ) {
 						foreach ( $_stats as $key => $value ) {
-							$impr[ $date ][ $key ] = 0;
+							if ( ! isset( $impr[ $date ][ $key ] ) ) {
+								$impr[ $date ][ $key ] = 0;
+							}
 						}
 					}
 				}

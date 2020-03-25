@@ -33,6 +33,12 @@ $auth_url = 'https://accounts.google.com/o/oauth2/v2/auth?scope=' .
 				<div class="gadsense-modal-content-inner" data-content="confirm-code">
 					<i class="dashicons dashicons-dismiss"></i>
 					<label style="font-size:1.1em;font-weight:600;margin-bottom:.3em;display:block;"><?php _e( 'Please enter the confirmation code.', 'advanced-ads' ); ?></label>
+					<div class="gadsense-modal-error" id="gadsense-modal-error">
+						<?php
+						/* Translators: 1: opening a tag to open Google Adsense modal 2: closing a tag */
+						printf( esc_attr__( 'This is not the correct confirmation code. %1$sPlease try again%2$s.', 'advanced-ads' ), '<a href="#" id="gadsense-reopen-connect">', '</a>' );
+						?>
+					</div>
 					<input type="text" class="widefat" id="mapi-code" value="" />
 					<p><label><input type="checkbox" value="1" id="mapi-autoads"<?php echo ( $options['page-level-enabled'] ) ? ' checked="checked"' : ''; ?> />&nbsp;<?php _e( 'Insert the AdSense header code used for verification and the Auto Ads feature.', 'advanced-ads' ); ?></label></p>
 					<p class="submit">

@@ -133,14 +133,17 @@ class Advanced_Ads_Tracking_Plugin {
 	}
 
 	/**
-	* check, whether to track a specific ad or not
+	* Check, whether to track a specific ad or not
 	*
-	* @param obj $ad ad object
-	* @param str $what, what to track. default value 'impression'
+	* @param object $ad ad object.
+	* @param string $what, what to track. default value 'impression'.
 	*/
 	public function check_ad_tracking_enabled( Advanced_Ads_Ad $ad, $what = 'impression' ) {
+
 	    //  TODO: write a better implementation; right now this check should be enough and has little performance impact compared to more generic approaches
-        if (isset($ad->type) && $ad->type === "yieldscale"){
+
+		// don’t track Google Ad Manager or Yieldscale ad types.
+        if ( isset( $ad->type ) && in_array( $ad->type, array( 'yieldscale', 'gam' ) ) ) {
             return false;
         }
 		$options = $ad->options();

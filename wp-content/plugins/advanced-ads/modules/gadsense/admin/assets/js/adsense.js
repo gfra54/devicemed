@@ -37,7 +37,7 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
 
     getSelectedId() {
         const pubId = gadsenseData.pubId || false;
-        const slotId = $( '#unit-code' ).val().trim();
+        const slotId = jQuery( '#unit-code' ).val().trim();
         if (pubId && slotId)
             return "ca-" + pubId + ":" + slotId;
         return null;
@@ -54,8 +54,7 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
             var elmData = jQuery(elm).data('refresh');
             if (elmData){
                 elmData = typeof(elmData) === 'string' ? JSON.parse(elmData) : elmData;
-                var unit_code = $('input#unit-code').val();
-                elmData.filter_value = unit_code;
+                elmData.filter_value = slotId.split(':')[1]; // get the unit id from the slot id
                 elmData.requires_refresh = true;
                 jQuery(elm).data('refresh', elmData);
                 Advanced_Ads_Adsense_Helper.process_dashboard(elm);
@@ -76,11 +75,11 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
     }
 
     onManualSetup() {
-        $( '.advads-adsense-code' ).css( 'display', 'none' );
-        $( '#remote-ad-unsupported-ad-type' ).css( 'display', 'none' );
+        jQuery( '.advads-adsense-code' ).css( 'display', 'none' );
+        jQuery( '#remote-ad-unsupported-ad-type' ).css( 'display', 'none' );
         this.undoReadOnly();
         // const name = (this.adUnitName) ? "( " + this.adUnitName + " ) " : "";
-        // $( '#advanced-ads-adsense-unit-name').text(name);
+        // jQuery( '#advanced-ads-adsense-unit-name').text(name);
     }
 
     /**
@@ -94,11 +93,11 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
             this.undoReadOnly();
             this.setDetailsFromAdCode(parsed);
             this.makeReadOnly();
-            $('#remote-ad-code-error').css('display', 'none');
-            $('#remote-ad-unsupported-ad-type').css('display', 'none');
+            jQuery('#remote-ad-code-error').css('display', 'none');
+            jQuery('#remote-ad-unsupported-ad-type').css('display', 'none');
             this.closeAdSelector();
         } else {
-            $( '#remote-ad-code-error' ).css( 'display', 'block' );
+            jQuery( '#remote-ad-code-error' ).css( 'display', 'block' );
         }
         return parsed;
     }
@@ -124,7 +123,7 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
             var code = this.codes[slotID];
             var parsed = this.processAdCode(code);
             if ( false !== parsed ) {
-                $( '#remote-ad-unsupported-ad-type' ).css( 'display', 'none' );
+                jQuery( '#remote-ad-unsupported-ad-type' ).css( 'display', 'none' );
                 this.closeAdSelector();
                 this.preventCloseAdSelector = false;
             }
@@ -138,9 +137,9 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
     getRemoteCode( slotID ) {
 
         if ( '' == slotID ) return;
-        $( '#mapi-loading-overlay' ).css( 'display', 'block' );
+        jQuery( '#mapi-loading-overlay' ).css( 'display', 'block' );
         const that = this;
-        $.ajax({
+        jQuery.ajax({
             type: 'post',
             url: ajaxurl,
             data: {
@@ -149,9 +148,9 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
                 unit: slotID,
             },
             success: function(response,status,XHR){
-                $( '#mapi-loading-overlay' ).css( 'display', 'none' );
+                jQuery( '#mapi-loading-overlay' ).css( 'display', 'none' );
                 if ( 'undefined' != typeof response.code ) {
-                    $( '#remote-ad-code-msg' ).empty();
+                    jQuery( '#remote-ad-code-msg' ).empty();
                     var parsed = that.processAdCode( response.code );
                     if ( false !== parsed ) {
                         that.codes[slotID] = response.code;
@@ -160,17 +159,18 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
                     AdvancedAdsAdmin.AdImporter.highlightSelectedRowInExternalAdsList();
                     // // Update quota message if needed
                     // if (  1 == 0 ) {
-                    //     $( '#mapi-quota-message' ).text( response.quotaMsg );
+                    //     jQuery( '#mapi-quota-message' ).text( response.quotaMsg );
                     //     AdsenseMAPI.quota = response.quota;
                     //     if ( 0 == response.quota ) {
-                    //         $( '#mapi-get-adcode,#mapi-get-adunits' ).prop( 'disabled', true );
+                    //         jQuery( '#mapi-get-adcode,#mapi-get-adunits' ).prop( 'disabled', true );
                     //     }
                     // }
+                    jQuery('[data-slotid="'+slotID+'"]').children('.unittype').text(response.type);
                     that.closeAdSelector();
 
                 } else {
                     if ( 'undefined' != typeof response.raw ) {
-                        $( '#remote-ad-code-msg' ).html( response.raw );
+                        jQuery( '#remote-ad-code-msg' ).html( response.raw );
                     } else if( 'undefined' != typeof response.msg ) {
                         if ( 'undefined' != typeof response.reload ) {
                             AdvancedAdsAdmin.AdImporter.emptyMapiSelector( response.msg );
@@ -178,7 +178,7 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
                             if ( 'doesNotSupportAdUnitType' == response.msg ) {
                                 AdvancedAdsAdmin.AdImporter.unitIsNotSupported( slotID );
                             } else {
-                                $( '#remote-ad-code-msg' ).html( response.msg );
+                                jQuery( '#remote-ad-code-msg' ).html( response.msg );
                             }
                         }
                         if ( 'undefined' != typeof response.raw ) {
@@ -188,7 +188,7 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
                 }
             },
             error: function(request,status,err){
-                $( '#mapi-loading-overlay' ).css( 'display', 'none' );
+                jQuery( '#mapi-loading-overlay' ).css( 'display', 'none' );
 
             },
         });
@@ -204,7 +204,7 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
     parseAdContent(content) {
         var rawContent = ('undefined' != typeof(content))? content.trim() : '';
         var theAd = {};
-        var theContent = $( '<div />' ).html( rawContent );
+        var theContent = jQuery( '<div />' ).html( rawContent );
         var adByGoogle = theContent.find( 'ins' );
         theAd.slotId = adByGoogle.attr( 'data-ad-slot' ) || '';
         if ('undefined' != typeof(adByGoogle.attr( 'data-ad-client' ))) {
@@ -214,7 +214,7 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
         if (undefined !== theAd.slotId && '' != theAd.pubId) {
             theAd.display = adByGoogle.css( 'display' );
             theAd.format = adByGoogle.attr( 'data-ad-format' );
-            theAd.layout = adByGoogle.attr( 'data-ad-layout' ); // for InFeed and InArticle
+            theAd.layout = adByGoogle.attr( 'data-ad-layout' ); // for In-feed and In-article
             theAd.layout_key = adByGoogle.attr( 'data-ad-layout-key' ); // for InFeed
             theAd.style = adByGoogle.attr( 'style' ) || '';
 
@@ -250,14 +250,14 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
                 theAd.type = 'matched-content';
             }
 
-            /* InArticle & InFeed ads */
+            /* In-article & In-feed ads */
             else if ('undefined' != typeof(theAd.format) && 'fluid' == theAd.format) {
 
-                // InFeed
+                // In-article
                 if('undefined' != typeof(theAd.layout) && 'in-article' == theAd.layout){
                     theAd.type = 'in-article';
                 } else {
-                    // InArticle
+                    // In-feed
                     theAd.type = 'in-feed';
                 }
             }
@@ -297,11 +297,11 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
         }
 
         if ( '' == theAd.slotId && gadsenseData.pubId && '' != gadsenseData.pubId ) {
-            theAd.type = $( '#unit-type' ).val();
+            theAd.type = jQuery( '#unit-type' ).val();
         }
 
         /* Page-Level ad */
-        if ( rawContent.indexOf( 'enable_page_level_ads' ) !== -1 ) {
+        if ( rawContent.indexOf( 'enable_page_level_ads' ) !== -1 || /script[^>]+data-ad-client=/.test( rawContent ) ) {
             theAd = { 'parse_message': 'pageLevelAd' };
         }
 
@@ -310,7 +310,7 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
             theAd = { 'parse_message': 'unknownAd' };
         }
 
-        $( document ).trigger( 'gadsenseParseAdContent', [ theAd, adByGoogle ] );
+        jQuery( document ).trigger( 'gadsenseParseAdContent', [ theAd, adByGoogle ] );
         return theAd;
     }
 
@@ -332,7 +332,7 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
      * legacy method
      */
     handleParseResult( parseResult ) {
-        $( '#pastecode-msg' ).empty();
+        jQuery( '#pastecode-msg' ).empty();
         switch ( parseResult.parse_message ) {
             case 'pageLevelAd' :
                 advads_show_adsense_auto_ads_warning();
@@ -341,19 +341,19 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
                 // Not recognized ad code
                 if ( this.parseCodeBtnClicked && 'post-new.php' == gadsenseData.pagenow ) {
                     // do not show if just after switching to AdSense ad type on ad creation
-                    $( '#pastecode-msg' ).append( $( '<p />' ).css( 'color', 'red' ).html( gadsenseData.msg.unknownAd ) );
+                    jQuery( '#pastecode-msg' ).append( jQuery( '<p />' ).css( 'color', 'red' ).html( gadsenseData.msg.unknownAd ) );
                 }
                 break;
             default:
                 this.setDetailsFromAdCode( parseResult );
                 if ( 'undefined' != typeof AdsenseMAPI && 'undefined' != typeof AdsenseMAPI.hasToken && parseResult.pubId == AdsenseMAPI.pubId ) {
-                    var content = $( '#advanced-ads-ad-parameters input[name="advanced_ad[content]"]' ).val();
+                    var content = jQuery( '#advanced-ads-ad-parameters input[name="advanced_ad[content]"]' ).val();
                     this.mapiSaveAdCode( content, parseResult.slotId );
                     this.makeReadOnly();
                 }
-                $( '.advads-adsense-code' ).hide();
-                $( '.advads-adsense-show-code' ).show();
-                $( '#mapi-insert-code' ).show();
+                jQuery( '.advads-adsense-code' ).hide();
+                jQuery( '.advads-adsense-show-code' ).show();
+                jQuery( '.mapi-insert-code' ).show();
                 var SNT = this.getCustomInputs();
                 SNT.css( 'display', 'block' );
         }
@@ -365,56 +365,56 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
      */
     setDetailsFromAdCode(theAd) {
         this.undoReadOnly();
-        $( '#unit-code' ).val( theAd.slotId );
-        $( '#advads-adsense-pub-id' ).val( theAd.pubId );
+        jQuery( '#unit-code' ).val( theAd.slotId );
+        jQuery( '#advads-adsense-pub-id' ).val( theAd.pubId );
         if ('normal' == theAd.type) {
-            $( '#unit-type' ).val( 'normal' );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( theAd.width );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( theAd.height );
+            jQuery( '#unit-type' ).val( 'normal' );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( theAd.width );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( theAd.height );
         }
         if ('responsive' == theAd.type) {
-            $( '#unit-type' ).val( 'responsive' );
-            $( '#ad-resize-type' ).val( 'auto' );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( '' );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( '' );
+            jQuery( '#unit-type' ).val( 'responsive' );
+            jQuery( '#ad-resize-type' ).val( 'auto' );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( '' );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( '' );
         }
         if ('link' == theAd.type) {
-            $( '#unit-type' ).val( 'link' );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( theAd.width );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( theAd.height );
+            jQuery( '#unit-type' ).val( 'link' );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( theAd.width );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( theAd.height );
         }
         if ('link-responsive' == theAd.type) {
-            $( '#unit-type' ).val( 'link-responsive' );
-            $( '#ad-resize-type' ).val( 'auto' );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( '' );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( '' );
+            jQuery( '#unit-type' ).val( 'link-responsive' );
+            jQuery( '#ad-resize-type' ).val( 'auto' );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( '' );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( '' );
         }
         if ('matched-content' == theAd.type) {
-            $( '#unit-type' ).val( 'matched-content' );
-            $( '#ad-resize-type' ).val( 'auto' );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( '' );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( '' );
+            jQuery( '#unit-type' ).val( 'matched-content' );
+            jQuery( '#ad-resize-type' ).val( 'auto' );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( '' );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( '' );
         }
         if ('in-article' == theAd.type) {
-            $( '#unit-type' ).val( 'in-article' );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( '' );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( '' );
+            jQuery( '#unit-type' ).val( 'in-article' );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( '' );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( '' );
         }
         if ('in-feed' == theAd.type) {
-            $( '#unit-type' ).val( 'in-feed' );
-            $( '#ad-layout-key' ).val( theAd.layout_key );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( '' );
-            $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( '' );
+            jQuery( '#unit-type' ).val( 'in-feed' );
+            jQuery( '#ad-layout-key' ).val( theAd.layout_key );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val( '' );
+            jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val( '' );
         }
         var storedPubId = gadsenseData.pubId;
 
         if ( '' !== storedPubId && theAd.pubId != storedPubId && '' != theAd.slotId ) {
-            $( '#adsense-ad-param-error' ).text( gadsenseData.msg.pubIdMismatch );
+            jQuery( '#adsense-ad-param-error' ).text( gadsenseData.msg.pubIdMismatch );
         } else {
-            $( '#adsense-ad-param-error' ).empty();
+            jQuery( '#adsense-ad-param-error' ).empty();
         }
-        $( document ).trigger( 'this.setDetailsFromAdCode', [ theAd ] );
-        $( '#unit-type' ).trigger( 'change' );
+        jQuery( document ).trigger( 'this.setDetailsFromAdCode', [ theAd ] );
+        jQuery( '#unit-type' ).trigger( 'change' );
     }
 
     /**
@@ -422,32 +422,32 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
      * Format the post content field
      */
     static gadsenseFormatAdContent() {
-        var slotId = $( '#ad-parameters-box #unit-code' ).val();
-        var unitType = $( '#ad-parameters-box #unit-type' ).val();
-        var publisherId = $( '#advads-adsense-pub-id' ).val() ? $( '#advads-adsense-pub-id' ).val() : gadsenseData.pubId;
+        var slotId = jQuery( '#ad-parameters-box #unit-code' ).val();
+        var unitType = jQuery( '#ad-parameters-box #unit-type' ).val();
+        var publisherId = jQuery( '#advads-adsense-pub-id' ).val() ? jQuery( '#advads-adsense-pub-id' ).val() : gadsenseData.pubId;
         var adContent = {
             slotId: slotId,
             unitType: unitType,
             pubId: publisherId,
         };
         if ('responsive' == unitType) {
-            var resize = $( '#ad-parameters-box #ad-resize-type' ).val();
+            var resize = jQuery( '#ad-parameters-box #ad-resize-type' ).val();
             if (0 == resize) { resize = 'auto'; }
             adContent.resize = resize;
         }
         if ('in-feed' == unitType) {
-            adContent.layout_key = $( '#ad-parameters-box #ad-layout-key' ).val();
+            adContent.layout_key = jQuery( '#ad-parameters-box #ad-layout-key' ).val();
         }
         if ('undefined' != typeof(adContent.resize) && 'auto' != adContent.resize) {
-            $( document ).trigger( 'gadsenseFormatAdResponsive', [adContent] );
+            jQuery( document ).trigger( 'gadsenseFormatAdResponsive', [adContent] );
         }
-        $( document ).trigger( 'gadsenseFormatAdContent', [adContent] );
+        jQuery( document ).trigger( 'gadsenseFormatAdContent', [adContent] );
 
         if ('undefined' != typeof(window.gadsenseAdContent)) {
             adContent = window.gadsenseAdContent;
             delete( window.gadsenseAdContent );
         }
-        $( '#advads-ad-content-adsense' ).val( JSON.stringify( adContent, false, 2 ) );
+        jQuery( '#advads-ad-content-adsense' ).val( JSON.stringify( adContent, false, 2 ) );
 
     }
 
@@ -455,48 +455,48 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
      * legacy method
      */
     updateAdsenseType(){
-        var type = $( '#unit-type' ).val();
-        $( '.advads-adsense-layout' ).hide();
-        $( '.advads-adsense-layout' ).next('div').hide();
-        $( '.advads-adsense-layout-key' ).hide();
-        $( '.advads-adsense-layout-key' ).next('div').hide();
-        $( '.advads-ad-notice-in-feed-add-on' ).hide();
+        var type = jQuery( '#unit-type' ).val();
+        jQuery( '.advads-adsense-layout' ).hide();
+        jQuery( '.advads-adsense-layout' ).next('div').hide();
+        jQuery( '.advads-adsense-layout-key' ).hide();
+        jQuery( '.advads-adsense-layout-key' ).next('div').hide();
+        jQuery( '.advads-ad-notice-in-feed-add-on' ).hide();
         if ( 'responsive' == type || 'link-responsive' == type || 'matched-content' == type ) {
-            $( '#advanced-ads-ad-parameters-size' ).css( 'display', 'none' );
-            $( '#advanced-ads-ad-parameters-size' ).prev('.label').css( 'display', 'none' );
-            $( '#advanced-ads-ad-parameters-size' ).next('.hr').css( 'display', 'none' );
-            $( '.clearfix-before' ).show();
+            jQuery( '#advanced-ads-ad-parameters-size' ).css( 'display', 'none' );
+            jQuery( '#advanced-ads-ad-parameters-size' ).prev('.label').css( 'display', 'none' );
+            jQuery( '#advanced-ads-ad-parameters-size' ).next('.hr').css( 'display', 'none' );
+            jQuery( '.clearfix-before' ).show();
         } else if ( 'in-feed' == type ) {
-            $( '.advads-adsense-layout' ).css( 'display', 'none' );
-            $( '.advads-adsense-layout' ).next('div').css( 'display', '`none' );
-            $( '.advads-adsense-layout-key' ).css( 'display', 'block' );
-            $( '.advads-adsense-layout-key' ).next('div').css( 'display', 'block' );
-            $( '.advads-adsense-layout-key' ).next('div').css( 'display', 'block' );
-            $( '#advanced-ads-ad-parameters-size' ).css( 'display', 'none' );
-            $( '#advanced-ads-ad-parameters-size' ).prev('.label').css( 'display', 'none' );
-            $( '#advanced-ads-ad-parameters-size' ).next('.hr').css( 'display', 'none' );
+            jQuery( '.advads-adsense-layout' ).css( 'display', 'none' );
+            jQuery( '.advads-adsense-layout' ).next('div').css( 'display', '`none' );
+            jQuery( '.advads-adsense-layout-key' ).css( 'display', 'block' );
+            jQuery( '.advads-adsense-layout-key' ).next('div').css( 'display', 'block' );
+            jQuery( '.advads-adsense-layout-key' ).next('div').css( 'display', 'block' );
+            jQuery( '#advanced-ads-ad-parameters-size' ).css( 'display', 'none' );
+            jQuery( '#advanced-ads-ad-parameters-size' ).prev('.label').css( 'display', 'none' );
+            jQuery( '#advanced-ads-ad-parameters-size' ).next('.hr').css( 'display', 'none' );
             // show add-on notice
-            $( '.advads-ad-notice-in-feed-add-on' ).show();
-            $( '.clearfix-before' ).show();
+            jQuery( '.advads-ad-notice-in-feed-add-on' ).show();
+            jQuery( '.clearfix-before' ).show();
         } else if ( 'in-article' == type ) {
-            $( '#advanced-ads-ad-parameters-size' ).css( 'display', 'none' );
-            $( '#advanced-ads-ad-parameters-size' ).prev('.label').css( 'display', 'none' );
-            $( '#advanced-ads-ad-parameters-size' ).next('.hr').css( 'display', 'none' );
-            $( '.clearfix-before' ).show();
+            jQuery( '#advanced-ads-ad-parameters-size' ).css( 'display', 'none' );
+            jQuery( '#advanced-ads-ad-parameters-size' ).prev('.label').css( 'display', 'none' );
+            jQuery( '#advanced-ads-ad-parameters-size' ).next('.hr').css( 'display', 'none' );
+            jQuery( '.clearfix-before' ).show();
         } else if ( 'normal' == type || 'link' == type ) {
-            $( '#advanced-ads-ad-parameters-size' ).css( 'display', 'block' );
-            $( '#advanced-ads-ad-parameters-size' ).prev('.label').css( 'display', 'block' );
-            $( '#advanced-ads-ad-parameters-size' ).next('.hr').css( 'display', 'block' );
-            $( '.clearfix-before' ).hide();
+            jQuery( '#advanced-ads-ad-parameters-size' ).css( 'display', 'block' );
+            jQuery( '#advanced-ads-ad-parameters-size' ).prev('.label').css( 'display', 'block' );
+            jQuery( '#advanced-ads-ad-parameters-size' ).next('.hr').css( 'display', 'block' );
+            jQuery( '.clearfix-before' ).hide();
 
-            if ( ! $( '[name="advanced_ad\[width\]"]' ).val() ) {
-                $( '[name="advanced_ad\[width\]"]' ).val( '300' );
+            if ( ! jQuery( '[name="advanced_ad\[width\]"]' ).val() ) {
+                jQuery( '[name="advanced_ad\[width\]"]' ).val( '300' );
             }
-            if ( ! $( '[name="advanced_ad\[height\]"]' ).val() ) {
-                $( '[name="advanced_ad\[height\]"]' ).val( '250' );
+            if ( ! jQuery( '[name="advanced_ad\[height\]"]' ).val() ) {
+                jQuery( '[name="advanced_ad\[height\]"]' ).val( '250' );
             }
         }
-        $( document ).trigger( 'gadsenseUnitChanged' );
+        jQuery( document ).trigger( 'gadsenseUnitChanged' );
         AdvancedAdsNetworkAdsense.gadsenseFormatAdContent();
 
         this.show_float_warnings( type );
@@ -507,8 +507,8 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
      * Show / hide position warning.
      */
     show_float_warnings( unit_type ) {
-        var resize_type = $('#ad-resize-type').val();
-        var position = $( '#advanced-ad-output-position input[name="advanced_ad[output][position]"]:checked' ).val();
+        var resize_type = jQuery('#ad-resize-type').val();
+        var position = jQuery( '#advanced-ad-output-position input[name="advanced_ad[output][position]"]:checked' ).val();
 
         if (
             ( -1 !== [ 'link-responsive', 'matched-content', 'in-article', 'in-feed' ].indexOf( unit_type )
@@ -516,9 +516,9 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
             )
             && ( 'left' == position || 'right' == position )
         ) {
-            $('#ad-parameters-box-notices .advads-ad-notice-responsive-position').show();
+            jQuery('#ad-parameters-box-notices .advads-ad-notice-responsive-position').show();
         } else {
-            $('#ad-parameters-box-notices .advads-ad-notice-responsive-position').hide();
+            jQuery('#ad-parameters-box-notices .advads-ad-notice-responsive-position').hide();
         }
     }
 
@@ -526,26 +526,27 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
      * legacy method - adds readonly to relevant inputs
      */
     makeReadOnly() {
-        $( '#unit-code,#ad-layout,#ad-layout-key,[name="advanced_ad[width]"],[name="advanced_ad[height]"]' ).prop( 'readonly', true );
-        $( '#unit-type option:not(:selected)' ).prop( 'disabled', true );
+        jQuery( '#unit-type option:not(:selected)' ).prop( 'disabled', true );
     }
 
     /**
      * legacy method - removes readonly from relevant inputs  (original name getSlotAndType_jq)
      */
     undoReadOnly() {
-        $( '#unit-code,#ad-layout,#ad-layout-key,[name="advanced_ad[width]"],[name="advanced_ad[height]"]' ).prop( 'readonly', false );
-        $( '#unit-type option:not(:selected)' ).prop( 'disabled', false );
+        jQuery( '#unit-code,#ad-layout,#ad-layout-key,[name="advanced_ad[width]"],[name="advanced_ad[height]"]' ).prop( 'readonly', false );
+        jQuery( '#unit-type option:not(:selected)' ).prop( 'disabled', false );
     }
 
     getCustomInputs() {
-        var $div1 = $( '#unit-code' ).closest( 'div' );
+        var $div1 = jQuery( '#unit-code' ).closest( 'div' );
         var $label1 = $div1.prev();
         var $hr1 = $div1.next();
         var $label2 = $hr1.next();
         var $div2 = $label2.next();
+        var $layoutKey = jQuery( '#ad-layout-key' ).closest( 'div' );
+        var $layoutKeyLabel = $layoutKey.prev( '#advads-adsense-layout-key' );
 
-        var $elems = $div1.add( $label1 ).add( $hr1 ).add( $label2 ).add( $div2 );
+        var $elems = $div1.add( $label1 ).add( $hr1 ).add( $label2 ).add( $div2 ).add( $layoutKey ).add( $layoutKeyLabel );
         return $elems;
     }
 
@@ -570,7 +571,7 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
                 if (parsedAd) {
                     //  check
                     //  we need to check if the type of the ad is different from the default. this marks a manually setup ad.
-                    const unitType = $('#unit-type').val();
+                    const unitType = jQuery('#unit-type').val();
                     if (parsedAd.type != unitType) {
                         //this ad was manually setup. don't open the selector, but switch to manual select.
                         switchToManualSetup = true;
@@ -590,20 +591,34 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
 
     onDomReady() {
         const that = this;
-        $( document ).on( 'click', '.advads-adsense-close-code', function( ev ) {
+        jQuery( document ).on( 'click', '.advads-adsense-close-code', function( ev ) {
             ev.preventDefault();
             that.onSelected();
         } );
 
-        $( document ).on('click', '.advads-adsense-submit-code', function(ev){
+        jQuery( document ).on('click', '.advads-adsense-submit-code', function(ev){
             ev.preventDefault();
             that.parseCodeBtnClicked = true;
-            var rawContent = $( '.advads-adsense-content' ).val();
+            var rawContent = jQuery( '.advads-adsense-content' ).val();
             var parseResult = that.parseAdContent( rawContent );
             that.handleParseResult( parseResult );
             if (AdvancedAdsAdmin.AdImporter.highlightSelectedRowInExternalAdsList()){
                 AdvancedAdsAdmin.AdImporter.openExternalAdsList();
                 that.preventCloseAdSelector = true;
+
+                // save the manually added ad code to the AdSense settings
+                wp.ajax.post('advads-mapi-save-manual-code', {
+                    raw_code: encodeURIComponent(rawContent),
+                    parsed_code: parseResult,
+                    nonce: AdsenseMAPI.nonce
+                })
+                    .fail(function (r) {
+                        var $notice = jQuery('<div>').addClass('notice notice-error').html(jQuery('<p>').text(r.responseJSON.data.message));
+                        jQuery('#post').before($notice);
+                        jQuery('body html').animate({
+                            scrollTop: $notice.offset().top
+                        }, 200);
+                    });
             }
             else{
                 //  no adsense ad with this slot id was found
@@ -613,16 +628,39 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
             }
         });
 
-        $( document ).on('change', '#unit-type, #unit-code', function (ev) {
+		jQuery(document).on('gadsenseUnitChanged', function () {
+			var $row = jQuery('tr[data-slotid$="' + jQuery('#unit-code').val() + '"]'),
+				type = window.adsenseAdvancedAdsJS.ad_types.display;
+
+			switch (jQuery('#unit-type').val()) {
+				case 'matched-content':
+					type = window.adsenseAdvancedAdsJS.ad_types.matched_content;
+					break;
+				case 'link':
+				case 'link-responsive':
+					type = window.adsenseAdvancedAdsJS.ad_types.link;
+					break;
+				case 'in-article':
+					type = window.adsenseAdvancedAdsJS.ad_types.in_article;
+					break;
+				case 'in-feed':
+					type = window.adsenseAdvancedAdsJS.ad_types.in_feed;
+					break;
+			}
+
+			$row.children('.unittype').text(type);
+		});
+
+        jQuery( document ).on('change', '#unit-type, #unit-code', function () {
             that.checkAdSlotId(this);
         });
 
-        let inputCode = $('#unit-code');
+        let inputCode = jQuery('#unit-code');
         if (inputCode) {
             this.checkAdSlotId(inputCode[0]);
         }
 
-        $( document ).on( 'change', '#ad-resize-type', function( ev ) {
+        jQuery( document ).on( 'change', '#ad-resize-type', function( ev ) {
             that.show_float_warnings( 'responsive' );
         } );
         this.updateAdsenseType();
@@ -637,20 +675,20 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
     }
 
     checkAdSlotId(elm) {
-        if ( 'unit-code' == $( elm ).attr( 'id' ) ) {
-            var val = $( elm ).val();
+        if ( 'unit-code' == jQuery( elm ).attr( 'id' ) ) {
+            var val = jQuery( elm ).val();
             if (val) val = val.trim();
             if ( val.length > 0 && ( gadsenseData.pubId && -1 != val.indexOf( gadsenseData.pubId.substr( 4 ) ) ) ) {
                 // if ( val.length > 0 && -1 != val.indexOf( gadsenseData.pubId.substr( 4 ) ) ) {
-                $( '#advads-pubid-in-slot' ).css( 'display', 'block' );
-                $( elm ).css( 'background-color', 'rgba(255, 235, 59, 0.33)' );
+                jQuery( '#advads-pubid-in-slot' ).css( 'display', 'block' );
+                jQuery( elm ).css( 'background-color', 'rgba(255, 235, 59, 0.33)' );
             } else {
-                $( '#unit-code' ).css( 'background-color', '#fff' );
-                $( '#advads-pubid-in-slot' ).css( 'display', 'none' );
+                jQuery( '#unit-code' ).css( 'background-color', '#fff' );
+                jQuery( '#advads-pubid-in-slot' ).css( 'display', 'none' );
             }
         } else {
-            $( '#unit-code' ).css( 'background-color', '#fff' );
-            $( '#advads-pubid-in-slot' ).css( 'display', 'none' );
+            jQuery( '#unit-code' ).css( 'background-color', '#fff' );
+            jQuery( '#advads-pubid-in-slot' ).css( 'display', 'none' );
         }
         this.updateAdsenseType();
     }
@@ -658,8 +696,8 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
     mapiSaveAdCode( code, slot ) {
         if ( 'undefined' != typeof AdsenseMAPI.hasToken && 'undefined' == typeof this.codes[ 'ca-' + AdsenseMAPI.pubId + ':' + slot ] ) {
             this.codes['ca-' + AdsenseMAPI.pubId + ':' + slot] = code;
-            $( '#mapi-loading-overlay' ).css( 'display', 'block' );
-            $.ajax({
+            jQuery( '#mapi-loading-overlay' ).css( 'display', 'block' );
+            jQuery.ajax({
                 type: 'post',
                 url: ajaxurl,
                 data: {
@@ -669,10 +707,10 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
                     action: 'advads-mapi-reconstructed-code',
                 },
                 success: function( resp, status, XHR ) {
-                    $( '#mapi-loading-overlay' ).css( 'display', 'none' );
+                    jQuery( '#mapi-loading-overlay' ).css( 'display', 'none' );
                 },
                 error: function( req, status, err ) {
-                    $( '#mapi-loading-overlay' ).css( 'display', 'none' );
+                    jQuery( '#mapi-loading-overlay' ).css( 'display', 'none' );
                 },
             });
         }
@@ -681,14 +719,14 @@ class AdvancedAdsNetworkAdsense extends AdvancedAdsAdNetwork{
     mapiMayBeSaveAdCode(){
         // MAPI not set up
         if ( 'undefined' == typeof AdsenseMAPI.hasToken ) return;
-        var slotId = $( '#unit-code' ).val();
+        var slotId = jQuery( '#unit-code' ).val();
         if ( !slotId ) return;
 
-        var type = $( '#unit-type' ).val();
-        var width = $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val().trim();
-        var height = $( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val().trim();
-        var layout = $( '#ad-layout' ).val();
-        var layoutKey = $( '#ad-layout-key' ).val();
+        var type = jQuery( '#unit-type' ).val();
+        var width = jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[width]"]' ).val().trim();
+        var height = jQuery( '#advanced-ads-ad-parameters-size input[name="advanced_ad[height]"]' ).val().trim();
+        var layout = jQuery( '#ad-layout' ).val();
+        var layoutKey = jQuery( '#ad-layout-key' ).val();
 
         var code = false;
 

@@ -217,7 +217,13 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
         }
 
         $options = Advanced_Ads_Pro::get_instance()->get_options();
+
         $info['ajax_url'] = admin_url( 'admin-ajax.php' );
+        if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+            $current_lang = apply_filters( 'wpml_current_language', null );
+            $info['ajax_url'] = add_query_arg( 'wpml_lang', $current_lang, $info['ajax_url'] );
+        }
+
         $info['lazy_load_module_enabled'] = $this->lazy_load_module_enabled;
         $info['lazy_load'] = array (
             'default_offset' => $this->lazy_load_module_offset,
@@ -507,6 +513,8 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
                     $args['ad_label'] = 'disabled';
                     $args['group_info'] = array (
                         'passive_cb' => true,
+                        'id' => $adgroup->id,
+                        'name' => $adgroup->name,
                         'type' => $adgroup->type,
                         'refresh_enabled' => Advanced_Ads_Pro_Group_Refresh::is_enabled( $adgroup ),
                     );
@@ -552,7 +560,7 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
                             }
 
                             $adgroup->ad_args['cache-busting'] = self::OPTION_OFF;
-                            unset( $adgroup->ad_args['cache_busting_elementid'] );
+                            unset( $adgroup->ad_args['cache_busting_elementid'], $args['cache_busting_elementid'] );
                             $adgroup->ad_args['global_output'] = true;
                             if ( $prev_is_placement ) {
                                 $adgroup->ad_args['cache-busting-orig'] = self::OPTION_AUTO;
@@ -593,6 +601,8 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
         }
 
         $this->collecting_js_items = true;
+        $elementid = $this->generate_elementid();
+        $args['cache_busting_elementid'] = $ad->args['cache_busting_elementid'] = $elementid;
         $overriden_ad = '';
 
         if ( $ad->can_display() ) {
@@ -601,7 +611,7 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
             $ad->global_output = false;
 
             $l = count( $this->has_js_items );
-            $overriden_ad = $this->add_simple_js_item( $ad->output(), $l, $args );
+            $overriden_ad = $this->add_simple_js_item( $elementid, $ad->output(), $l, $args );
 
             $ad->args['global_output'] = true;
             $ad->global_output = true;
@@ -625,12 +635,14 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
         }
 
         $this->collecting_js_items = true;
+        $elementid = $this->generate_elementid();
+        $args['cache_busting_elementid'] = $adgroup->ad_args['cache_busting_elementid'] = $elementid;
 
         // Disable global output because the ads will be tracked using an AJAX request.
         $adgroup->ad_args['global_output'] = false;
 
         $l = count( $this->has_js_items );
-        $overriden_group = $this->add_simple_js_item( $adgroup->output( $ordered_ad_ids ), $l, $args );
+        $overriden_group = $this->add_simple_js_item( $elementid, $adgroup->output( $ordered_ad_ids ), $l, $args );
 
         $adgroup->ad_args['global_output'] = true;
         $this->collecting_js_items = false;
@@ -646,14 +658,26 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
      * @param array $args Placement options.
      * @return string Wrapper id.
      */
-    function add_simple_js_item( $output, $l, $args ) {
-        $elementid = $this->generate_elementid();
-        $this->js_items[] = array(
+    function add_simple_js_item( $elementid, $output, $l, $args ) {
+
+        $js_item = array(
             'output' => $output,
             'elementid' => $elementid,
             'args' => $args,
             'has_js_items' => array_slice( $this->has_js_items, $l ),
         );
+
+        $js_item = apply_filters(
+            'advanced-ads-cache-busting-item',
+            $js_item,
+            array(
+                'method' => 'placement',
+                'args' => $args
+            )
+        );
+
+        $this->js_items[] = $js_item;
+
         /**
          * Collect blog data before `restore_current_blog` is called
          */
@@ -685,7 +709,7 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
 
         $not_head = ! $this->isHead || ( isset( $args['placement_type'] ) && $args['placement_type'] !== 'header' );
         $elementid = $not_head ? $this->generate_elementid() : null;
-        $ad->args['cache_busting_elementid'] = $elementid;
+        $args['cache_busting_elementid'] = $ad->args['cache_busting_elementid'] = $elementid;
         $output_string = $not_head ? $this->create_wrapper( $elementid, $args ) : '';
 
         $js_array[ $uniq_key ] = array(
@@ -693,15 +717,14 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
             'ads' => array( $ad->id => $this->get_passive_cb_for_ad( $ad ) ), // only 1 ad
         );
 
+
         if ( $cache_busting_auto ) {
             $placements = Advanced_Ads::get_ad_placements_array();
-            $placement_info = $placements[ $id ];
-            $placement_info['id'] = (string) $id;
             $test_id = isset( $args['test_id'] ) ? $args['test_id'] : null;
 
             $js_array[ $uniq_key ]['type'] = 'ad';
             $js_array[ $uniq_key ]['id'] = $ad->id;
-            $js_array[ $uniq_key ]['placement_info']  = $placement_info;
+            $js_array[ $uniq_key ]['placement_info']  = $this->get_placement_info( $id );
             $js_array[ $uniq_key ]['test_id'] = $test_id;
 
             if ( $ad_for_adblocker = Advanced_Ads_Pro_Module_Ads_For_Adblockers::get_ad_for_adblocker( $args ) ) {
@@ -716,6 +739,14 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
             }
         }
 
+        $js_array[ $uniq_key ] = apply_filters(
+            'advanced-ads-cache-busting-item',
+            $js_array[ $uniq_key ],
+            array(
+                'method' => $cache_busting_auto ? 'placement' : 'ad',
+                'args' => $args
+            )
+        );
 
         return $output_string;
     }
@@ -744,7 +775,7 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
 
         $not_head = ! $this->isHead || ( isset( $args['placement_type'] ) && $args['placement_type'] !== 'header' );
         $elementid = $not_head ? $this->generate_elementid() : null;
-        $adgroup->ad_args['cache_busting_elementid'] = $elementid;
+        $args['cache_busting_elementid'] = $adgroup->ad_args['cache_busting_elementid'] = $elementid;
         $output_string = $not_head ? $this->create_wrapper( $elementid, $args ) : '';
 
         // remove ads with 0 ad weight
@@ -802,9 +833,7 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
 
         if ( $cache_busting_auto ) {
             $placements = Advanced_Ads::get_ad_placements_array();
-            $placement_info = $placements[ $id ];
-            $placement_info['id'] = (string) $id;
-            $js_array[ $uniq_key ]['placement_info'] = $placement_info;
+            $js_array[ $uniq_key ]['placement_info']  = $this->get_placement_info( $id );
             $js_array[ $uniq_key ]['test_id'] = isset( $args['test_id'] ) ? $args['test_id'] : null;
 
             if ( $ad_for_adblocker = Advanced_Ads_Pro_Module_Ads_For_Adblockers::get_ad_for_adblocker( $args ) ) {
@@ -834,10 +863,42 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
                 . '</div>'
             );
         }
-
+        $js_array[ $uniq_key ] = apply_filters(
+            'advanced-ads-cache-busting-item',
+            $js_array[ $uniq_key ],
+            array(
+                'method' => $cache_busting_auto ? 'placement' : 'group',
+                'args' => $args
+            )
+        );
 
         return $output_string;
     }
+
+	/**
+	 * Get placement information
+	 *
+	 * @param string $id Placement id.
+	 * @param array $placement_info Placement information.
+	 */
+	private function get_placement_info( $id ) {
+		// The information which passive cache-busting (`inc/base.js`) can read.
+		// When a new placement option is added and passive cache-busting needs to access it, it should be added to the array.
+		$allowed_keys = array( 'id', 'lazy_load', 'test_id', 'layer_placement', 'close', 'inject_by', 'placement_position' );
+
+		$placements = Advanced_Ads::get_ad_placements_array();
+		$placement_info = $placements[ $id ];
+		$placement_info['id'] = (string) $id;
+
+		if ( ! empty( $placement_info['options'] ) && is_array( $placement_info['options'] ) ) {
+			foreach ( $placement_info['options'] as $k => $option ) {
+				if ( ! in_array( $k, $allowed_keys, true ) ) {
+					unset( $placement_info['options'][ $k ] );
+				}
+			}
+		}
+		return $placement_info;
+	}
 
     /**
      * add new passive ad to passive cb js array
@@ -1167,7 +1228,8 @@ class Advanced_Ads_Pro_Module_Cache_Busting {
      * @return array $args.
      */
     private function create_wrapper( $element_id ) {
-        return '<div id="' . $element_id . '"></div>';
+        // TODO: `id` is deprecated.
+        return '<div class="' . $element_id . '" id="' . $element_id . '"></div>';
     }
 
 

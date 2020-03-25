@@ -9,8 +9,14 @@
 .advads-placement-tests-table tbody tr td:last-child { width: 70px; }
 
 .advads-placements-table-test-column { width: 150px; }
-.advads-placements-table-options fieldset { margin-left: 2em; margin-bottom: 1em; }
-.advads-placements-table-options fieldset legend { margin-left: -2em; font-weight: bold; }
+.advads-placements-table-options .advads-option-placement-custom-position fieldset { margin-left: 2em; margin-bottom: 1em; }
+.advads-placements-table-options .advads-option-placement-custom-position fieldset legend { margin-left: -2em; font-weight: bold; }
+
+/**
+ PLACEMENT VISITOR AND DISPLAY CONDITIONS
+ */
+.advads-placements-table .advads-conditions-table tbody tr td { width: auto; font-size: inherit; padding: 10px 5px; }
+.advads-placements-table .advads-conditions-table tbody tr { background-color: inherit; }
 
 /**
  AD GROUPD PAGE

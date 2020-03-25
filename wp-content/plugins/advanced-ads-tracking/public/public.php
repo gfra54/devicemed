@@ -520,7 +520,13 @@ class Advanced_Ads_Tracking {
                     header("X-Robots-Tag: noindex", true);
 				}
 
-                header("Cache-Control: no-cache, must-revalidate");
+	            /**
+				 * Redirect to the target URL
+				 *
+	             * no-cache: page should not be cached
+				 * no-store: browsers should not store the redirect, which would prevent them from calling the /linkout page
+	             */
+                header("Cache-Control: no-cache, no-store, must-revalidate");
                 header("HTTP/1.1 307  Temporary Redirect");
                 header('Location: '. esc_url_raw( $url ));
 
@@ -568,11 +574,19 @@ class Advanced_Ads_Tracking {
                 // 'shutdown' or 'frontend' + AJAX
                 add_action( 'shutdown', array( $this, 'track_on_shutdown' ) );
 
+				// Use AJAX for delayed ads.
+				if ( isset( $options['delayed-ads'] ) ) {
+					add_action( 'wp_enqueue_scripts', array( $this, 'load_header_scripts') );
+					add_filter( 'advanced-ads-output-wrapper-options', array( $this, 'add_wrapper' ), 20, 2 );
+                    add_action( 'advanced-ads-output', array( $this, 'collect_ad_id' ), 10, 3 );
+				}
+				
 				// collect ads ID-s for google Analytics
 				if ( defined( 'ADVANCED_ADS_TRACKING_FORCE_ANALYTICS' ) && ADVANCED_ADS_TRACKING_FORCE_ANALYTICS ) {
 					if ( has_action( 'advanced-ads-output', array( $this, 'collect_ad_id' ) ) ) break;
 					add_action( 'advanced-ads-output', array( $this, 'collect_ad_id' ), 10, 3 );
 				}
+				
                 break;
 			case 'ga':
 				add_action( 'advanced-ads-output', array( $this, 'collect_ad_id' ), 10, 3 );
@@ -588,9 +602,18 @@ class Advanced_Ads_Tracking {
                 // track impression when output is loaded
                 add_action( 'advanced-ads-output', array( $this, 'track_on_output' ), 10, 3 );
 
+				// Use AJAX for delayed ads.
+				if ( isset( $options['delayed-ads'] ) ) {
+					add_action( 'wp_enqueue_scripts', array( $this, 'load_header_scripts') );
+					add_filter( 'advanced-ads-output-wrapper-options', array( $this, 'add_wrapper' ), 20, 2 );
+                    add_action( 'advanced-ads-output', array( $this, 'collect_ad_id' ), 10, 3 );
+				}
+				
 				// also collect ads ID-s for google Analytic
 				if ( defined( 'ADVANCED_ADS_TRACKING_FORCE_ANALYTICS' ) && ADVANCED_ADS_TRACKING_FORCE_ANALYTICS ) {
-					add_action( 'advanced-ads-output', array( $this, 'collect_ad_id' ), 10, 3 );
+					if ( false !== has_action( 'advanced-ads-output', array( $this, 'collect_ad_id' ) ) ) {
+						add_action( 'advanced-ads-output', array( $this, 'collect_ad_id' ), 10, 3 );
+					}
 				}
         }
 
@@ -671,14 +694,16 @@ class Advanced_Ads_Tracking {
 		$advads = Advanced_Ads::get_instance();
 		
 		$tracking_options = $this->plugin->options();
+		$placements = Advanced_Ads::get_ad_placements_array();
+		
+		$ads_in_groups = array();
 		
         foreach ( $advads->current_ads as $_ad ) {
             if ( 'ad' !== $_ad['type'] ) {
                 continue;
             }
-			$is_trigger_ad = false;
-			if ( 'frontend' == $tracking_options['method'] && isset( $_ad['placement_id'] ) ) {
-				$placements = Advanced_Ads::get_ad_placements_array();
+			$is_trigger_ad = false; // (cache busting)
+			if ( 'frontend' == $tracking_options['method']  && isset( $_ad['placement_id'] ) ) {
 				foreach ( $placements as $_id => $_placement ) {
 					if ( $_id == $_ad['placement_id'] ) {
 						if ( isset( $_placement['options']['cache-busting'] ) && 'on' == $_placement['options']['cache-busting'] ) {
@@ -694,11 +719,68 @@ class Advanced_Ads_Tracking {
 					}
 				}
 			}
-			if ( $is_trigger_ad ) {
+			
+			$is_delayed_ad = false; // ( static ad and groups )
+			if ( isset( $tracking_options['delayed-ads'] ) ) {
+				
+				foreach ( $placements as $_id => $_placement ) {
+					
+					if ( $_ad['type'] . '_' . $_ad['id'] == $_placement['item'] ) {
+						if ( isset( $_placement['options']['layer_placement'] ) && ! empty( $_placement['options']['layer_placement']['trigger'] ) ) {
+							$is_delayed_ad = true;
+							break;
+						}
+						if ( isset( $_placement['options']['sticky'] ) && ! empty( $_placement['options']['sticky']['trigger'] ) ) {
+							$is_delayed_ad = true;
+							break;
+						}
+					}
+					
+					if ( 0 === strpos( $_placement['item'], 'group' ) ) {
+						if (
+							( isset( $_placement['options']['layer_placement'] ) && ! empty( $_placement['options']['layer_placement']['trigger'] ) ) ||
+							( isset( $_placement['options']['sticky'] ) && ! empty( $_placement['options']['sticky']['trigger'] ) )
+						) {
+							
+							$group_id = absint( str_replace( 'group_', '', $_placement['item'] ) );
+							if ( ! isset( $ads_in_groups[ $group_id ] ) ) {
+								
+								$_adsingroup = Advanced_Ads::get_ads(
+									array(
+										'tax_query' => array(
+											array(
+												'taxonomy' => Advanced_Ads::AD_GROUP_TAXONOMY,
+												'field' => 'term_id',
+												'terms' => $group_id,
+											)
+										)
+									)
+								);
+								$ads_in_groups[ $group_id ] = array();
+								
+								foreach ( $_adsingroup as $__ad ) {
+									$ads_in_groups[ $group_id ][] = $__ad->ID;
+								}
+								
+							}
+							if ( in_array( absint( $_ad['id'] ), $ads_in_groups[ $group_id ] ) ) {
+								$is_delayed_ad = true;
+								break;
+							}
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+			if ( $is_trigger_ad || $is_delayed_ad ) {
 				continue;
 			}
 			
             $ad = new Advanced_Ads_Ad( $_ad['id'] );
+			
             // check if this ad should be tracked
             // do not track empty ad (if ad output is available)
             if( !$this->plugin->check_ad_tracking_enabled( $ad )
@@ -727,7 +809,8 @@ class Advanced_Ads_Tracking {
 
 		$blog_id = get_current_blog_id();
         $params = array(
-            'ajaxurl' => admin_url( 'admin-ajax.php' ) . '?action=' . Advanced_Ads_Tracking_Ajax::TRACK_IMPRESSION,
+            'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'ajaxActionName' => Advanced_Ads_Tracking_Ajax::TRACK_IMPRESSION,
             'method' => $method,
 			'blogId' => $blog_id,
         );
@@ -774,7 +857,7 @@ class Advanced_Ads_Tracking {
         $method = apply_filters( 'advanced-ads-tracking-method', $method );
 		
 		// do not collect ads with display trigger.
-		if ( 'frontend' == $method ) {
+		if ( 'frontend' == $method || isset( $options['delayed-ads'] ) ) {
 			$ad_options = $ad->options();
 			if ( 
 				isset( $ad_options['layer_placement'] ) && !empty( $ad_options['layer_placement']['trigger'] ) ||
@@ -865,6 +948,19 @@ class Advanced_Ads_Tracking {
             return;
         }
 
+		// Do not track delayed ads when AJAX option enabled.
+		$ad_options = $ad->options();
+		$plugin_options = $this->plugin->options();
+		
+		if ( 
+			(
+				isset( $ad_options['layer_placement'] ) && !empty( $ad_options['layer_placement']['trigger'] ) ||
+				isset( $ad_options['sticky'] ) && !empty( $ad_options['sticky']['trigger'] ) 
+			) && isset( $plugin_options['delayed-ads'] )
+		) {
+			return;
+		}
+		
         $args = array(
             'ad_id' => $ad->id,
         );

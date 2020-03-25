@@ -86,7 +86,7 @@ class Advanced_Ads_Pro_Module_PaidMembershipsPro {
 	 * @param arr $options options of the condition
 	 * @param int $index index of the condition
 	 */
-	static function metabox_pmp_membership_level_display_condition( $options, $index = 0 ){
+	static function metabox_pmp_membership_level_display_condition( $options, $index = 0, $form_name = '' ){
 	    
 	    global $wpdb;
 
@@ -99,7 +99,7 @@ class Advanced_Ads_Pro_Module_PaidMembershipsPro {
 	    }
 
 	    // form name basis
-	    $name = Advanced_Ads_Display_Conditions::FORM_NAME . '[' . $index . ']';	    
+		$name = Advanced_Ads_Display_Conditions::get_form_name_with_index( $form_name, $index );
 
 	    // options
 	    $values = ( isset($options['value']) && is_array($options['value']) ) ? $options['value'] : array();
@@ -116,11 +116,13 @@ class Advanced_Ads_Pro_Module_PaidMembershipsPro {
 	    // get all levels
 	    $levels = $wpdb->get_results( "SELECT * FROM {$wpdb->pmpro_membership_levels}", OBJECT );
 	    ?><div class="advads-conditions-single advads-buttonset"><?php
+		$rand = md5( $form_name );
 	    if( is_array( $levels ) && count( $levels ) ){
 		foreach( $levels as $_level ) {
 		    $value = ( $values === array() || in_array($_level->id, $values) ) ? 1 : 0;
-		    ?><label class="button ui-button" for="advads-conditions-<?php echo $index; ?>-<?php echo $_level->id;
-		    ?>"><?php echo $_level->name; ?></label><input type="checkbox" id="advads-conditions-<?php echo $index; ?>-<?php echo $_level->id; ?>" name="<?php echo $name; ?>[value][]" <?php checked($value, 1); ?> value="<?php echo $_level->id; ?>"><?php
+			$field_id = 'advads-visitor-conditions-' . sanitize_title( $_level->id ) . $rand;
+			?><label class="button ui-button" for="<?php echo $field_id;
+				?>"><?php echo $_level->name; ?></label><input type="checkbox" id="<?php echo $field_id; ?>" name="<?php echo $name; ?>[value][]" <?php checked($value, 1); ?> value="<?php echo $_level->id; ?>"><?php
 		}
 	    } else {
 		_e( 'No membership levels set up yet.', 'advanced-ads-pro' );
@@ -199,7 +201,7 @@ class Advanced_Ads_Pro_Module_PaidMembershipsPro {
 	 * @param arr $options options of the condition
 	 * @param int $index index of the condition
 	 */
-	static function metabox_pmp_membership_level_visitor_condition( $options, $index = 0 ){
+	static function metabox_pmp_membership_level_visitor_condition( $options, $index = 0, $form_name = '' ){
 	    
 	    global $wpdb;
 
@@ -212,7 +214,7 @@ class Advanced_Ads_Pro_Module_PaidMembershipsPro {
 	    }
 
 	    // form name basis
-	    $name = Advanced_Ads_Visitor_Conditions::FORM_NAME . '[' . $index . ']';	    
+		$name = Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions::get_form_name_with_index( $form_name, $index );
 
 	    // options
 	    $values = ( isset($options['value']) && is_array($options['value']) ) ? $options['value'] : array();
@@ -228,12 +230,14 @@ class Advanced_Ads_Pro_Module_PaidMembershipsPro {
 	    
 	    // get all levels
 	    $levels = $wpdb->get_results( "SELECT * FROM {$wpdb->pmpro_membership_levels}", OBJECT );
+		$rand = md5( $form_name );
 	    ?><div class="advads-conditions-single advads-buttonset"><?php
 	    if( is_array( $levels ) && count( $levels ) ){
 		foreach( $levels as $_level ) {
 		    $value = ( $values === array() || in_array($_level->id, $values) ) ? 1 : 0;
-		    ?><label class="button ui-button" for="advads-visitor-conditions-<?php echo $index; ?>-<?php echo $_level->id;
-		    ?>"><?php echo $_level->name; ?></label><input type="checkbox" id="advads-visitor-conditions-<?php echo $index; ?>-<?php echo $_level->id; ?>" name="<?php echo $name; ?>[value][]" <?php checked($value, 1); ?> value="<?php echo $_level->id; ?>"><?php
+			$field_id = 'advads-visitor-conditions-' . sanitize_title( $_level->id ) . $rand;
+			?><label class="button ui-button" for="<?php echo $field_id
+				?>"><?php echo $_level->name; ?></label><input type="checkbox" id="<?php echo $field_id; ?>" name="<?php echo $name; ?>[value][]" <?php checked($value, 1); ?> value="<?php echo $_level->id; ?>"><?php
 		}
 	    } else {
 		_e( 'No membership levels set up yet.', 'advanced-ads-pro' );

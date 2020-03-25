@@ -31,6 +31,7 @@ if (!advanced_ads_pro) {
         options: {
             action: "advads_ad_select", // service action
         },
+        inject_before: [], // scripts to inject to the wrapper before other output.
 
         /**
          * Prepare ajax requests.
@@ -50,7 +51,7 @@ if (!advanced_ads_pro) {
             var server_conditions = args.hasOwnProperty("server_conditions") ? args.server_conditions : '';
 
             if ( elementId && this.iterations > 1 ) {
-                jQuery( '#' + elementId ).empty();
+                jQuery( '.' + elementId ).empty();
             }
 
             if ( params && typeof params === 'object' ) {
@@ -106,6 +107,29 @@ if (!advanced_ads_pro) {
         },
 
         /**
+         * Inject a script prior to injecting ads.
+         *
+         * @param {str} elementId Element id.
+         * @param {jQuery} ref Wrapper to inject ads.
+         * @return {jQuery} ref Wrapper to inject ads.
+         */
+        _inject_before: function( elementId, ref ) {
+            if ( elementId ) {
+                advads_pro_utils.each( advanced_ads_pro.inject_before, function( item ) {
+                    if ( item.elementId === elementId ) {
+                        advads_pro_utils.each( item.data, function( data ) {
+                            ref.append( data );
+                        } );
+                        //ref = jQuery( '[id=' + elementId + ']' );
+                        ref = jQuery( '.' + elementId );
+                        item.data = [];
+                    }
+                });
+            }
+            return ref;
+        },
+
+        /**
         * Inject ad content, block if needed.
         *
         * @param {str} elementId id of the wrapper
@@ -126,33 +150,47 @@ if (!advanced_ads_pro) {
                 if ( elementId === null ) {
                      ref = jQuery( 'head ');
                 } else {
-                    ref = jQuery( "#" + elementId );
+                    ref = jQuery( "." + elementId );
                     if ( ! ref.length ) { return; }
                 }
 
+
+
                 if (async) {
                     this.blockme = true;
-                    advads_postscribe(ref, ad, {
-                        afterAsync: function () {
-                            that.blockme = false;
-                            that.injectBlocked();
-                        },
-                        done: function() {
-                            that.postscribeObservers.fire( { event: "postscribe_done", ref: ref, ad: ad } );
-                        },
-                        error: function( e ) {
-                            console.log( e );
-                        }
-                    });
+
+                    ref = that._inject_before( elementId, ref );
+
+                    ref.each( function() {
+                        var $this = jQuery( this );
+                        advads_postscribe( $this, ad, {
+                            afterAsync: function () {
+                                that.blockme = false;
+                                that.injectBlocked();
+                            },
+                            done: function() {
+                                that.postscribeObservers.fire( { event: "postscribe_done", ref: ref, ad: ad } );
+                            },
+                            error: function( e ) {
+                                console.log( e );
+                            }
+                        });
+                    } );
                 } else {
-                    advads_postscribe(ref, ad, {
-                        done: function() {
-                            that.postscribeObservers.fire( { event: "postscribe_done", ref: ref, ad: ad } );
-                        },
-                        error: function( e ) {
-                            console.log( e );
-                        }
-                    });
+
+                    ref = that._inject_before( elementId, ref );
+
+                    ref.each( function() {
+                        var $this = jQuery( this );
+                        advads_postscribe( $this, ad, {
+                            done: function() {
+                                that.postscribeObservers.fire( { event: "postscribe_done", ref: ref, ad: ad } );
+                            },
+                            error: function( e ) {
+                                console.log( e );
+                            }
+                        });
+                    } );
                 }
             } catch (err) {
                 console.log(err);
@@ -177,6 +215,11 @@ if (!advanced_ads_pro) {
                     for ( var j =0; j < msg_bunch.length; j++ ) {
                         var msg = msg_bunch[j];
                         if ( msg.hasOwnProperty("status") && msg.status === "success" && msg.hasOwnProperty("item") && msg.item ) {
+
+                            if ( msg.inject_before ) {
+                                advanced_ads_pro.inject_before.push( { elementId: msg.elementId, data: msg.inject_before } );
+                            }
+
                             that.inject(msg.elementId, msg.item, true); // inject if item is not empty
 
                             if (msg.hasOwnProperty("ads") && Array.isArray(msg.ads)) {
@@ -287,7 +330,7 @@ if (!advanced_ads_pro) {
 					}
 
 					advads_pro_utils.each( item.elementid, function( element_id ) {
-						if ( advanced_ads_pro.iterations > 1 ) jQuery( '#' + element_id ).empty();
+						if ( advanced_ads_pro.iterations > 1 ) jQuery( '.' + element_id ).empty();
 						var ad = new Advads_passive_cb_Ad( item.ads[ key ], element_id ); // only one ad, pass it as argument
 
 						if ( ad.can_display() ) {
@@ -298,7 +341,7 @@ if (!advanced_ads_pro) {
 
 				advads_pro_utils.each_key( advads_passive_groups, function( key, item ) {
 					advads_pro_utils.each( item.elementid, function( element_id ) {
-						if ( advanced_ads_pro.iterations > 1 ) jQuery( '#' + element_id ).empty();
+						if ( advanced_ads_pro.iterations > 1 ) jQuery( '.' + element_id ).empty();
 						var group = new Advads_passive_cb_Group( item, element_id );
 						group.output();
 					});
@@ -306,7 +349,7 @@ if (!advanced_ads_pro) {
 
 				advads_pro_utils.each_key( advads_passive_placements, function( key, item ) {
 					advads_pro_utils.each( item.elementid, function( element_id ) {
-						if ( advanced_ads_pro.iterations > 1 ) jQuery( '#' + element_id ).empty();
+						if ( advanced_ads_pro.iterations > 1 ) jQuery( '.' + element_id ).empty();
 
 						var placement = new Advads_passive_cb_Placement( item, element_id );
 						if (  ! placement.can_use_passive_cb() ) {
@@ -330,6 +373,12 @@ if (!advanced_ads_pro) {
 						if ( advanced_ads_pro.iterations > 1 ) { return; }
 						// don’t show `Custom Position` placement ad if selector doesn’t exist
 						if ( ! advads_pro_utils.selector_exists( item.args ) ) { return; }
+
+
+						if ( item.inject_before ) {
+							advanced_ads_pro.inject_before.push( { elementId: item.elementid, data: item.inject_before } );
+						}
+
 						advanced_ads_pro.inject( item.elementid, item.output, true );
 
 						advads_pro_utils.each( item.has_js_items, function( query ) {
@@ -1254,6 +1303,10 @@ function Advads_passive_cb_Placement( placement, element_id ) {
 	// If not, ajax cache-busting will be used.
 	this.server_conditions = placement.server_conditions;
 
+    if ( placement.inject_before ) {
+        advanced_ads_pro.inject_before.push( { elementId: this.element_id, data: placement.inject_before } );
+    }
+
 };
 
 /**
@@ -1348,6 +1401,7 @@ Advads_passive_cb_Placement.prototype.can_use_passive_cb = function() {
  */
 Advads_passive_cb_Placement.prototype.output = function() {
 	is_empty = true;
+
 
 	switch ( this.type ) {
 		case 'ad':
@@ -1776,7 +1830,9 @@ Advads_passive_cb_Group.prototype.output_refresh = function() {
         tracked_ads = [],
         ads_displayed = 0,
         interval = this.refresh_interval;
-        var $el = jQuery( '#' + self.elementid );
+
+        var $el = jQuery( '.' + self.elementid );
+        $el = advanced_ads_pro._inject_before( this.elementid, $el );
 
 
     if ( ! jQuery.isArray( ordered_ad_ids ) || ! jQuery.isPlainObject( this.ads ) ) {

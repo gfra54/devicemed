@@ -92,6 +92,30 @@ class Advanced_Ads_Ads_Txt_Strategy {
 	}
 
 	/**
+	 * Set additional content.
+	 *
+	 * @param string $custom Additional content.
+	 * @param bool   $replace Whether to replace or not.
+	 *
+	 * @return bool
+	 */
+	public function set_additional_content( $custom, $replace = false ) {
+		$prev = $this->get_options();
+
+		if ( $replace ) {
+			$this->options['custom'] = $custom;
+		} else {
+			$this->options['custom'] .= "\n" . $custom;
+		}
+
+		if ( $this->options !== $prev ) {
+			$this->changed = true;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Prepare content of a blog for output.
 	 *
 	 * @param array $options Options.

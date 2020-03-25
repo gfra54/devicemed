@@ -3,10 +3,10 @@
  * Advanced Ads.
  *
  * @package   Advanced_Ads_Admin
- * @author    Thomas Maier <thomas.maier@webgilde.com>
+ * @author    Thomas Maier <support@wpadvancedads.com>
  * @license   GPL-2.0+
- * @link      http://webgilde.com
- * @copyright 2013-2018 Thomas Maier, webgilde GmbH
+ * @link      https://wpadvancedads.com
+ * @copyright 2013-2018 Thomas Maier, Advanced Ads GmbH
  */
 
 /**
@@ -14,14 +14,13 @@
  * public-facing side of the WordPress site.
  *
  * @package Advanced_Ads
- * @author  Thomas Maier <thomas.maier@webgilde.com>
+ * @author  Thomas Maier <support@wpadvancedads.com>
  */
 class Advanced_Ads {
 
 	/**
 	 * Post type slug
 	 *
-	 * @since   1.0.0
 	 * @var     string
 	 */
 	const POST_TYPE_SLUG = 'advanced_ads';
@@ -29,7 +28,6 @@ class Advanced_Ads {
 	/**
 	 * Ad group slug
 	 *
-	 * @since   1.0.0
 	 * @var     string
 	 */
 	const AD_GROUP_TAXONOMY = 'advanced_ads_groups';
@@ -37,7 +35,6 @@ class Advanced_Ads {
 	/**
 	 * Instance of this class.
 	 *
-	 * @since    1.0.0
 	 * @var      object
 	 */
 	private static $instance = null;
@@ -59,7 +56,6 @@ class Advanced_Ads {
 	/**
 	 * Plugin options
 	 *
-	 * @since   1.0.1
 	 * @var     array (if loaded)
 	 */
 	protected $options = false;
@@ -67,7 +63,6 @@ class Advanced_Ads {
 	/**
 	 * Interal plugin options – set by the plugin
 	 *
-	 * @since   1.4.5
 	 * @var     array (if loaded)
 	 */
 	protected $internal_options = false;
@@ -82,7 +77,6 @@ class Advanced_Ads {
 	/**
 	 * List of bots and crawlers to exclude from ad impressions
 	 *
-	 * @since 1.4.9
 	 * @var array list of bots
 	 */
 	protected $bots = array( 'bot', 'spider', 'crawler', 'scraper', 'parser', '008', 'Accoona-AI-Agent', 'ADmantX', 'alexa', 'appie', 'Apple-PubSub', 'Arachmo', 'Ask Jeeves', 'avira\.com', 'B-l-i-t-z-B-O-T', 'boitho\.com-dc', 'BUbiNG', 'Cerberian Drtrs', 'Charlotte', 'cosmos', 'Covario IDS', 'curl', 'DataparkSearch', 'DDG-Android', 'expo9', 'facebookexternalhit', 'Feedfetcher-Google', 'FindLinks', 'Firefly', 'froogle', 'Genieo', 'heritrix', 'Holmes', 'htdig', 'https://developers\.google\.com', 'ia_archiver', 'ichiro', 'igdeSpyder', 'InfoSeek', 'inktomi', 'Kraken', 'L\.webis', 'Larbin', 'Linguee', 'LinkWalker', 'looksmart', 'lwp-trivial', 'mabontland', 'Mnogosearch', 'mogimogi', 'Morning Paper', 'MVAClient', 'NationalDirectory', 'NetResearchServer', 'NewsGator', 'NG-Search', 'Nusearch', 'NutchCVS', 'Nymesis', 'oegp', 'Orbiter', 'Peew', 'Pompos', 'PostPost', 'proximic', 'PycURL', 'Qseero', 'rabaz', 'Radian6', 'Reeder', 'savetheworldheritage', 'SBIder', 'Scooter', 'ScoutJet', 'Scrubby', 'SearchSight', 'semanticdiscovery', 'Sensis', 'ShopWiki', 'silk', 'Snappy', 'Spade', 'Sqworm', 'StackRambler', 'TechnoratiSnoop', 'TECNOSEEK', 'Teoma', 'Thumbnail\.CZ', 'TinEye', 'truwoGPS', 'updated', 'Vagabondo', 'voltron', 'Vortex', 'voyager', 'VYU2', 'WebBug', 'webcollage', 'WebIndex', 'Websquash\.com', 'WeSEE:Ads', 'wf84', 'Wget', 'WomlpeFactory', 'WordPress', 'yacy', 'Yahoo! Slurp', 'Yahoo! Slurp China', 'YahooSeeker', 'YahooSeeker-Testing', 'YandexBot', 'YandexMedia', 'YandexBlogs', 'YandexNews', 'YandexCalendar', 'YandexImages', 'Yeti', 'yoogliFetchAgent', 'Zao', 'ZyBorg', 'okhttp', 'ips-agent', 'ltx71', 'Optimizer', 'Daum', 'Qwantify' );
@@ -148,7 +142,6 @@ class Advanced_Ads {
 	/**
 	 * Return an instance of this class.
 	 *
-	 * @since     1.0.0
 	 * @return    Advanced_Ads    A single instance of this class.
 	 */
 	public static function get_instance() {
@@ -180,12 +173,11 @@ class Advanced_Ads {
 	/**
 	 * Initialize the plugin by setting localization and loading public scripts
 	 * and styles.
-	 *
-	 * @since     1.0.0
 	 */
 	public function wp_plugins_loaded() {
 		// register hook for global constants.
 		add_action( 'wp', array( $this, 'set_disabled_constant' ) );
+		add_action( 'rest_api_init', array( $this, 'set_disabled_constant' ) );
 
 		// setup default ad types.
 		add_filter( 'advanced-ads-ad-types', array( $this, 'setup_default_ad_types' ), 5 );
@@ -195,7 +187,7 @@ class Advanced_Ads {
 
 		// add meta robots noindex, nofollow to images, which are part of 'Image ad' ad type.
 		add_action( 'wp_head', array( $this, 'noindex_attachment_images' ) );
-		
+
 		// use custom CSS or other custom header code.
 		add_action( 'wp_head', array( $this, 'custom_header_code' ) );
 
@@ -213,8 +205,6 @@ class Advanced_Ads {
 
 	/**
 	 * Init / load plugin specific functions and settings
-	 *
-	 * @since 1.0.0
 	 */
 	public function wp_init() {
 		// load ad post types.
@@ -229,8 +219,6 @@ class Advanced_Ads {
 	 * description => publically readable description
 	 * editor => kind of editor: text (normal text field), content (WP content field), none (no content field)
 	 *  will display text field, if left empty
-	 *
-	 * @since 1.0.0
 	 */
 	public function set_ad_types() {
 
@@ -259,8 +247,6 @@ class Advanced_Ads {
 
 	/**
 	 * Set global constant that prevents ads from being displayed on the current page view
-	 *
-	 * @since 1.3.10
 	 */
 	public function set_disabled_constant() {
 
@@ -275,6 +261,14 @@ class Advanced_Ads {
 		// check if ads are disabled completely.
 		if ( ! empty( $options['disabled-ads']['all'] ) ) {
 			define( 'ADVADS_ADS_DISABLED', true );
+			return;
+		}
+
+		// Check if ads are disabled in REST API.
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			if ( ! empty( $options['disabled-ads']['rest-api'] ) ) {
+				define( 'ADVADS_ADS_DISABLED', true );
+			}
 			return;
 		}
 
@@ -342,8 +336,7 @@ class Advanced_Ads {
 	/**
 	 * Return the plugin slug.
 	 *
-	 * @since  1.0.0
-	 * @return Plugin slug variable.
+	 * @return string Plugin slug variable.
 	 */
 	public function get_plugin_slug() {
 		return $this->plugin->get_plugin_slug();
@@ -352,8 +345,8 @@ class Advanced_Ads {
 	/**
 	 * Add plain and content ad types to the default ads of the plugin using a filter
 	 *
-	 * @param arr $types array with ad types.
-	 * @since 1.0.0
+	 * @param array $types array with ad types.
+	 * @return array
 	 */
 	public function setup_default_ad_types( $types ) {
 		$types['plain']   = new Advanced_Ads_Ad_Type_Plain(); /* plain text and php code */
@@ -368,7 +361,6 @@ class Advanced_Ads {
 	 * Log error messages when debug is enabled
 	 *
 	 * @param string $message error message.
-	 * @since 1.0.0
 	 * @link http://www.smashingmagazine.com/2011/03/08/ten-things-every-wordpress-plugin-developer-should-know/
 	 */
 	public static function log( $message ) {
@@ -404,8 +396,6 @@ class Advanced_Ads {
 
 	/**
 	 * Injected ad into header
-	 *
-	 * @since 1.1.0
 	 */
 	public function inject_header() {
 		$placements = get_option( 'advads-ads-placements', array() );
@@ -413,6 +403,8 @@ class Advanced_Ads {
 			foreach ( $placements as $_placement_id => $_placement ) {
 				if ( isset( $_placement['type'] ) && 'header' === $_placement['type'] ) {
 					$_options = isset( $_placement['options'] ) ? $_placement['options'] : array();
+					// injecting ad code so we don’t run escaping here.
+					// phpcs:ignore
 					echo Advanced_Ads_Select::get_instance()->get_ad_by_method( $_placement_id, Advanced_Ads_Select::PLACEMENT, $_options );
 				}
 			}
@@ -430,6 +422,8 @@ class Advanced_Ads {
 			foreach ( $placements as $_placement_id => $_placement ) {
 				if ( isset( $_placement['type'] ) && 'footer' === $_placement['type'] ) {
 					$_options = isset( $_placement['options'] ) ? $_placement['options'] : array();
+					// injecting ad code so we don’t run escaping here.
+					// phpcs:ignore
 					echo Advanced_Ads_Select::get_instance()->get_ad_by_method( $_placement_id, Advanced_Ads_Select::PLACEMENT, $_options );
 				}
 			}
@@ -440,8 +434,9 @@ class Advanced_Ads {
 	 * Injected ad into content (before and after)
 	 * Displays ALL ads
 	 *
-	 * @since 1.1.0
-	 * @param str $content post content.
+	 * @param string $content post content.
+	 *
+	 * @return string
 	 */
 	public function inject_content( $content = '' ) {
 		$options = $this->plugin->options();
@@ -451,15 +446,8 @@ class Advanced_Ads {
 			return $content;
 		}
 
+		// do not inject ads multiple times, e.g., when the_content is applied multiple times.
 		if ( $this->has_many_the_content() ) {
-			if ( current_user_can( 'advanced_ads_place_ads' ) ) {
-				global $wp;
-				Advanced_Ads::log( sprintf( 'More then one `the_content` in the stack (%s): %s, %s',
-					ADVADS_URL . 'manual/ad-health/#the_content_filter_found_multiple_times',
-					isset( $wp->request ) ? $wp->request : '',
-					wp_debug_backtrace_summary() )
-				);
-			}
 			return $content;
 		}
 
@@ -485,7 +473,9 @@ class Advanced_Ads {
 			array(
 				'public'             => true,
 				'publicly_queryable' => true,
-			), 'names', 'or'
+			),
+			'names',
+			'or'
 		);
 
 		// make sure that no ad is injected into another ad.
@@ -544,9 +534,8 @@ class Advanced_Ads {
 	 * Load all ads based on WP_Query conditions
 	 *
 	 * @deprecated 1.4.8 use model class
-	 * @since 1.1.0
-	 * @param arr $args WP_Query arguments that are more specific that default.
-	 * @return arr $ads array with post objects
+	 * @param array $args WP_Query arguments that are more specific that default.
+	 * @return array $ads array with post objects
 	 */
 	public static function get_ads( $args = array() ) {
 		return self::get_instance()->get_model()->get_ads( $args );
@@ -556,9 +545,8 @@ class Advanced_Ads {
 	 * Load all ad groups
 	 *
 	 * @deprecated 1.4.8 use model class
-	 * @since 1.1.0
-	 * @param arr $args array with options.
-	 * @return arr $groups array with ad groups
+	 * @param array $args array with options.
+	 * @return array $groups array with ad groups
 	 * @link http://codex.wordpress.org/Function_Reference/get_terms
 	 */
 	public static function get_ad_groups( $args = array() ) {
@@ -568,9 +556,8 @@ class Advanced_Ads {
 	/**
 	 * Get the array with ad placements
 	 *
-	 * @since 1.1.0
 	 * @deprecated 1.4.8 use model
-	 * @return arr $ad_placements
+	 * @return array $ad_placements
 	 */
 	public static function get_ad_placements_array() {
 		return self::get_instance()->get_model()->get_ad_placements_array();
@@ -589,7 +576,6 @@ class Advanced_Ads {
 	/**
 	 * General check if ads can be displayed for the whole page impression
 	 *
-	 * @since 1.4.9
 	 * @return bool true, if ads can be displayed.
 	 * @todo move this to set_disabled_constant().
 	 */
@@ -669,8 +655,6 @@ class Advanced_Ads {
 
 	/**
 	 * Registers ad post type and group taxonomies
-	 *
-	 * @since 1.0.0
 	 */
 	public function create_post_types() {
 		if ( 1 !== did_action( 'init' ) && 1 !== did_action( 'uninstall_' . ADVADS_BASE ) ) {
@@ -693,7 +677,6 @@ class Advanced_Ads {
 	/**
 	 * Defines the parameters for the ad post type taxonomy
 	 *
-	 * @since 1.0.0
 	 * @return array
 	 */
 	protected function get_group_taxonomy_params() {
@@ -730,7 +713,6 @@ class Advanced_Ads {
 	/**
 	 * Defines the parameters for the custom post type
 	 *
-	 * @since 1.0.0
 	 * @return array
 	 */
 	protected function get_post_type_params() {
@@ -800,8 +782,8 @@ class Advanced_Ads {
 		global $post;
 
 		if ( is_attachment() && is_object( $post ) && isset( $post->post_parent ) ) {
-			$post_parent = get_post( $post->post_parent );
-			$parent_is_ad = $post_parent && self::POST_TYPE_SLUG == $post_parent->post_type;
+			$post_parent  = get_post( $post->post_parent );
+			$parent_is_ad = $post_parent && self::POST_TYPE_SLUG === $post_parent->post_type;
 			// if the image was not attached to any post and if at least one image ad contains the image. Needed for backward compatibility.
 			$parent_is_image_ad = ( empty( $post->post_parent ) && 0 < get_post_meta( get_the_ID(), '_advanced-ads_parent_id', true ) );
 
@@ -810,19 +792,17 @@ class Advanced_Ads {
 			}
 		}
 	}
-	
+
 	/**
 	 * Show custom CSS in the header
-	 * 
-	 * @since 1.10.8
 	 */
 	public function custom_header_code(){
 		if ( ! defined( 'ADVANCED_ADS_DISABLE_EDIT_BAR' ) && current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_edit_ads') ) ){
 			?><style>
 			    div.advads-edit-bar{position:relative;top:0;left:0;height:0;display:none;z-index:10000;animation:advads-edit-appear 2s linear 1;}
-                @keyframes advads-edit-appear {  
+				@keyframes advads-edit-appear {
                     0% {opacity: 0.0;pointer-events: none;}
-                    66% {opacity: 0.0;} 
+					66% {opacity: 0.0;}
                     100% {opacity: 1.0;}
                 }
 			    a.advads-edit-button{position:absolute;top:0;left:0;text-decoration:none !important;box-shadow:none;border-bottom:none;color:#0074a2;margin-top:-5px;}
@@ -937,17 +917,17 @@ class Advanced_Ads {
 	 * Makes sense only when a hooked to `the_content` function that produces an inner `the_content` has
 	 * lesser priority then `$this->plugin->get_content_injection_priority()`.
 	 *
-	 * @param string Post content.
-	 * @param string Post content (unchanged).
+	 * @param string $content Post content (unchanged).
+	 *
+	 * @return string
 	 */
-	function set_was_in_the_loop( $content ) {
-		if ( Advanced_Ads::get_instance()->has_many_the_content() ) {
+	public function set_was_in_the_loop( $content ) {
+		if ( self::get_instance()->has_many_the_content() ) {
 			$this->was_in_the_loop = $this->was_in_the_loop || in_the_loop();
 		} else {
 			// Next top level `the_content`, forget that the loop started.
 			$this->was_in_the_loop = false;
 		}
-
 
 		return $content;
 	}

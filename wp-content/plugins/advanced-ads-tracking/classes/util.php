@@ -14,6 +14,7 @@ final class Advanced_Ads_Tracking_Util {
 	const TABLE_CLICKS_BASENAME = 'advads_clicks';
 	const SUM_TIMEOUT = 60; // default value for sum timeout in minutes
 	const SUM_TRANSIENT = 'advads_tracking_sum'; // name of transient option
+	const DEBUG_OPT = 'advads_track_debug'; // tracking debug option name
 
 	const FIXED_HOUR = '06';
 
@@ -58,6 +59,13 @@ final class Advanced_Ads_Tracking_Util {
 	    // load table names
 	    $this->impressions_table =  $wpdb->prefix . self::TABLE_BASENAME;
 	    $this->clicks_table =       $wpdb->prefix . self::TABLE_CLICKS_BASENAME;
+		
+		$debug_option = get_option( self::DEBUG_OPT, false );
+		if ( $debug_option ) {
+			if ( time() > $debug_option['time'] + ( 3600 * 24 ) ) {
+				delete_option( self::DEBUG_OPT );
+			}
+		}
 
 	}
 
@@ -67,7 +75,7 @@ final class Advanced_Ads_Tracking_Util {
 	public function collect_blog_data() {
 		$bid = get_current_blog_id();
 		if ( !isset( $this->blog_data['ajaxurls'][$bid] ) ) {
-			$this->blog_data['ajaxurls'][$bid] = admin_url( 'admin-ajax.php' ) . '?action=' . Advanced_Ads_Tracking_Ajax::TRACK_IMPRESSION;
+			$this->blog_data['ajaxurls'][$bid] = admin_url( 'admin-ajax.php' );
 		}
 		$options = get_option( $this->plugin->options_slug, array() );
 		if ( !isset( $this->blog_data['gaUIDs'][$bid] ) ) {
@@ -169,8 +177,8 @@ final class Advanced_Ads_Tracking_Util {
 	    $baseTime -= $baseTime % 3600;
 		$count = 0;
 	    for ($y = 0; $y < $runs; $y++) {
-			$insert = '';
-			$insert_clicks = '';
+			$insert = array();
+			$insert_clicks = array();
 			for ($n = $i; $n>0; $n--) {
 				$ts = $baseTime - 3600 * mt_rand(0, $maxHours / $variance / 10) * mt_rand(1, $variance * 10);
 				$ts = $this->get_timestamp( $ts, true );
@@ -195,6 +203,30 @@ final class Advanced_Ads_Tracking_Util {
 	}
 
 	/**
+	 * Removes records for ads that no more exist.
+	 * 
+	 * @return [bool] TRUE on succes, FALSE if no ad found.
+	 */
+	public function reset_stats_deleted_ads() {
+		$deleted_ads = Advanced_Ads_Tracking_Dbop::get_instance()->get_deleted_ads();
+		if ( ! empty( $deleted_ads['impressions'] ) || ! empty( $deleted_ads['impressions'] ) ) {
+			
+			global $wpdb;
+			$clicks = $wpdb->prefix . 'advads_clicks';
+			$impressions = $wpdb->prefix . 'advads_impressions';
+			
+			if ( ! empty( $deleted_ads['impressions'] ) ) {
+				$wpdb->query( "DELETE FROM $impressions WHERE `ad_id` IN (" . implode( ',', $deleted_ads['impressions'] ) . ')' );
+			}
+			if ( ! empty( $deleted_ads['clicks'] ) ) {
+				$wpdb->query( "DELETE FROM $clicks WHERE `ad_id` IN (" . implode( ',', $deleted_ads['clicks'] ) . ')' );
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * resets stats for ads
 	 *
 	 * @param str/int $ad_id ad id or string "all-ads"
@@ -205,7 +237,11 @@ final class Advanced_Ads_Tracking_Util {
 	    if ( ! $ad_id ) {
 		return;
 	    }
-
+		
+		if ( 'deleted-ads' == $ad_id ) {
+			return $this->reset_stats_deleted_ads();
+		}
+		
 	    // reset the whole table if all stats should be removed
 	    if ( $ad_id === 'all-ads' ){
 		$wpdb->query( 'TRUNCATE TABLE ' . $this->impressions_table );
@@ -303,7 +339,7 @@ final class Advanced_Ads_Tracking_Util {
         $the_ad = new Advanced_Ads_Ad( $ad_id );
         if ( $the_ad->is_ad ) {
             $ad_options = $the_ad->options();
-            if ( $ad_options['expiry_date'] && time() > $ad_options['expiry_date'] ) {
+            if ( isset( $ad_options['expiry_date'] ) && $ad_options['expiry_date'] && time() > $ad_options['expiry_date'] ) {
                 // Do not track expired ads impression (cached).
                 return;
             }
@@ -373,6 +409,17 @@ final class Advanced_Ads_Tracking_Util {
 	    $this->persist($ad_id, $this->clicks_table);
 	}
 
+	public function get_debug_option() {
+		$option = get_option( self::DEBUG_OPT, false );
+		if ( is_array( $option ) && isset( $option['id'] ) ) {
+			return $option['id'];
+		}
+		if ( defined( 'ADVANCED_ADS_TRACKING_DEBUG' ) ) {
+			return ADVANCED_ADS_TRACKING_DEBUG;
+		}
+		return false;
+	}
+	
 	protected function persist($id, $table) {
 	    global $wpdb;
 	    $timestamp = $this->get_timestamp( null, true );
@@ -391,9 +438,8 @@ final class Advanced_Ads_Tracking_Util {
 	     * add custom logging if ADVANCED_ADS_TRACKING_DEBUG is enabled
 	     * writes events into wp-content/advanced-ads-tracking.csv
 	     */
-	    if( defined( 'ADVANCED_ADS_TRACKING_DEBUG')
-		    &&  ( true === ADVANCED_ADS_TRACKING_DEBUG
-		    || $id === ADVANCED_ADS_TRACKING_DEBUG ) ){
+		$debug_option = $this->get_debug_option();
+	    if( ( true === $debug_option || $id === $debug_option ) ) {
 		    $ip = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '';
 		    
 		    // if this is AJAX-tracked, get the post ID instead of the request UI

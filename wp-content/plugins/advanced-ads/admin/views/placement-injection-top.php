@@ -1,7 +1,7 @@
 <?php
 // show quick injection options
 // check if the ad code contains the AdSense verification and Auto ads code
-$is_page_level_ad_in_code_field = isset( $ad->type ) && 'plain' === $ad->type && strpos( $ad->content, 'enable_page_level_ads' );
+$is_page_level_ad_in_code_field = ( isset( $ad->type ) && 'plain' === $ad->type && strpos( $ad->content, 'enable_page_level_ads' ) ) || preg_match( '/script[^>]+data-ad-client=/', $ad->content );
 
 if ( isset( $_GET['message'] ) && 6 === $_GET['message'] ) : ?>
 <div id="advads-ad-injection-box" class="advads-ad-metabox postbox">

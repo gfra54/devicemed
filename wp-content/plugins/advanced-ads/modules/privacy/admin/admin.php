@@ -73,7 +73,7 @@ class Advanced_Ads_Privacy_Admin
 	 */
 	public function settings_init($hook) {
 
-		register_setting( ADVADS_PRIVACY_SLUG, Advanced_Ads_Privacy::OPTION_KEY );
+		register_setting( ADVADS_PRIVACY_SLUG, Advanced_Ads_Privacy::OPTION_KEY, array( $this, 'sanitize_settings' ) );
 
 		// add new section
 		add_settings_section(
@@ -86,6 +86,18 @@ class Advanced_Ads_Privacy_Admin
 		add_settings_field(
 			'consent-method', __('Consent method', 'advanced-ads'), array($this, 'render_settings_consent_method'), ADVADS_PRIVACY_SLUG . '-settings', ADVADS_PRIVACY_SLUG . '_settings_section'
 		);
+	}
+
+	/**
+	 * Sanitize settings.
+	 *
+	 * @param  array $options Privacy options.
+	 * @return array $options Privacy options.
+	 */
+	public function sanitize_settings( $options ) {
+		$options['custom-cookie-name'] = isset( $options['custom-cookie-name'] ) ? trim( $options['custom-cookie-name'] ) : '';
+		$options['custom-cookie-value'] = isset( $options['custom-cookie-value'] ) ? trim( $options['custom-cookie-value'] ) : '';
+		return $options;
 	}
 	
 	

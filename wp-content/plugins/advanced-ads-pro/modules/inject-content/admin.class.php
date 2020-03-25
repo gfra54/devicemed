@@ -121,7 +121,7 @@ class Advanced_Ads_Pro_Module_Inject_Content_Admin {
 			    $options = Advanced_Ads_Pro::get_instance()->get_options();
 			    $minimum_length = ( isset( $placement['options']['pro_minimum_length'] ) && $placement['options']['pro_minimum_length'] > 0 ) ? $placement['options']['pro_minimum_length'] : '';
 			    $option_content = '<input type="number" name="advads[placements][' . $placement_slug . '][options][pro_minimum_length]" size="4" value="'. $minimum_length . '" id="advads-placement-minimum-content-length-'. $placement_slug .'"/>';
-			    $description = __( 'Minimum length of content (in words) before automatically injected ads are allowed in them. Leave empty to use default setting. Default settings will also be used if they are lower.', 'advanced-ads-pro' );
+			    $description = __( 'Minimum length of content (in words) before automatically injected ads are allowed in them. Set to zero or leave empty to always display ads, regardless of how long the content is.', 'advanced-ads-pro' );
 			    
 			    if( class_exists( 'Advanced_Ads_Admin_Options' ) ){
 				Advanced_Ads_Admin_Options::render_option( 

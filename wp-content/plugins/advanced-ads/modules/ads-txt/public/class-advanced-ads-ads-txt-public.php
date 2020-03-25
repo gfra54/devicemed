@@ -40,13 +40,7 @@ class Advanced_Ads_Ads_Txt_Public {
 			return;
 		}
 
-		if ( $this->strategy->is_all_network() ) {
-			$content = $this->prepare_multisite();
-		} else {
-			$options = $this->strategy->get_options();
-			$content = $this->strategy->parse_content( $options );
-			$content = apply_filters( 'advanced-ads-ads-txt-content', $content, get_current_blog_id() );
-		}
+		$content = $this->get_frontend_output();
 
 		if ( $content ) {
 			$content = self::TOP . "\n" . $content;
@@ -55,6 +49,22 @@ class Advanced_Ads_Ads_Txt_Public {
 		}
 
 		return '';
+	}
+
+	/**
+	 * Get output for frontend.
+	 *
+	 * @return string
+	 */
+	public function get_frontend_output() {
+		if ( $this->strategy->is_all_network() ) {
+			$content = $this->prepare_multisite();
+		} else {
+			$options = $this->strategy->get_options();
+			$content = $this->strategy->parse_content( $options );
+			$content = apply_filters( 'advanced-ads-ads-txt-content', $content, get_current_blog_id() );
+		}
+		return $content;
 	}
 
 	/**

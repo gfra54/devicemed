@@ -93,9 +93,9 @@ class Advanced_Ads_Pro {
 
 		add_filter( 'advanced-ads-can-display', array( $this, 'can_display_by_display_limit' ), 10, 3 );
 		// Check if ads can be displayed by post type.
-		add_filter( 'advanced-ads-can-display', array( $this, 'can_display_by_post_type' ), 10 );
+		add_filter( 'advanced-ads-can-display', array( $this, 'can_display_by_post_type' ), 10, 2 );
 		// Check if Verification code & Auto ads ads can be displayed by post type.
-		add_filter( 'advanced-ads-can-display-ads-in-header', array( $this, 'can_display_by_post_type' ), 10 );
+		add_filter( 'advanced-ads-can-display-ads-in-header', array( $this, 'can_display_in_header_by_post_type' ), 10 );
 		add_filter( 'advanced-ads-placement-content-offsets', array( $this, 'placement_content_offsets' ), 10, 3 );
 		add_filter( 'advanced-ads-output-inside-wrapper', array( $this, 'add_custom_code' ), 10, 2 );
 		
@@ -455,9 +455,31 @@ class Advanced_Ads_Pro {
 	 * Check if the ad should be displayed based on post type.
 	 *
 	 * @param bool $can_display True if the ad should be displayed, false otherwise.
+	 * @param obj Advanced_Ads_Ad object.
 	 * @return bool True if the ad should be displayed, false otherwise.
 	 */
-	public function can_display_by_post_type( $can_display ) {
+	public function can_display_by_post_type( $can_display, Advanced_Ads_Ad $ad ) {
+		if ( ! $can_display ) {
+			return false;
+		}
+
+		$options = $this->get_options();
+
+		if ( empty( $options['general']['disable-by-post-types'] ) || ! is_array( $options['general']['disable-by-post-types'] ) ) {
+			return true;
+		}
+
+		$ad_options = $ad->options();
+
+		if ( ! empty( $ad_options['post']['post_type'] )
+			&& in_array( $ad_options['post']['post_type'], $options['general']['disable-by-post-types'], true ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public function can_display_in_header_by_post_type( $can_display ) {
 		if ( ! $can_display ) {
 			return false;
 		}
@@ -532,21 +554,24 @@ class Advanced_Ads_Pro {
 	 *
 	 * Note: this won’t work for the Background ad placement. There is a custom solution for that in Advanced_Ads_Pro_Module_Background_Ads:ad_output
 	 *
-	 * @param str $ad_content Ad content.
-	 * @param obj $ad Advanced_Ads_Ad
-	 * @return str $ad_content Ad content.
+	 * @param string $ad_content Ad content.
+	 * @param Advanced_Ads_Ad $ad ad object.
+	 * @return string $ad_content Ad content.
 	 */
 	public function add_custom_code( $ad_content, Advanced_Ads_Ad $ad ) {
 		$options = $ad->options( 'output' );
 
-		if ( ! empty( $options['custom-code'] ) ) {
-			return $ad_content .= $options['custom-code'];
+		$custom_code = isset( $options['custom-code'] ) ? $options['custom-code'] : '';
+		$custom_code = apply_filters( 'advanced_ads_pro_output_custom_code', $custom_code, $ad );
+
+		if ( ! empty( $custom_code ) ) {
+			return $ad_content .= $custom_code;
 		}
 		return $ad_content;
 	}
 
 	/**
-	 * enable placement test emails
+	 * Enable placement test emails
 	 */
 	public static function enable_placement_test_emails() {
 		// only schedule if not yet scheduled

@@ -190,15 +190,15 @@ class Advanced_Ads_AdSense_Admin {
      * @param type $hide_idle Whether to hide idle ads.
      */
     public static function get_mapi_ad_selector( $hide_idle_ads = true ) {
-        global $closeable, $use_dashicons, $network, $ad_units, $unsupported_ad_type_link, $display_slot_id;
+        global $closeable, $use_dashicons, $network, $ad_units, $display_slot_id;
         $closeable = true;
         $use_dashicons = false;
         $network = Advanced_Ads_Network_Adsense::get_instance();
         $ad_units = $network->get_external_ad_units();
-        $unsupported_ad_type_link = Advanced_Ads_AdSense_MAPI::UNSUPPORTED_TYPE_LINK;
         $display_slot_id = true;
+        $pub_id = Advanced_Ads_AdSense_Data::get_instance()->get_adsense_id();
 
         require_once GADSENSE_BASE_PATH . 'admin/views/external-ads-list.php';
-        require_once GADSENSE_BASE_PATH . 'admin/views/external-ads-adsense.php';
+        // require_once GADSENSE_BASE_PATH . 'admin/views/external-ads-adsense.php';
     }
 }

@@ -11,8 +11,6 @@ class Advanced_Ads_Pro_Module_Inject_Content {
 		add_filter( 'advanced-ads-ad-output', array( $this, 'after_ad_output' ), 10, 2 );
 		// action after group output is created; used for js injection
 		add_filter( 'advanced-ads-group-output', array( $this, 'after_group_output' ), 10, 2 );
-		// inject js after group output when passive cache-busting is used
-		add_filter( 'advanced-ads-pro-passive-cb-group-data', array( $this, 'after_group_output_passive' ), 10, 3 );
 		// check if content injection is limited for longer texts only
 		add_filter( 'advanced-ads-can-inject-into-content', array( $this, 'check_content_length' ), 10, 3 );
 		// Allow to prevent injection inside `the_content`.
@@ -39,8 +37,9 @@ class Advanced_Ads_Pro_Module_Inject_Content {
 			// run Advanced Ads Pro content filter
 			add_filter( ADVANCED_ADS_PRO_CUSTOM_CONTENT_FILTER, array( $this, 'inject_content' ) );
 		}
-	}
 
+		add_filter( 'advanced-ads-cache-busting-item', array( $this, 'inject_js_before_cache_busting_output' ), 10, 2 );
+	}
 
 	/**
 	 * add new placement types
@@ -228,11 +227,7 @@ class Advanced_Ads_Pro_Module_Inject_Content {
 			return $content;
 		}
 
-		// If cache-busting is used.
-		if ( isset( $ad->args['cache_busting_elementid'] ) ) {
-			// First, move the empty wrapper because some ad networks do not allow to move ads inserted to the DOM.
-			$content = $this->get_output_js( $ad->args['cache_busting_elementid'], $ad->args ) . $content;
-		} elseif ( isset( $ad->wrapper['id'] ) ) {
+		if ( ! isset( $ad->args['cache_busting_elementid'] ) && isset( $ad->wrapper['id'] ) ) {
 			$content .= $this->get_output_js( $ad->wrapper['id'], $ad->args );
 		}
 
@@ -247,11 +242,8 @@ class Advanced_Ads_Pro_Module_Inject_Content {
 	 */
 	public function after_group_output( $output_string, Advanced_Ads_Group $group ) {
 		if ( $output_string ) {
-			// If cache-busting is used.
-			if ( isset( $group->ad_args['cache_busting_elementid'] ) ) {
-				// First, move the empty wrapper because some ad networks do not allow to move ads inserted to the DOM.
-				$output_string = $this->get_output_js( $group->ad_args['cache_busting_elementid'], $group->ad_args ) . $output_string;
-			} else {
+
+			if ( ! isset( $group->ad_args['cache_busting_elementid'] ) ) {
 				$wrapper_id = Advanced_Ads_Pro_Utils::generate_wrapper_id();
 
 				if ( $js_output = $this->get_output_js( $wrapper_id, $group->ad_args ) ) {
@@ -262,22 +254,6 @@ class Advanced_Ads_Pro_Module_Inject_Content {
 
 		return $output_string;
 	}
-
-	/**
-	 * inject js code after group output (passive cache-busting)
-	 *
-	 * @param arr $group_data
-	 * @param obj $group Advanced_Ads_Group
-	 * @param string $element_id
-	 */
-	public function after_group_output_passive( $group_data, Advanced_Ads_Group $group, $element_id ) {
-		if ( $element_id && $js_output = $this->get_output_js( $element_id, $group->ad_args ) ) {
-			$group_data['group_wrap'][] = array( 'min_ads' => 1, 'before' => $js_output, 'after' => '' );
-		}
-
-		return $group_data;
-	}
-
 
 	/**
 	 * get js to append after ad/group output
@@ -580,7 +556,8 @@ class Advanced_Ads_Pro_Module_Inject_Content {
 		$tags['img'] = sprintf( __( 'image (%s)', 'advanced-ads-pro' ), '&lt;img&gt;' );
 		$tags['table'] = sprintf( __( 'table (%s)', 'advanced-ads-pro' ), '&lt;table&gt;' );
 		$tags['li'] = sprintf( __( 'list item (%s)', 'advanced-ads-pro' ), '&lt;li&gt;' );
-                $tags['blockquote'] = sprintf( __( 'quote (%s)', 'advanced-ads-pro' ), '&lt;blockquote&gt;' );
+		$tags['blockquote'] = sprintf( __( 'quote (%s)', 'advanced-ads-pro' ), '&lt;blockquote&gt;' );
+		$tags['iframe'] = sprintf( __( 'iframe (%s)', 'advanced-ads-pro' ), '&lt;iframe&gt;' );
 
 		$headlines = apply_filters( 'advanced-ads-headlines-for-ad-injection', array( 'h2', 'h3', 'h4' ) );
 		$headlines_imploded = '&lt;' . implode( '&gt;, &lt;', $headlines ) . '&gt;';
@@ -591,16 +568,16 @@ class Advanced_Ads_Pro_Module_Inject_Content {
 	}
 
 	/**
-	 * change options for new content injection tags
+	 * Change options for new content injection tags
 	 *
 	 * @since 1.2.4
-	 * @parem arr $options the options to change
-	 * @param str $tag the tag for which the options are
-	 * @return arr $options
+	 * @param array  $options the options to change.
+	 * @param string $tag the tag for which the options are.
+	 * @return array $options
 	 */
-	public function content_injection_tag_options( $options, $tag ){
-		if( 'img' === $tag  ){
-			$options['allowEmpty'] = true; // image tags don’t need text content
+	public function content_injection_tag_options( $options, $tag ) {
+		if ( in_array( $tag, array( 'img', 'iframe' ), true ) ) {
+			$options['allowEmpty'] = true; // image tags don’t need text content.
 		}
 
 		return $options;
@@ -724,5 +701,24 @@ class Advanced_Ads_Pro_Module_Inject_Content {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Inject a script to output before cache busting output.
+	 * The script moves the empty wrapper because some ad networks do not allow to move ads inserted to the DOM.
+	 *
+	 * @param array $r Cache busting item.
+	 * @param array $request Request info.
+	 * @return array $r Cache busting item.
+	 */
+	function inject_js_before_cache_busting_output( $r, $request ) {
+		if ( ! isset( $request['method'] ) || 'placement' !== $request['method']
+			|| empty( $request['args']['cache_busting_elementid'] ) ) {
+			return $r;
+		}
+
+		$el_id = $request['args']['cache_busting_elementid'];
+		$r['inject_before'][] = $this->get_output_js( $el_id, $request['args'] );
+		return $r;
 	}
 }

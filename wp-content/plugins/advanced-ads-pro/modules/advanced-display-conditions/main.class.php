@@ -204,7 +204,8 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 		$operator = 'is';
 	    }
 
-	    if (!Advanced_Ads_Display_Conditions::can_display_ids(ICL_LANGUAGE_CODE, $options['value'], $operator)) {
+		$lang = apply_filters( 'wpml_current_language', null );
+		if ( ! Advanced_Ads_Display_Conditions::can_display_ids( $lang, $options['value'], $operator ) ) {
 		return false;
 	    }
 
@@ -325,7 +326,7 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 	 * @param arr $options options of the condition
 	 * @param int $index index of the condition
 	 */
-	static function metabox_string( $options, $index = 0 ){
+	static function metabox_string( $options, $index = 0, $form_name = '' ) {
 
 	    if ( ! isset ( $options['type'] ) || '' === $options['type'] ) { return; }
 
@@ -336,7 +337,7 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 	    }
 
 	    // form name basis
-	    $name = Advanced_Ads_Display_Conditions::FORM_NAME . '[' . $index . ']';
+		$name = self::get_form_name_with_index( $form_name, $index );
 
 	    // options
 	    $value = isset( $options['value'] ) ? $options['value'] : '';
@@ -352,7 +353,7 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 	 * @param arr $options options of the condition
 	 * @param int $index index of the condition
 	 */
-	static function metabox_page_template( $options, $index = 0 ){
+	static function metabox_page_template( $options, $index = 0, $form_name = '' ) {
 
 	    if ( ! isset ( $options['type'] ) || '' === $options['type'] ) { return; }
 	    
@@ -363,7 +364,7 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 	    }
 	    
 	    // form name basis
-	    $name = Advanced_Ads_Display_Conditions::FORM_NAME . '[' . $index . ']';	    
+		$name = self::get_form_name_with_index( $form_name, $index );
 
 	    // options
 	    $values = ( isset($options['value']) && is_array($options['value']) ) ? $options['value'] : array();
@@ -379,6 +380,7 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 	    // get all page templates
 	    $post_type = ( isset( $type_options[$options['type']]['post-type'] ) ) ? $type_options[$options['type']]['post-type'] : 'page';
 	    $templates = get_page_templates( null, $post_type );
+		$rand = md5( $form_name );
 	    
 	    ?><div class="advads-conditions-single advads-buttonset"><?php
 	    foreach( $templates as $_name => $_file ) {
@@ -387,9 +389,13 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 		} else {
 		    $_val = 0;
 		}
-		?><label class="button ui-button" for="advads-conditions-<?php echo $index; ?>-<?php echo sanitize_title( $_name );
-		?>"><?php echo $_name; ?></label><input type="checkbox" id="advads-conditions-<?php echo $index; ?>-<?php echo sanitize_title( $_name ); ?>" name="<?php echo $name; ?>[value][]" <?php checked($_val, 1); ?> value="<?php echo $_file; ?>"><?php
+		$field_id = 'advads-conditions-' . sanitize_title( $_name ) . md5( $name );
+		?><label class="button ui-button" for="<?php echo $field_id; 
+		?>"><?php echo $_name; ?></label><input type="checkbox" id="<?php echo $field_id; ?>" name="<?php echo $name; ?>[value][]" <?php checked($_val, 1); ?> value="<?php echo $_file; ?>"><?php
 	    }
+		if ( file_exists( ADVADS_BASE_PATH . 'admin/views/conditions/not-selected.php' ) ) {
+			include ADVADS_BASE_PATH . 'admin/views/conditions/not-selected.php';
+		}
 	    ?></div>
 	
 	    <p class="description"><?php echo $type_options[ $options['type'] ]['description']; ?></p><?php
@@ -402,7 +408,7 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 	 * @param arr $options options of the condition
 	 * @param int $index index of the condition
 	 */
-	static function metabox_wpml_language( $options, $index = 0 ){
+	static function metabox_wpml_language( $options, $index = 0, $form_name = '' ) {
 
 	    if ( ! isset ( $options['type'] ) || '' === $options['type'] ) { return; }
 	    
@@ -413,7 +419,7 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 	    }
 
 	    // form name basis
-	    $name = Advanced_Ads_Display_Conditions::FORM_NAME . '[' . $index . ']';	    
+		$name = self::get_form_name_with_index( $form_name, $index );
 
 	    // options
 	    $values = ( isset($options['value']) && is_array($options['value']) ) ? $options['value'] : array();
@@ -429,13 +435,15 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 	    
 	    // get all languages	    
 	    $wpml_active_languages = apply_filters( 'wpml_active_languages', null, array() );
+		$rand = md5( $form_name );
 	    
 	    ?><div class="advads-conditions-single advads-buttonset"><?php
 	    if( is_array( $wpml_active_languages ) && count( $wpml_active_languages ) ){
 		foreach( $wpml_active_languages as $_language ) {
+			$field_id = 'advads-conditions-' . $_language['code'] . md5( $name );
 		    $value = ( $values === array() || in_array($_language['code'], $values) ) ? 1 : 0;
-		    ?><label class="button ui-button" for="advads-conditions-<?php echo $index; ?>-<?php echo $_language['code'];
-		    ?>"><?php echo $_language['native_name']; ?></label><input type="checkbox" id="advads-conditions-<?php echo $index; ?>-<?php echo $_language['code']; ?>" name="<?php echo $name; ?>[value][]" <?php checked($value, 1); ?> value="<?php echo $_language['code']; ?>"><?php
+			?><label class="button ui-button" for="<?php echo $field_id;
+			?>"><?php echo $_language['native_name']; ?></label><input type="checkbox" id="<?php echo $field_id; ?>" name="<?php echo $name; ?>[value][]" <?php checked($value, 1); ?> value="<?php echo $_language['code']; ?>"><?php
 		}
 	    } else {
 		_e( 'no languages set up in WPML', 'advanced-ads-pro' );
@@ -451,7 +459,7 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 	 * @param arr $options options of the condition
 	 * @param int $index index of the condition
 	 */
-	static function metabox_post_meta( $options, $index = 0 ){
+	static function metabox_post_meta( $options, $index = 0, $form_name = '' ) {
 		if ( ! isset ( $options['type'] ) || '' === $options['type'] ) { return; }
 
 		$type_options = Advanced_Ads_Display_Conditions::get_instance()->conditions;
@@ -461,7 +469,7 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 		}
 
 		// form name basis
-		$name = Advanced_Ads_Display_Conditions::FORM_NAME . '[' . $index . ']';
+		$name = self::get_form_name_with_index( $form_name, $index );
 
 		// options
 		$mode = ( isset($options['mode']) && $options['mode'] === 'all' ) ? 'all' : 'any';
@@ -481,7 +489,7 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 	 * @param arr $options options of the condition
 	 * @param int $index index of the condition
 	 */
-	static function metabox_paginated_post( $options, $index = 0 ) {
+	static function metabox_paginated_post( $options, $index = 0, $form_name = '' ) {
 		if ( ! isset ( $options['type'] ) || '' === $options['type'] ) { return; }
 
 		$type_options = Advanced_Ads_Display_Conditions::get_instance()->conditions;
@@ -491,7 +499,7 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 		}
 
 		// form name basis
-		$name = Advanced_Ads_Display_Conditions::FORM_NAME . '[' . $index . ']';
+		$name = self::get_form_name_with_index( $form_name, $index );
 
 		// options
 		$first = ! empty( $options['first'] ) ? absint( $options['first'] ) : 1;
@@ -511,5 +519,22 @@ class Advanced_Ads_Pro_Module_Advanced_Display_Conditions {
 
 	}
 
+	/**
+	 * Helper function to the name of a form field.
+	 * falls back to default
+	 *
+	 * @param string $form_name form name if submitted.
+	 * @param int    $index index of the condition.
+	 *
+	 * @return string
+	 */
+	public static function get_form_name_with_index( $form_name = '', $index = 0 ) {
+		// form name basis
+		if ( method_exists( 'Advanced_Ads_Display_Conditions', 'get_form_name_with_index' ) ) {
+			return Advanced_Ads_Display_Conditions::get_form_name_with_index( $form_name, $index );
+		} else {
+			return Advanced_Ads_Display_Conditions::FORM_NAME . '[' . $index . ']';
+		}
+	}
 
 }

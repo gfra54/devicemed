@@ -1,6 +1,9 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Class Advanced_Ads_Admin_Settings
+ */
 class Advanced_Ads_Admin_Settings {
 	/**
 	 * Instance of this class.
@@ -24,7 +27,7 @@ class Advanced_Ads_Admin_Settings {
 	 */
 	public static function get_instance() {
 		// If the single instance hasn't been set, set it now.
-		if ( null == self::$instance ) {
+		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
 
@@ -171,7 +174,7 @@ class Advanced_Ads_Admin_Settings {
 			'advanced_ads_setting_section_disable_ads'
 		);
 		// dummy setting field to hide ads for post types.
-		if( !defined( 'AAP_VERSION' ) ) {
+		if ( ! defined( 'AAP_VERSION' ) ) {
 			add_settings_field(
 				'disable-by-post-types-pro',
 				__( 'Disable ads for post types', 'advanced-ads' ),
@@ -258,7 +261,7 @@ class Advanced_Ads_Admin_Settings {
 	 * Add license tab
 	 *
 	 * @param array $tabs setting tabs.
-     * @return array
+	 * @return array
 	 */
 	public function license_tab( array $tabs ) {
 
@@ -275,13 +278,15 @@ class Advanced_Ads_Admin_Settings {
 	/**
 	 * Add pro pitch tab
 	 *
-	 * @oaram array $tabs setting tabs
+	 * @param array $tabs setting tabs.
+	 *
+	 * @return array $tabs
 	 */
 	public function pro_pitch_tab( array $tabs ) {
 
 		$tabs['pro_pitch'] = array(
 			'page'  => 'advanced-ads-settings-pro-pitch-page',
-			//'group' => ADVADS_SLUG . '-pro-pitch',
+			// 'group' => ADVADS_SLUG . '-pro-pitch',
 			'tabid' => 'pro-pitch',
 			'title' => __( 'Pro', 'advanced-ads' ),
 		);
@@ -292,7 +297,9 @@ class Advanced_Ads_Admin_Settings {
 	/**
 	 * Add tracking pitch tab
 	 *
-	 * array $tabs setting tabs
+	 * @param array $tabs setting tabs.
+	 *
+	 * @return array $tabs
 	 */
 	public function tracking_pitch_tab( array $tabs ) {
 
@@ -307,8 +314,6 @@ class Advanced_Ads_Admin_Settings {
 
 	/**
 	 * Render settings section
-	 *
-	 * @since 1.1.1
 	 */
 	public function render_settings_section_callback() {
 		// for whatever purpose there might come.
@@ -316,8 +321,6 @@ class Advanced_Ads_Admin_Settings {
 
 	/**
 	 * Render "Disable Ads" settings section
-	 *
-	 * @since 1.12
 	 */
 	public function render_settings_section_disable_ads_callback() {
 		// for whatever purpose there might come.
@@ -325,8 +328,6 @@ class Advanced_Ads_Admin_Settings {
 
 	/**
 	 * Render "Content Injection" settings section
-	 *
-	 * @since 1.12
 	 */
 	public function render_settings_section_output_callback() {
 		// for whatever purpose there might come.
@@ -334,44 +335,30 @@ class Advanced_Ads_Admin_Settings {
 
 	/**
 	 * Render "Content Injection" settings section
-	 *
-	 * @since 1.12
 	 */
 	public function render_settings_section_injection_callback() {
 		// for whatever purpose there might come.
 	}
 
 	/**
-	 * render licenses settings section
-	 *
-	 * @since 1.5.1
+	 * Render licenses settings section
 	 */
 	public function render_settings_licenses_section_callback() {
-		echo '<p>' . sprintf( __( 'Enter license keys for our powerful <a href="%s" target="_blank">add-ons</a>.', 'advanced-ads' ), ADVADS_URL . 'add-ons/#utm_source=advanced-ads&utm_medium=link&utm_campaign=settings-licenses' );
-		echo ' ' . sprintf( __( 'See also <a href="%s" target="_blank">Issues and questions about licenses</a>.', 'advanced-ads' ), ADVADS_URL . 'manual-category/purchase-licenses/#utm_source=advanced-ads&utm_medium=link&utm_campaign=settings-licenses' ) . '</p>';
-		// nonce field
-		echo '<input type="hidden" id="advads-licenses-ajax-referrer" value="' . wp_create_nonce( "advads_ajax_license_nonce" ) . '"/>';
+		include ADVADS_BASE_PATH . 'admin/views/settings/license/section.php';
 	}
 
 	/**
-	 * render licenses pithces settings section
-	 *
-	 * @since 1.8.12
+	 * Render licenses pithces settings section
 	 */
 	public function render_settings_licenses_pitch_section_callback() {
 
 		echo '<h3>' . esc_attr__( 'Are you missing something?', 'advanced-ads' ) . '</h3>';
 
-		$link = ADVADS_URL . 'manual/how-to-install-an-add-on/#utm_source=advanced-ads&utm_medium=link&utm_campaign=settings-licenses';
-		echo '<p><a href="' . esc_url( $link ) . '" target="_blank">' . esc_attr__( 'How to install and activate an add-on.', 'advanced-ads' ) . '</a></p>';
-
 		Advanced_Ads_Overview_Widgets_Callbacks::render_addons( true );
 	}
 
 	/**
-	 * render pro pitch settings section
-	 *
-	 * @since 1.8.12
+	 * Render pro pitch settings section
 	 */
 	public function render_settings_pro_pitch_section_callback() {
 		echo '<br/>';
@@ -379,9 +366,7 @@ class Advanced_Ads_Admin_Settings {
 	}
 
 	/**
-	 * render tracking pitch settings section
-	 *
-	 * @since 1.8.12
+	 * Render tracking pitch settings section
 	 */
 	public function render_settings_tracking_pitch_section_callback() {
 		echo '<br/>';
@@ -389,9 +374,7 @@ class Advanced_Ads_Admin_Settings {
 	}
 
 	/**
-	 * options to disable ads
-	 *
-	 * @since 1.3.11
+	 * Options to disable ads
 	 */
 	public function render_settings_disable_ads() {
 		$options = Advanced_Ads::get_instance()->options();
@@ -402,15 +385,14 @@ class Advanced_Ads_Admin_Settings {
 		$disable_archives  = isset( $options['disabled-ads']['archives'] ) ? 1 : 0;
 		$disable_secondary = isset( $options['disabled-ads']['secondary'] ) ? 1 : 0;
 		$disable_feed      = ( ! isset( $options['disabled-ads']['feed'] ) || $options['disabled-ads']['feed'] ) ? 1 : 0;
+		$disable_rest_api  = isset( $options['disabled-ads']['rest-api'] ) ? 1 : 0;
 
 		// load the template.
-		include ADVADS_BASE_PATH . 'admin/views/settings-disable-ads.php';
+		include ADVADS_BASE_PATH . 'admin/views/settings/general/disable-ads.php';
 	}
 
 	/**
-	 * render setting to hide ads from logged in users
-	 *
-	 * @since 1.1.1
+	 * Render setting to hide ads from logged in users
 	 */
 	public function render_settings_hide_for_users() {
 		$options = Advanced_Ads::get_instance()->options();
@@ -423,139 +405,96 @@ class Advanced_Ads_Admin_Settings {
 		global $wp_roles;
 		$roles = $wp_roles->get_names();
 
-		echo '<div id="advads-settings-hide-by-user-role">';
-		foreach ( $roles as $_role => $_display_name ) {
-			$checked = in_array( $_role, $hide_for_roles, true );
-			echo '<label><input type="checkbox" value="' . esc_attr( $_role ) . '" name="' . ADVADS_SLUG . '[hide-for-user-role][]" '
-				. checked( $checked, true, false ) . '>' . esc_html( $_display_name ) . '</label>';
-		}
-		echo '</div>';
-
-		echo '<p class="description">' . esc_html__( 'Choose the roles a user must have in order to not see any ads.', 'advanced-ads' ) . '</p>';
+		include ADVADS_BASE_PATH . 'admin/views/settings/general/hide-for-user-role.php';
 	}
 
 	/**
-	 * render setting to display advanced js file
-	 *
-	 * @since 1.2.3
+	 * Render setting to display advanced js file
 	 */
 	public function render_settings_advanced_js() {
 		$options = Advanced_Ads::get_instance()->options();
 		$checked = ( ! empty( $options['advanced-js'] ) ) ? 1 : 0;
 
-		// display notice if js file was overridden
-		if ( ! $checked && apply_filters( 'advanced-ads-activate-advanced-js', $checked ) ) {
-			echo '<p>' . __( '<strong>notice: </strong>the file is currently enabled by an add-on that needs it.', 'advanced-ads' ) . '</p>';
-		}
-		echo '<input id="advanced-ads-advanced-js" type="checkbox" value="1" name="' . ADVADS_SLUG . '[advanced-js]" ' . checked( $checked, 1, false ) . '>';
-		echo '<p class="description">' . sprintf( __( 'Enable advanced JavaScript functions (<a href="%s" target="_blank">here</a>). Some features and add-ons might override this setting if they need features from this file.', 'advanced-ads' ), ADVADS_URL . 'javascript-functions/#utm_source=advanced-ads&utm_medium=link&utm_campaign=settings' ) . '</p>';
+		include ADVADS_BASE_PATH . 'admin/views/settings/general/advanced-js.php';
 	}
 
 	/**
-	 * render setting for content injection protection
-	 *
-	 * @since 1.4.1
+	 * Render setting for content injection protection
 	 */
 	public function render_settings_content_injection_everywhere() {
 		$options = Advanced_Ads::get_instance()->options();
 
 		if ( ! isset( $options['content-injection-everywhere'] ) ) {
 			$everywhere = 0;
-		} elseif ( $options['content-injection-everywhere'] === 'true' ) {
+		} elseif ( 'true' === $options['content-injection-everywhere'] ) {
 			$everywhere = - 1;
 		} else {
 			$everywhere = absint( $options['content-injection-everywhere'] );
 		}
 
-		echo '<input id="advanced-ads-injection-everywhere" type="number" value="' . $everywhere . '" min="-1" name="' . ADVADS_SLUG . '[content-injection-everywhere]">';
-		echo '<p class="description">' . __( 'Some plugins and themes trigger ad injections where it shouldn’t happen. Therefore, Advanced Ads ignores injected placements on non-singular pages and outside the loop. However, this can cause problems with some themes. Set this option to -1 in order to enable unlimited ad injection at your own risk, set it to 0 to keep it disabled or choose a positive number to enable the injection only in the first x posts on your archive pages.', 'advanced-ads' ) . '</p>';
-
+		include ADVADS_BASE_PATH . 'admin/views/settings/general/content-injection-everywhere.php';
 	}
 
 	/**
-	 * render setting for content injection priority
-	 *
-	 * @since 1.4.1
+	 * Render setting for content injection priority
 	 */
 	public function render_settings_content_injection_priority() {
 		$options  = Advanced_Ads::get_instance()->options();
 		$priority = ( isset( $options['content-injection-priority'] ) ) ? intval( $options['content-injection-priority'] ) : 100;
 
-		echo '<input id="advanced-ads-content-injection-priority" type="number" value="' . $priority . '" name="' . ADVADS_SLUG . '[content-injection-priority]" size="3"/>';
-		echo '<p class="description">';
-		if ( $priority < 11 ) {
-			echo '<span class="advads-error-message">' . __( 'Please check your post content. A priority of 10 and below might cause issues (wpautop function might run twice).', 'advanced-ads' ) . '</span><br />';
-		}
-		_e( 'Play with this value in order to change the priority of the injected ads compared to other auto injected elements in the post content.', 'advanced-ads' );
-		echo '</p>';
+		include ADVADS_BASE_PATH . 'admin/views/settings/general/content-injection-priority.php';
 	}
 
 	/**
-	 * render setting to disable content injection level limitation
-	 *
-	 * @since 1.7.22
+	 * Render setting to disable content injection level limitation
 	 */
 	public function render_settings_content_injection_level_limitation() {
 		$options = Advanced_Ads::get_instance()->options();
 		$checked = ( ! empty( $options['content-injection-level-disabled'] ) ) ? 1 : 0;
 
-		echo '<input id="advanced-ads-content-injection-level-disabled" type="checkbox" value="1" name="' . ADVADS_SLUG . '[content-injection-level-disabled]" ' . checked( $checked, 1, false ) . '>';
-		echo '<p class="description">' . __( 'Advanced Ads ignores paragraphs and other elements in containers when injecting ads into the post content. Check this option to ignore this limitation and ads might show up again.', 'advanced-ads' ) . '</p>';
+		include ADVADS_BASE_PATH . 'admin/views/settings/general/content-injection-level-limitation.php';
 	}
 
 	/**
-	 * render setting for blocking bots
-	 *
-	 * @since 1.4.9
+	 * Render setting for blocking bots
 	 */
 	public function render_settings_block_bots() {
 		$options = Advanced_Ads::get_instance()->options();
 		$checked = ( ! empty( $options['block-bots'] ) ) ? 1 : 0;
 
-		echo '<input id="advanced-ads-block-bots" type="checkbox" value="1" name="' . ADVADS_SLUG . '[block-bots]" ' . checked( $checked, 1, false ) . '>';
-		if ( Advanced_Ads::get_instance()->is_bot() ) {
-			echo '<span class="advads-error-message">' . __( 'You look like a bot', 'advanced-ads' ) . '</a>. </span>';
-		}
-		echo '<span class="description"><a href="' . ADVADS_URL . 'hide-ads-from-bots/#utm_source=advanced-ads&utm_medium=link&utm_campaign=settings" target="blank">' . __( 'Read this first', 'advanced-ads' ) . '</a></span>';
-		echo '<p class="description">' . __( 'Hide ads from crawlers, bots and empty user agents.', 'advanced-ads' ) . '</p>';
+		include ADVADS_BASE_PATH . 'admin/views/settings/general/block-bots.php';
 	}
 
 	/**
-	 * render setting to disable ads by post types
-	 *
-	 * @since 1.13.5
+	 * Render setting to disable ads by post types
 	 */
-	public function render_settings_disable_post_types(){
+	public function render_settings_disable_post_types() {
 
-		$post_types = get_post_types( array( 'public' => true, 'publicly_queryable' => true ), 'objects', 'or' );
+		$post_types        = get_post_types(
+			array(
+				'public'             => true,
+				'publicly_queryable' => true,
+			),
+			'objects',
+			'or'
+		);
 		$type_label_counts = array_count_values( wp_list_pluck( $post_types, 'label' ) );
 
-		echo '<p><a href="' . ADVADS_URL . 'add-ons/advanced-ads-pro/#utm_source=advanced-ads&utm_medium=link&utm_campaign=pitch-pro-disable-post-type' . '" target="_blank">'. __( 'Pro feature', 'advanced-ads' ) .'</a></p>';
-
-		require ADVADS_BASE_PATH . '/admin/views/setting-disable-post-types.php';
+		require ADVADS_BASE_PATH . '/admin/views/settings/general/disable-post-types.php';
 	}
 
 	/**
-	 * render setting to disable notices
-	 *
-	 * @since 1.5.3
-	 * @updated 1.13 disable Ad Health as well
+	 * Render setting to disable notices and Ad Health
 	 */
 	public function render_settings_disabled_notices() {
 		$options = Advanced_Ads::get_instance()->options();
 		$checked = ( ! empty( $options['disable-notices'] ) ) ? 1 : 0;
 
-		echo '<input id="advanced-ads-disabled-notices" type="checkbox" value="1" name="' . ADVADS_SLUG . '[disable-notices]" ' . checked( $checked, 1, false ) . '>';
-		echo '<p class="description">' . sprintf(
-			// translators: %1$s is a starting <a> tag and %2$s a closing one
-				__( 'Disable %1$sAd Health%2$s in frontend and backend, warnings and internal notices like tips, tutorials, email newsletters and update notices.', 'advanced-ads' ), '<a href="'
-				                                                                                                                                                                      . ADVADS_URL . 'manual/ad-health/#utm_source=advanced-ads&utm_medium=link&utm_campaign=settings-ad-health" target="_blank"> ', '</a>' ) . '</p>';
+		require ADVADS_BASE_PATH . '/admin/views/settings/general/disable-notices.php';
 	}
 
 	/**
-	 * render setting for frontend prefix
-	 *
-	 * @since 1.6.8
+	 * Render setting for frontend prefix
 	 */
 	public function render_settings_front_prefix() {
 		$options = Advanced_Ads::get_instance()->options();
@@ -563,64 +502,45 @@ class Advanced_Ads_Admin_Settings {
 		$prefix     = Advanced_Ads_Plugin::get_instance()->get_frontend_prefix();
 		$old_prefix = ( isset( $options['id-prefix'] ) ) ? esc_attr( $options['id-prefix'] ) : '';
 
-		echo '<input id="advanced-ads-front-prefix" type="text" value="' . $prefix . '" name="' . ADVADS_SLUG . '[front-prefix]" />';
-		// deprecated
-		echo '<input type="hidden" value="' . $old_prefix . '" name="' . ADVADS_SLUG . '[id-prefix]" />';
-		echo '<p class="description">' . __( 'Prefix of class or id attributes in the frontend. Change it if you don’t want <strong>ad blockers</strong> to mark these blocks as ads.<br/>You might need to <strong>rewrite css rules afterwards</strong>.', 'advanced-ads' ) . '</p>';
+		require ADVADS_BASE_PATH . '/admin/views/settings/general/frontend-prefix.php';
 	}
 
 	/**
-	 * render setting to allow editors to manage ads
-	 *
-	 * @since 1.6.14
+	 * Render setting to allow editors to manage ads
 	 */
 	public function render_settings_editors_manage_ads() {
 		$options = Advanced_Ads::get_instance()->options();
 
-		// is false by default if no options where previously set
+		// is false by default if no options where previously set.
 		if ( isset( $options['editors-manage-ads'] ) && $options['editors-manage-ads'] ) {
 			$allow = true;
 		} else {
 			$allow = false;
 		}
 
-		echo '<input id="advanced-ads-editors-manage-ads" type="checkbox" ' . checked( $allow, true, false ) . ' name="' . ADVADS_SLUG . '[editors-manage-ads]" />';
-		echo '<p class="description">' . __( 'Allow editors to also manage and publish ads.', 'advanced-ads' ) .
-		     ' ' . sprintf( __( 'You can assign different ad-related roles on a user basis with <a href="%s" target="_blank">Advanced Ads Pro</a>.', 'advanced-ads' ), ADVADS_URL . 'add-ons/advanced-ads-pro/#utm_source=advanced-ads&utm_medium=link&utm_campaign=settings' ) . '</p>';
+		require ADVADS_BASE_PATH . '/admin/views/settings/general/editors-manage-ads.php';
 	}
 
 	/**
-	 * render setting to add an "Advertisement" label before ads
-	 *
+	 * Render setting to add an "Advertisement" label before ads
 	 */
 	public function render_settings_add_custom_label() {
 		$options = Advanced_Ads::get_instance()->options();
 
 		$enabled = isset( $options['custom-label']['enabled'] );
-		$label   = ! empty ( $options['custom-label']['text'] ) ? esc_html( $options['custom-label']['text'] ) : _x( 'Advertisements', 'label before ads', 'advanced-ads' );
-		?>
+		$label   = ! empty( $options['custom-label']['text'] ) ? esc_html( $options['custom-label']['text'] ) : _x( 'Advertisements', 'label before ads', 'advanced-ads' );
 
-        <fieldset>
-            <input type="checkbox" <?php checked( $enabled, true ); ?> value="1"
-                   name="<?php echo ADVADS_SLUG . '[custom-label][enabled]'; ?>"/>
-            <input id="advads-custom-label" type="text" value="<?php echo $label; ?>"
-                   name="<?php echo ADVADS_SLUG . '[custom-label][text]'; ?>"/>
-        </fieldset>
-        <p class="description"><?php _e( 'Displayed above ads.', 'advanced-ads' ); ?>&nbsp;<a target="_blank"
-                                                                                              href="<?php echo ADVADS_URL . 'manual/advertisement-label/#utm_source=advanced-ads&utm_medium=link&utm_campaign=settings-advertisement-label' ?>"><?php _e( 'Manual', 'advanced-ads' ); ?></a>
-        </p>
-
-		<?php
+		require ADVADS_BASE_PATH . '/admin/views/settings/general/custom-label.php';
 	}
 
 	/**
-	 * render link-nofollow setting
+	 * Render link target="_blank" setting
 	 *
 	 * @since 1.8.4 – moved here from Tracking add-on
 	 */
 	public function render_settings_link_target_callback() {
 
-		// get option if saved for tracking
+		// get option if saved for tracking.
 		$options = Advanced_Ads::get_instance()->options();
 		if ( ! isset( $options['target-blank'] ) && class_exists( 'Advanced_Ads_Tracking_Plugin' ) ) {
 			$tracking_options = Advanced_Ads_Tracking_Plugin::get_instance()->options();
@@ -630,21 +550,17 @@ class Advanced_Ads_Admin_Settings {
 		}
 
 		$target = isset( $options['target-blank'] ) ? $options['target-blank'] : 0;
-		include ADVADS_BASE_PATH . 'admin/views/setting-target.php';
+		include ADVADS_BASE_PATH . 'admin/views/settings/general/link-target.php';
 	}
 
 	/**
-	 * render setting 'Delete data on uninstall"
-	 *
+	 * Render setting 'Delete data on uninstall"
 	 */
 	public function render_settings_uninstall_delete_data() {
 		$options = Advanced_Ads::get_instance()->options();
-		$enabled = ! empty( $options['uninstall-delete-data'] ); ?>
+		$enabled = ! empty( $options['uninstall-delete-data'] );
 
-        <input type="checkbox" value="1"
-               name="<?php echo ADVADS_SLUG; ?>[uninstall-delete-data]" <?php checked( $enabled, 1 ); ?>>
-        <p class="description"><?php _e( 'Clean up all data related to Advanced Ads when removing the plugin.', 'advanced-ads' ); ?></p>
-		<?php
+		include ADVADS_BASE_PATH . 'admin/views/settings/general/uninstall-delete-data.php';
 	}
 
 	/**
@@ -655,21 +571,19 @@ class Advanced_Ads_Admin_Settings {
 
 		$checked = ! empty( $options['disable-shortcode-button'] );
 
-		echo '<input id="advanced-ads-disable-shortcode-button" type="checkbox" ' . checked( $checked, true, false ) . ' name="' . ADVADS_SLUG . '[disable-shortcode-button]" />';
-		echo '<p class="description">' . __( 'Disable shortcode button in visual editor.', 'advanced-ads' ) . '</p>';
+		include ADVADS_BASE_PATH . 'admin/views/settings/general/disable-shortcode-button.php';
 	}
 
 	/**
-	 * sanitize plugin settings
+	 * Sanitize plugin settings
 	 *
-	 * @since 1.5.1
+	 * @param array $options all the options.
 	 *
-	 * @param array $options all the options
+	 * @return array sanitized options.
 	 */
 	public function sanitize_settings( $options ) {
 
-		// sanitize whatever option one wants to sanitize
-
+		// sanitize whatever option one wants to sanitize.
 		if ( isset( $options['front-prefix'] ) ) {
 			$options['front-prefix'] = sanitize_html_class( $options['front-prefix'], Advanced_Ads_Plugin::DEFAULT_FRONTEND_PREFIX );
 		}
@@ -677,9 +591,9 @@ class Advanced_Ads_Admin_Settings {
 		$options = apply_filters( 'advanced-ads-sanitize-settings', $options );
 
 		// check if editors can edit ads now and set the rights
-		// else, remove that right
+		// else, remove that right.
 		$editor_role = get_role( 'editor' );
-		if ( null == $editor_role ) {
+		if ( null === $editor_role ) {
 			return $options;
 		}
 		if ( isset( $options['editors-manage-ads'] ) && $options['editors-manage-ads'] ) {
@@ -694,14 +608,14 @@ class Advanced_Ads_Admin_Settings {
 			$editor_role->remove_cap( 'advanced_ads_place_ads' );
 		}
 
-		// we need 3 states: ! isset, 1, 0
+		// we need 3 states: ! isset, 1, 0.
 		$options['disabled-ads']['feed'] = isset( $options['disabled-ads']['feed'] ) ? 1 : 0;
 
 		if ( isset( $options['content-injection-everywhere'] ) ) {
-			if ( $options['content-injection-everywhere'] == 0 ) {
+			if ( 0 == $options['content-injection-everywhere'] ) {
 				unset( $options['content-injection-everywhere'] );
 			} elseif ( $options['content-injection-everywhere'] <= - 1 ) {
-				$options['content-injection-everywhere'] = "true";
+				$options['content-injection-everywhere'] = 'true';
 			} else {
 				$options['content-injection-everywhere'] = absint( $options['content-injection-everywhere'] );
 			}

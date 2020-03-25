@@ -1,17 +1,30 @@
 <?php
-abstract class Advanced_Ads_Ad_Network_Ad_Importer{
-    protected $ad_network;
 
-    /**
-     * Advanced_Ads_Ad_Network_Ad_Importer constructor.
-     * @param $ad_network
-     */
-    public function __construct($ad_network)
-    {
-        $this->ad_network = $ad_network;
-    }
+/**
+ * Class Advanced_Ads_Ad_Network_Ad_Importer
+ */
+abstract class Advanced_Ads_Ad_Network_Ad_Importer {
 
-    public function render(){
+	/**
+	 * Ad network
+	 *
+	 * @var object
+	 */
+	protected $ad_network;
 
-    }
+	/**
+	 * Advanced_Ads_Ad_Network_Ad_Importer constructor.
+	 *
+	 * @param object $ad_network ad network object.
+	 */
+	public function __construct( $ad_network ) {
+		$this->ad_network = $ad_network;
+	}
+
+	/**
+	 * Render network
+	 */
+	public function render() {
+
+	}
 }

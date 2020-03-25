@@ -239,7 +239,7 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 	 * @param arr $options options of the condition
 	 * @param int $index index of the condition
 	 */
-	static function metabox_capabilities( $options, $index = 0 ){
+	static function metabox_capabilities( $options, $index = 0, $form_name = '' ) {
 
 	    if ( ! isset ( $options['type'] ) || '' === $options['type'] ) { return; }
 
@@ -250,7 +250,7 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 	    }
 
 	    // form name basis
-	    $name = Advanced_Ads_Visitor_Conditions::FORM_NAME . '[' . $index . ']';
+		$name = self::get_form_name_with_index( $form_name, $index );
 
 	    // options
 	    $value = isset( $options['value'] ) ? $options['value'] : '';
@@ -276,12 +276,12 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 		    <option value="can" <?php selected( 'can', $operator ); ?>><?php _e( 'can', 'advanced-ads-pro' ); ?></option>
 		    <option value="can_not" <?php selected( 'can_not', $operator ); ?>><?php _e( 'can not', 'advanced-ads-pro' ); ?></option>
 		</select>
-		<select name="<?php echo $name; ?>[value]">
+		<div class="advads-conditions-select-wrap"><select name="<?php echo $name; ?>[value]">
 			<option><?php _e( '-- choose one --', 'advanced-ads-pro' ); ?></option>
 			<?php foreach( $capabilities as $cap => $_val ) : ?>
 				<option value="<?php echo $cap; ?>" <?php selected( $cap, $value ); ?>><?php echo $cap; ?></option>
 			<?php endforeach; ?>
-		</select>
+		</select></div>
 	    <p class="description"><?php echo $type_options[ $options['type'] ]['description']; ?></p><?php
 	}
 
@@ -291,7 +291,7 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 	 * @param arr $options options of the condition
 	 * @param int $index index of the condition
 	 */
-	static function metabox_roles( $options, $index = 0 ){
+	static function metabox_roles( $options, $index = 0, $form_name = '' ) {
 
 		if ( ! isset ( $options['type'] ) || '' === $options['type'] ) { return; }
 
@@ -302,7 +302,7 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 		}
 
 		// form name basis
-		$name = Advanced_Ads_Visitor_Conditions::FORM_NAME . '[' . $index . ']';
+		$name = self::get_form_name_with_index( $form_name, $index );
 
 		// options
 		$value = isset( $options['value'] ) ? $options['value'] : '';
@@ -316,12 +316,12 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 			<option value="is" <?php selected( 'is', $operator ); ?>><?php _e( 'is', 'advanced-ads-pro' ); ?></option>
 			<option value="is_not" <?php selected( 'is_not', $operator ); ?>><?php _e( 'is not', 'advanced-ads-pro' ); ?></option>
 		</select>
-		<select name="<?php echo $name; ?>[value]">
+		<div class="advads-conditions-select-wrap"><select name="<?php echo $name; ?>[value]">
 			<option><?php _e( '-- choose one --', 'advanced-ads-pro' ); ?></option>
 			<?php foreach( $roles as $_role => $_display_name ) : ?>
 			<option value="<?php echo $_role; ?>" <?php selected( $_role, $value ); ?>><?php echo $_display_name; ?></option>
 			<?php endforeach; ?>
-		</select>
+		</select></div>
 		<p class="description"><?php echo $type_options[ $options['type'] ]['description']; ?></p><?php
 	}
 
@@ -331,7 +331,7 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 	 * @param arr $options options of the condition
 	 * @param int $index index of the condition
 	 */
-	static function metabox_browser_lang( $options, $index = 0 ){
+	static function metabox_browser_lang( $options, $index = 0, $form_name = '' ) {
 
 	    if ( ! isset ( $options['type'] ) || '' === $options['type'] ) { return; }
 
@@ -342,7 +342,7 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 	    }
 
 	    // form name basis
-	    $name = Advanced_Ads_Visitor_Conditions::FORM_NAME . '[' . $index . ']';
+		$name = self::get_form_name_with_index( $form_name, $index );
 
 	    // options
 	    $operator = isset( $options['operator'] ) ? $options['operator'] : 'is';
@@ -377,7 +377,7 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 	 * @param arr $options options of the condition
 	 * @param int $index index of the condition
 	 */
-	static function metabox_cookie( $options, $index = 0 ){
+	static function metabox_cookie( $options, $index = 0, $form_name = '' ) {
 
 	    if ( ! isset ( $options['type'] ) || '' === $options['type'] ) { return; }
 
@@ -388,7 +388,8 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 	    }
 
 	    // form name basis
-	    $name = Advanced_Ads_Visitor_Conditions::FORM_NAME . '[' . $index . ']';
+		$name = self::get_form_name_with_index( $form_name, $index );
+
 	    $operator = isset( $options['operator'] ) ? $options['operator'] : 'show';
 
 	    // options
@@ -413,7 +414,7 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 	 * @param arr $options options of the condition
 	 * @param int $index index of the condition
 	 */
-	static function metabox_ad_impressions( $options, $index = 0 ){
+	static function metabox_ad_impressions( $options, $index = 0, $form_name = '' ) {
 
 	    if ( ! isset ( $options['type'] ) || '' === $options['type'] ) { return; }
 
@@ -424,7 +425,7 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 	    }
 
 	    // form name basis
-	    $name = Advanced_Ads_Visitor_Conditions::FORM_NAME . '[' . $index . ']';
+		$name = self::get_form_name_with_index( $form_name, $index );
 
 	    // options
 	    $value = isset( $options['value'] ) ? absint( $options['value'] ) : 0;
@@ -762,5 +763,23 @@ class Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions {
 			}
 		}
 		return $content;
+	}
+
+	/**
+	 * Helper function to the name of a form field.
+	 * falls back to default
+	 *
+	 * @param string $form_name form name if submitted.
+	 * @param int    $index index of the condition.
+	 *
+	 * @return string
+	 */
+	public static function get_form_name_with_index( $form_name = '', $index = 0 ) {
+		// form name basis
+		if ( method_exists( 'Advanced_Ads_Visitor_Conditions', 'get_form_name_with_index' ) ) {
+			return Advanced_Ads_Visitor_Conditions::get_form_name_with_index( $form_name, $index );
+		} else {
+			return Advanced_Ads_Visitor_Conditions::FORM_NAME . '[' . $index . ']';
+		}
 	}
 }

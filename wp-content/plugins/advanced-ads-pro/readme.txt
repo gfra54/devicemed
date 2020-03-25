@@ -1,18 +1,16 @@
 === Advanced Ads Pro ===
-Contributors: webzunft
-Tags: ads, ad, banner, adverts, advertisement, anchor, ad place, ad space
 Requires at least: WP 4.4
-Tested up to: 5.2.2
+Tested up to: 5.3.1
 Requires PHP: 5.6
-Stable tag: 2.5.1
+Stable tag: 2.6.2
 
 Advanced Ads Pro is for those who want to perform magic on their ads.
 
 == Copyright ==
 
-Copyright 2014-2019, Thomas Maier, https://wpadvancedads.com
+Copyright 2014-2019, Thomas Maier, Advanced Ads GmbH, https://wpadvancedads.com/
 
-This plugin is only distributed by webgilde GmbH. Arrangements to use it in themes and plugins can be made individually.
+This plugin is only distributed by Advanced Ads GmbH. Arrangements to use it in themes and plugins can be made individually.
 
 == Description ==
 
@@ -73,6 +71,31 @@ Advanced Ads Pro is based on the free Advanced Ads plugin, a simple and powerful
 You can use Advanced Ads along any other ad management plugin and don’t need to switch completely.
 
 == Changelog ==
+
+= untagged =
+
+* use Display and Visitor Conditions in placements
+* allow content injection based on iframe tag
+* show the link to duplicate an ad only when the ad was already saved once
+* fixed wide 'select' elements in conditions that broke layout
+
+= 2.6.2 =
+
+* added `advanced_ads_pro_output_custom_code` filter to manipulate the Custom Code option
+* prevented returning default language in the WPML plugin when AJAX cache-busting is used
+* prevented reset of the "Disable ads for post types" option when saving Pro settings
+* fix "Disable ads for post types" option when using AJAX cache-busting
+* fixed possible PHP warning
+
+= 2.6.1 =
+
+* fixed a minify-related bug that prevented some Custom Position placement from working
+
+= 2.6 =
+
+* new feature: duplicate ads
+* load group name to Cache Busting code as per request by a customer
+* made possible to place Custom Position placement in relation to several elements found by selector
 
 = 2.5.1 =
 

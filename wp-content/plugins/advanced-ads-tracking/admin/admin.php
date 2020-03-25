@@ -22,6 +22,12 @@ class Advanced_Ads_Tracking_Admin {
     protected $util;
 
     /**
+     *
+     * @var Advanced_Ads_Tracking_Admin
+     */
+    protected static $instance;
+
+    /**
      * Initialize the plugin by loading admin scripts & styles and adding a
      * settings page and menu.
      *
@@ -84,6 +90,20 @@ class Advanced_Ads_Tracking_Admin {
 		
 		add_action( 'dp_duplicate_post', array( $this, 'on_duplicate_post' ), 20, 2 );
 	}
+
+    /**
+     * Get Instance
+     *
+     * @return Advanced_Ads_Tracking_Admin
+     */
+    public static function get_instance() {
+        // If the single instance hasn't been set, set it now.
+        if ( null === self::$instance ) {
+            self::$instance = new self;
+        }
+
+        return self::$instance;
+    }
 
 	/**
 	 *  Recreate public stats link on post duplication
@@ -560,9 +580,8 @@ class Advanced_Ads_Tracking_Admin {
 		// public stats
 		$tracking_options = Advanced_Ads_Tracking_Plugin::get_instance()->options();
 		$public_stats_slug = ( isset( $tracking_options['public-stats-slug'] ) )? $tracking_options['public-stats-slug'] : self::PUBLIC_STATS_DEFAULT;
-		$public_id = ( isset( $ad_options['public-id'] ) && ! empty( $ad_options['public-id'] ) )? $ad_options['public-id'] : false;
-		$hash_length = 48;
-		
+		$public_id = self::get_public_id( $post->ID );
+
 		$public_name = ( isset( $ad_options['public-name'] ) && ! empty( $ad_options['public-name'] ) )? stripslashes( $ad_options['public-name'] ) : '';
 
 		$clicks_display = ( in_array( $ad->type, Advanced_Ads_Tracking_Plugin::$types_using_click_tracking ) ) ? '' : 'display:none; ';
@@ -583,12 +602,14 @@ class Advanced_Ads_Tracking_Admin {
 		$order_id = get_post_meta( $post->ID, 'advanced_ads_selling_order', true );
 		if ( $order_id ) {
 			// if ad was sold via WooCommerce
-			$order = wc_get_order( $order_id );
-			global $woocommerce;
-			if ( isset( $woocommerce->version ) && version_compare( $woocommerce->version, '3.0', ">=" ) ) {
-				$billing_email = $order->get_billing_email();
-			} else {
-				$billing_email = $order->billing_email;
+			if( function_exists( 'wc_get_order' ) ) {
+				$order = wc_get_order( $order_id );
+				global $woocommerce;
+				if ( isset( $woocommerce->version ) && version_compare( $woocommerce->version, '3.0', ">=" ) ) {
+					$billing_email = $order->get_billing_email();
+				} else {
+					$billing_email = $order->billing_email;
+				}
 			}
 		}
 		
@@ -684,6 +705,19 @@ class Advanced_Ads_Tracking_Admin {
             $hook,
             'advanced_ads_tracking_setting_section'
         );
+		
+		if ( defined( 'AAPLDS_BASE_PATH' ) || defined( 'AASADS_BASE_PATH' ) ) {
+		
+			// Delayed ads.
+			add_settings_field(
+				'delayed-ads',
+				__( 'Delayed ads', 'advanced-ads-tracking' ),
+				array( $this, 'render_settings_delayed_ads_cb' ),
+				$hook,
+				'advanced_ads_tracking_setting_section'
+			);
+		
+		}
 		
         add_settings_field(
             'link-nofollow',
@@ -799,6 +833,7 @@ class Advanced_Ads_Tracking_Admin {
 	 *
 	 * @since 1.2.6
 	 * @param array $options all the options
+     * @return mixed
 	 */
 	public function sanitize_settings( $options ){
 
@@ -880,6 +915,12 @@ class Advanced_Ads_Tracking_Admin {
         if (!isset($ad->id) || empty($ad->id)) return;
 
         $ad = new Advanced_Ads_Ad($ad->id);
+		
+		// do not show tracking options for Google Ad Manager ads.
+		if ( 'gam' == $ad->type ) {
+			return;
+		}
+		
         $options = $ad->options();
 		$ad_options = isset( $options['tracking'] ) ? $options['tracking'] : array();
 		
@@ -979,8 +1020,11 @@ class Advanced_Ads_Tracking_Admin {
 
     /**
      * save ad tracking options
-     *
      * @since 1.0.0
+     *
+     * @param array $options
+     * @param int $ad
+     * @return array
      */
     public function save_options($options = array(), $ad = 0) {
 		
@@ -1026,10 +1070,10 @@ class Advanced_Ads_Tracking_Admin {
     /**
      * add stats submenu item
      *
-     * @since 1.0.0
      * @param string $plugin_slug
+     * @since 1.0.0
      */
-    public function add_menu_item($plugin_slug = ''){
+    public function add_menu_item($plugin_slug = '') {
 
 	$cap = method_exists( 'Advanced_Ads_Plugin', 'user_cap' ) ?  Advanced_Ads_Plugin::user_cap( 'advanced_ads_edit_ads') : 'manage_options';
 
@@ -1042,8 +1086,8 @@ class Advanced_Ads_Tracking_Admin {
      * add menu page to the array of pages that belong to Advanced Ads
      *
      * @since 1.2.4
-     * @param arr $pages array with screen ids that already belong to Advanced Ads
-     * @return arr $pages array with screen ids that already belong to Advanced Ads
+     * @param array $pages
+     * @return array $pages array with screen ids that already belong to Advanced Ads
      */
     public function add_menu_page_to_array( array $pages ){
 	    $pages[] = 'advanced-ads_page_advanced-ads-stats';
@@ -1268,6 +1312,7 @@ class Advanced_Ads_Tracking_Admin {
         // values might be null (not set) or false (error in input)
 
         $where = '';
+		
         if (isset($start) && $start) {
             $where .= "WHERE `timestamp` >= $start";
         }
@@ -1288,6 +1333,14 @@ class Advanced_Ads_Tracking_Admin {
 			} else {
 				$where .= 'WHERE `ad_id` = ' . $args['ad_id'][0];
 			}
+		} elseif ( 1 < count( $args['ad_id'] ) ) {
+			
+			if ( $where ) {
+				$where .= ' AND `ad_id` IN (' . implode( ',', $args['ad_id'] ) . ')';
+			} else {
+				$where .= 'WHERE `ad_id` IN (' . implode( ',', $args['ad_id'] ) . ')';
+			}
+			
 		}
 		
         // order
@@ -1484,6 +1537,14 @@ class Advanced_Ads_Tracking_Admin {
 	    include ADVADS_BASE_PATH . 'admin/views/setting-license.php';
     }
 
+	/**
+	 * Delayed ads settings
+	 */
+	public function render_settings_delayed_ads_cb() {
+		include AAT_BASE_PATH . 'admin/views/setting_delayed_ads.php';
+	}
+	
+	
 	/**
 	 *  Render Google Analytics settings
 	 */
@@ -1793,6 +1854,117 @@ class Advanced_Ads_Tracking_Admin {
             // add database version number to options
             $options['dbversion'] = Advanced_Ads_Tracking_Util::DB_VERSION;
             $this->plugin->update_options( $options );
+        }
+    }
+
+    /**
+     * Get ad options
+     *
+     * @param $ad_id 'post ID of the ad'
+     * @return mixed
+     */
+    public static function get_ad_options($ad_id)  {
+        $ad = new Advanced_Ads_Ad($ad_id);
+        $options = $ad->options();
+        $ad_options = is_array( $options ) ? $options : array();
+
+        return $ad_options;
+    }
+
+    /**
+     * Save ad options
+     *
+     * @param int $ad_id post ID of the ad
+     * @param array $options ad options.
+	 *
+	 * @todo this function belongs into the core plugin
+     */
+    public static function save_ad_options( $ad_id, array $options )  {
+
+	    // don’t allow to clear options by accident.
+	    if ( $options === array() ) {
+		    return;
+	    }
+
+	    update_post_meta( $ad_id, Advanced_Ads_Ad::$options_meta_field, $options );
+    }
+
+    /**
+     * Gets public ID from ad_id
+     *
+     * @param $ad_id 'post ID of the ad'
+     * @return bool|mixed
+     */
+    public static function get_public_id($ad_id) {
+        $ad_options = self::get_ad_options($ad_id);
+        $public_id = (isset($ad_options['tracking']['public-id']) && !empty($ad_options['tracking']['public-id'])) ? $ad_options['tracking']['public-id'] : false;
+        if (empty($public_id)) {
+            $public_id = self::set_public_id($ad_id);
+        }
+        return $public_id;
+    }
+
+    /**
+     * Sets public ID from ad ID
+     *
+     * @param $ad_id 'post ID of the ad'
+     * @return mixed|void
+     */
+    public static function set_public_id($ad_id) {
+        $ad_options = self::get_ad_options($ad_id);
+
+        if (is_array($ad_options) && empty($ad_options['tracking']['public-id'])) {
+                $ad_options['tracking']['public-id'] = wp_generate_password(48, false);
+
+                // store value in DB so that we don’t need to save it again
+
+	        	self::save_ad_options( $ad_id, $ad_options );
+
+                return $ad_options['tracking']['public-id'];
+        }
+    }
+
+    /**
+     * Gets public static slug
+     *
+     * @return string
+     */
+    public static function get_public_static_slug() {
+        $tracking_options = Advanced_Ads_Tracking_Plugin::get_instance()->options();
+        $public_stats_slug = ( isset($tracking_options['public-stats-slug']) ) ? $tracking_options['public-stats-slug'] : self::PUBLIC_STATS_DEFAULT;
+
+        return $public_stats_slug;
+    }
+
+    /**
+     * Get public link from ad ID
+     *
+     * @param $ad_id 'post ID of the ad'
+     * @return bool|string|void
+     */
+    public function get_public_link( $ad_id ) {
+        $public_stats_slug = self::get_public_static_slug();
+        $public_id = self::get_public_id($ad_id);
+
+        $public_link = $public_id ? site_url( '/' . $public_stats_slug . '/' . $public_id . '/' ) : false;
+        $permalink = get_option('permalink_structure');
+
+        if ( empty($permalink) && $public_link ) {
+            $public_link = site_url('/?' . $public_stats_slug . '=' . $public_id);
+        }
+        return $public_link;
+    }
+
+    /**
+     * Checks, if ad is once saved and 'enabled' array_key in ad_options is available
+     *
+     * @param $ad_id
+     * @return bool
+     */
+    public function is_stats_option_saved($ad_id) {
+        $ad_options = self::get_ad_options($ad_id);
+        if ( ! empty( $ad_options['tracking'] ) ) {
+            return ( is_array( $ad_options['tracking'] ) && ( array_key_exists( 'enabled', $ad_options['tracking'] ))) ? true : false;
         }
     }
 }

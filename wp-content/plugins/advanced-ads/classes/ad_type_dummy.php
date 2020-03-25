@@ -3,10 +3,10 @@
  * Advanced Ads Dummy Ad Type
  *
  * @package   Advanced_Ads
- * @author    Thomas Maier <thomas.maier@webgilde.com>
+ * @author    Thomas Maier <support@wpadvancedads.com>
  * @license   GPL-2.0+
- * @link      http://webgilde.com
- * @copyright 2014-2017 Thomas Maier, webgilde GmbH
+ * @link      https://wpadvancedads.com
+ * @copyright 2014-2017 Thomas Maier, Advanced Ads GmbH
  * @since     1.8
  *
  * Class containing information about the dummy ad type
@@ -46,7 +46,7 @@ class Advanced_Ads_Ad_Type_Dummy extends Advanced_Ads_Ad_Type_Abstract{
 		    <div><input type="text" name="advanced_ad[url]" id="advads-url" class="advads-ad-url" value="<?php echo $url; ?>"/></div><hr/>
 		<?php endif;
 		
-		?><img src="<?php echo ADVADS_BASE_URL ?>/public/assets/img/dummy.jpg" width="300" height="250"/><?php
+		?><img src="<?php echo ADVADS_BASE_URL ?>public/assets/img/dummy.jpg" width="300" height="250"/><?php
 		
 		?><input type="hidden" name="advanced_ad[width]" value="300"/>
 		<input type="hidden" name="advanced_ad[height]" value="250"/><?php
@@ -67,7 +67,7 @@ class Advanced_Ads_Ad_Type_Dummy extends Advanced_Ads_Ad_Type_Abstract{
 
 		ob_start();
 		if( ! defined( 'AAT_VERSION' ) && $url ){ echo '<a href="'. $url .'"'.$target_blank.'>'; }
-		echo '<img src="' . ADVADS_BASE_URL . '/public/assets/img/dummy.jpg" width="300" height="250"/>';
+		echo '<img src="' . ADVADS_BASE_URL . 'public/assets/img/dummy.jpg" width="300" height="250"/>';
 		if( ! defined( 'AAT_VERSION' ) && $url ){ echo '</a>'; }
 
 		return ob_get_clean();

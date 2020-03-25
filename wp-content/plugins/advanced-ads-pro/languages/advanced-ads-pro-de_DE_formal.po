@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Advanced Ads Pro package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-07-22 13:07:07+0000\n"
+"PO-Revision-Date: 2020-01-06 10:01:03+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,6 +10,27 @@ msgstr ""
 "X-Generator: GlotPress/2.3.1\n"
 "Language: de\n"
 "Project-Id-Version: Advanced Ads Pro\n"
+
+#. Author of the plugin
+msgid "Advanced Ads GmbH"
+msgstr "Advanced Ads GmbH"
+
+#: modules/duplicate-ads/admin.class.php:138
+msgctxt "noun"
+msgid "copy"
+msgstr "Kopie"
+
+#: modules/inject-content/admin.class.php:124
+msgid "Minimum length of content (in words) before automatically injected ads are allowed in them. Set to zero or leave empty to always display ads, regardless of how long the content is."
+msgstr "Mindestlänge des Inhalts in Wörtern um Anzeigen automatisch zu injizieren. Null oder kein Wert führen dazu, dass Anzeigen unabhängig von der Länge injiziert werden."
+
+#: modules/duplicate-ads/admin.class.php:85
+msgid "Duplicate"
+msgstr "Duplizieren"
+
+#: modules/duplicate-ads/admin.class.php:85
+msgid "Create a copy of this ad"
+msgstr "Kopie der Anzeige erstellen"
 
 #: modules/inject-content/views/setting_post_meta_box.php:4
 msgid "Disable automatic ad injection into the content"
@@ -52,11 +73,11 @@ msgstr "Es ist ein Fehler aufgetreten."
 msgid "Updated"
 msgstr "Aktualisiert"
 
-#: modules/advanced-visitor-conditions/main.class.php:152
+#: modules/advanced-visitor-conditions/main.class.php:155
 msgid "Display ads based on the user’s roles. See <a href=\"%s\" target=\"_blank\">List of roles in WordPress</a>."
 msgstr "Zeigen Sie Anzeigen basierend auf der Rolle des jeweiligen Nutzers. Sehen Sie hier eine <a href=\"%s\" target=\"_blank\">Liste aller Nutzerollen in WordPress</a>."
 
-#: modules/advanced-visitor-conditions/main.class.php:151
+#: modules/advanced-visitor-conditions/main.class.php:154
 msgid "user role"
 msgstr "Nutzerrolle"
 
@@ -117,10 +138,6 @@ msgstr "Eigener Code"
 #. Author URI of the plugin
 msgid "https://wpadvancedads.com"
 msgstr "https://wpadvancedads.com"
-
-#. Author of the plugin
-msgid "Thomas Maier"
-msgstr "Thomas Maier"
 
 #. URI of the plugin
 msgid "https://wpadvancedads.com/add-ons/advanced-ads-pro/"
@@ -318,23 +335,23 @@ msgstr "<em>Cache-Busting</em> aktivieren."
 msgid "Activate <em>advanced visitor conditions</em> module."
 msgstr "<em>Erweiterte Besucherbedingungen</em> aktivieren."
 
-#: modules/advanced-display-conditions/views/referrer-url-metabox.php:15
 #: modules/advanced-visitor-conditions/views/referrer-url-metabox.php:15
+#: modules/advanced-display-conditions/views/referrer-url-metabox.php:15
 msgid "url of the referrer"
 msgstr "URL des Referrers"
 
-#: modules/advanced-display-conditions/views/referrer-url-metabox.php:5
 #: modules/advanced-visitor-conditions/views/referrer-url-metabox.php:5
+#: modules/advanced-display-conditions/views/referrer-url-metabox.php:5
 msgid "URL"
 msgstr "URL"
 
-#: modules/advanced-display-conditions/views/referrer-url-metabox.php:3
 #: modules/advanced-visitor-conditions/views/referrer-url-metabox.php:3
+#: modules/advanced-display-conditions/views/referrer-url-metabox.php:3
 msgid "Display ad depending on the external url the user comes from."
 msgstr "Anzeige basierend auf der URL anzeigen, von welcher der Nutzer kommt."
 
-#: modules/advanced-display-conditions/views/referrer-url-metabox.php:1
 #: modules/advanced-visitor-conditions/views/referrer-url-metabox.php:1
+#: modules/advanced-display-conditions/views/referrer-url-metabox.php:1
 msgid "Display by referrer url"
 msgstr "Entsprechend der Referrer-URL anzeigen"
 
@@ -415,67 +432,67 @@ msgstr "Lazy Load"
 msgid "Lazy Load"
 msgstr "Lazy Load"
 
-#: modules/inject-content/inject-content.class.php:575
+#: modules/inject-content/inject-content.class.php:563
 msgid "any headline (%s)"
 msgstr "Überschriften (%s)"
 
-#: modules/inject-content/inject-content.class.php:571
+#: modules/inject-content/inject-content.class.php:559
 msgid "quote (%s)"
 msgstr "Zitat (%s)"
 
-#: modules/inject-content/inject-content.class.php:570
+#: modules/inject-content/inject-content.class.php:558
 msgid "list item (%s)"
 msgstr "Listeneintrag (%s)"
 
-#: modules/inject-content/inject-content.class.php:569
+#: modules/inject-content/inject-content.class.php:557
 msgid "table (%s)"
 msgstr "Tabelle (%s)"
 
-#: modules/inject-content/inject-content.class.php:568
+#: modules/inject-content/inject-content.class.php:556
 msgid "image (%s)"
 msgstr "Bild (%s)"
 
-#: modules/inject-content/inject-content.class.php:567
+#: modules/inject-content/inject-content.class.php:555
 msgid "container (%s)"
 msgstr "Container (%s)"
 
-#: modules/inject-content/inject-content.class.php:85
+#: modules/inject-content/inject-content.class.php:84
 msgid "Display the ad between posts on post lists, e.g. home, archives, search etc."
 msgstr "Anzeige in Artikel-Listen einfügen, z.B. Startseite, Archive, Suche, etc."
 
-#: modules/inject-content/inject-content.class.php:84
+#: modules/inject-content/inject-content.class.php:83
 msgid "Post Lists"
 msgstr "Artikel-Liste"
 
-#: modules/inject-content/inject-content.class.php:78
+#: modules/inject-content/inject-content.class.php:77
 msgid "Attach the ad to any element in the frontend."
 msgstr "Anzeige an einer frei gewählten Position einfügen."
 
-#: modules/inject-content/inject-content.class.php:77
+#: modules/inject-content/inject-content.class.php:76
 msgid "Custom Position"
 msgstr "Eigene Position"
 
-#: modules/inject-content/inject-content.class.php:71
+#: modules/inject-content/inject-content.class.php:70
 msgid "In the middle of the main content based on the number of paragraphs."
 msgstr "In der Mitte des Hauptinhaltes. Ausgehend von der Anzahl der Paragraphen."
 
-#: modules/inject-content/inject-content.class.php:70
+#: modules/inject-content/inject-content.class.php:69
 msgid "Content Middle"
 msgstr "Textmitte"
 
-#: modules/inject-content/inject-content.class.php:64
+#: modules/inject-content/inject-content.class.php:63
 msgid "Above the main headline on the page (&lt;h1&gt;)."
 msgstr "Über der Hauptüberschrift auf der Seite (&lt;h1&gt;)."
 
-#: modules/inject-content/inject-content.class.php:63
+#: modules/inject-content/inject-content.class.php:62
 msgid "Above Headline"
 msgstr "Über der Überschrift"
 
-#: modules/inject-content/inject-content.class.php:57
+#: modules/inject-content/inject-content.class.php:56
 msgid "After a random paragraph in the main content."
 msgstr "Nach einem zufälligen Paragraphen im Hauptinhalt."
 
-#: modules/inject-content/inject-content.class.php:56
+#: modules/inject-content/inject-content.class.php:55
 msgid "Random Paragraph"
 msgstr "Zufälliger Absatz"
 
@@ -494,10 +511,6 @@ msgstr "Anzeigen in alle Beitrags-Listen injizieren (secondary queries)."
 #: modules/inject-content/admin.class.php:129
 msgid "minimum content length"
 msgstr "Mindestwortzahl"
-
-#: modules/inject-content/admin.class.php:124
-msgid "Minimum length of content (in words) before automatically injected ads are allowed in them. Leave empty to use default setting. Default settings will also be used if they are lower."
-msgstr "Mindestlänge des Inhaltes (in Wörtern) bevor Anzeigen automatisch injiziert werden. Leer lassen um keine Einschränkung zu geben. Standardwerte werden genutzt, wenn sie geringer sind."
 
 #: modules/inject-content/admin.class.php:85
 msgid "Before which post to inject the ad on post lists."
@@ -628,23 +641,23 @@ msgstr "Dateien und Animationen im Flash-Format (.swf) hochladen."
 msgid "Flash File"
 msgstr "Flash-Datei"
 
-#: modules/click-fraud-protection/click-fraud-protection.class.php:266
+#: modules/click-fraud-protection/click-fraud-protection.class.php:247
 msgid "Click Fraud Protection enabled"
 msgstr "Schutz vor Klick-Betrug aktivieren"
 
-#: modules/click-fraud-protection/click-fraud-protection.class.php:110
+#: modules/click-fraud-protection/click-fraud-protection.class.php:111
 msgid "hours"
 msgstr "Stunden"
 
-#: modules/click-fraud-protection/click-fraud-protection.class.php:108
+#: modules/click-fraud-protection/click-fraud-protection.class.php:109
 msgid "within"
 msgstr "innerhalb von"
 
-#: modules/click-fraud-protection/click-fraud-protection.class.php:83
+#: modules/click-fraud-protection/click-fraud-protection.class.php:84
 msgid "Display ad only if a click limit has not been reached"
 msgstr "Die Anzeige nur einblenden, wenn der Nutzer das Klicklimit noch nicht erreicht hat."
 
-#: modules/click-fraud-protection/click-fraud-protection.class.php:82
+#: modules/click-fraud-protection/click-fraud-protection.class.php:83
 msgid "max. ad clicks"
 msgstr "max. Anzeigenklicks"
 
@@ -652,29 +665,29 @@ msgstr "max. Anzeigenklicks"
 msgid "Click Fraud Protection"
 msgstr "Schutz vor Klickbetrug"
 
-#: modules/cache-busting/cache-busting.class.php:1266
+#: modules/cache-busting/cache-busting.class.php:1315
 msgctxt "placement admin label"
 msgid "Cache-busting:"
 msgstr "Cache-Busting:"
 
-#: modules/cache-busting/cache-busting.class.php:1260
+#: modules/cache-busting/cache-busting.class.php:1309
 msgid "The ad is not displayed on the page"
 msgstr "Die Anzeige wird nicht auf der Seite angezeigt."
 
-#: modules/cache-busting/cache-busting.class.php:1259
+#: modules/cache-busting/cache-busting.class.php:1308
 msgid "The ad is displayed on the page"
 msgstr "Die Anzeige wird auf der Seite angezeigt."
 
-#: modules/cache-busting/cache-busting.class.php:1256
+#: modules/cache-busting/cache-busting.class.php:1305
 #: modules/cache-busting/views/settings.php:20
 msgid "passive"
 msgstr "passiv"
 
-#: modules/cache-busting/cache-busting.class.php:1250
+#: modules/cache-busting/cache-busting.class.php:1299
 msgid "The ad can work with passive cache-busting"
 msgstr "Die Anzeige funktioniert mit passivem Cache-Busting."
 
-#: modules/cache-busting/cache-busting.class.php:1248
+#: modules/cache-busting/cache-busting.class.php:1297
 msgid "The ad can not work with passive cache-busting"
 msgstr "Die Anzeige funktioniert nicht mit passivem Cache-Busting"
 
@@ -697,13 +710,13 @@ msgid "auto"
 msgstr "auto"
 
 #: modules/cache-busting/admin-ui.class.php:42
-#: modules/cache-busting/cache-busting.class.php:1263
+#: modules/cache-busting/cache-busting.class.php:1312
 msgctxt "setting label"
 msgid "off"
 msgstr "aus"
 
 #: modules/cache-busting/admin-ui.class.php:41
-#: modules/cache-busting/cache-busting.class.php:1254
+#: modules/cache-busting/cache-busting.class.php:1303
 msgctxt "setting label"
 msgid "ajax"
 msgstr "AJAX"
@@ -748,9 +761,8 @@ msgstr "Foren-Themen-Seite"
 msgid "Inject at %s. post"
 msgstr "Beim %s. Beitrag einfügen."
 
-#: modules/bbpress/admin.class.php:42 modules/bbpress/admin.class.php:58
-#: modules/buddypress/admin.class.php:38
-#: modules/inject-content/admin.class.php:74
+#: modules/buddypress/admin.class.php:38 modules/bbpress/admin.class.php:42
+#: modules/bbpress/admin.class.php:58 modules/inject-content/admin.class.php:74
 #: modules/inject-content/admin.class.php:89
 msgid "position"
 msgstr "Position"
@@ -787,114 +799,114 @@ msgstr "Hintergrund der Webseite"
 msgid "Background Ad"
 msgstr "Hintergrund-Anzeigen"
 
-#: modules/advanced-visitor-conditions/main.class.php:434
+#: modules/advanced-visitor-conditions/main.class.php:437
 msgid "within %s seconds"
 msgstr "Innerhalb von %s Sekunden"
 
-#: modules/advanced-visitor-conditions/main.class.php:404
+#: modules/advanced-visitor-conditions/main.class.php:407
 msgid "Leave the value empty to check only the existance of the cookie."
 msgstr "Lassen Sie den Wert leer, um nur die Existenz des Cookie zu prüfen."
 
-#: modules/advanced-visitor-conditions/main.class.php:402
+#: modules/advanced-visitor-conditions/main.class.php:405
 msgctxt "order of cookie visitor condition string"
 msgid "%1$s if %2$s is %3$s"
 msgstr "%1$s wenn %2$s gleich %3$s ist"
 
-#: modules/advanced-visitor-conditions/main.class.php:401
+#: modules/advanced-visitor-conditions/main.class.php:404
 msgid "Cookie Value"
 msgstr "Cookie-Wert"
 
-#: modules/advanced-visitor-conditions/main.class.php:400
+#: modules/advanced-visitor-conditions/main.class.php:403
 msgid "Cookie Name"
 msgstr "Cookie-Name"
 
-#: modules/advanced-visitor-conditions/main.class.php:398
+#: modules/advanced-visitor-conditions/main.class.php:401
 msgctxt "visitor condition operator for cookies"
 msgid "is not"
 msgstr "ist nicht"
 
-#: modules/advanced-visitor-conditions/main.class.php:397
+#: modules/advanced-visitor-conditions/main.class.php:400
 msgctxt "visitor condition operator for cookies"
 msgid "is"
 msgstr "ist"
 
-#: modules/advanced-visitor-conditions/main.class.php:277
-#: modules/advanced-visitor-conditions/main.class.php:317
-#: modules/advanced-visitor-conditions/main.class.php:360
+#: modules/advanced-visitor-conditions/main.class.php:280
+#: modules/advanced-visitor-conditions/main.class.php:320
+#: modules/advanced-visitor-conditions/main.class.php:363
 msgid "-- choose one --"
 msgstr "-- auswählen --"
 
-#: modules/advanced-visitor-conditions/main.class.php:274
+#: modules/advanced-visitor-conditions/main.class.php:277
 msgid "can not"
 msgstr "kann nicht"
 
-#: modules/advanced-visitor-conditions/main.class.php:273
+#: modules/advanced-visitor-conditions/main.class.php:276
 msgid "can"
 msgstr "kann"
 
-#: modules/advanced-visitor-conditions/main.class.php:192
+#: modules/advanced-visitor-conditions/main.class.php:195
 msgid "Display ads to new or returning visitors only."
 msgstr "Anzeige nur für neue oder wiederkehrende Besucher anzeigen."
 
-#: modules/advanced-visitor-conditions/main.class.php:191
+#: modules/advanced-visitor-conditions/main.class.php:194
 msgid "new visitor"
 msgstr "Neuer Besucher"
 
-#: modules/advanced-visitor-conditions/main.class.php:185
+#: modules/advanced-visitor-conditions/main.class.php:188
 msgid "Display the ad only for a few impressions in a given period per user."
 msgstr "Die Anzeige nur für einige Impressionen pro Nutzer und Periode einblenden."
 
-#: modules/advanced-visitor-conditions/main.class.php:184
+#: modules/advanced-visitor-conditions/main.class.php:187
 msgid "max. ad impressions"
 msgstr "max. Anzeigenimpressionen"
 
-#: modules/advanced-visitor-conditions/main.class.php:178
+#: modules/advanced-visitor-conditions/main.class.php:181
 msgid "Display ads based on the number of page impressions the user already made (before the current on)."
 msgstr "Anzeige basierend auf der Anzahl an Seitenimpressionen anzeigen, die der Nutzer vor dem aktuellen gemacht hat."
 
-#: modules/advanced-visitor-conditions/main.class.php:177
+#: modules/advanced-visitor-conditions/main.class.php:180
 msgid "page impressions"
 msgstr "Seitenimpressionen"
 
-#: modules/advanced-visitor-conditions/main.class.php:170
+#: modules/advanced-visitor-conditions/main.class.php:173
 msgid "Display ads based on the value of a cookie."
 msgstr "Anzeigen basierend auf dem Wert eines Cookies anzeigen."
 
-#: modules/advanced-visitor-conditions/main.class.php:169
+#: modules/advanced-visitor-conditions/main.class.php:172
 msgid "cookie"
 msgstr "Cookie"
 
-#: modules/advanced-visitor-conditions/main.class.php:162
+#: modules/advanced-visitor-conditions/main.class.php:165
 msgid "Display ads based on the visitors browser language."
 msgstr "Anzeigen basierend auf der Browsersprache anzeigen."
 
-#: modules/advanced-visitor-conditions/main.class.php:161
+#: modules/advanced-visitor-conditions/main.class.php:164
 msgid "browser language"
 msgstr "Browsersprache"
 
-#: modules/advanced-visitor-conditions/main.class.php:145
+#: modules/advanced-visitor-conditions/main.class.php:148
 msgid "Display ads based on the users capabilities. See <a href=\"https://codex.wordpress.org/Roles_and_Capabilities\" target=\"_blank\">List of capabilities in WordPress</a>."
 msgstr ""
 "Anzeigen basierend auf den Rechten angemeldeter Nutzer anzeigen. Vgl. <a href=\"https://codex.wordpress.org/Roles_and_Capabilities\" \n"
 "target=\"_blank\">Liste der Rechte in WordPress</a>."
 
-#: modules/advanced-visitor-conditions/main.class.php:144
+#: modules/advanced-visitor-conditions/main.class.php:147
 msgid "user can (capabilities)"
 msgstr "Nutzerrechte"
 
-#: modules/advanced-visitor-conditions/main.class.php:127
+#: modules/advanced-visitor-conditions/main.class.php:130
 msgid "Display ads based on the user agent. <a href=\"http://www.useragentstring.com/pages/useragentstring.php\" target=\"_blank\">List of user agents</a>."
 msgstr "Anzeigen basierend auf dem User Agent anzeigen. <a href=\"http://www.useragentstring.com/pages/useragentstring.php\" target=\"_blank\">Liste möglicher User Agents</a>."
 
-#: modules/advanced-visitor-conditions/main.class.php:126
+#: modules/advanced-visitor-conditions/main.class.php:129
 msgid "user agent"
 msgstr "User Agent"
 
-#: modules/advanced-visitor-conditions/main.class.php:119
+#: modules/advanced-visitor-conditions/main.class.php:122
 msgid "Display ads based on the referrer url."
 msgstr "Anzeigen basierend auf der vorher besuchten URL anzeigen"
 
-#: modules/advanced-visitor-conditions/main.class.php:118
+#: modules/advanced-visitor-conditions/main.class.php:121
 msgid "referrer url"
 msgstr "Referrer URL"
 
@@ -902,43 +914,43 @@ msgstr "Referrer URL"
 msgid "Advanced visitor conditions"
 msgstr "Advanced Visitor Conditions"
 
-#: modules/advanced-display-conditions/main.class.php:507
+#: modules/advanced-display-conditions/main.class.php:511
 msgid "count from end"
 msgstr "von unten zählen"
 
-#: modules/advanced-display-conditions/main.class.php:504
+#: modules/advanced-display-conditions/main.class.php:508
 msgid "from %s to %s"
 msgstr "von %s bis %s"
 
-#: modules/advanced-display-conditions/main.class.php:474
+#: modules/advanced-display-conditions/main.class.php:478
 msgid "meta key"
 msgstr "Meta-Schlüssel"
 
-#: modules/advanced-display-conditions/main.class.php:473
+#: modules/advanced-display-conditions/main.class.php:477
 msgid "all of"
 msgstr "alle"
 
-#: modules/advanced-display-conditions/main.class.php:472
+#: modules/advanced-display-conditions/main.class.php:476
 msgid "any of"
 msgstr "irgendeiner"
 
-#: modules/advanced-display-conditions/main.class.php:441
+#: modules/advanced-display-conditions/main.class.php:445
 msgid "no languages set up in WPML"
 msgstr "keine Sprachen in WPML eingestellt"
 
-#: modules/advanced-display-conditions/main.class.php:377
-#: modules/advanced-display-conditions/main.class.php:427
-#: modules/advanced-visitor-conditions/main.class.php:314
-#: modules/advanced-visitor-conditions/main.class.php:357
+#: modules/advanced-visitor-conditions/main.class.php:317
+#: modules/advanced-visitor-conditions/main.class.php:360
+#: modules/advanced-display-conditions/main.class.php:378
+#: modules/advanced-display-conditions/main.class.php:431
 #: modules/paid-memberships-pro/main.class.php:113
 #: modules/paid-memberships-pro/main.class.php:226
 msgid "is not"
 msgstr "ist nicht"
 
-#: modules/advanced-display-conditions/main.class.php:376
-#: modules/advanced-display-conditions/main.class.php:426
-#: modules/advanced-visitor-conditions/main.class.php:313
-#: modules/advanced-visitor-conditions/main.class.php:356
+#: modules/advanced-visitor-conditions/main.class.php:316
+#: modules/advanced-visitor-conditions/main.class.php:359
+#: modules/advanced-display-conditions/main.class.php:377
+#: modules/advanced-display-conditions/main.class.php:430
 #: modules/paid-memberships-pro/main.class.php:112
 #: modules/paid-memberships-pro/main.class.php:225
 msgid "is"
@@ -986,12 +998,12 @@ msgstr "Anzeigen anhand des Templates des %s Post Types einblenden."
 msgid "%s template"
 msgstr "%s Template"
 
-#: modules/advanced-visitor-conditions/main.class.php:136
+#: modules/advanced-visitor-conditions/main.class.php:139
 msgid "Display ads based on the current url parameters (everything following %s)."
 msgstr "Anzeige basierend auf Parametern in der URL anzeigen (alles nach %s)."
 
+#: modules/advanced-visitor-conditions/main.class.php:138
 #: modules/advanced-display-conditions/main.class.php:32
-#: modules/advanced-visitor-conditions/main.class.php:135
 msgid "url parameters"
 msgstr "URL Parameter"
 
@@ -1039,50 +1051,50 @@ msgstr "Blende die Anzeige nur einmal pro Seite ein"
 msgid "Display only once"
 msgstr "Nur einmal anzeigen"
 
-#: classes/advanced-ads-pro.php:388
+#: classes/advanced-ads-pro.php:421
 msgid "Please note, the “Ad Admin“ and the “Ad Manager“ roles have the “upload_files“ and the “unfiltered_html“ capabilities"
 msgstr "Bitte beachten Sie, dass die Rollen \"Ad Admin\" und \"Ad Manager\" allgemein die Rechte \"upload_files\" und \"unfiltered_html\" haben."
 
-#: classes/advanced-ads-pro.php:232
+#: classes/advanced-ads-pro.php:265
 msgid "<strong>%s</strong> requires the <strong><a href=\"https://wpadvancedads.com\" target=\"_blank\">Advanced Ads</a></strong> plugin to be installed and activated on your site."
 msgstr "<strong>%s</strong> basiert auf dem freien <strong><a href=\"https://wpadvancedads.com\" target=\"_blank\">Advanced Ads</a></strong> Plugin."
 
-#: classes/advanced-ads-pro.php:228
+#: classes/advanced-ads-pro.php:261
 msgid "Install Now"
 msgstr "Jetzt installieren"
 
-#: classes/advanced-ads-pro.php:226
+#: classes/advanced-ads-pro.php:259
 msgid "Activate Now"
 msgstr "Jetzt aktivieren"
 
-#: classes/advanced-ads-pro-admin.php:283
+#: classes/advanced-ads-pro-admin.php:297
 msgid "Enable the Advanced Visitor Conditions <a href=\"%s\" target=\"_blank\">in the settings</a>."
 msgstr "Erweiterte Besucherbedingungen <a href=\"%s\" target=\"_blank\">in den Einstellungen</a> aktivieren."
 
-#: classes/advanced-ads-pro-admin.php:232
+#: classes/advanced-ads-pro-admin.php:246
 msgid "Please note, with the last update, the “Ad Admin“ and “Ad Manager“ roles have the “upload_files“ and the “unfiltered_html“ capabilities."
 msgstr "Bitte beachten Sie, dass die Rollen \"Ad Admin\" und \"Ad Manager\" allgemein die Rechte \"upload_files\" und \"unfiltered_html\" haben."
 
-#: classes/advanced-ads-pro-admin.php:225
+#: classes/advanced-ads-pro-admin.php:239
 msgid "Ad User Role"
 msgstr "Nutzerrolle hinzufügen"
 
-#: classes/advanced-ads-pro-admin.php:222
+#: classes/advanced-ads-pro-admin.php:236
 msgid "Advanced Ads User Role"
 msgstr "Advanced Ads Nutzerrolle"
 
-#: classes/advanced-ads-pro-admin.php:217
+#: classes/advanced-ads-pro-admin.php:231
 msgid "--no role--"
 msgstr "–keine Rolle–"
 
-#: classes/advanced-ads-pro-admin.php:216 classes/advanced-ads-pro.php:203
+#: classes/advanced-ads-pro.php:236 classes/advanced-ads-pro-admin.php:230
 msgid "Ad User"
 msgstr "Anzeigen-Nutzer"
 
-#: classes/advanced-ads-pro-admin.php:215 classes/advanced-ads-pro.php:194
+#: classes/advanced-ads-pro.php:227 classes/advanced-ads-pro-admin.php:229
 msgid "Ad Manager"
 msgstr "Anzeigen-Manager"
 
-#: classes/advanced-ads-pro-admin.php:214 classes/advanced-ads-pro.php:184
+#: classes/advanced-ads-pro.php:217 classes/advanced-ads-pro-admin.php:228
 msgid "Ad Admin"
 msgstr "Anzeigen-Admin"

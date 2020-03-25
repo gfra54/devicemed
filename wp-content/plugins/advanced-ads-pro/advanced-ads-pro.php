@@ -6,8 +6,8 @@
  * Plugin Name:         Advanced Ads Pro
  * Plugin URI:          https://wpadvancedads.com/add-ons/advanced-ads-pro/
  * Description:         Advanced features to boost your ad revenue.
- * Version:             2.5.1
- * Author:              Thomas Maier
+ * Version:             2.6.2
+ * Author:              Advanced Ads GmbH
  * Author URI:          https://wpadvancedads.com
  * Text Domain:         advanced-ads-pro
  * Domain Path:         /languages
@@ -20,7 +20,7 @@ if ( ! defined( 'AAP_SLUG' ) ) {
 	define( 'AAP_BASE_PATH', plugin_dir_path( __FILE__ ) );
 	define( 'AAP_BASE_URL', plugin_dir_url( __FILE__ ) );
 	define( 'AAP_BASE_DIR', dirname( AAP_BASE ) ); // directory of the plugin without any paths.
-	define( 'AAP_VERSION', '2.5.1' );
+	define( 'AAP_VERSION', '2.6.2' );
 	define( 'AAP_PLUGIN_NAME', 'Advanced Ads Pro' );
 
 	// autoload and activate.

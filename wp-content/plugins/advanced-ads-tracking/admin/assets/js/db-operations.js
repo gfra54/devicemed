@@ -80,6 +80,42 @@
 
 	} );
 
+	$( document ).on( 'submit', '#debug-mode-form', function ( ev ) {
+		ev.preventDefault();
+		var theAd = $( '#debug-mode-adID' ).val();
+		
+		var formData = {
+			nonce: advadsTrackingDbopVars.nonce,
+			action: 'advads_tracking_debug_mode',
+			ad: theAd,
+		};
+		$( this ).find( '.button' ).after( $( getSpinnerCode() ) );
+		disable();
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: formData,
+			success: function ( resp, textStatus, XHR ) {
+				$( '.dbop-spinner' ).remove();
+				if ( undefined !== resp.status && resp.status ) {
+					location.reload();
+				} else {
+					enable();
+					if ( undefined !== resp.msg ) {
+						console.log( resp.msg );
+					}
+				}
+			},
+			error: function ( request, textStatus, err ) {
+				$( '.dbop-spinner' ).remove();
+				enable();
+				console.log( request );
+				alert( trackingDbopLocale.serverFail );
+			}
+		});
+
+	} );
+	
 	$( document ).on( 'submit', '#reset-stats-form', function ( ev ) {
 		ev.preventDefault();
 		var ad = $( '#reset-stats-adID' ).val();
@@ -122,7 +158,6 @@
 					}
 				});
 
-				
 			}
 		}		
 	} );

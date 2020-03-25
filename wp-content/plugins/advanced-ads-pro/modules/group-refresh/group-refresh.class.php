@@ -190,27 +190,30 @@ class Advanced_Ads_Pro_Group_Refresh {
 
 			$this->state_groups[ $el_group_id ]['query'] = $query;
 
-			$js = '<script>';
-
-			$position = ! empty( $this->state_groups[ $el_group_id ]['position'] ) ? $this->state_groups[ $el_group_id ]['position'] : false;
-			$js .= sprintf( 'advanced_ads_group_refresh.prepare_wrapper( jQuery("#%s"), "%s", %d );', $element_id, $position, $is_first_impression );
-
 
 			// If the first ad was shown, do not use Lazy Load anymore.
 			unset( $query['params']['lazy_load'] );
-
+			$position = ! empty( $this->state_groups[ $el_group_id ]['position'] ) ? $this->state_groups[ $el_group_id ]['position'] : false;
 			$intervals =  self::get_ad_intervals( $group );
 			$interval = $intervals[ $prev_ad_id ];
 
-			$js .= 'advanced_ads_group_refresh.add_query( ' . json_encode( $query ) . ', ' . $interval . ' );'
-			. 'advanced_ads_group_refresh.element_ids[ "' . $element_id . '" ] = "true";'
-			. '</script>';
+			$js = '<script>(function() {';
+			$js .= 'var query_id = ' . mt_rand() . ';'
+				. 'if ( advanced_ads_group_refresh.element_ids[ "' . $element_id . '" ] === query_id ) {'
+				. '    return;'
+				. '}'
+				. 'advanced_ads_group_refresh.element_ids[ "' . $element_id . '" ] = query_id;';
+			$js .= sprintf( 'advanced_ads_group_refresh.prepare_wrapper( jQuery(".%s"), "%s", %d );', $element_id, $position, $is_first_impression );
+			$js .= 'advanced_ads_group_refresh.add_query( ' . json_encode( $query ) . ', ' . $interval . ' );';
+			$js .= '})()</script>';
+
 
 
 			if ( $is_first_impression ) {
+				//error_log( $element_id );
 				$style = in_array( $position, array( 'left', 'right' ) ) ? 'float:' . $float . ';' : '';
 				// Create wrapper around group. The following AJAX requests will insert group content into this wrapper.
-				$output_string = $js . '<div style="' . $style . '" id="' . $element_id .  '">' . $output_string . '</div>';
+				$output_string = $js . '<div style="' . $style . '" class="' . $element_id .  '" id="' . $element_id .  '">' . $output_string . '</div>';
 			} else {
 				$output_string = $js . $output_string;
 			}

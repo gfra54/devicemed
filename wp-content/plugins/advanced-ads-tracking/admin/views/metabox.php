@@ -1,4 +1,14 @@
 <?php
+global $post;
+
+$the_ad = new Advanced_Ads_Ad( $post->ID );
+
+// Google Ad Manager ads do not use tracking and stats.
+if ( $the_ad && 'gam' == $the_ad->type ) {
+	echo '<div><p><strong><em>' . esc_html( 'Tracking cannot be used for Google Ad Manager ads. Please use the reporting in your GAM account.', 'advanced-ads-tracking' ) . '</em></strong></p></div>';
+	return;
+}
+
 $has_limits_message = 	( !empty( $impression_limit ) || !empty( $click_limit ) ); 
 ?><style type="text/css">
 #tracking-ads-box .form-group {
@@ -25,7 +35,7 @@ if( 'ga' !== $this->plugin->get_tracking_method() ) :
 ?></ul>
 <div class="advads-option-list">
 <?php
-    global $post, $wpdb;
+    global $wpdb;
     $admin_ad_title = $post->post_title;
 	
 	$to = date_create( 'today' );
@@ -266,11 +276,7 @@ if( 'ga' !== $this->plugin->get_tracking_method() ) :
 		<hr />
 		<?php endif; // if ( $has_limits_message ) ?>
 	<?php endif; ?>
-    <?php if ( $public_id ) : ?>
-		<input type="hidden" name="advanced_ad[tracking][public-id]" value="<?php echo esc_attr( $public_id ); ?>" />
-    <?php else : ?>
-		<input type="hidden" name="advanced_ad[tracking][public-id]" value="<?php echo wp_generate_password( $hash_length, false ); ?>" />
-    <?php endif; ?>
+	<input type="hidden" name="advanced_ad[tracking][public-id]" value="<?php echo esc_attr( $public_id ); ?>" />
 	<span class="label"><?php _e( 'report recipient', 'advanced-ads-tracking' ); ?></span>
 	<div>
 		<?php if ( $billing_email ) : ?>

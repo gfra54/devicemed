@@ -1,6 +1,6 @@
 <?php
 /**
- * the view for the placements page
+ * The view for the placements page
  */
 ?><div class="wrap">
 <?php
@@ -16,10 +16,20 @@ if ( isset( $_GET['message'] ) ) :
 	endif;
 	?>
 <?php endif; ?>
-	<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+	<h1 class="wp-heading-inline"><?php echo esc_html( get_admin_page_title() ); ?></h1>
+	<a href="#" class="page-title-action" title="<?php _e( 'Create a new placement', 'advanced-ads' ); ?>" class="button-secondary" onclick="advads_toggle('.advads-placements-new-form'); advads_scroll_to_element('#advads-placements-new-form');"><?php
+		_e( 'New Placement', 'advanced-ads' );
+		?></a>
+
+	<hr class="wp-header-end">
+
 	<p class="description"><?php _e( 'Placements are physically places in your theme and posts. You can use them if you plan to change ads and ad groups on the same place without the need to change your templates.', 'advanced-ads' ); ?></p>
 	<p class="description"><?php printf( __( 'See also the manual for more information on <a href="%s">placements</a>.', 'advanced-ads' ), ADVADS_URL . 'manual/placements/#utm_source=advanced-ads&utm_medium=link&utm_campaign=placements' ); ?></p>
 <?php
+
+// add placement form.
+include_once ADVADS_BASE_PATH . 'admin/views/placement-form.php';
+
 if ( isset( $placements ) && is_array( $placements ) && count( $placements ) ) :
 	do_action( 'advanced-ads-placements-list-before', $placements );
 	?>
@@ -125,11 +135,11 @@ if ( isset( $placements ) && is_array( $placements ) && count( $placements ) ) :
 											$option_content
 										);
 
-										if ( ! function_exists( 'mb_convert_encoding' ) ) :
-											?>
-					<p><span class="advads-error-message"><?php _e( 'Important Notice', 'advanced-ads' ); ?>: </span><?php _e( 'Your server is missing an extension. This might break the content injection.<br/>Ignore this warning if everything works fine or else ask your hosting provider to enable <em>mbstring</em>.', 'advanced-ads' ); ?></p>
-											<?php
-					   endif;
+										if ( ! extension_loaded( 'dom' ) ) :
+										?>
+					<p><span class="advads-error-message"><?php _e( 'Important Notice', 'advanced-ads' ); ?>: </span><?php printf( __( 'Missing PHP extensions could cause issues. Please ask your hosting provider to enable them: %s', 'advanced-ads' ), 'dom (php_xml)' ); ?></p>
+<?php
+endif;
 										break;
 								endswitch;
 								do_action( 'advanced-ads-placement-options-after', $_placement_slug, $_placement );
@@ -196,7 +206,7 @@ if ( isset( $placements ) && is_array( $placements ) && count( $placements ) ) :
 			<div class="tablenav bottom">
 			<input type="submit" id="advads-save-placements-button" class="button button-primary" value="<?php _e( 'Save Placements', 'advanced-ads' ); ?>"/>
 		<?php wp_nonce_field( 'advads-placement', 'advads_placement', true ); ?>
-		<button type="button" title="<?php _e( 'Create a new placement', 'advanced-ads' ); ?>" class="button-secondary" onclick="advads_toggle('.advads-placements-new-form')">
+		<button type="button" title="<?php _e( 'Create a new placement', 'advanced-ads' ); ?>" class="button-secondary" onclick="advads_toggle('.advads-placements-new-form'); advads_scroll_to_element('#advads-placements-new-form');">
 											   <?php
 												_e( 'New Placement', 'advanced-ads' );
 												?>
@@ -209,62 +219,4 @@ if ( isset( $placements ) && is_array( $placements ) && count( $placements ) ) :
 	do_action( 'advanced-ads-placements-list-after', $placements );
 endif;
 
-?>
-	<form method="POST" action="" onsubmit="return advads_validate_placement_form();" class="advads-placements-new-form"
-	<?php
-	if ( isset( $placements ) && count( $placements ) ) {
-		echo ' style="display: none;"';
-	}
-	?>
-	>
-	<h3>1. <?php _e( 'Choose a placement type', 'advanced-ads' ); ?></h3>
-	<p class="description"><?php printf( __( 'Placement types define where the ad is going to be displayed. Learn more about the different types from the <a href="%s">manual</a>', 'advanced-ads' ), ADVADS_URL . 'manual/placements/#utm_source=advanced-ads&utm_medium=link&utm_campaign=placements' ); ?></p>
-	<div class= "advads-new-placement-types advads-buttonset">
-	<?php
-	if ( is_array( $placement_types ) ) {
-		foreach ( $placement_types as $_key => $_place ) :
-			if ( isset( $_place['image'] ) ) :
-				$image = '<img src="' . $_place['image'] . '" alt="' . $_place['title'] . '"/>';
-			else :
-				$image = '<strong>' . $_place['title'] . '</strong><br/><p class="description">' . $_place['description'] . '</p>';
-			endif;
-			?>
-			<div class="advads-placement-type"><label for="advads-placement-type-<?php echo $_key; ?>"><?php echo $image; ?></label>
-			<input type="radio" id="advads-placement-type-<?php echo $_key; ?>" name="advads[placement][type]" value="<?php echo $_key; ?>"/>
-			<p class="advads-placement-description"><strong><?php echo $_place['title']; ?></strong><br/><?php echo $_place['description']; ?></p>
-			</div>
-			<?php
-		endforeach;
-	};
-	?>
-		</div>
-	<div class="clear"></div>
-	<p class="advads-error-message advads-placement-type-error"><?php _e( 'Please select a placement type.', 'advanced-ads' ); ?></p>
-	<br/>
-	<h3>2. <?php _e( 'Choose a Name', 'advanced-ads' ); ?></h3>
-	<p class="description"><?php _e( 'The name of the placement is only visible to you. Tip: choose a descriptive one, e.g. <em>Below Post Headline</em>.', 'advanced-ads' ); ?></p>
-		<p><input name="advads[placement][name]" class="advads-new-placement-name" type="text" value="" placeholder="<?php _e( 'Placement Name', 'advanced-ads' ); ?>"/></p>
-	<p class="advads-error-message advads-placement-name-error"><?php _e( 'Please enter a name for your placement.', 'advanced-ads' ); ?></p>
-	<h3>3. <?php _e( 'Choose the Ad or Group', 'advanced-ads' ); ?></h3>
-	<p class="description"><?php _e( 'The ad or group that should be displayed.', 'advanced-ads' ); ?></p>
-	<p><select name="advads[placement][item]">
-		<option value=""><?php _e( '--not selected--', 'advanced-ads' ); ?></option>
-		<?php if ( isset( $items['groups'] ) ) : ?>
-		<optgroup label="<?php _e( 'Ad Groups', 'advanced-ads' ); ?>">
-			<?php foreach ( $items['groups'] as $_item_id => $_item_title ) : ?>
-			<option value="<?php echo $_item_id; ?>"><?php echo $_item_title; ?></option>
-		<?php endforeach; ?>
-		</optgroup>
-		<?php endif; ?>
-		<?php if ( isset( $items['ads'] ) ) : ?>
-		<optgroup label="<?php _e( 'Ads', 'advanced-ads' ); ?>">
-			<?php foreach ( $items['ads'] as $_item_id => $_item_title ) : ?>
-			<option value="<?php echo $_item_id; ?>"><?php echo $_item_title; ?></option>
-		<?php endforeach; ?>
-		</optgroup>
-		<?php endif; ?>
-		</select></p>
-	<?php wp_nonce_field( 'advads-placement', 'advads_placement', true ); ?>
-		<input type="submit" class="button button-primary" value="<?php _e( 'Save New Placement', 'advanced-ads' ); ?>"/>
-	</form>
-</div>
+?></div>

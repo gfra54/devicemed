@@ -36,10 +36,6 @@ class Advanced_Ads_AdSense_Public {
 			return;
 		}
 
-		if ( Advanced_Ads_Utils::is_iframe() ) {
-			return;
-		}
-
 		$privacy_options = Advanced_Ads_Privacy::get_instance()->options();
 		$privacy_enabled = ! empty( $privacy_options['enabled'] ) && 'not_needed' !== Advanced_Ads_Privacy::get_instance()->get_state();
 		$npa_enabled = ! empty( $privacy_options['show-non-personalized-adsense'] );

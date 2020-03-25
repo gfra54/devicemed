@@ -21,7 +21,8 @@
  * attribute: get_help_link
  * (enter URL, if exists, will add a link after the message)
  */
-$advanced_ads_ad_health_notices = apply_filters( 'advanced-ads-ad-health-notices',
+$advanced_ads_ad_health_notices = apply_filters(
+	'advanced-ads-ad-health-notices',
 	array(
 		// old PHP version
 		// checked using Advanced_Ads_Checks::php_version_minimum().
@@ -31,27 +32,6 @@ $advanced_ads_ad_health_notices = apply_filters( 'advanced-ads-ad-health-notices
 				__( 'Your <strong>PHP version (%1$s) is too low</strong>. Advanced Ads is built for PHP %2$s and higher. It might work, but updating PHP is highly recommended. Please ask your hosting provider for more information.', 'advanced-ads' ),
 				phpversion(),
 				Advanced_Ads_Checks::MINIMUM_PHP_VERSION
-			),
-			'type' => 'problem',
-		),
-		// cache enabled, but not Advanced Ads Pro
-		// checked using Advanced_Ads_Checks::cache() && ! defined( 'AAP_VERSION' ).
-		/*'cache_no_pro'                                  => array(
-			'text' => sprintf(
-			// translators: %s is a target URL.
-				__( 'Your <strong>website uses cache</strong>. Some dynamic features like ad rotation or visitor conditions might not work properly. Use the cache-busting feature of <a href="%s" target="_blank">Advanced Ads Pro</a> to load ads dynamically.', 'advanced-ads' ),
-				ADVADS_URL . 'add-ons/advanced-ads-pro/#utm_source=advanced-ads&utm_medium=link&utm_campaign=error-cache'
-			),
-			'type' => 'problem',
-		),*/
-		// Autoptimize found, but no Advanced Ads Pro
-		// Advanced_Ads_Checks::active_autoptimize() && ! defined( 'AAP_VERSION' ) ).
-		// 1907: Autoptimize didn’t cause issues for a while. We are no longer showing the warning and might remove this if the plugin doesn’t cause problems anymore.
-		'autoptimize_no_pro'                            => array(
-			'text' => sprintf(
-			// translators: %s is a target URL.
-				__( '<strong>Autoptimize plugin detected</strong>. While this plugin is great for site performance, it is known to alter code, including scripts from ad networks. <a href="%s" target="_blank">Advanced Ads Pro</a> has a build-in support for Autoptimize.', 'advanced-ads' ),
-				ADVADS_URL . 'add-ons/advanced-ads-pro/#utm_source=advanced-ads&utm_medium=link&utm_campaign=error-autoptimize'
 			),
 			'type' => 'problem',
 		),

@@ -1872,7 +1872,7 @@
                                 {
                                     color: COLORS[ 2 * parseInt( _i ) ],
                                     highlighter: {
-                                        formatString: "%s: %0f " + statsLocale.impressions,
+                                        formatString: "%s: %.0f " + statsLocale.impressions,
                                     },
                                     lineWidth: 1,
                                     markerOptions: {
@@ -1936,6 +1936,16 @@
                     }
                     graphOptions.axes.xaxis.ticks = ticks;
                     this.graph = $.jqplot( 'advads-stats-graph', lines, graphOptions );
+					
+					if ( 20 < lines[0].length && 900 > $( '#advads-stats-graph' ).width() ) {
+						$( '.jqplot-xaxis-tick' ).css( 'transform', 'rotate(-45deg)' );
+						$( '.jqplot-xaxis' ).css( 'bottom', -10 );
+						$( '#advads-graph-legend' ).css( 'margin-top', 25 );
+					} else {
+						$( '.jqplot-xaxis-tick' ).css( 'transform', 'rotate(0deg)' );
+						$( '.jqplot-xaxis' ).css( 'bottom', 0 ),
+						$( '#advads-graph-legend' ).css( 'margin-top', 13 );
+					}
 					
                     if ( adFilters.length || groupFilters.length ) {
                         $( '#advads-graph-legend .legend-item' ).not( '.donotremove' ).remove();
@@ -2641,6 +2651,16 @@
                 $( '#advads-stats-graph' ).empty();
                 this.graph = $.jqplot( 'advads-stats-graph', lines, graphOptions );
                 
+				if ( 20 < lines[0].length && 900 > $( '#advads-stats-graph' ).width() ) {
+					$( '.jqplot-xaxis-tick, .jqplot-x2axis-tick' ).css( 'transform', 'rotate(-45deg)' );
+					$( '.jqplot-x2axis' ).css( 'bottom', -10 );
+					$( '#advads-graph-legend' ).css( 'margin-top', 25 );
+				} else {
+					$( '.jqplot-xaxis-tick, .jqplot-x2axis-tick' ).css( 'transform', 'rotate(0deg)' );
+					$( '.jqplot-x2axis' ).css( 'bottom', 0 ),
+					$( '#advads-graph-legend' ).css( 'margin-top', 13 );
+				}
+				
                 $( '#advads-graph-legend .legend-item' ).not( '.donotremove' ).remove();
                 
                 $( '#advads-graph-legend' ).append( $(

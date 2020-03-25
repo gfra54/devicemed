@@ -1,4 +1,9 @@
 <?php
+/**
+ * Template for license fields.
+ *
+ * Do not move since it could be used by add-ons.
+ */
 $errortext     = false;
 $expires       = Advanced_Ads_Admin_Licenses::get_instance()->get_license_expires( $options_slug );
 $expired       = false;

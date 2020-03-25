@@ -5,7 +5,6 @@
  * @package WordPress
  * @subpackage Advanced Ads Plugin
  */
-
 class Advanced_Ads_Ad_List_Filters {
 	/**
 	 * The unique instance of this class.
@@ -70,7 +69,8 @@ class Advanced_Ads_Ad_List_Filters {
 	 * Collect available filters for ad overview page.
 	 *
 	 * @param array $posts array of ads.
-	 * @return array
+	 *
+	 * @return null
 	 */
 	private function collect_filters( $posts ) {
 
@@ -89,14 +89,15 @@ class Advanced_Ads_Ad_List_Filters {
 		// can not filter correctly with "trashed" posts. Do not display any filtering option in this case.
 		if ( isset( $_REQUEST['post_status'] ) && 'trash' === $_REQUEST['post_status'] ) {
 			$this->all_filters = $all_filters;
+
 			return;
 		}
 
 		$advads = Advanced_Ads::get_instance();
-		
-		// put potential groups in another array which we later reduce so that we only check groups we don’t know, yet
+
+		// put potential groups in another array which we later reduce so that we only check groups we don’t know, yet.
 		$groups_to_check = $this->ads_in_groups;
-		
+
 		foreach ( $posts as $post ) {
 
 			if ( ! isset( $this->all_ads_options[ $post->ID ] ) ) {
@@ -156,7 +157,8 @@ class Advanced_Ads_Ad_List_Filters {
 				}
 			}
 
-			if ( ! array_key_exists( $ad_option['type'], $all_filters['all_types'] )
+			if ( isset( $ad_option['type'] ) // could be missing for new ads that are stored only by WP auto-save.
+				&& ! array_key_exists( $ad_option['type'], $all_filters['all_types'] )
 				&& isset( $advads->ad_types[ $ad_option['type'] ] )
 			) {
 				$all_filters['all_types'][ $ad_option['type'] ] = $advads->ad_types[ $ad_option['type'] ]->title;
@@ -203,24 +205,24 @@ class Advanced_Ads_Ad_List_Filters {
 
 		$group_ids      = array_keys( $groups );
 		$group_ids_str  = implode( ',', $group_ids );
-        $term_relations = array();
-        
+		$term_relations = array();
+
 		/**
-		 * we need to use %1$s below, because when using %s the $wpdb->prepare function adds quotation marks around the value, 
+		 * We need to use %1$s below, because when using %s the $wpdb->prepare function adds quotation marks around the value,
 		 * which breaks the SQL, because the numbers are no longer recognised as such
 		 */
-        if ( ! empty( $group_ids ) ) {
-            $term_relations = $wpdb->get_results(
-                $wpdb->prepare(
-                        'SELECT object_id, term_taxonomy_id FROM `' . $wpdb->prefix . 'term_relationships` WHERE `term_taxonomy_id` IN (' .
-                        'SELECT term_taxonomy_id FROM `' . $wpdb->prefix . 'term_taxonomy` WHERE `taxonomy` = %s' .
-                        ')',
-                        Advanced_Ads::AD_GROUP_TAXONOMY
-                    ),
-                    'ARRAY_A'
-            );
+		if ( ! empty( $group_ids ) ) {
+			$term_relations = $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT object_id, term_taxonomy_id FROM `' . $wpdb->prefix . 'term_relationships` WHERE `term_taxonomy_id` IN (' .
+					'SELECT term_taxonomy_id FROM `' . $wpdb->prefix . 'term_taxonomy` WHERE `taxonomy` = %s' .
+					')',
+					Advanced_Ads::AD_GROUP_TAXONOMY
+				),
+				'ARRAY_A'
+			);
 		}
-        foreach ( $term_relations as $value ) {
+		foreach ( $term_relations as $value ) {
 			if ( isset( $value['term_taxonomy_id'] ) && isset( $value['object_id'] ) ) {
 				$this->ads_in_groups[ absint( $value['term_taxonomy_id'] ) ][] = absint( $value['object_id'] );
 			}
@@ -253,8 +255,10 @@ class Advanced_Ads_Ad_List_Filters {
 	/**
 	 * Re-order the posts list by post title.
 	 *
-	 * @param string   $orderby     the previous orderby value.
-	 * @param WP_Query $the_query   the current WP_Query object.
+	 * @param string   $orderby the previous orderby value.
+	 * @param WP_Query $the_query the current WP_Query object.
+	 *
+	 * @return mixed
 	 */
 	public function orderby_filter( $orderby, $the_query ) {
 		if ( ! function_exists( 'get_current_screen' ) ) {
@@ -272,14 +276,17 @@ class Advanced_Ads_Ad_List_Filters {
 				$orderby = 'post_title ASC';
 			}
 		}
+
 		return $orderby;
 	}
 
 	/**
 	 * Edit the query for list table.
 	 *
-	 * @param array    $posts     the posts array from the query.
+	 * @param array    $posts the posts array from the query.
 	 * @param WP_Query $the_query the current WP_Query object.
+	 *
+	 * @return array with posts
 	 */
 	public function post_results( $posts, $the_query ) {
 		if ( ! function_exists( 'get_current_screen' ) ) {
@@ -308,6 +315,7 @@ class Advanced_Ads_Ad_List_Filters {
 			if ( false !== strpos( $server['PHP_SELF'], 'edit.php' ) && isset( $request['post_type'] ) && Advanced_Ads::POST_TYPE_SLUG === $request['post_type'] ) {
 				$this->collect_all_ads( $posts );
 			}
+
 			return $posts;
 		}
 
@@ -350,8 +358,10 @@ class Advanced_Ads_Ad_List_Filters {
 	/**
 	 * Apply ad filters on post array
 	 *
-	 * @param array    $posts     the oriinal post array.
+	 * @param array    $posts the original post array.
 	 * @param WP_Query $the_query the current WP_Query object.
+	 *
+	 * @return array with posts
 	 */
 	private function ad_filters( $posts, &$the_query ) {
 		$using_original = true;
@@ -380,7 +390,7 @@ class Advanced_Ads_Ad_List_Filters {
 			$new_posts = array();
 			$the_list  = $using_original ? $this->all_ads : $posts;
 			foreach ( $the_list as $post ) {
-				if ( $author === absint( $post->post_author ) ) {
+				if ( absint( $post->post_author ) === $author ) {
 					$new_posts[] = $post;
 				}
 			}
@@ -405,28 +415,28 @@ class Advanced_Ads_Ad_List_Filters {
 			$using_original         = false;
 		}
 
-        /**
-         * Filter by taxonomy
-         */
-        if ( isset( $request['taxonomy'] ) && isset( $request['term'] ) ) {
-            
-            $term = $request['term'];
-            global $wpdb;
-            $q =    'SELECT `object_id` FROM `' . $wpdb->prefix . 'term_relationships` WHERE `term_taxonomy_id` = (' .
-                        'SELECT ' . $wpdb->prefix . 'terms.term_id FROM `' . $wpdb->prefix . 'terms` INNER JOIN ' .
-                        $wpdb->prefix . 'term_taxonomy on ' . $wpdb->prefix . 'terms.term_id = ' . $wpdb->prefix . 'term_taxonomy.term_id ' .
-                        'WHERE ' . $wpdb->prefix . 'terms.slug = %s AND ' . $wpdb->prefix . 'term_taxonomy.taxonomy = %s' .
-                    ')';
-            
-            $q = $wpdb->prepare( $q, $term, Advanced_Ads::AD_GROUP_TAXONOMY );
-            
-            $object_ids = $wpdb->get_results( $q, 'ARRAY_A' );
-            $ads_in_taxo = array();
-            
-            foreach( $object_ids as $object ) {
-                $ads_in_taxo[] = absint( $object['object_id'] );
-            }
-            
+		/**
+		 * Filter by taxonomy
+		 */
+		if ( isset( $request['taxonomy'] ) && isset( $request['term'] ) ) {
+
+			$term = $request['term'];
+			global $wpdb;
+			$q = 'SELECT `object_id` FROM `' . $wpdb->prefix . 'term_relationships` WHERE `term_taxonomy_id` = (' .
+				 'SELECT ' . $wpdb->prefix . 'terms.term_id FROM `' . $wpdb->prefix . 'terms` INNER JOIN ' .
+				 $wpdb->prefix . 'term_taxonomy on ' . $wpdb->prefix . 'terms.term_id = ' . $wpdb->prefix . 'term_taxonomy.term_id ' .
+				 'WHERE ' . $wpdb->prefix . 'terms.slug = %s AND ' . $wpdb->prefix . 'term_taxonomy.taxonomy = %s' .
+				 ')';
+
+			$q = $wpdb->prepare( $q, $term, Advanced_Ads::AD_GROUP_TAXONOMY );
+
+			$object_ids  = $wpdb->get_results( $q, 'ARRAY_A' );
+			$ads_in_taxo = array();
+
+			foreach ( $object_ids as $object ) {
+				$ads_in_taxo[] = absint( $object['object_id'] );
+			}
+
 			$new_posts = array();
 			$the_list  = $using_original ? $this->all_ads : $posts;
 			foreach ( $the_list as $post ) {
@@ -437,9 +447,9 @@ class Advanced_Ads_Ad_List_Filters {
 			$posts                  = $new_posts;
 			$the_query->found_posts = count( $posts );
 			$using_original         = false;
-            
-        }
-        
+
+		}
+
 		/**
 		 * Filter ad type
 		 */

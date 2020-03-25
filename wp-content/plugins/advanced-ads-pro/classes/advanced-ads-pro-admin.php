@@ -121,7 +121,13 @@ class Advanced_Ads_Pro_Admin {
      * @since 1.1
      */
     public function render_other_settings() {
-	
+		// Save options when the user is on the "Pro" tab.
+		$selected = $this->get_disable_by_post_type_options();
+		foreach ( $selected as $item ) { ?>
+			<input type="hidden" name="<?php
+				echo AAP_SLUG; ?>[general][disable-by-post-types][]" value="<?php echo esc_html( $item ); ?>">
+			<?php
+		}
     }
 
     /**
@@ -139,17 +145,25 @@ class Advanced_Ads_Pro_Admin {
 	 * Render settings to disable ads by post types.
 	 */
 	public function render_settings_disable_post_types() {
+		$selected = $this->get_disable_by_post_type_options();
+
+		$post_types = get_post_types( array( 'public' => true, 'publicly_queryable' => true ), 'objects', 'or' );
+		$type_label_counts = array_count_values( wp_list_pluck( $post_types, 'label' ) );
+
+		require AAP_BASE_PATH . '/views/setting_disable_post_types.php';
+	}
+
+	/**
+	 * Get "Disabled by post type" Pro options.
+	 */
+	private function get_disable_by_post_type_options() {
 		$options = Advanced_Ads_Pro::get_instance()->get_options();
 		if ( isset( $options['general']['disable-by-post-types'] ) && is_array( $options['general']['disable-by-post-types'] ) ) {
 			$selected = $options['general']['disable-by-post-types'];
 		} else {
 			$selected = array();
 		}
-
-		$post_types = get_post_types( array( 'public' => true, 'publicly_queryable' => true ), 'objects', 'or' );
-		$type_label_counts = array_count_values( wp_list_pluck( $post_types, 'label' ) );
-
-		require AAP_BASE_PATH . '/views/setting_disable_post_types.php';
+		return $selected;
 	}
 
     /**

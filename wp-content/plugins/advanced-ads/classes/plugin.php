@@ -1,45 +1,43 @@
 <?php
 
 /**
- * Wordpress integration and definitions:
+ * WordPress integration and definitions:
  *
  * - posttypes
  * - taxonomy
  * - textdomain
- *
- * @since 1.5.0
  */
 class Advanced_Ads_Plugin {
 	/**
+	 * Instance of Advanced_Ads_Plugin
 	 *
-	 * @var Advanced_Ads_Plugin
+	 * @var object Advanced_Ads_Plugin
 	 */
 	protected static $instance;
 
 	/**
+	 * Instance of Advanced_Ads_Model
 	 *
-	 * @var Advanced_Ads_Model
+	 * @var object Advanced_Ads_Model
 	 */
 	protected $model;
 
 	/**
-	 * plugin options
+	 * Plugin options
 	 *
-	 * @since   1.0.1
-	 * @var     array (if loaded)
+	 * @var array $options
 	 */
 	protected $options;
 
 	/**
-	 * interal plugin options – set by the plugin
+	 * Interal plugin options – set by the plugin
 	 *
-	 * @since   1.4.5
-	 * @var     array (if loaded)
+	 * @var     array $internal_options
 	 */
 	protected $internal_options;
 
 	/**
-	 * default prefix of selectors (id, class) in the frontend
+	 * Default prefix of selectors (id, class) in the frontend
 	 * can be changed by options
 	 *
 	 * @var Advanced_Ads_Plugin
@@ -47,12 +45,15 @@ class Advanced_Ads_Plugin {
 	const DEFAULT_FRONTEND_PREFIX = 'advads-';
 
 	/**
+	 * Frontend prefix for classes and IDs
 	 *
-	 * @var frontend prefix for classes and IDs
+	 * @var string $frontend_prefix
 	 */
 	private $frontend_prefix;
 
-
+	/**
+	 * Advanced_Ads_Plugin constructor.
+	 */
 	private function __construct() {
 		register_activation_hook( ADVADS_BASE, array( $this, 'activate' ) );
 		register_deactivation_hook( ADVADS_BASE, array( $this, 'deactivate' ) );
@@ -63,31 +64,36 @@ class Advanced_Ads_Plugin {
 	}
 
 	/**
+	 * Get instance of Advanced_Ads_Plugin
 	 *
 	 * @return Advanced_Ads_Plugin
 	 */
 	public static function get_instance() {
 		// If the single instance hasn't been set, set it now.
 		if ( null === self::$instance ) {
-			self::$instance = new self;
+			self::$instance = new self();
 		}
 
 		return self::$instance;
 	}
 
 	/**
+	 * Get instance of Advanced_Ads_Model
 	 *
-	 * @param Advanced_Ads_Model $model
+	 * @param Advanced_Ads_Model $model model to access data.
 	 */
-	public function set_model(Advanced_Ads_Model $model) {
+	public function set_model( Advanced_Ads_Model $model ) {
 		$this->model = $model;
 	}
 
+	/**
+	 * Execute various hooks after WordPress and all plugins are available
+	 */
 	public function wp_plugins_loaded() {
-		// Load plugin text domain
+		// Load plugin text domain.
 		$this->load_plugin_textdomain();
 
-		// activate plugin when new blog is added on multisites // -TODO this is admin-only
+		// activate plugin when new blog is added on multisites // -TODO this is admin-only.
 		add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
 
 		// Load public-facing style sheet and JavaScript.
@@ -95,21 +101,21 @@ class Advanced_Ads_Plugin {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'wp_head', array( $this, 'print_head_scripts' ), 7 );
 
-		// add short codes
+		// add short codes.
 		add_shortcode( 'the_ad', array( $this, 'shortcode_display_ad' ) );
 		add_shortcode( 'the_ad_group', array( $this, 'shortcode_display_ad_group' ) );
 		add_shortcode( 'the_ad_placement', array( $this, 'shortcode_display_ad_placement' ) );
 
-		// remove default ad group menu item // -TODO only for admin
+		// remove default ad group menu item // -TODO only for admin.
 		add_action( 'admin_menu', array( $this, 'remove_taxonomy_menu_item' ) );
-		// load widgets
+		// load widgets.
 		add_action( 'widgets_init', array( $this, 'widget_init' ) );
-		
-		// load display conditions
+
+		// load display conditions.
 		Advanced_Ads_Display_Conditions::get_instance();
-		new Advanced_Ads_Frontend_Checks;
-		new Advanced_Ads_Compatibility;
-		Advanced_Ads_Ad_Health_Notices::get_instance(); // load to fetch notices
+		new Advanced_Ads_Frontend_Checks();
+		new Advanced_Ads_Compatibility();
+		Advanced_Ads_Ad_Health_Notices::get_instance(); // load to fetch notices.
 	}
 
 	/**
@@ -132,8 +138,6 @@ class Advanced_Ads_Plugin {
 
 	/**
 	 * Register and enqueue public-facing style sheet.
-	 *
-	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
 		// wp_enqueue_style( $this->get_plugin_slug() . '-plugin-styles', plugins_url('assets/css/public.css', __FILE__), array(), ADVADS_VERSION);
@@ -142,34 +146,29 @@ class Advanced_Ads_Plugin {
 	/**
 	 * Return the plugin slug.
 	 *
-	 * @since    1.0.0
-	 * @return    Plugin slug variable.
+	 * @return   string plugin slug variable.
 	 */
 	public function get_plugin_slug() {
-	    return ADVADS_SLUG;
+		return ADVADS_SLUG;
 	}
 
 	/**
 	 * Register and enqueues public-facing JavaScript files.
-	 *
-	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
 		if ( advads_is_amp() ) {
 			return;
 		}
 		// wp_enqueue_script( $this->get_plugin_slug() . '-plugin-script', plugins_url('assets/js/public.js', __FILE__), array('jquery'), ADVADS_VERSION);
-		$options = $this->options();
+		$options      = $this->options();
 		$activated_js = apply_filters( 'advanced-ads-activate-advanced-js', isset( $options['advanced-js'] ) );
-		if ( $activated_js ){
+		if ( $activated_js ) {
 			wp_enqueue_script( $this->get_plugin_slug() . '-advanced-js', ADVADS_BASE_URL . 'public/assets/js/advanced.js', array( 'jquery' ), ADVADS_VERSION );
 		}
 	}
 
 	/**
 	 * Print public-facing JavaScript in the HTML head.
-	 *
-	 * @since    untagged
 	 */
 	public function print_head_scripts() {
 		/**
@@ -178,34 +177,48 @@ class Advanced_Ads_Plugin {
 		 *    // Called when DOM is ready.
 		 * } );
 		 */
-		
-		echo apply_filters( 'advanced-ads-attribution', sprintf( '<!-- managing ads with Advanced Ads – %s -->', ADVADS_URL ) ); 
+
+		$attribution = self::show_to_new_users( 1583841600, 'a' ) ? '<!-- managing ads with Advanced Ads ' . ADVADS_VERSION . '– %s -->' : '<!-- managing ads with Advanced Ads – %s -->';
+		// escaping would break HTML comment tags so we disable checks here.
+		// phpcs:ignore
+		echo apply_filters( 'advanced-ads-attribution', sprintf( $attribution, ADVADS_URL ) );
 
 		if ( advads_is_amp() ) {
 			return;
 		}
 
 		ob_start();
-		?><script>
-		<?php if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			readfile( ADVADS_BASE_PATH . 'public/assets/js/ready.js' );
-		} else { ?>
-			advanced_ads_ready=function(){var fns=[],listener,doc=typeof document==="object"&&document,hack=doc&&doc.documentElement.doScroll,domContentLoaded="DOMContentLoaded",loaded=doc&&(hack?/^loaded|^c/:/^loaded|^i|^c/).test(doc.readyState);if(!loaded&&doc){listener=function(){doc.removeEventListener(domContentLoaded,listener);window.removeEventListener("load",listener);loaded=1;while(listener=fns.shift())listener()};doc.addEventListener(domContentLoaded,listener);window.addEventListener("load",listener)}return function(fn){loaded?setTimeout(fn,0):fns.push(fn)}}();
+		?>
+		<script>
+			//@formatter:off
 			<?php
-		}
+			if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+				readfile( ADVADS_BASE_PATH . 'public/assets/js/ready.js' );
+			} else {
+				?>
+			advanced_ads_ready=function(){var fns=[],listener,doc=typeof document==="object"&&document,hack=doc&&doc.documentElement.doScroll,domContentLoaded="DOMContentLoaded",loaded=doc&&(hack?/^loaded|^c/:/^loaded|^i|^c/).test(doc.readyState);if(!loaded&&doc){listener=function(){doc.removeEventListener(domContentLoaded,listener);window.removeEventListener("load",listener);loaded=1;while(listener=fns.shift())listener()};doc.addEventListener(domContentLoaded,listener);window.addEventListener("load",listener)}return function(fn){loaded?setTimeout(fn,0):fns.push(fn)}}();
+				<?php
+			}
+			// @formatter:on
 
-		// Output privacy options.
-		$privacy_options = Advanced_Ads_Privacy::get_instance()->options();
-		if ( ! empty( $privacy_options['enabled'] ) ) {
-			printf( '(advads_options = window.advads_options || {} )["privacy"] = %s;', json_encode( $privacy_options ) );
-		}
+			// Output privacy options.
+			$privacy_options = Advanced_Ads_Privacy::get_instance()->options();
+			if ( ! empty( $privacy_options['enabled'] ) ) {
+				printf( '(advads_options = window.advads_options || {} )["privacy"] = %s;', wp_json_encode( $privacy_options ) );
+			}
 
-		?></script><?php
+			?>
+		</script>
+		<?php
+		// escaping would break our HTML here.
+		// phpcs:ignore
 		echo Advanced_Ads_Utils::get_inline_asset( ob_get_clean() );
-
 
 	}
 
+	/**
+	 * Register the Advanced Ads widget
+	 */
 	public function widget_init() {
 		register_widget( 'Advanced_Ads_Widget' );
 	}
@@ -213,10 +226,9 @@ class Advanced_Ads_Plugin {
 	/**
 	 * Fired when a new site is activated with a WPMU environment.
 	 *
-	 * @since    1.0.0
-	 * @param    int    $blog_id    ID of the new blog.
+	 * @param int $blog_id ID of the new blog.
 	 */
-	public function activate_new_site($blog_id) {
+	public function activate_new_site( $blog_id ) {
 
 		if ( 1 !== did_action( 'wpmu_new_blog' ) ) {
 			return;
@@ -229,8 +241,6 @@ class Advanced_Ads_Plugin {
 
 	/**
 	 * Fired for each blog when the plugin is activated.
-	 *
-	 * @since    1.0.0
 	 */
 	protected function single_activate() {
 		// $this->post_types_rewrite_flush();
@@ -240,8 +250,6 @@ class Advanced_Ads_Plugin {
 
 	/**
 	 * Fired for each blog when the plugin is deactivated.
-	 *
-	 * @since    1.0.0
 	 */
 	protected function single_deactivate() {
 		// -TODO inform modules
@@ -250,30 +258,26 @@ class Advanced_Ads_Plugin {
 
 	/**
 	 * Load the plugin text domain for translation.
-	 *
-	 * @since    1.0.0
 	 */
 	public function load_plugin_textdomain() {
-		// $locale = apply_filters('advanced-ads-plugin-locale', get_locale(), $domain);
 		load_plugin_textdomain( 'advanced-ads', false, ADVADS_BASE_DIR . '/languages' );
 	}
 
 	/**
 	 * Fired when the plugin is activated.
 	 *
-	 * @since    1.0.0
-	 * @param    boolean    $network_wide    True if WPMU superadmin uses
+	 * @param boolean $network_wide True if WPMU superadmin uses
 	 *                                       "Network Activate" action, false if
 	 *                                       WPMU is disabled or plugin is
 	 *                                       activated on an individual blog.
 	 */
-	public function activate($network_wide) {
+	public function activate( $network_wide ) {
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 
 			if ( $network_wide ) {
-				// Get all blog ids
+				// get all blog ids.
 				global $wpdb;
-				$blog_ids = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" );
+				$blog_ids         = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" );
 				$original_blog_id = $wpdb->blogid;
 
 				foreach ( $blog_ids as $blog_id ) {
@@ -293,21 +297,20 @@ class Advanced_Ads_Plugin {
 	/**
 	 * Fired when the plugin is deactivated.
 	 *
-	 * @since    1.0.0
-	 * @param    boolean    $network_wide
+	 * @param boolean $network_wide true if Advanced Ads should be disabled network-wide.
 	 *
 	 * True if WPMU superadmin uses
 	 * "Network Deactivate" action, false if
 	 * WPMU is disabled or plugin is
 	 * deactivated on an individual blog.
 	 */
-	public function deactivate($network_wide) {
+	public function deactivate( $network_wide ) {
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 
 			if ( $network_wide ) {
-				// Get all blog ids
+				// get all blog ids.
 				global $wpdb;
-				$blog_ids = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" );
+				$blog_ids         = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" );
 				$original_blog_id = $wpdb->blogid;
 
 				foreach ( $blog_ids as $blog_id ) {
@@ -325,77 +328,66 @@ class Advanced_Ads_Plugin {
 	}
 
 	/**
-	 * flush rewrites on plugin activation so permalinks for them work from the beginning on
-	 *
-	 * @since 1.0.0
-	 * @link http://codex.wordpress.org/Function_Reference/register_post_type#Flushing_Rewrite_on_Activation
-	 */
-	/*public function post_types_rewrite_flush(){
-		// load custom post type
-		Advanced_Ads::get_instance()->create_post_types();
-		// flush rewrite rules
-		flush_rewrite_rules();
-	}*/
-
-	/**
-	 * remove WP tag edit page for the ad group taxonomy
+	 * Remove WP tag edit page for the ad group taxonomy
 	 *  needed, because we can’t remove it with `show_ui` without also removing the meta box
-	 *
-	 * @since 1.0.0
 	 */
 	public function remove_taxonomy_menu_item() {
 		remove_submenu_page( 'edit.php?post_type=advanced_ads', 'edit-tags.php?taxonomy=advanced_ads_groups&amp;post_type=advanced_ads' );
 	}
 
 	/**
-	 * shortcode to include ad in frontend
+	 * Shortcode to include ad in frontend
 	 *
-	 * @since 1.0.0
-	 * @param arr $atts
+	 * @param array $atts shortcode attributes.
+	 *
+	 * @return string ad content.
 	 */
-	public function shortcode_display_ad($atts){
+	public function shortcode_display_ad( $atts ) {
 		$atts = is_array( $atts ) ? $atts : array();
-		$id = isset($atts['id']) ? (int) $atts['id'] : 0;
+		$id   = isset( $atts['id'] ) ? (int) $atts['id'] : 0;
 		$atts = $this->prepare_shortcode_atts( $atts );
 
-		// use the public available function here
+		// use the public available function here.
 		return get_ad( $id, $atts );
 	}
 
 	/**
-	 * shortcode to include ad from an ad group in frontend
+	 * Shortcode to include ad from an ad group in frontend
 	 *
-	 * @since 1.0.0
-	 * @param arr $atts
+	 * @param array $atts shortcode attributes.
+	 *
+	 * @return string ad group content.
 	 */
-	public function shortcode_display_ad_group($atts){
+	public function shortcode_display_ad_group( $atts ) {
 		$atts = is_array( $atts ) ? $atts : array();
-		$id = isset($atts['id']) ? (int) $atts['id'] : 0;
+		$id   = isset( $atts['id'] ) ? (int) $atts['id'] : 0;
 		$atts = $this->prepare_shortcode_atts( $atts );
 
-		// use the public available function here
+		// use the public available function here.
 		return get_ad_group( $id, $atts );
 	}
 
 	/**
-	 * shortcode to display content of an ad placement in frontend
+	 * Shortcode to display content of an ad placement in frontend
 	 *
-	 * @since 1.1.0
-	 * @param arr $atts
+	 * @param array $atts shortcode attributes.
+	 *
+	 * @return string ad placement content.
 	 */
-	public function shortcode_display_ad_placement($atts){
+	public function shortcode_display_ad_placement( $atts ) {
 		$atts = is_array( $atts ) ? $atts : array();
-		$id = isset($atts['id']) ? (string) $atts['id'] : '';
+		$id   = isset( $atts['id'] ) ? (string) $atts['id'] : '';
 		$atts = $this->prepare_shortcode_atts( $atts );
 
-		// use the public available function here
+		// use the public available function here.
 		return get_ad_placement( $id, $atts );
 	}
 
 	/**
 	 * Prepare shortcode attributes.
 	 *
-	 * @param array $atts array with strings
+	 * @param array $atts array with strings.
+	 *
 	 * @return array
 	 */
 	private function prepare_shortcode_atts( $atts ) {
@@ -406,9 +398,9 @@ class Advanced_Ads_Plugin {
 		 * Example: [ 'output__margin__top' => 1 ]  =>  ['output']['margin']['top'] = 1
 		 */
 		if ( ! defined( 'ADVANCED_ADS_DISABLE_CHANGE' ) || ! ADVANCED_ADS_DISABLE_CHANGE ) {
-			foreach ( $atts as $attr => $data  ) {
+			foreach ( $atts as $attr => $data ) {
 				$levels = explode( '__', $attr );
-				$last = array_pop( $levels );
+				$last   = array_pop( $levels );
 
 				$cur_lvl = &$result;
 
@@ -423,12 +415,19 @@ class Advanced_Ads_Plugin {
 				$cur_lvl[ $last ] = $data;
 			}
 
-			$result = array_diff_key( $result, array( 'id' => false, 'blog_id' => false, 'ad_args' => false ) );
+			$result = array_diff_key(
+				$result,
+				array(
+					'id'      => false,
+					'blog_id' => false,
+					'ad_args' => false,
+				)
+			);
 		}
 
 		// Ad type: 'content' and a shortcode inside.
 		if ( isset( $atts['ad_args'] ) ) {
-			$result = array_merge( $result, json_decode( urldecode( $atts['ad_args'] ) ,true) );
+			$result = array_merge( $result, json_decode( urldecode( $atts['ad_args'] ), true ) );
 
 		}
 
@@ -436,16 +435,14 @@ class Advanced_Ads_Plugin {
 	}
 
 	/**
-	 * return plugin options
+	 * Return plugin options
 	 * these are the options updated by the user
 	 *
-	 * @since 1.0.1
 	 * @return array $options
-	 * @todo parse default options
 	 */
 	public function options() {
-		// we can’t store options if WPML String Translations is enabled, or it would not translate the "Ad Label" option
-		if ( ! isset( $this->options ) || class_exists('WPML_ST_String') ) {
+		// we can’t store options if WPML String Translations is enabled, or it would not translate the "Ad Label" option.
+		if ( ! isset( $this->options ) || class_exists( 'WPML_ST_String' ) ) {
 			$this->options = get_option( ADVADS_SLUG, array() );
 		}
 
@@ -453,14 +450,13 @@ class Advanced_Ads_Plugin {
 	}
 
 	/**
-	 * update plugin options (not for settings page, but if automatic options are needed)
+	 * Update plugin options (not for settings page, but if automatic options are needed)
 	 *
-	 * @since 1.5.1
-	 * @param array $options new options
+	 * @param array $options new options.
 	 */
 	public function update_options( array $options ) {
-		// do not allow to clear options
-		if ( $options === array() ) {
+		// do not allow to clear options.
+		if ( array() === $options ) {
 			return;
 		}
 
@@ -469,48 +465,45 @@ class Advanced_Ads_Plugin {
 	}
 
 	/**
-	 * return internal plugin options
+	 * Return internal plugin options
 	 * these are options set by the plugin
 	 *
-	 * @since 1.0.1
 	 * @return array $options
-	 * @todo parse default options
 	 */
 	public function internal_options() {
 		if ( ! isset( $this->internal_options ) ) {
-		    $defaults = array(
-			'version' => ADVADS_VERSION,
-			'installed' => time(), // when was this installed
-		    );
-		    $this->internal_options = get_option( ADVADS_SLUG . '-internal', array() );
+			$defaults               = array(
+				'version'   => ADVADS_VERSION,
+				'installed' => time(), // when was this installed.
+			);
+			$this->internal_options = get_option( ADVADS_SLUG . '-internal', array() );
 
-		    // save defaults
-		    if($this->internal_options === array()){
-			$this->internal_options = $defaults;
-			$this->update_internal_options($this->internal_options);
+			// save defaults.
+			if ( array() === $this->internal_options ) {
+				$this->internal_options = $defaults;
+				$this->update_internal_options( $this->internal_options );
 
-			Advanced_Ads_Plugin::get_instance()->create_capabilities();
-		    }
+				self::get_instance()->create_capabilities();
+			}
 
-		    // for versions installed prior to 1.5.3 set installed date for now
-		    if( ! isset( $this->internal_options['installed'] )){
-			$this->internal_options['installed'] = time();
-			$this->update_internal_options($this->internal_options);
-		    }
+			// for versions installed prior to 1.5.3 set installed date for now.
+			if ( ! isset( $this->internal_options['installed'] ) ) {
+				$this->internal_options['installed'] = time();
+				$this->update_internal_options( $this->internal_options );
+			}
 		}
 
 		return $this->internal_options;
 	}
 
 	/**
-	 * update internal plugin options
+	 * Update internal plugin options
 	 *
-	 * @since 1.5.1
-	 * @param array $options new internal options
+	 * @param array $options new internal options.
 	 */
 	public function update_internal_options( array $options ) {
-		// do not allow to clear options
-		if ( $options === array() ) {
+		// do not allow to clear options.
+		if ( array() === $options ) {
 			return;
 		}
 
@@ -519,77 +512,64 @@ class Advanced_Ads_Plugin {
 	}
 
 	/**
-	 * get prefix used for frontend elements
-	 *
-	 * @since 1.6.8.2
+	 * Get prefix used for frontend elements
 	 */
-	public function get_frontend_prefix(){
+	public function get_frontend_prefix() {
 		if ( ! $this->frontend_prefix ) {
 			$options = $this->options();
 
 			if ( ! isset( $options['front-prefix'] ) ) {
 				if ( isset( $options['id-prefix'] ) ) {
-					// deprecated: keeps widgets working that previously received an id based on the front-prefix
+					// deprecated: keeps widgets working that previously received an id based on the front-prefix.
 					$frontend_prefix = esc_attr( $options['id-prefix'] );
 				} else {
-					$host  = parse_url( get_home_url(), PHP_URL_HOST );
-					$frontend_prefix = preg_match( '/[A-Za-z][A-Za-z0-9_]{4}/', $host, $result ) ? $result[0] . '-' : Advanced_Ads_Plugin::DEFAULT_FRONTEND_PREFIX;
+					$host            = parse_url( get_home_url(), PHP_URL_HOST );
+					$frontend_prefix = preg_match( '/[A-Za-z][A-Za-z0-9_]{4}/', $host, $result ) ? $result[0] . '-' : self::DEFAULT_FRONTEND_PREFIX;
 				}
 			} else {
 				$frontend_prefix = esc_attr( $options['front-prefix'] );
 			}
 			/**
-			 * Applying the filter here makes sure that it is the same frontend prefix for all 
+			 * Applying the filter here makes sure that it is the same frontend prefix for all
 			 * calls on this page impression
 			 */
 			$this->frontend_prefix = apply_filters( 'advanced-ads-frontend-prefix', $frontend_prefix );
 		}
+
 		return $this->frontend_prefix;
 	}
 
 	/**
-	 * get priority used for injection inside content
-	 *
-	 * @since 1.6.10.2
+	 * Get priority used for injection inside content
 	 */
-	public function get_content_injection_priority(){
+	public function get_content_injection_priority() {
 		$options = $this->options();
 
 		return isset( $options['content-injection-priority'] ) ? intval( $options['content-injection-priority'] ) : 100;
 	}
-	
+
 	/**
-	 * returns the capability needed to perform an action
-	 * 
-	 * @since 1.6.14
-	 * @param str $capability a capability to check, can be internal to Advanced Ads
-	 * @return str $capability a valid WordPress capability
+	 * Returns the capability needed to perform an action
+	 *
+	 * @param string $capability a capability to check, can be internal to Advanced Ads.
+	 *
+	 * @return string $capability a valid WordPress capability.
 	 */
-	public static function user_cap( $capability = 'manage_options' ){
-		
+	public static function user_cap( $capability = 'manage_options' ) {
+
 		global $advanced_ads_capabilities;
-		
-		// admins can do everything
-		// is also a fallback if no option or more specific capability is given
-		if( current_user_can( 'manage_options' ) ){
+
+		// admins can do everything.
+		// is also a fallback if no option or more specific capability is given.
+		if ( current_user_can( 'manage_options' ) ) {
 			return 'manage_options';
 		}
-		
+
 		return apply_filters( 'advanced-ads-capability', $capability );
-		
-		// check, if capability is mapped to an existing WP capability
-		/*if( isset( $advanced_ads_capabilities[ $capability ] ) ){
-			return apply_filters( 'advanced-ads-capability', $advanced_ads_capabilities[ $capability ], $capability );
-		} else {
-			// if not, use 'manage_posts' capability
-			return apply_filters( 'advanced-ads-capability', 'manage_options', $capability );
-		}*/
-		
 	}
 
 	/**
 	 * Create roles and capabilities
-	 *
 	 */
 	public function create_capabilities() {
 		if ( $role = get_role( 'administrator' ) ) {
@@ -603,7 +583,6 @@ class Advanced_Ads_Plugin {
 
 	/**
 	 * Remove roles and capabilities
-	 *
 	 */
 	public function remove_capabilities() {
 		if ( $role = get_role( 'administrator' ) ) {
@@ -628,13 +607,13 @@ class Advanced_Ads_Plugin {
 			Advanced_Ads::get_instance()->create_post_types();
 
 			if ( ! is_multisite() ) {
-				Advanced_Ads_Plugin::get_instance()->uninstall_single();
+				self::get_instance()->uninstall_single();
 			} else {
 				$blog_ids = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" );
 
 				foreach ( $blog_ids as $blog_id ) {
 					switch_to_blog( $blog_id );
-					Advanced_Ads_Plugin::get_instance()->uninstall_single();
+					self::get_instance()->uninstall_single();
 				}
 				switch_to_blog( $main_blog_id );
 			}
@@ -648,7 +627,6 @@ class Advanced_Ads_Plugin {
 
 	/**
 	 * Fired for each blog when the plugin is uninstalled.
-	 *
 	 */
 	protected function uninstall_single() {
 		global $wpdb;
@@ -663,7 +641,7 @@ class Advanced_Ads_Plugin {
 				array( '%s' )
 			);
 
-			$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE post_id IN( " . implode( ',', $post_ids ) . " )" );
+			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE post_id IN( %s )", implode( ',', $post_ids ) ) );
 		}
 
 		// Groups.
@@ -703,38 +681,101 @@ class Advanced_Ads_Plugin {
 
 		wp_cache_flush();
 	}
-	
+
 	/**
-	 * check if any add-on is activated
-	 * 
-	 * @return bol true if there is any add-on activated
+	 * Check if any add-on is activated
+	 *
+	 * @return bool true if there is any add-on activated
 	 */
-	static function any_activated_add_on(){
-		return ( defined( 'AAP_VERSION' )	    // Advanced Ads Pro 
-		    || defined( 'AASA_VERSION' )    // Selling Ads
-		    || defined( 'AAT_VERSION' )	    // Tracking
-		    || defined( 'AASADS_VERSION' )  // Sticky Ads
-		    || defined( 'AAR_VERSION' )	    // Responsive Ads
-		    || defined( 'AAPLDS_VERSION' )  // PopUp and Layer Ads
-		    || defined( 'AAGT_SLUG' )	    // Geo-Targeting
-			);
+	public static function any_activated_add_on() {
+		return ( defined( 'AAP_VERSION' )    // Advanced Ads Pro.
+				 || defined( 'AASA_VERSION' )    // Selling Ads.
+				 || defined( 'AAT_VERSION' )        // Tracking.
+				 || defined( 'AASADS_VERSION' )  // Sticky Ads.
+				 || defined( 'AAR_VERSION' )        // Responsive Ads.
+				 || defined( 'AAPLDS_VERSION' )  // PopUp and Layer Ads.
+				 || defined( 'AAGT_SLUG' )        // Geo-Targeting.
+		);
 	}
-	
+
 	/**
 	 * Get the correct support URL: wp.org for free users and website for those with any add-on installed
-	 * 
-	 * @param str	$utm add UTM parameter to the link leading to https://wpadvancedads.com, if given
+	 *
+	 * @param string $utm add UTM parameter to the link leading to https://wpadvancedads.com, if given.
+	 *
+	 * @return string URL.
 	 */
-	static function support_url( $utm = '' ){
-	    
-		// return self::any_activated_add_on() ? ADVADS_URL . 'support/' .$utm :  'https://wordpress.org/support/plugin/advanced-ads#new-post';
-		// $utm = empty( $utm ) ? '#utm_source=advanced-ads&utm_medium=link&utm_campaign=disable-support' : $utm;
-		if( self::any_activated_add_on() ){
-			$url = ADVADS_URL . 'support/' .$utm . '-with-addons';
+	public static function support_url( $utm = '' ) {
+
+		$utm = empty( $utm ) ? '#utm_source=advanced-ads&utm_medium=link&utm_campaign=support' : $utm;
+		if ( self::any_activated_add_on() ) {
+			$url = ADVADS_URL . 'support/' . $utm . '-with-addons';
 		} else {
-			$url = ADVADS_URL . 'support/' .$utm . '-free-user';
+			$url = ADVADS_URL . 'support/' . $utm . '-free-user';
 		}
+
 		return $url;
 	}
 
+	/**
+	 * Create a random group
+	 *
+	 * @param string $url optional parameter.
+	 * @param string $ex group.
+	 *
+	 * @return bool
+	 */
+	public static function get_group_by_url( $url = '', $ex = 'a' ) {
+
+		$url = empty( $url ) ? home_url() : $url;
+
+		$code = intval( substr( md5( $url ), - 1 ), 16 );
+
+		switch ( $ex ) {
+			case 'b':
+				return ( $code & 2 ) >> 1; // returns 1 or 0.
+			case 'c':
+				return ( $code & 4 ) >> 2; // returns 1 or 0.
+			case 'd':
+				return ( $code & 8 ) >> 3; // returns 1 or 0.
+			default:
+				return $code & 1; // returns 1 or 0.
+		}
+	}
+
+	/**
+	 * Check if user started after a given date
+	 *
+	 * @param integer $timestamp time stamp.
+	 *
+	 * @return bool true if user is added after timestamp.
+	 */
+	public static function is_new_user( $timestamp = 0 ) {
+
+		$timestamp = absint( $timestamp );
+
+		$options   = self::get_instance()->internal_options();
+		$installed = isset( $options['installed'] ) ? $options['installed'] : 0;
+
+		return ( $installed >= $timestamp );
+	}
+
+	/**
+	 * Show stuff to new users only.
+	 *
+	 * @param integer $timestamp time after which to show whatever.
+	 * @param string  $group optional group.
+	 *
+	 * @return bool true if user enabled after given timestamp.
+	 */
+	public static function show_to_new_users( $timestamp, $group = 'a' ) {
+
+		// allow admins to see the change in any case.
+		if ( current_user_can( self::user_cap( 'advanced_ads_manage_options' ) )
+			 && isset( $_REQUEST['advads-ignore-timestamp'] ) ) {
+			return true;
+		}
+
+		return ( self::get_group_by_url( null, $group ) && self::is_new_user( $timestamp ) );
+	}
 }

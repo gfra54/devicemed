@@ -132,7 +132,7 @@ class Advanced_Ads_Pro_Module_BuddyPress {
 		return array( 'field' => $options['field'], 'data' => $profile );
 	}
     
-	public static function xprofile_metabox( $options, $index = 0 ) {
+	public static function xprofile_metabox( $options, $index = 0, $form_name = '' ) {
 		if ( ! isset ( $options['type'] ) || '' === $options['type'] ) { return; }
 
 		$type_options = Advanced_Ads_Visitor_Conditions::get_instance()->conditions;
@@ -144,7 +144,8 @@ class Advanced_Ads_Pro_Module_BuddyPress {
 		$groups     = bp_profile_get_field_groups();
 
 		// form name basis
-		$name = Advanced_Ads_Visitor_Conditions::FORM_NAME . '[' . $index . ']';
+		$name = Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions::get_form_name_with_index( $form_name, $index );
+
 		$value = isset( $options['value'] ) ? $options['value'] : '';
 
 		// options
@@ -154,7 +155,7 @@ class Advanced_Ads_Pro_Module_BuddyPress {
 		?><input type="hidden" name="<?php echo $name; ?>[type]" value="<?php echo $options['type']; ?>"/>
 
 		<?php if( $groups ) :
-		    ?><select name=<?php echo $name; ?>[field]"><?php
+		    ?><div class="advads-conditions-select-wrap"><select name=<?php echo $name; ?>[field]"><?php
 			foreach( $groups as $_group ) :
 			    ?><optgroup label="<?php echo $_group->name; ?>"><?php
 				if(  $_group->fields ) foreach( $_group->fields as $_field ) :
@@ -162,7 +163,7 @@ class Advanced_Ads_Pro_Module_BuddyPress {
 				endforeach;
 			    ?></optgroup><?php
 			endforeach;
-		    ?></select><?php
+		    ?></select></div><?php
 		else :
 		    ?><p class="advads-error-message"><?php 
 		    /* translators: "profile fields" relates to BuddyPress profile fields */

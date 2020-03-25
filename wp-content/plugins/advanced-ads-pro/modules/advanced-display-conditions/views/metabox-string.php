@@ -4,5 +4,5 @@
 	    include( ADVADS_BASE_PATH . 'admin/views/ad-conditions-string-operators.php' ); 
     } ?>
     <input type="text" name="<?php echo $name; ?>[value]" value="<?php echo $value; ?>"/>
-    <p class="description"><?php echo $type_options[ $options['type'] ]['description']; ?></p>
 </div>
+	<p class="description"><?php echo $type_options[ $options['type'] ]['description']; ?></p>

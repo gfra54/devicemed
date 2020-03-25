@@ -9,7 +9,9 @@ final class Advanced_Ads_ModuleLoader {
 	public static function getLoader()
 	{
 		if ( null === self::$loader ) {
-			self::$loader = require_once ADVADS_BASE_PATH . 'vendor/autoload_52.php';
+			self::$loader = file_exists(ADVADS_BASE_PATH . 'vendor/autoload.php')
+				? require_once ADVADS_BASE_PATH . 'vendor/autoload.php'
+				: require_once ADVADS_BASE_PATH . 'lib/autoload.php';
 		}
 
 		return self::$loader;

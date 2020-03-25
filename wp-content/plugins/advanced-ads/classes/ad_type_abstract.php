@@ -3,10 +3,10 @@
  * Advanced Ads Abstract Ad Type
  *
  * @package   Advanced_Ads
- * @author    Thomas Maier <thomas.maier@webgilde.com>
+ * @author    Thomas Maier <support@wpadvancedads.com>
  * @license   GPL-2.0+
- * @link      http://webgilde.com
- * @copyright 2014 Thomas Maier, webgilde GmbH
+ * @link      https://wpadvancedads.com
+ * @copyright 2014 Thomas Maier, Advanced Ads GmbH
  *
  * Class containing information that are defaults for all the other ad types
  *

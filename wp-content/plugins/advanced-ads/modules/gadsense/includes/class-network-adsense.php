@@ -46,11 +46,23 @@ class Advanced_Ads_Network_Adsense extends Advanced_Ads_Ad_Network{
             $section_id
         );
 
-        // AdSense anchor ad on top of pages.
+		// AdSense anchor ad on top of pages.
+		// Only show this field if selected, otherwise use new auto ads code.
+		if ( isset( $this->data->get_options()['top-anchor-ad'] ) ) {
+			add_settings_field(
+				'top_anchor_ad',
+				__( 'Auto ads', 'advanced-ads' ) . ':&nbsp;' . __( 'Disable top anchor ad', 'advanced-ads' ),
+				array( $this, 'render_settings_adsense_top_anchor_ad' ),
+				$hook,
+				$section_id
+			);
+		}
+
+        // hide AdSense stats in the backend
         add_settings_field(
-            'top_anchor_ad',
-            __( 'Auto ads', 'advanced-ads' ) . ':&nbsp;' . __( 'Disable top anchor ad', 'advanced-ads' ),
-            array( $this, 'render_settings_adsense_top_anchor_ad' ),
+            'hide_stats',
+            __( 'Disable stats', 'advanced-ads' ),
+            array( $this, 'render_settings_adsense_hide_stats' ),
             $hook,
             $section_id
         );
@@ -157,6 +169,19 @@ class Advanced_Ads_Network_Adsense extends Advanced_Ads_Ad_Network{
     }
 
     /**
+     * Render setting to hide AdSense stats showing in the backend
+     */
+    public function render_settings_adsense_hide_stats() {
+        $options = $this->data->get_options();
+        $hide_stats = isset( $options['hide-stats'] )? true : false; ?>
+        <label>
+            <input type="checkbox" name="<?php echo GADSENSE_OPT_NAME; ?>[hide-stats]" value="1" <?php checked( $hide_stats ); ?> />
+            <?php esc_html_e( 'Enable this option to stop loading stats from AdSense into your WordPress backend.', 'advanced-ads' ); ?>
+        </label>
+        <?php
+    }
+
+    /**
      * render page-level ads setting
      *
      * @since 1.6.9
@@ -239,7 +264,7 @@ class Advanced_Ads_Network_Adsense extends Advanced_Ads_Ad_Network{
             if( 0 === strpos( $options['adsense-id'], 'ca-' ) ){
                 $options['adsense-id'] = str_replace( 'ca-', '', $options['adsense-id'] );
             }
-			
+
             // trim publisher id
             $options['adsense-id'] = trim($options['adsense-id']);
         }
@@ -303,12 +328,14 @@ class Advanced_Ads_Network_Adsense extends Advanced_Ads_Ad_Network{
                     $ad_unit->code = $ad_codes[$id];
                 }
                 if (isset ($raw['contentAdsSettings'])){
-                    if (isset ($raw['contentAdsSettings']['type'])){
-                        $ad_unit->display_type = Advanced_Ads_AdSense_MAPI::format_ad_data( $raw['contentAdsSettings']['type'], 'type' );
-                    }
-                    if (isset ($raw['contentAdsSettings']['size'])){
-                        $ad_unit->display_size = Advanced_Ads_AdSense_MAPI::format_ad_data( $raw['contentAdsSettings']['size'], 'size' );
-                    }
+					if ( isset( $raw['contentAdsSettings']['type'] ) ) {
+						$ad_unit->display_type = $raw['contentAdsSettings']['type'];
+						$ad_unit->display_type = Advanced_Ads_AdSense_MAPI::format_ad_data( $ad_unit, 'type' );
+					}
+					if ( isset( $raw['contentAdsSettings']['size'] ) ) {
+						$ad_unit->display_size = $raw['contentAdsSettings']['size'];
+						$ad_unit->display_size = Advanced_Ads_AdSense_MAPI::format_ad_data( $ad_unit, 'size' );
+					}
                 }
                 $units[] = $ad_unit;
             }
@@ -321,11 +348,15 @@ class Advanced_Ads_Network_Adsense extends Advanced_Ads_Ad_Network{
         Advanced_Ads_AdSense_Admin::get_mapi_ad_selector($hide_idle_ads);
     }
 
-    public function is_supported($ad_unit)
-    {
-        $mapi_options = Advanced_Ads_AdSense_MAPI::get_option();
-        return ! array_key_exists( $ad_unit->id, $mapi_options['unsupported_units'] );
-    }
+	public function is_supported( $ad_unit ) {
+		$mapi_options = Advanced_Ads_AdSense_MAPI::get_option();
+		$supported    = ! array_key_exists( $ad_unit->id, $mapi_options['unsupported_units'] );
+		if ( ! $supported ) {
+			$supported = array_key_exists( $ad_unit->id, $mapi_options['ad_codes'] );
+		}
+
+		return $supported;
+	}
 
     public function update_external_ad_units()
     {
@@ -342,13 +373,23 @@ class Advanced_Ads_Network_Adsense extends Advanced_Ads_Ad_Network{
         return GADSENSE_BASE_URL . 'admin/assets/js/adsense.js';
     }
 
-    public function append_javascript_data(&$data)
-    {
-        $pub_id = Advanced_Ads_AdSense_Data::get_instance()->get_adsense_id();
-        $data['pubId'] = $pub_id;
-        $data['connected'] = $this->is_account_connected();
-        return $data;
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function append_javascript_data( &$data ) {
+		$pub_id            = Advanced_Ads_AdSense_Data::get_instance()->get_adsense_id();
+		$data['pubId']     = $pub_id;
+		$data['connected'] = $this->is_account_connected();
+		$data['ad_types']  = array(
+			'matched_content' => _x( 'Matched Content', 'AdSense ad type', 'advanced-ads' ),
+			'in_article'      => _x( 'In-article', 'AdSense ad type', 'advanced-ads' ),
+			'in_feed'         => _x( 'In-feed', 'AdSense ad type', 'advanced-ads' ),
+			'display'         => _x( 'Display', 'AdSense ad type', 'advanced-ads' ),
+			'link'            => _x( 'Link', 'AdSense ad type', 'advanced-ads' ),
+		);
+
+		return $data;
+	}
 
     public function supports_manual_ad_setup()
     {

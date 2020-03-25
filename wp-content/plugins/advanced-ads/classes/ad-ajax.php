@@ -7,20 +7,32 @@
  */
 class Advanced_Ads_Ajax {
 
-	private function __construct()
-	{
+	/**
+	 * Advanced_Ads_Ajax constructor.
+	 */
+	private function __construct() {
 		add_action( 'wp_ajax_advads_ad_select', array( $this, 'advads_ajax_ad_select' ) );
 		add_action( 'wp_ajax_nopriv_advads_ad_select', array( $this, 'advads_ajax_ad_select' ) );
 		add_action( 'wp_ajax_advads-ad-health-notice-push', array( $this, 'ad_health_notice_push' ) );
 		add_action( 'wp_ajax_nopriv_advads-ad-health-notice-push', array( $this, 'ad_health_notice_push' ) );
+		add_action( 'wp_ajax_advads-ad-frontend-notice-update', array( $this, 'frontend_notice_update' ) );
 	}
 
+	/**
+	 * Instance of Advanced_Ads_Ajax
+	 *
+	 * @var $instance
+	 */
 	private static $instance;
 
-	public static function get_instance()
-	{
-		if ( ! isset(self::$instance) ) {
-			self::$instance = new self;
+	/**
+	 * Instance getter
+	 *
+	 * @return Advanced_Ads_Ajax
+	 */
+	public static function get_instance() {
+		if ( ! isset( self::$instance ) ) {
+			self::$instance = new self();
 		}
 
 		return self::$instance;
@@ -30,65 +42,71 @@ class Advanced_Ads_Ajax {
 	 * Simple wp ajax interface for ad selection.
 	 */
 	public function advads_ajax_ad_select() {
-		// set proper header
+		// set proper header.
 		header( 'Content-Type: application/json; charset: utf-8' );
 
-		// allow modules / add ons to test (this is rather late but should happen before anything important is called)
+		// allow modules / add ons to test (this is rather late but should happen before anything important is called).
 		do_action( 'advanced-ads-ajax-ad-select-init' );
 
-		$adIds = isset( $_REQUEST['ad_ids'] ) ? $_REQUEST['ad_ids'] : null;
-		if ( is_string( $adIds ) ) {
-			$adIds = json_decode( $adIds, true );
+		$ad_ids = isset( $_REQUEST['ad_ids'] ) ? $_REQUEST['ad_ids'] : null;
+		if ( is_string( $ad_ids ) ) {
+			$ad_ids = json_decode( $ad_ids, true );
 		}
-		if (is_array($adIds)) { // ads loaded previously and passed by query
-			Advanced_Ads::get_instance()->current_ads += $adIds;
+		if ( is_array( $ad_ids ) ) { // ads loaded previously and passed by query.
+			Advanced_Ads::get_instance()->current_ads += $ad_ids;
 		}
 
-		$deferedAds = isset( $_REQUEST['deferedAds'] ) ? $_REQUEST['deferedAds'] : null;
-		if ( $deferedAds ) { // load all ajax ads with a single request
+		$defered_ads = isset( $_REQUEST['deferedAds'] ) ? $_REQUEST['deferedAds'] : null;
+		if ( $defered_ads ) { // load all ajax ads with a single request.
 			$response = array();
 
 			$requests_by_blog = array();
-			foreach ( (array) $deferedAds as $request ) {
-				$blog_id = isset( $request['blog_id'] ) ? $request['blog_id'] : get_current_blog_id();
+			foreach ( (array) $defered_ads as $request ) {
+				$blog_id                        = isset( $request['blog_id'] ) ? $request['blog_id'] : get_current_blog_id();
 				$requests_by_blog[ $blog_id ][] = $request;
 			}
 			foreach ( $requests_by_blog as $blog_id => $requests ) {
-				if ( $blog_id !== get_current_blog_id() ) { Advanced_Ads::get_instance()->switch_to_blog( $blog_id ); }
-
-				foreach ( $requests as $request ) {
-					$result = $this->select_one( $request );
-					$result['elementId'] = ! empty( $request['elementId'] ) ? $request['elementId'] : null;
-					$response[] = $result;
+				if ( get_current_blog_id() !== $blog_id ) {
+					Advanced_Ads::get_instance()->switch_to_blog( $blog_id );
 				}
 
-				if ( $blog_id !== get_current_blog_id() ) { Advanced_Ads::get_instance()->restore_current_blog(); }
+				foreach ( $requests as $request ) {
+					$result              = $this->select_one( $request );
+					$result['elementId'] = ! empty( $request['elementId'] ) ? $request['elementId'] : null;
+					$response[]          = $result;
+				}
+
+				if ( get_current_blog_id() !== $blog_id ) {
+					Advanced_Ads::get_instance()->restore_current_blog();
+				}
 			}
 
-			echo json_encode( $response );
+			echo wp_json_encode( $response );
 			die();
 		}
 
 		$response = $this->select_one( $_REQUEST );
-		echo json_encode( $response );
+		echo wp_json_encode( $response );
 		die();
 	}
 
 	/**
 	 * Provides a single ad (ad, group, placement) given ID and selection method.
 	 *
-	 * @param $request array
+	 * @param array $request request.
+	 *
+	 * @return array
 	 */
 	private function select_one( $request ) {
-		// init handlers
-		$selector = Advanced_Ads_Select::get_instance();
-		$methods = $selector->get_methods();
-		$method = isset( $request['ad_method'] ) ? (string) $request['ad_method'] : null;
-		$id = isset( $request['ad_id'] ) ? (string) $request['ad_id'] : null;
+		// init handlers.
+		$selector  = Advanced_Ads_Select::get_instance();
+		$methods   = $selector->get_methods();
+		$method    = isset( $request['ad_method'] ) ? (string) $request['ad_method'] : null;
+		$id        = isset( $request['ad_id'] ) ? (string) $request['ad_id'] : null;
 		$arguments = isset( $request['ad_args'] ) ? $request['ad_args'] : array();
-		if (is_string($arguments)) {
-			$arguments = stripslashes($arguments);
-			$arguments = json_decode($arguments, true);
+		if ( is_string( $arguments ) ) {
+			$arguments = stripslashes( $arguments );
+			$arguments = json_decode( $arguments, true );
 		}
 		if ( ! empty( $request['elementId'] ) ) {
 			$arguments['cache_busting_elementid'] = $request['elementId'];
@@ -97,40 +115,85 @@ class Advanced_Ads_Ajax {
 		$response = array();
 		if ( isset( $methods[ $method ] ) && isset( $id ) ) {
 			$advads = Advanced_Ads::get_instance();
-			$l = count( $advads->current_ads );
+			$l      = count( $advads->current_ads );
 
-			// build content
+			// build content.
 			$content = $selector->get_ad_by_method( $id, $method, $arguments );
-			$adIds = array_slice( $advads->current_ads, $l ); // ads loaded by this request
+			$ad_ids  = array_slice( $advads->current_ads, $l ); // ads loaded by this request.
 
-			return array( 'status' => 'success', 'item' => $content, 'id' => $id, 'method' => $method, 'ads' => $adIds, 'blog_id' => get_current_blog_id() );
+			$r = array(
+				'status'  => 'success',
+				'item'    => $content,
+				'id'      => $id,
+				'method'  => $method,
+				'ads'     => $ad_ids,
+				'blog_id' => get_current_blog_id(),
+			);
+
+			return apply_filters(
+				'advanced-ads-cache-busting-item',
+				$r,
+				array(
+					'id'     => $id,
+					'method' => $method,
+					'args'   => $arguments,
+				)
+			);
 		} else {
-			// report error
-			return array( 'status' => 'error', 'message' => 'No valid ID or METHOD found.' );
+			// report error.
+			return array(
+				'status'  => 'error',
+				'message' => 'No valid ID or METHOD found.',
+			);
 		}
 	}
 
 	/**
 	 * Push an Ad Health notice to the queue in the backend
 	 */
-	public function ad_health_notice_push(){
-		
+	public function ad_health_notice_push() {
+
 		check_ajax_referer( 'advanced-ads-ad-health-ajax-nonce', 'nonce' );
-		
-		if ( ! current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_edit_ads') ) ) {
+
+		if ( ! current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_edit_ads' ) ) ) {
 			return;
 		}
-		
-		$key = ( !empty( $_REQUEST['key'] ) ) ? esc_attr( $_REQUEST['key'] ) : false;
-		$attr = ( !empty( $_REQUEST['attr'] ) && is_array( $_REQUEST['attr'] ) ) ? $_REQUEST['attr'] : array();
-		
+
+		$key  = ( ! empty( $_REQUEST['key'] ) ) ? esc_attr( $_REQUEST['key'] ) : false;
+		$attr = ( ! empty( $_REQUEST['attr'] ) && is_array( $_REQUEST['attr'] ) ) ? $_REQUEST['attr'] : array();
+
 		// update or new entry?
-		if( isset( $attr['mode'] ) && 'update' === $attr['mode'] ){
+		if ( isset( $attr['mode'] ) && 'update' === $attr['mode'] ) {
 			Advanced_Ads_Ad_Health_Notices::get_instance()->update( $key, $attr );
 		} else {
 			Advanced_Ads_Ad_Health_Notices::get_instance()->add( $key, $attr );
-		}	    
-		
+		}
+
+		die();
+	}
+
+	/**
+	 * Update frontend notice array
+	 */
+	public function frontend_notice_update() {
+
+		check_ajax_referer( 'advanced-ads-frontend-notice-nonce', 'nonce' );
+
+		if ( ! current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_edit_ads' ) ) ) {
+			return;
+		}
+
+		$key  = ( ! empty( $_REQUEST['key'] ) ) ? esc_attr( $_REQUEST['key'] ) : false;
+		$attr = ( ! empty( $_REQUEST['attr'] ) && is_array( $_REQUEST['attr'] ) ) ? $_REQUEST['attr'] : array();
+
+		// update or new entry?
+		if ( isset( $attr['mode'] ) && 'update' === $attr['mode'] ) {
+			die();
+			// Advanced_Ads_Frontend_Notices::get_instance()->update( $key, $attr );
+		} else {
+			Advanced_Ads_Frontend_Notices::get_instance()->update( $key, $attr );
+		}
+
 		die();
 	}
 }

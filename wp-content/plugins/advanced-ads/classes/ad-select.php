@@ -97,6 +97,7 @@ class Advanced_Ads_Select {
 			return ;
 		}
 		$args = $this->get_ad_arguments( $method, $id, $args );
+
 		return call_user_func( $methods[ $method ], $args );
 	}
 
@@ -109,7 +110,6 @@ class Advanced_Ads_Select {
 			return ;
 		}
 
-
 		// get ad
 		$ad = new Advanced_Ads_Ad( (int) $args['id'], $args );
 
@@ -119,7 +119,6 @@ class Advanced_Ads_Select {
 		
 		// check conditions
 		if ( $ad->can_display() ) {
-//if($args['id']==20284) me($ad->output());
 			return $ad->output();
 		}
 	}
@@ -138,9 +137,7 @@ class Advanced_Ads_Select {
 		$adgroup = new Advanced_Ads_Group( $id, $args );
 		$ordered_ad_ids = $adgroup->get_ordered_ad_ids();
 
-		$override = apply_filters( 'advanced-ads-ad-select-override-by-group', false, $adgroup, $ordered_ad_ids, $args);
-
-		if ( $override !== false ) {	
+		if ( false !== ( $override = apply_filters( 'advanced-ads-ad-select-override-by-group', false, $adgroup, $ordered_ad_ids, $args ) ) ) {	
 			return $override;
 		}
 

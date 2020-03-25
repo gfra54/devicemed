@@ -56,10 +56,35 @@ class Advanced_Ads_Tracking_Dbop {
 		add_action( 'wp_ajax_advads_tracking_remove', array( $this, 'ajax_remove' ) );
 		add_action( 'wp_ajax_advads_tracking_export', array( $this, 'ajax_export' ) );
 		add_action( 'wp_ajax_advads_tracking_reset', array( $this, 'ajax_reset' ) );
+		add_action( 'wp_ajax_advads_tracking_debug_mode', array( $this, 'ajax_debug_mode' ) );
 	}
 
+	public function ajax_debug_mode() {
+		$_post = wp_unslash( $_POST );
+		if ( false !== wp_verify_nonce( $_post['nonce'], 'advads_tracking_dbop' ) && current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_manage_options' ) ) ) {
+			$the_ad = $_post['ad'];
+			if ( 'cancel' === $the_ad ) {
+				delete_option( Advanced_Ads_Tracking_Util::DEBUG_OPT );
+				header( 'Content-Type: application/json' );
+				echo json_encode( array( 'status' => true ) );
+			} else {
+				$option = array(
+					'id' => absint( $the_ad ),
+					'time' => time(),
+				);
+				if ( 'all' == $the_ad ) {
+					$option['id'] = true;
+				}
+				update_option( Advanced_Ads_Tracking_Util::DEBUG_OPT, $option );
+				header( 'Content-Type: application/json' );
+				echo json_encode( array( 'status' => true ) );
+			}
+		}
+		die;
+	}
+	
 	public function ajax_reset(){
-		if ( false !== wp_verify_nonce( $_POST['nonce'], 'advads_tracking_dbop' ) ) {
+		if ( false !== wp_verify_nonce( $_POST['nonce'], 'advads_tracking_dbop' ) && current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_manage_options' ) ) ) {
 			$ad = $_POST['ad'];
 			$admin_class = new Advanced_Ads_Tracking_Admin();
 			$result = $admin_class->reset_stats( $ad );
@@ -83,7 +108,7 @@ class Advanced_Ads_Tracking_Dbop {
 	}
 
 	public function ajax_remove(){
-		if ( false !== wp_verify_nonce( $_POST['nonce'], 'advads_tracking_dbop' ) ) {
+		if ( false !== wp_verify_nonce( $_POST['nonce'], 'advads_tracking_dbop' ) && current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_manage_options' ) ) ) {
 			$period = ( $_POST['period'] )? $_POST['period'] : false;
 			$result = $this->remove( $period );
 			header( 'Content-Type: application/json' );
@@ -94,7 +119,7 @@ class Advanced_Ads_Tracking_Dbop {
 	}
 
 	public function ajax_export() {
-		if ( false !== wp_verify_nonce( $_GET['nonce'], 'advads_tracking_dbop' ) ) {
+		if ( false !== wp_verify_nonce( $_GET['nonce'], 'advads_tracking_dbop' ) && current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_manage_options' ) ) ) {
 			$period = ( $_GET['period'] )? stripslashes( $_GET['period'] ) : false;
 			$from = ( isset( $_GET['from'] ) )? $_GET['from'] : '';
 			$to = ( isset( $_GET['to'] ) )? $_GET['to'] : '';
@@ -744,6 +769,48 @@ class Advanced_Ads_Tracking_Dbop {
 		);
 	}
 
+	/**
+	 * Get ID of deleted ads from the impression and clicks tables.
+	 * 
+	 * @return [array] $result The list of deleted ads
+	 */
+	public function get_deleted_ads() {
+		global $wpdb;
+		$clicks = $wpdb->prefix . 'advads_clicks';
+		$impressions = $wpdb->prefix . 'advads_impressions';
+		$ads = $wpdb->prefix . 'posts';
+		
+		$imp_q = 	"SELECT $impressions.ad_id FROM $impressions WHERE $impressions.ad_id NOT IN ( SELECT $ads.ID from $ads WHERE $ads.post_type = %s ) GROUP BY $impressions.ad_id";
+		$clk_q = 	"SELECT $clicks.ad_id FROM $clicks WHERE $clicks.ad_id NOT IN ( SELECT $ads.ID from $ads WHERE $ads.post_type = %s ) GROUP BY $clicks.ad_id";
+		
+		$imp = $wpdb->get_results(
+			$wpdb->prepare( $imp_q, Advanced_Ads::POST_TYPE_SLUG ),
+			'ARRAY_A'
+		);
+		
+		$clk = $wpdb->get_results(
+			$wpdb->prepare( $clk_q, Advanced_Ads::POST_TYPE_SLUG ),
+			'ARRAY_A'
+		);
+		
+		$deleted_impressions = array();
+		$deleted_clicks = array();
+		
+		foreach ( $imp as $ad ) {
+			$deleted_impressions[] = $ad['ad_id'];
+		}
+		
+		foreach ( $clk as $ad ) {
+			$deleted_clicks[] = $ad['ad_id'];
+		}
+		
+		return array(
+			'impressions' => $deleted_impressions,
+			'clicks' => $deleted_clicks,
+		);
+		
+	}
+	
 	/**
 	 *  check DB info then update a transient if needed
 	 *

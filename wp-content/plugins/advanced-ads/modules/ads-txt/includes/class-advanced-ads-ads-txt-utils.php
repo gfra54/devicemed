@@ -8,13 +8,26 @@ class Advanced_Ads_Ads_Txt_Utils {
 	/**
 	 * Get file info.
 	 *
+	 * @param string $url Url to retrieve the file.
 	 * @return array/WP_Error An array containing 'exists', 'is_third_party'.
 	 *                        A WP_Error upon error.
 	 */
 	public static function get_file_info( $url = null ) {
 		$url = $url ? $url : home_url( '/' );
 
-		$response     = wp_remote_get( trailingslashit( $url ) . 'ads.txt', array( 'timeout' => 3 ) );
+		// Disable ssl verification to prevent errors on servers that are not properly configured with its https certificates.
+		/** This filter is documented in wp-includes/class-wp-http-streams.php */
+		$sslverify    = apply_filters( 'https_local_ssl_verify', false );
+		$response     = wp_remote_get(
+			trailingslashit( $url ) . 'ads.txt',
+			array(
+				'timeout'   => 3,
+				'sslverify' => $sslverify,
+				'headers'   => array(
+					'Cache-Control' => 'no-cache',
+				),
+			)
+		);
 		$code         = wp_remote_retrieve_response_code( $response );
 		$content      = wp_remote_retrieve_body( $response );
 		$content_type = wp_remote_retrieve_header( $response, 'content-type' );
@@ -73,7 +86,7 @@ class Advanced_Ads_Ads_Txt_Utils {
 
 			// Example: `one.com.au'.
 			$suffix_and_tld = implode( '.', array_slice( $host_parts, 1 ) );
-			if ( in_array( $suffix_and_tld, array( 'com.au', 'com.br' ) ) ) {
+			if ( in_array( $suffix_and_tld, array( 'com.au', 'com.br', 'com.pl' ) ) ) {
 				return false;
 			}
 

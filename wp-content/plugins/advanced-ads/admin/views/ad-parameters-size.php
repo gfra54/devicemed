@@ -1,3 +1,11 @@
+<?php
+
+// don’t show sizes for Google Ad Manager ads.
+if ( 'gam' == $type->ID ) {
+	return;
+}
+
+?>
 <span class="label"><?php _e( 'size', 'advanced-ads' ); ?></span>
 <div id="advanced-ads-ad-parameters-size">
 	<label><?php _e( 'width', 'advanced-ads' ); ?><input type="number" value="<?php echo isset( $ad->width ) ? $ad->width : 0; ?>" name="advanced_ad[width]">px</label>

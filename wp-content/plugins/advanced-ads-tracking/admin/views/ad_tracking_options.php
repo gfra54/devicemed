@@ -9,10 +9,15 @@
 	<p class="description"><?php printf(__('Please visit the <a href="%s" target="_blank">manual</a> to learn more about click tracking.', 'advanced-ads-tracking'), Advanced_Ads_Tracking_Admin::PLUGIN_LINK); ?></p>
     </div>
     <hr/>
-    <span class="label"><?php _e('url', 'advanced-ads-tracking'); ?></span>
-    <div>
-	<input name="advanced_ad[url]" style="width:60%;" id="advads-url" type="text" value="<?php echo $link; ?>"/>
-	<p class="description"><?php _e( 'Don’t use this field on JavaScript ad tags (like from Google AdSense). If you are using your own <code>&lt;a&gt;</code> tag, use <code>href="%link%"</code> to insert the tracking link.', 'advanced-ads-tracking' ); ?></p>
+	<label for="advads-url" class="label"><?php _e( 'url', 'advanced-ads-tracking' ); ?></label>
+	<div>
+		<input type="url" name="advanced_ad[url]" id="advads-url" class="advads-ad-url" style="width:60%;" value="<?php echo $link; ?>" placeholder="<?php _e( 'https://www.example.com/', 'advanced-ads' ); ?>"/>
+		<p class="description">
+			<?php _e( 'Link to target site including http(s)', 'advanced-ads' ); ?>
+		</p>
+		<p class="description">
+			<?php _e( 'Don’t use this field on JavaScript ad tags (like from Google AdSense). If you are using your own <code>&lt;a&gt;</code> tag, use <code>href="%link%"</code> to insert the tracking link.', 'advanced-ads-tracking' ); ?>
+		</p>
 	<?php $supported_placeholder_array = array( 
 		'[POST_ID]'	=> 'post ID', 
 		'[POST_SLUG]'	=> 'post slug',

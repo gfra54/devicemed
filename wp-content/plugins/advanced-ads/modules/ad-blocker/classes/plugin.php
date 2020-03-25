@@ -33,7 +33,7 @@ class Advanced_Ads_Ad_Blocker
 			 $options['upload_dir']
 		) {
 			$this->plugins_url = plugins_url();
-			add_action( 'plugins_loaded', array( $this, 'wp_plugins_loaded' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'edit_script_output' ), 101 );
 		}
 	}
 
@@ -51,15 +51,6 @@ class Advanced_Ads_Ad_Blocker
 		}
 
 		return self::$instance;
-	}
-
-	/**
-	 * Add actions/filters/hooks and localisation after module have been loaded
-	 *
-	 * @since   1.0.0
-	 */
-	public function wp_plugins_loaded() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'edit_script_output' ), 101 );
 	}
 
 	/**

@@ -91,7 +91,7 @@ class Advanced_Ads_Pro_Module_CFP
 	/**
 	 * render the markup for visitor condition 
 	 */
-	public function visitor_conditions_metabox( $options, $index = 0 ) {
+	public function visitor_conditions_metabox( $options, $index = 0, $form_name = '' ) {
 		if ( ! isset ( $options['type'] ) || '' === $options['type'] ) { return; }
 		
 		$type_options = Advanced_Ads_Visitor_Conditions::get_instance()->conditions;
@@ -100,7 +100,8 @@ class Advanced_Ads_Pro_Module_CFP
 		}
 		
 		// form name basis
-		$name = Advanced_Ads_Visitor_Conditions::FORM_NAME . '[' . $index . ']';
+		$name = Advanced_Ads_Pro_Module_Advanced_Visitor_Conditions::get_form_name_with_index( $form_name, $index );
+
 		// options
 		$limit = isset( $options['limit']  ) ? $options['limit'] : '' ;
 		$expiration = isset( $options['expiration']  ) ? $options['expiration'] : '' ;

@@ -1,4 +1,7 @@
 <?php
+
+global $wpdb;
+
 $ad_titles = array();
 $autocomplete_src = array();
 foreach( $all_ads as $_ad ) {
@@ -8,7 +11,9 @@ foreach( $all_ads as $_ad ) {
         'value' => $_ad->ID,
     );
 }
+
 $ad_titles['length'] = count( $ad_titles );
+
 $nonce = wp_create_nonce( 'advads-stats-page' );
 $has_tables = $this->has_tables();
 $analytics_home_url = 'https://analytics.google.com/analytics/web/';
@@ -22,7 +27,6 @@ $missing_tables_notice = sprintf(
 /**
  *  ad groups
  */
-global $wpdb;
 $ad_model = new Advanced_Ads_Model( $wpdb );
 $terms = $ad_model->get_ad_groups( array( 'post_status' => array( 'publish', 'future', 'draft', 'pending' ) ) );
 $groups_to_ads = array();
@@ -63,7 +67,7 @@ $formated_number = number_format_i18n( 12345.678, 3 );
 	var groupsToAds = <?php echo json_encode( $groups_to_ads ); ?>;
 	var adsToGroups = <?php echo json_encode( $ads_to_groups ); ?>;
 	var groupAutoCompSrc = <?php echo json_encode( $groups_autocomplete ); ?>;
-	var numbersFormated = '<?php echo $formated_number; ?>';
+	var numbersFormated = "<?php echo str_replace( '"', '\"', $formated_number ); ?>";
 </script>
 <div class="wrap">
     <h1><?php _e('Advertisement Statistics', 'advanced-ads-tracking'); ?></h1>

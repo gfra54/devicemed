@@ -3,10 +3,10 @@
  * Advanced Ads Image Ad Type
  *
  * @package   Advanced_Ads
- * @author    Thomas Maier <thomas.maier@webgilde.com>
+ * @author    Thomas Maier <support@wpadvancedads.com>
  * @license   GPL-2.0+
- * @link      http://webgilde.com
- * @copyright 2015 Thomas Maier, webgilde GmbH
+ * @link      https://wpadvancedads.com
+ * @copyright 2015 Thomas Maier, Advanced Ads GmbH
  * @since     1.6.10
  *
  * Class containing information about the content ad type
@@ -60,11 +60,15 @@ class Advanced_Ads_Ad_Type_Image extends Advanced_Ads_Ad_Type_Abstract{
 		    <?php $this->create_image_tag( $id, $ad ); ?>
 		</div>
 		<?php // don’t show if tracking plugin enabled
-		if( ! defined( 'AAT_VERSION' )) : ?>
-			<span class="label"><?php _e( 'URL', 'advanced-ads' ); ?></span>
+		if ( ! defined( 'AAT_VERSION' ) ) : ?>
+			<label for="advads-url" class="label"><?php _e( 'URL', 'advanced-ads' ); ?></label>
 			<div>
-				<input type="url" name="advanced_ad[url]" id="advads-url" class="advads-ad-url" value="<?php echo $url; ?>" placeholder="<?php _e( 'Link to target site', 'advanced-ads' ); ?>" /></p>
-			</div><hr/><?php 
+				<input type="url" name="advanced_ad[url]" id="advads-url" class="advads-ad-url" value="<?php echo $url; ?>" placeholder="https://www.example.com/"/>
+				<p class="description">
+					<?php _e( 'Link to target site including http(s)', 'advanced-ads' ); ?>
+				</p>
+			</div>
+			<hr/><?php
 		endif;
 	}
 
@@ -79,7 +83,7 @@ class Advanced_Ads_Ad_Type_Image extends Advanced_Ads_Ad_Type_Abstract{
 
 		$image = wp_get_attachment_image_src( $attachment_id, 'full' );
 		$style = '';
-		
+
 		if ( $image ) {
 			list( $src, $width, $height ) = $image;
 			// override image sizes with the sizes given in ad options, but in frontend only
@@ -91,13 +95,14 @@ class Advanced_Ads_Ad_Type_Image extends Advanced_Ads_Ad_Type_Abstract{
 			$hwstring = image_hwstring($width, $height);
 			$attachment = get_post($attachment_id);
 			$alt = trim(esc_textarea( get_post_meta($attachment_id, '_wp_attachment_image_alt', true) ));
-			
+
 			global $wp_current_filter;
-			
+
+			// TODO: use an array for attributes so they are simpler to extend
 			$more_attributes = $srcset = $sizes = '';
 			// create srcset and sizes attributes if we are in the the_content filter and in WordPress 4.4
-			if( isset( $wp_current_filter ) 
-				&& in_array( 'the_content', $wp_current_filter ) 
+			if( isset( $wp_current_filter )
+				&& in_array( 'the_content', $wp_current_filter )
 				&& ! defined( 'ADVADS_DISABLE_RESPONSIVE_IMAGES' )){
 				if( function_exists( 'wp_get_attachment_image_srcset' ) ){
 					$srcset = wp_get_attachment_image_srcset( $attachment_id, 'full' );
@@ -106,24 +111,32 @@ class Advanced_Ads_Ad_Type_Image extends Advanced_Ads_Ad_Type_Abstract{
 					$sizes = wp_get_attachment_image_sizes( $attachment_id, 'full' );
 				}
 				if ( $srcset && $sizes ) {
-					$more_attributes .= ' srcset=\'' . $srcset . '\' sizes=\'' . $sizes . '\'';
+					$more_attributes .= ' srcset="' . $srcset . '" sizes="' . $sizes . '"';
 				}
 			}
-			
-			// add css rule to be able to center the ad
+
+			// TODO: move to classes/compabtility.php when we have a simpler filter for additional attributes
+			// compabitility with WP Smush. Disables their lazy load for image ads because it caused them to not show up in certain positions at all.
+			$wp_smush_settings = get_option( 'wp-smush-settings' );
+			if ( isset( $wp_smush_settings['lazy_load'] ) && $wp_smush_settings['lazy_load'] ) {
+				// Lazy load is enabled.
+				$more_attributes .= ' class="no-lazyload"';
+			}
+
+			// add css rule to be able to center the ad.
 			if( isset( $ad->output['position'] ) && 'center' === $ad->output['position'] ){
 			    $style .= 'display: inline-block;';
 			}
-			
+
 			$style = apply_filters( 'advanced-ads-ad-image-tag-style', $style );
 			$style = '' !== $style ? 'style="' . $style . '"' : '';
-			
+
 			$more_attributes = apply_filters( 'advanced-ads-ad-image-tag-attributes', $more_attributes );
-			
+
 			echo rtrim("<img $hwstring") . " src='$src' alt='$alt' $more_attributes $style/>";
 		}
 	}
-	
+
 	/**
 	 * render image icon for overview pages
 	 *
@@ -135,7 +148,7 @@ class Advanced_Ads_Ad_Type_Image extends Advanced_Ads_Ad_Type_Abstract{
 		$image = wp_get_attachment_image_src( $attachment_id, 'medium', true );
 		if ( $image ) {
 			list( $src, $width, $height ) = $image;
-			
+
 			// scale down width or height to max 100px
 			if( $width > $height ){
 			    $height = absint( $height / ( $width / 100 ) );
@@ -144,11 +157,11 @@ class Advanced_Ads_Ad_Type_Image extends Advanced_Ads_Ad_Type_Abstract{
 			    $width = absint( $width / ( $height / 100 ) );
 			    $height = 100;
 			}
-			
+
 			$hwstring = trim( image_hwstring($width, $height) );
 			$attachment = get_post($attachment_id);
 			$alt = trim(strip_tags( get_post_meta($attachment_id, '_wp_attachment_image_alt', true) ));
-			
+
 			echo "<img $hwstring src='$src' alt='$alt' />";
 		}
 	}
@@ -175,35 +188,35 @@ class Advanced_Ads_Ad_Type_Image extends Advanced_Ads_Ad_Type_Abstract{
 
 		return ob_get_clean();
 	}
-	
+
 	/**
 	 * Generate a string with the original image size for output in the backend
 	 * Only show, if different from entered image sizes
-	 * 
+	 *
 	 * @param   obj	$ad Advanced_Ads_Ad
 	 * @return  str	empty, if the entered size is the same as the original size
 	 */
 	public static function show_original_image_size( $ad ){
 
 		$attachment_id = ( isset( $ad->output['image_id'] ) ) ? absint( $ad->output['image_id'] ) : '';
-		
+
 		$image = wp_get_attachment_image_src( $attachment_id, 'full' );
-		
+
 		if ( $image ) {
 			list( $src, $width, $height ) = $image;
-			?><p class="description"><?php if( ( isset( $ad->width ) && $ad->width != $width ) 
+			?><p class="description"><?php if( ( isset( $ad->width ) && $ad->width != $width )
 				|| ( isset( $ad->height ) && $ad->height != $height ) ) {
-			printf( 
+			printf(
 				/**
-				 * translators: $s is a size string like "728 x 90". 
+				 * translators: $s is a size string like "728 x 90".
 				 * This string shows up on the ad edit page of image ads if the size entered for the ad is different from the size of the uploaded image.
 				 */
 				esc_attr__( 'Original size: %s', 'advanced-ads' ), $width . '&nbsp;x&nbsp;' . $height ); ?></p><?php
 			}
 		}
-		
+
 		return '';
-		
+
 	}
 
 }

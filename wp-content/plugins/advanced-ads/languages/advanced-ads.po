@@ -5,7 +5,7 @@ msgstr ""
 "POT-Creation-Date: 2015-01-28 20:07+0100\n"
 "PO-Revision-Date: Mon Apr 25 2016 08:52:19 GMT+0200 (CEST)\n"
 "Last-Translator: admin <post@webzunft.de>\n"
-"Language-Team: webgilde <thomas.maier@webgilde.com>\n"
+"Language-Team: webgilde <support@wpadvancedads.com>\n"
 "Language: Unknown locale\n"
 "Plural-Forms: nplurals=2; plural=n != 1\n"
 "MIME-Version: 1.0\n"
@@ -39,7 +39,7 @@ msgid "Thomas Maier"
 msgstr ""
 
 #. Author URI of the plugin
-msgid "http://webgilde.com"
+msgid "https://wpadvancedads.com"
 msgstr ""
 
 #: ../admin/class-advanced-ads-admin.php:212 ../classes/display-conditions.php:

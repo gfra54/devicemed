@@ -143,7 +143,14 @@ $alerts_advads_messages = Advanced_Ads_Adsense_MAPI::get_adsense_alert_messages(
 		#auto-adsense-settings-div .widget-col:first-child:after { top: auto; right: auto; bottom: -10px; left: 20px; display: inline-block; padding: 0px 5px 0px 5px; }
 	}
 </style>
-<?php else : ?>
+<?php
+	echo "<br/><br/><br/><hr>";
+	include ADVADS_BASE_PATH . 'modules/gadsense/admin/views/auto-ads-video.php';
+	?><p>
+	<a href="<?php echo esc_url( ADVADS_URL ); ?>place-adsense-ad-unit-manually/#utm_source=advanced-ads&utm_medium=link&utm_campaign=adsense-manually" style="text-decoration: none;" target="_blank"><span class="dashicons dashicons-welcome-learn-more"></span>&nbsp;<?php
+		esc_attr_e( 'How to choose specific positions for AdSense ad units', 'advanced-ads' ); ?></a>
+	</p><?php
+else : ?>
 <p><?php // translators: %1$s is the opening link tag to our manual; %2$s is the appropriate closing link tag; %3$s is the opening link tag to our help forum; %4$s is the appropriate closing link tag
 printf(__( 'Problems with AdSense? Check out the %1$smanual%2$s or %3$sask here%4$s.', 'advanced-ads' ), 
 	'<a href="' . ADVADS_URL . 'adsense-ads/#utm_source=advanced-ads&utm_medium=link&utm_campaign=adsense-manual-check" target="_blank">',
@@ -158,7 +165,7 @@ printf(__( 'Problems with AdSense? Check out the %1$smanual%2$s or %3$sask here%
 <div id="mapi-alerts-overlay">
     <div style="position:relative;text-align:center;display:table;width:100%;height:100%;">
         <div style="display:table-cell;vertical-align:middle;">
-            <img alt="loading" src="<?php echo esc_url( ADVADS_BASE_URL . 'admin/assets/img/loader.gif;' ); ?>" />
+            <img alt="loading" src="<?php echo esc_url( ADVADS_BASE_URL . 'admin/assets/img/loader.gif' ); ?>" />
         </div>
     </div>
 </div>

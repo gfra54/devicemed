@@ -90,12 +90,16 @@ function advads_can_display_ads(){
 
 /**
  * Are we currently on an AMP URL?
- * Will always return `false` and show PHP Notice if called before the `parse_query` hook.
+ * Will always return `false` and show PHP Notice if called before the `wp` hook.
  *
  * @return bool true if amp url, false otherwise
  */
 function advads_is_amp() {
+	global $pagenow;
 	if ( is_admin()
+		|| is_embed()
+		|| is_feed()
+		|| ( isset( $pagenow ) && in_array( $pagenow, array( 'wp-login.php', 'wp-signup.php', 'wp-activate.php' ), true ) )
 		|| ( defined( 'REST_REQUEST' ) && REST_REQUEST )
 		|| ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST )
 	) {
@@ -103,15 +107,13 @@ function advads_is_amp() {
 	}
 
 	if ( ! did_action( 'wp' ) ) {
-		Advanced_Ads::log( sprintf( esc_html( '%1$s was called before the %2$s action. %3$s' ),
-			'advads_is_amp()', 'wp', wp_debug_backtrace_summary() )
-		);
 		return false;
 	}
 
 	return ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() )
 	|| ( function_exists( 'is_wp_amp' ) && is_wp_amp() )
 	|| ( function_exists( 'ampforwp_is_amp_endpoint' ) && ampforwp_is_amp_endpoint() )
+	|| ( function_exists( 'is_penci_amp' ) && is_penci_amp() )
 	|| isset( $_GET [ 'wpamp' ] );
 }
 
