@@ -36,6 +36,8 @@ class wsNewMenuHighlighter {
 		'plugins.php'                       => true,
 		'post-new.php'                      => true,
 		'profile.php'                       => true,
+		'privacy.php'                       => true,
+		'site-health.php'                   => true,
 		'theme-editor.php'                  => true,
 		'themes.php'                        => true,
 		'tools.php'                         => true,
@@ -44,6 +46,14 @@ class wsNewMenuHighlighter {
 		'user-new.php'                      => true,
 		'users.php'                         => true,
 		'widgets.php'                       => true,
+		//Network admin items.
+		'settings.php'                      => true,
+		'site-new.php'                      => true,
+		'sites.php'                         => true,
+		'theme-install.php'                 => true,
+		'upgrade.php'                       => true,
+		//Hidden ACF menu. It's used to show the "Welcome to Advanced Custom Fields" page.
+		'edit.php?post_type=acf-field-group&page=acf-settings-info' => true,
 	);
 
 	private $menusWithNewSubmenus = array();
@@ -180,10 +190,10 @@ class wsNewMenuHighlighter {
 
 		if ( isset($GLOBALS['wp_menu_editor']) && is_callable(array(
 				$GLOBALS['wp_menu_editor'],
-				'register_base_dependencies',
+				'register_jquery_plugins',
 			))
 		) {
-			$GLOBALS['wp_menu_editor']->register_base_dependencies();
+			$GLOBALS['wp_menu_editor']->register_jquery_plugins();
 			$dependencies[] = 'jquery-cookie';
 		}
 

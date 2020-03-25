@@ -12,7 +12,7 @@ add_filter('pre_get_posts','search_filter');
 
 
 
-
+/*
 add_filter('posts_orderby','changer_ordre_recherche',10,2);
 function changer_ordre_recherche( $orderby, $query ){
     global $wpdb;
@@ -39,4 +39,8 @@ function include_tags_in_search($query){
             )
         ));
     }
-}
+}*/
+
+
+
+

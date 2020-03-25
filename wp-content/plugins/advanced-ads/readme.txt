@@ -1,11 +1,11 @@
 === Advanced Ads – Ad Manager & AdSense ===
-Contributors: webzunft
+Contributors: webzunft, advancedads
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5RRRCEBGN3UT2
 Tags: ads, ad manager, ad rotation, adsense, banner
 Requires at least: 4.6
-Tested up to: 5.1
-Requires PHP: 5.4
-Stable tag: 1.12
+Tested up to: 5.2
+Requires PHP: 5.6
+Stable tag: 1.14.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,14 +19,20 @@ Are you looking for a simple ad manager plugin? These are the top arguments to u
 * Google AdSense Partner
 * most features to test and optimize ads
 * unlimited ad units
+* ads.txt support
 * dedicated Gutenberg block for ads
 * works with all ad types and networks (e.g. Google AdSense, Google Ad Manager, or Amazon ads)
 * the only solution with *Ad Health* integration and Google AdSense violation checks
 * best rated [free support](https://wordpress.org/support/plugin/advanced-ads)
 
+This is what our users are saying about Advanced Ads:
+
+> We use this plugin to deliver rotating ads on a community news site, and it’s great. Both feature-rich and reliable, your imagination is the limit when it comes to the product you want to create for your users. We’ve delivered over a million ad impressions since we launched less than a year ago, using a combination of sidebar, top, sticky and in-content placements — both HTML5 and images. Advanced Ads makes it easy for our small team to deliver a good experience to our users and our advertisers.
+> mytown304 on wp.org
+
 Would you like to know if there is a certain feature, what the optimized setup would be, or how to implement your client’s demands? Just [open a thread in the forum](https://wordpress.org/support/plugin/advanced-ads#new-post)!
 
-Based on my experience as a publisher with millions of monthly served ads, I've developed this ad management plugin for WordPress when no other solution offered testing and optimization features. It allowed us to grow to 100 MM monthly ad impressions. Benefit from this knowledge and monetize your website today!
+Based on my experience as a publisher with millions of monthly served ads, I've developed this ad management plugin for WordPress when no other solution offered testing and optimization features. It allowed us to grow to 100 MM monthly ad impressions. Benefit from this knowledge about advertising and monetize your website today!
 
 [Full Feature List](https://wpadvancedads.com/features/).
 
@@ -43,8 +49,8 @@ Based on my experience as a publisher with millions of monthly served ads, I've 
 
 choose between different ad types that enable you to:
 
-* insert ads content and banners from all ad and affiliate networks (e.g., Google AdSense, Chitika, Amazon, BuySellAds, Google Ad Manager, DoubleClick (DFP), Ezoic, media.net, Booking.com, Tradedoubler, Awin, Getyourguide, The Moneytizer...)
-* dedicated support for all types of Google AdSense ads, including AdSense text and diplay ads, native ads (AdSense In-article, AdSense In-feed, AdSense matched content), AdSense link units (standard and responsive), Google AdSense Auto ads, and AdSense Auto ads for AMP)
+* insert ads content and banners from all ad and affiliate networks (e.g., Google AdSense, Amazon, BuySellAds, Google Ad Manager, DoubleClick (DFP), Ezoic, media.net, Booking.com, Tradedoubler, Awin, Getyourguide, The Moneytizer...)
+* dedicated support for all types of Google AdSense ads, including text and diplay ads, native ads (In-article, In-feed, matched content), link units (standard and responsive), Auto ads, and Auto ads for AMP
 * display images and image banners
 * create content-rich ads with the WordPress TinyMCE editor
 * create Amazon ads with the Rich Content ad type and the [Amazon Associates Link Builder](https://wordpress.org/plugins/amazon-associates-link-builder/) or insert contextual Amazon Native Shopping Ads
@@ -83,6 +89,10 @@ serve ads by conditions based on the visitor. [List of all visitor conditions](h
 * display ads by geolocation with the [Geo Targeting add-on](https://wpadvancedads.com/add-ons/geo-targeting/)
 * display ads by browser width with the [Responsive add-on](https://wpadvancedads.com/add-ons/responsive-ads/)
 
+> **Fantastic plugin and outstanding support**
+> I tried at least three other ad plugins for WordPress and ‘Advanced Ads’ is by and far the best one. Last but not least in the support. The first port of call are a number of excellent tutorials. And finally the hands on support. I don’t quite know how he does it but the speed and depth of responses are absolutely amazing.
+> djsawyer on wp.org
+
 = ad injection | placements =
 
 Placements to insert ads in pre-defined positions in your theme and content. [List of all placements](https://wpadvancedads.com/manual/placements/)
@@ -108,16 +118,30 @@ Amazing features of the most powerful and easy Google AdSense plugin.
 
 * unlimited Google AdSense ads banners
 * pull ad units directly from your Google AdSense account
+* show AdSense revenue in WP Admin
 * change settings of your Google AdSense ads directly from your WordPress backend
-* supports all Google AdSense ad types, including Google AdSense display ads, AdSense link units, native ads like Google AdSense In-feed ads, Google AdSense In-article ads, Google AdSense matched content ads, Google AdSense Auto ads, and Google AdSense Auto ads for AMP
+* supports all Google AdSense ad types, including Google AdSense display ads, link units, native ads like In-feed ads, In-article ads, matched content ads, Google AdSense Auto ads, and Google AdSense Auto ads for AMP
 * change type and sizes of an ad without going into your Google AdSense account
 * hide Google AdSense advertisements on 404 pages by default (to comply with Google AdSense terms)
 * insert Google AdSense code for verification and AdSense Auto Ads (previously called Page-Level ads and QuickStart)
+* disable Google Auto ads anchor ads at the top of the page
 * easy Ad Health integration and Google AdSense violation checks
 * option to make the Google AdSense background transparent
 * place Google AdSense In-feed ads using the also free [In-feed add-on](https://wordpress.org/plugins/advanced-ads-adsense-in-feed/)
 * assistant for exact sizes of responsive Google AdSense code with the [Responsive add-on](https://wpadvancedads.com/add-ons/responsive-ads/)
 * convert Google AdSense ads into AMP ads automatically with the [Responsive add-on](https://wpadvancedads.com/add-ons/responsive-ads/)
+* ads.txt generated with the correct AdSense information automatically
+
+Like j4ckson185, there are thousands of happy AdSense users:
+
+> Your app is awesome, congratulations! Google Adsense suggests using your app on its official website, it’s incredible!
+
+= ads.txt =
+
+* generates ads.txt with custom content
+* adds the content for AdSense to the ads.txt automatically
+
+(available with WordPress 5.1)
 
 https://vimeo.com/299410390
 
@@ -131,7 +155,7 @@ Learn more on the [plugin homepage](https://wpadvancedads.com).
 
 Thank you for motivating us with your [positive review](https://wordpress.org/support/plugin/advanced-ads/reviews/?rate=5#new-post).
 
-Localizations: Czech, Dutch, English, French, German, Italian, Japanese, Norwegian, Portuguese, Slovak, Spanish, Turkish, Vietnamese
+Localizations: Czech, Dutch, English, French, German, Italian, Japanese, Norwegian, Portuguese, Slovak, Spanish, Turkish, Vietnamese, Polish, Chinese (Taiwan)
 
 > <strong>Add-Ons</strong>
 >
@@ -257,7 +281,8 @@ Read more about ad blockers and the features Advanced Ads has to deal with them 
 
 = Does the plugin support an ads.txt? =
 
-Google AdSense and some other networks ask you to provide an ads.txt. You can create and integrate this file easily with [this plugin](https://wordpress.org/plugins/ads-txt/).
+Google AdSense and some other networks ask you to provide an ads.txt.
+Advanced Ads can create that file automatically with the correct information for AdSense, when you enable the ads.txt feature in Advanced Ads > Settings > General > ads.txt and enter your AdSense publisher ID in Advanced Ads > Settings > AdSense.
 
 = I am a developer. Can I customize the plugin? =
 
@@ -272,10 +297,139 @@ Yes. Advanced Ads is based on WordPress standards and therefore easily customiza
 5. Dynamically change AdSense ad options in your WordPress backend.
 6. Choose where to display your ads using many conditions.
 7. Use various conditions to choose who should see ads (basic plugin and more in add-ons).
-8. Track impressions and clicks (Tracking add-on).
-9. Convert AdSense ads into AMP automatically (Responsive add-on)
+8. See AdSense earnings in your WP Backend
+9. Track impressions and clicks (Tracking add-on).
+10. Convert AdSense ads into AMP automatically (Responsive add-on)
 
 == Changelog ==
+
+= 1.14.8 =
+
+* replaced AdSense with dummy ads on Customizer and Elementor preview pages to prevent issues
+* make text fields in Advanced Ads settings fully resizable
+* removed unneeded ads.txt warning on com.br domains
+
+= 1.14.7 =
+
+* allow "Footer code" and "Sidebar Widget" placements on AMP pages created by the official AMP plugin
+* prevented AMP warnings on XMLRPC requests
+* removed unused debug function
+* made editing of AdSense ads possible in PHP < 5.5.10 (please note that Advanced Ads is recommended for PHP > 5.6)
+
+= 1.14.6 =
+
+* fixed frontend issue showing for admins if the HEAD placement is used
+
+= 1.14.5 =
+
+* sanitize Container ID option on save and warn about wrong format
+* made Placements page work when another plugin includes Twitter Bootstrap
+* updated missing ads.txt warning
+* disabled Privacy module on AMP pages so that the Google AMP cache shows them
+* fixed warnings for some features on AMP pages
+* fixed suggestion to switch Auto ads code in plain text ad type to AdSense ad type
+
+= 1.14.4 =
+
+* fixed JavaScript issue on ad edit pages
+
+= 1.14.3 =
+
+* allow adding ads to newsletter emails created in MailPoet using the shortcode `[custom:ad:AD_ID]` in the email template
+* prevented error when Piklist plugin is used
+* fixed JS error on post edit pages that had no real consequences
+* minor fixes to licensing settings (Pro only)
+
+= 1.14.2 =
+
+* preparations for [Advanced Ads Pro](https://wpadvancedads.com/add-ons/advanced-ads-pro/) 2.4.2
+* fixed time zone difference in AdSense reporting
+* fixed script dependency in the backend
+
+= 1.14.1 =
+
+* fixed issue with PHP 5.2 (please update to PHP 5.6.20 since it is the minimum requirement of WordPress)
+* fixed potential conflict with ClassiPress ad categories
+* prevented user interface from looking broken when Twitter Bootstrap is added by another source
+
+= 1.14 =
+
+* rewrite of AdSense code logic. Please reach out through https://wpadvancedads.com/support/ if you discover any issues
+* show AdSense revenue in WP Admin
+* removed parent ad group option since it was never used by Advanced Ads
+* made newly installed Advanced Ads work correctly with Q2W3 Fixed Widget
+
+= 1.13.8 =
+
+* prevented warning about missing ads.txt file when the file exists
+* added a hint about solving ads.txt issue on WP Engine platform
+* allow to translate Ad Label option if WPML String Translation is used
+* fixed Ad Health notices showing also ignored issues when adding a new notice
+* inject ads in the outermost `the_content` when they may have been injected in an inner `the_content`
+* added chain of nested `the_content` filters to `debug.log` to allow reasoning about possible issues
+
+= 1.13.7 =
+
+* set `ADVANCED_ADS_DISABLE_EDIT_BAR` to disable frontend edit bar
+* set better default data for new AdSense ads
+* when `the_content` filters are nested, use the outermost one to inject ads
+* hide certain notices for a longer period even if they stay valid
+* removed notice about plugin updates since WP 5.2 handles this now
+* removed notice about website being hosted on wp.com
+* honor "Hide ads for user roles" and "Hide ads from bots" settings when displaying AdSense verification code & Auto ads
+* prevented some attachment pages containing ads from being indexed
+
+= 1.13.6 =
+
+* fixed missing index issue raised when Tracking settings never were saved
+
+= 1.13.5 =
+
+* option to hide ads by user role does now show all registered roles
+* prevented possible JavaScript error in Ad Health
+* updated minimum PHP version check to warn below PHP 5.6.20
+* exclude LiteSpeed Cache bot from bot detection
+* fixed Ad Health notices with invalid ID
+
+= 1.13.4 =
+
+* improved compatibility with WPML
+* improved errors given when no ad units were found in the AdSense account
+* improved UI when hiding ad health notices
+* fixed issue when logging the AdSense Hidden problem
+* fixed issue on ad filter list when two terms with the same slug exist
+* fixed unlikely case of an SQL error on ad overview page
+* fixed issue with Ad Health bar in frontend when jQuery was not found
+* added a link to ads.txt settings from AdSense warning about missing ads.txt file
+* removed unneeded ads.txt warning on com.au domains
+
+= 1.13.3 =
+
+* added link to get help in some error notices
+* fixed error caused by ads.txt module on multisites that use WordPress lower then 5.1
+* fixed compatibility with Gutenberg plugin
+
+= 1.13.2 =
+
+* added AdSense ad slot ID to "AdSense hidden" warning
+* improved ads.txt test for existing files and other problems
+* fixed broken link preventing the Privacy settings from working
+
+= 1.13.1 =
+
+* fixed issue with PHP 7.1 and higher
+
+= 1.13 =
+
+* added support for 'ads.txt'
+* added option to disable Google Auto ads anchor ads at the top of the page
+* prevented attachment content from being shown next to Rich Content ads on attachment pages
+* allow to hide "Ads are disabled" warning
+* added AdSense connection errors to notifications
+* remove hidden notices if resolved
+* load notices box without JavaScript
+* stop content injection into wp_router pages when ads are disabled on secondary queries
+* introduced `advanced-ads-max-ad-weight` filter to allow manipulating the available ad weight
 
 = 1.12 =
 

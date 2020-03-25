@@ -189,8 +189,8 @@ endforeach;
 			var connector = '<input style="display:none;" type="checkbox" name="<?php echo Advanced_Ads_Display_Conditions::FORM_NAME; ?>[' + display_condition_index + '][connector]" checked="checked" value="or" id="advads-conditions-'+ display_condition_index +'-connector"><label for="advads-conditions-'+ display_condition_index +'-connector"><?php esc_attr_e( 'or', 'advanced-ads' ); ?></label>';
 			var newline = '<tr class="advads-conditions-connector advads-conditions-connector-or"><td colspan="3">'+connector+'</td></tr><tr><td class="advads-conditions-type" data-condition-type="'+ display_condition_type +'">' + display_condition_title + '</td><td>' + r + '</td><td><button type="button" class="advads-conditions-remove button">x</button></td></tr>';
 			$('#advads-display-conditions table tbody').append(newline);
-			if ( advads_use_ui_buttonset() ) {
-				$('#advads-display-conditions table tbody .advads-conditions-single.advads-buttonset').buttonset();
+			if ( jQuery.fn.advads_buttonset ) {
+				$('#advads-display-conditions table tbody .advads-conditions-single.advads-buttonset').advads_buttonset();
 			}
 			if ( jQuery.fn.advads_button ) {
 				$('#advads-display-conditions table tbody .advads-conditions-connector input').advads_button();

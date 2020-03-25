@@ -52,7 +52,6 @@ class Advanced_Ads_Ad_Ajax_Callbacks {
 	public function load_ad_parameters_metabox() {
 	    
 		check_ajax_referer('advanced-ads-admin-ajax-nonce', 'nonce');
-	    
 		if ( ! current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_edit_ads') ) ) {
 			return;
 		}
@@ -68,9 +67,11 @@ class Advanced_Ads_Ad_Ajax_Callbacks {
 			$type = $types[ $type_string ];
 			$type->render_parameters( $ad );
 
-			if( 'dummy' !== $type_string ) :
-			    include ADVADS_BASE_PATH . 'admin/views/ad-parameters-size.php';
-			endif;
+			$types_without_size = array('dummy');
+            $types_without_size = apply_filters( 'advanced-ads-types-without-size', $types_without_size );
+			if ( ! in_array($type_string, $types_without_size) ) {
+                include ADVADS_BASE_PATH . 'admin/views/ad-parameters-size.php';
+            }
 		}
 
 		die();

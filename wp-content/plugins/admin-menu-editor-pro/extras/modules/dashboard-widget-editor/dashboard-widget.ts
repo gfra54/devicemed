@@ -32,12 +32,15 @@ abstract class AmeDashboardWidget {
 
 	canBeDeleted: boolean = false;
 	canChangePriority: boolean = false;
+	canChangeTitle: boolean = true;
+	areAdvancedPropertiesVisible: KnockoutObservable<boolean>;
+
 	widgetEditor: AmeDashboardWidgetEditor;
 
 	propertyTemplate: string = '';
 	protected widgetType: string = null;
 
-	constructor(settings: WidgetPropertyMap, widgetEditor: AmeDashboardWidgetEditor) {
+	protected constructor(settings: WidgetPropertyMap, widgetEditor: AmeDashboardWidgetEditor) {
 		this.rawProperties = settings;
 		this.widgetEditor = widgetEditor;
 
@@ -45,7 +48,7 @@ abstract class AmeDashboardWidget {
 		this.isPresent = !!(settings['isPresent']);
 		this.canBeDeleted = !this.isPresent;
 
-		var self = this;
+		const self = this;
 		this.safeTitle = ko.computed({
 			read: function () {
 				return AmeDashboardWidget.stripAllTags(self.title());
@@ -54,6 +57,7 @@ abstract class AmeDashboardWidget {
 		});
 
 		this.isOpen = ko.observable(false);
+		this.areAdvancedPropertiesVisible = ko.observable(true);
 
 		this.grantAccess = new AmeActorAccessDictionary(
 			settings.hasOwnProperty('grantAccess') ? settings['grantAccess'] : {}
@@ -81,7 +85,7 @@ abstract class AmeDashboardWidget {
 					let areAnyActorsEnabled = false, areAnyActorsDisabled = false;
 
 					for (let index = 0; index < actors.length; index++) {
-						let hasAccess = this.actorHasAccess(actors[index].id, actors[index]);
+						let hasAccess = this.actorHasAccess(actors[index].getId(), actors[index]);
 						if (hasAccess) {
 							areAnyActorsEnabled = true;
 						} else if (hasAccess === false) {
@@ -101,7 +105,7 @@ abstract class AmeDashboardWidget {
 					//Enable/disable all.
 					const actors = widgetEditor.actorSelector.getVisibleActors();
 					for (let index = 0; index < actors.length; index++) {
-						this.grantAccess.set(actors[index].id, enabled);
+						this.grantAccess.set(actors[index].getId(), enabled);
 					}
 				}
 			}
@@ -110,7 +114,7 @@ abstract class AmeDashboardWidget {
 
 	private static stripAllTags(input: string) {
 		//Based on: http://phpjs.org/functions/strip_tags/
-		var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+		const tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
 			commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
 		return input.replace(commentsAndPhpTags, '').replace(tags, '');
 	}
@@ -124,9 +128,9 @@ abstract class AmeDashboardWidget {
 			customValue = sentinel;
 		}
 
-		var _customValue = ko.observable<string>(customValue);
+		let _customValue = ko.observable<string>(customValue);
 
-		var observable = ko.computed<string>({
+		let observable = ko.computed<string>({
 			read: function (): string {
 				let customValue = _customValue();
 				if (customValue === sentinel) {
@@ -136,8 +140,8 @@ abstract class AmeDashboardWidget {
 				}
 			},
 			write: function (newValue: string) {
-				var oldValue = _customValue();
-				var valueToWrite = writeCallback(newValue, oldValue);
+				const oldValue = _customValue();
+				let valueToWrite = writeCallback(newValue, oldValue);
 
 				if ((valueToWrite === defaultValue) || (valueToWrite === null)) {
 					valueToWrite = sentinel;
@@ -167,7 +171,7 @@ abstract class AmeDashboardWidget {
 	}
 
 	toPropertyMap(): WidgetPropertyMap {
-		var properties = {
+		let properties = {
 			'id': this.id,
 			'title': this.title(),
 			'location': this.location(),
@@ -184,7 +188,7 @@ abstract class AmeDashboardWidget {
 		return properties;
 	}
 
-	private actorHasAccess(actorId: string, actor?: AmeBaseActor) {
+	protected actorHasAccess(actorId: string, actor?: IAmeActor, defaultAccess: boolean = true) {
 		//Is there a setting for this actor specifically?
 		let hasAccess = this.grantAccess.get(actorId, null);
 		if (hasAccess !== null) {
@@ -211,7 +215,7 @@ abstract class AmeDashboardWidget {
 		}
 
 		//By default, all widgets are visible to everyone.
-		return true;
+		return defaultAccess;
 	}
 }
 
@@ -222,7 +226,7 @@ interface KnockoutComputed<T> {
 
 class AmeActorAccessDictionary {
 	items: { [actorId: string] : KnockoutObservable<boolean>; } = {};
-	private numberOfObservables: KnockoutObservable<number>;
+	private readonly numberOfObservables: KnockoutObservable<number>;
 
 	constructor(initialData?: AmeDictionary<boolean>) {
 		this.numberOfObservables = ko.observable(0);
@@ -248,8 +252,9 @@ class AmeActorAccessDictionary {
 		}
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	getAll(): AmeDictionary<boolean> {
-		var result: AmeDictionary<boolean> = {};
+		let result: AmeDictionary<boolean> = {};
 		for (let actorId in this.items) {
 			if (this.items.hasOwnProperty(actorId)) {
 				result[actorId] = this.items[actorId]();
@@ -374,6 +379,103 @@ class AmeCustomHtmlWidget extends AmeDashboardWidget {
 		properties['content'] = this.content();
 		properties['filtersEnabled'] = this.filtersEnabled();
 		return properties;
+	}
+}
+
+class AmeCustomRssWidget extends AmeDashboardWidget {
+	feedUrl: KnockoutObservable<string>;
+
+	showAuthor: KnockoutObservable<boolean>;
+	showDate: KnockoutObservable<boolean>;
+	showSummary: KnockoutObservable<boolean>;
+
+	maxItems: KnockoutObservable<number>;
+
+	constructor(settings: WidgetPropertyMap, widgetEditor: AmeDashboardWidgetEditor) {
+		const _ = AmeDashboardWidget._;
+		settings = _.merge(
+			{
+				id: 'new-untitled-rss-widget',
+				isPresent: true,
+				grantAccess: {}
+			},
+			settings
+		);
+		super(settings, widgetEditor);
+
+		this.widgetType = 'custom-rss';
+		this.canChangePriority = true;
+
+		this.title = ko.observable(_.get(settings, 'title', 'New RSS Widget'));
+		this.location = ko.observable(_.get(settings, 'location', 'normal'));
+		this.priority = ko.observable(_.get(settings, 'priority', 'high'));
+
+		this.feedUrl = ko.observable(_.get(settings, 'feedUrl', ''));
+		this.maxItems = ko.observable(_.get(settings, 'maxItems', 5));
+		this.showAuthor = ko.observable(_.get(settings, 'showAuthor', true));
+		this.showDate = ko.observable(_.get(settings, 'showDate', true));
+		this.showSummary = ko.observable(_.get(settings, 'showSummary', true));
+
+		this.isPresent = true;
+		this.canBeDeleted = true;
+
+		this.propertyTemplate = 'ame-custom-rss-widget-template';
+	}
+
+	toPropertyMap(): WidgetPropertyMap {
+		let properties = super.toPropertyMap();
+		let storedProps = ['feedUrl', 'showAuthor', 'showDate', 'showSummary', 'maxItems'];
+		for (let i = 0; i < storedProps.length; i++) {
+			let name = storedProps[i];
+			properties[name] = this[name]();
+		}
+		return properties;
+	}
+}
+
+class AmeWelcomeWidget extends AmeDashboardWidget {
+	static permanentId: string = 'special:welcome-panel';
+
+	constructor(settings: WidgetPropertyMap, widgetEditor: AmeDashboardWidgetEditor) {
+		const _ = AmeDashboardWidget._;
+
+		if (_.isArray(settings)) {
+			settings = {};
+		}
+		settings = _.merge(
+			{
+				id: AmeWelcomeWidget.permanentId,
+				isPresent: true,
+				grantAccess: {}
+			},
+			settings
+		);
+		super(settings, widgetEditor);
+
+		this.title = ko.observable('Welcome');
+		this.location = ko.observable('normal');
+		this.priority = ko.observable('high');
+
+		this.canChangeTitle = false;
+		this.canChangePriority = false;
+		this.areAdvancedPropertiesVisible(false);
+
+		//The "Welcome" widget is part of WordPress core. It's always present and can't be deleted.
+		this.isPresent = true;
+		this.canBeDeleted = false;
+
+		this.propertyTemplate = 'ame-welcome-widget-template';
+	}
+
+	protected actorHasAccess(
+		actorId: string,
+		actor?: AmeBaseActor,
+		defaultAccess: boolean = true
+	): boolean | boolean | boolean | boolean {
+		//Only people who have the "edit_theme_options" capability can see the "Welcome" panel.
+		//See /wp-admin/index.php, line #108 or thereabouts.
+		defaultAccess = AmeActors.hasCapByDefault(actorId, 'edit_theme_options');
+		return super.actorHasAccess(actorId, actor, defaultAccess);
 	}
 }
 

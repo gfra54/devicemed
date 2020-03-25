@@ -175,8 +175,10 @@ advads = {
 		// use only visible elements
 		if( typeof options.moveintohidden === 'undefined' ){
 		    target = jQuery( target ).filter(':visible');
+		} else {
+			target = jQuery( target );
 		}
-		
+
 		// print warning in console if the element appears multiple times
 		if( target.length > 1 ){
 			console.log( "Advanced Ads: element '" + target_string + "' found " + target.length + " times." );		
@@ -249,9 +251,17 @@ advads = {
 		if ( options.is_invisible ) {
 		    el.hide();
 		}
-		// reset "right" to prevent conflicts
-		el.css('position', 'fixed').css('top', topoffset + 'px').css('left', leftoffset + 'px').css('right', '');
+		if ( 'left' === options.offset ) {
+			// Allow to scale the nested image down when it has `max-width: 100%` and touches the left edge of the viewport.
+			var rightoffset = jQuery( window ).width() - leftoffset - el.outerWidth();
+			el.css( 'position', 'fixed' ).css( 'top', topoffset + 'px' ).css( 'right', rightoffset + 'px' ).css( 'left', '' );
+		} else {
+			// reset "right" to prevent conflicts
+			el.css('position', 'fixed').css('top', topoffset + 'px').css('left', leftoffset + 'px').css('right', '');
+		}
+
 	},
+
 	/**
 	 * find the main wrapper
 	 *  either id or first of its class

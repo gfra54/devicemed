@@ -133,7 +133,7 @@ class Advanced_Ads_Admin_Settings {
 		// add setting fields for user role.
 		add_settings_field(
 			'hide-for-user-role',
-			__( 'Hide ads for logged in users', 'advanced-ads' ),
+			__( 'Hide ads for user roles', 'advanced-ads' ),
 			array( $this, 'render_settings_hide_for_users' ),
 			$hook,
 			'advanced_ads_setting_section_disable_ads'
@@ -170,6 +170,16 @@ class Advanced_Ads_Admin_Settings {
 			$hook,
 			'advanced_ads_setting_section_disable_ads'
 		);
+		// dummy setting field to hide ads for post types.
+		if( !defined( 'AAP_VERSION' ) ) {
+			add_settings_field(
+				'disable-by-post-types-pro',
+				__( 'Disable ads for post types', 'advanced-ads' ),
+				array( $this, 'render_settings_disable_post_types' ),
+				$hook,
+				'advanced_ads_setting_section_disable_ads'
+			);
+		}
 		// opt out from internal notices.
 		add_settings_field(
 			'disable-notices',
@@ -350,9 +360,12 @@ class Advanced_Ads_Admin_Settings {
 	 */
 	public function render_settings_licenses_pitch_section_callback() {
 
-		echo '<h3>' . __( 'Are you missing something?', 'advanced-ads' ) . '</h3>';
+		echo '<h3>' . esc_attr__( 'Are you missing something?', 'advanced-ads' ) . '</h3>';
 
-		Advanced_Ads_Overview_Widgets_Callbacks::render_addons( $hide_activated = true );
+		$link = ADVADS_URL . 'manual/how-to-install-an-add-on/#utm_source=advanced-ads&utm_medium=link&utm_campaign=settings-licenses';
+		echo '<p><a href="' . esc_url( $link ) . '" target="_blank">' . esc_attr__( 'How to install and activate an add-on.', 'advanced-ads' ) . '</a></p>';
+
+		Advanced_Ads_Overview_Widgets_Callbacks::render_addons( true );
 	}
 
 	/**
@@ -400,24 +413,25 @@ class Advanced_Ads_Admin_Settings {
 	 * @since 1.1.1
 	 */
 	public function render_settings_hide_for_users() {
-		$options                 = Advanced_Ads::get_instance()->options();
-		$current_capability_role = isset( $options['hide-for-user-role'] ) ? $options['hide-for-user-role'] : 0;
-
-		$capability_roles = array(
-			''                 => __( '(display to all)', 'advanced-ads' ),
-			'read'             => __( 'Subscriber', 'advanced-ads' ),
-			'delete_posts'     => __( 'Contributor', 'advanced-ads' ),
-			'edit_posts'       => __( 'Author', 'advanced-ads' ),
-			'edit_pages'       => __( 'Editor', 'advanced-ads' ),
-			'activate_plugins' => __( 'Admin', 'advanced-ads' ),
-		);
-		echo '<select name="' . ADVADS_SLUG . '[hide-for-user-role]">';
-		foreach ( $capability_roles as $_capability => $_role ) {
-			echo '<option value="' . $_capability . '" ' . selected( $_capability, $current_capability_role, false ) . '>' . $_role . '</option>';
+		$options = Advanced_Ads::get_instance()->options();
+		if ( isset( $options['hide-for-user-role'] ) ) {
+			$hide_for_roles = Advanced_Ads_Utils::maybe_translate_cap_to_role( $options['hide-for-user-role'] );
+		} else {
+			$hide_for_roles = array();
 		}
-		echo '</select>';
 
-		echo '<p class="description">' . __( 'Choose the lowest role a user must have in order to not see any ads.', 'advanced-ads' ) . '</p>';
+		global $wp_roles;
+		$roles = $wp_roles->get_names();
+
+		echo '<div id="advads-settings-hide-by-user-role">';
+		foreach ( $roles as $_role => $_display_name ) {
+			$checked = in_array( $_role, $hide_for_roles, true );
+			echo '<label><input type="checkbox" value="' . esc_attr( $_role ) . '" name="' . ADVADS_SLUG . '[hide-for-user-role][]" '
+				. checked( $checked, true, false ) . '>' . esc_html( $_display_name ) . '</label>';
+		}
+		echo '</div>';
+
+		echo '<p class="description">' . esc_html__( 'Choose the roles a user must have in order to not see any ads.', 'advanced-ads' ) . '</p>';
 	}
 
 	/**
@@ -504,6 +518,21 @@ class Advanced_Ads_Admin_Settings {
 		}
 		echo '<span class="description"><a href="' . ADVADS_URL . 'hide-ads-from-bots/#utm_source=advanced-ads&utm_medium=link&utm_campaign=settings" target="blank">' . __( 'Read this first', 'advanced-ads' ) . '</a></span>';
 		echo '<p class="description">' . __( 'Hide ads from crawlers, bots and empty user agents.', 'advanced-ads' ) . '</p>';
+	}
+
+	/**
+	 * render setting to disable ads by post types
+	 *
+	 * @since 1.13.5
+	 */
+	public function render_settings_disable_post_types(){
+
+		$post_types = get_post_types( array( 'public' => true, 'publicly_queryable' => true ), 'objects', 'or' );
+		$type_label_counts = array_count_values( wp_list_pluck( $post_types, 'label' ) );
+
+		echo '<p><a href="' . ADVADS_URL . 'add-ons/advanced-ads-pro/#utm_source=advanced-ads&utm_medium=link&utm_campaign=pitch-pro-disable-post-type' . '" target="_blank">'. __( 'Pro feature', 'advanced-ads' ) .'</a></p>';
+
+		require ADVADS_BASE_PATH . '/admin/views/setting-disable-post-types.php';
 	}
 
 	/**

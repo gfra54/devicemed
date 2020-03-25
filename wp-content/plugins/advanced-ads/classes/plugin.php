@@ -59,6 +59,7 @@ class Advanced_Ads_Plugin {
 		register_uninstall_hook( ADVADS_BASE, array( 'Advanced_Ads_Plugin', 'uninstall' ) );
 
 		add_action( 'plugins_loaded', array( $this, 'wp_plugins_loaded' ), 10 );
+		add_action( 'init', array( $this, 'run_upgrades' ), 9 );
 	}
 
 	/**
@@ -85,15 +86,6 @@ class Advanced_Ads_Plugin {
 	public function wp_plugins_loaded() {
 		// Load plugin text domain
 		$this->load_plugin_textdomain();
-		
-		$internal_options = $this->internal_options();
-		
-		/**
-		 * run upgrades, if this is a new version or version does not exist
-		 */
-		if ( ! defined( 'DOING_AJAX' ) && ( ! isset( $internal_options['version'] ) || version_compare( $internal_options['version'], ADVADS_VERSION, '<' ) ) ) {
-			new Advanced_Ads_Upgrades();
-		}
 
 		// activate plugin when new blog is added on multisites // -TODO this is admin-only
 		add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
@@ -121,6 +113,24 @@ class Advanced_Ads_Plugin {
 	}
 
 	/**
+	 * Run upgrades.
+	 *
+	 * Compatibility with the Piklist plugin that has a function hooked to `posts_where` that access $GLOBALS['wp_query'].
+	 * Since `Advanced_Ads_Upgrades` applies `posts_where`: (`Advanced_Ads_Admin_Notices::get_instance()` >
+	 * `Advanced_Ads::get_number_of_ads()` > new WP_Query > ... 'posts_where') this function is hooked to `init` so that `$GLOBALS['wp_query']` is instantiated.
+	 */
+	public function run_upgrades() {
+		/**
+		 * Run upgrades, if this is a new version or version does not exist.
+		 */
+		$internal_options = $this->internal_options();
+
+		if ( ! defined( 'DOING_AJAX' ) && ( ! isset( $internal_options['version'] ) || version_compare( $internal_options['version'], ADVADS_VERSION, '<' ) ) ) {
+			new Advanced_Ads_Upgrades();
+		}
+	}
+
+	/**
 	 * Register and enqueue public-facing style sheet.
 	 *
 	 * @since    1.0.0
@@ -145,6 +155,9 @@ class Advanced_Ads_Plugin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
+		if ( advads_is_amp() ) {
+			return;
+		}
 		// wp_enqueue_script( $this->get_plugin_slug() . '-plugin-script', plugins_url('assets/js/public.js', __FILE__), array('jquery'), ADVADS_VERSION);
 		$options = $this->options();
 		$activated_js = apply_filters( 'advanced-ads-activate-advanced-js', isset( $options['advanced-js'] ) );
@@ -167,6 +180,10 @@ class Advanced_Ads_Plugin {
 		 */
 		
 		echo apply_filters( 'advanced-ads-attribution', sprintf( '<!-- managing ads with Advanced Ads – %s -->', ADVADS_URL ) ); 
+
+		if ( advads_is_amp() ) {
+			return;
+		}
 
 		ob_start();
 		?><script>
@@ -427,7 +444,8 @@ class Advanced_Ads_Plugin {
 	 * @todo parse default options
 	 */
 	public function options() {
-		if ( ! isset( $this->options ) ) {
+		// we can’t store options if WPML String Translations is enabled, or it would not translate the "Ad Label" option
+		if ( ! isset( $this->options ) || class_exists('WPML_ST_String') ) {
 			$this->options = get_option( ADVADS_SLUG, array() );
 		}
 
@@ -710,7 +728,7 @@ class Advanced_Ads_Plugin {
 	static function support_url( $utm = '' ){
 	    
 		// return self::any_activated_add_on() ? ADVADS_URL . 'support/' .$utm :  'https://wordpress.org/support/plugin/advanced-ads#new-post';
-		$urm = empty( $utm ) ? '#utm_source=advanced-ads&utm_medium=link&utm_campaign=disable-support' : $utm;
+		// $utm = empty( $utm ) ? '#utm_source=advanced-ads&utm_medium=link&utm_campaign=disable-support' : $utm;
 		if( self::any_activated_add_on() ){
 			$url = ADVADS_URL . 'support/' .$utm . '-with-addons';
 		} else {

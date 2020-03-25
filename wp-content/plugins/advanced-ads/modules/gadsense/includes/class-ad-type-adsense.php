@@ -50,13 +50,30 @@ class Advanced_Ads_Ad_Type_Adsense extends Advanced_Ads_Ad_Type_Abstract {
 	 * @since 1.4
 	 */
 	public function render_parameters($ad) {
+        {
+            //  THIS IS JUST A QUICK AND DIRTY HACK
+            //  TODO: create a dedicated method to handle this properly
+            ?>
+            <script>
+                $(function () {
+                    <?php
+                    $mapi_options = Advanced_Ads_AdSense_MAPI::get_option();
+                    $json_ad_codes = json_encode($mapi_options['ad_codes']);
+                    ?>
+                    const adsense = new AdvancedAdsNetworkAdsense(<?php echo $json_ad_codes?>);
+                    AdvancedAdsAdmin.AdImporter.setup(adsense);
+                });
+            </script>
+            <?php
+        }
+
 		$options = $ad->options();
 
 		$content = (string) ( isset( $ad->content ) ? $ad->content : '' );
 		$unit_id = '';
 		$unit_pubid = '';
 		$unit_code = '';
-		$unit_type = '';
+		$unit_type = 'responsive';
 		$unit_width = 0;
 		$unit_height = 0;
 		$json_content = '';
@@ -72,10 +89,14 @@ class Advanced_Ads_Ad_Type_Adsense extends Advanced_Ads_Ad_Type_Abstract {
 
 		// check pub_id for errors
 		$pub_id_errors = false;
-		if( $pub_id !== '' && 0 !== strpos( $pub_id, 'pub-' )){
+		if( $pub_id !== '' && 0 !== strpos( $pub_id, 'pub-' ) ){
 			$pub_id_errors = __( 'The Publisher ID has an incorrect format. (must start with "pub-")', 'advanced-ads' );
 		}
 
+        global $external_ad_unit_id, $use_dashicons, $closeable;
+        $closeable = true;
+        $use_dashicons = false;
+        $external_ad_unit_id = "";
 		if ( trim($content) !== '' ) {
 
 			$json_content = stripslashes( $content );
@@ -105,6 +126,7 @@ class Advanced_Ads_Ad_Type_Adsense extends Advanced_Ads_Ad_Type_Abstract {
 				if ( ! empty( $unit_pubid ) ) {
 					$unit_id = 'ca-' . $unit_pubid . ':' . $unit_code;
 				}
+				$external_ad_unit_id = $unit_id;
 			}
 		}
 
@@ -138,13 +160,13 @@ class Advanced_Ads_Ad_Type_Adsense extends Advanced_Ads_Ad_Type_Abstract {
 	}
 
 	/**
-	 * prepare the ads frontend output
+	 * Prepare the ads frontend output.
 	 *
-	 * @param obj $ad ad object
-	 * @return str $content ad content prepared for frontend output
+	 * @param object $ad ad object.
+	 * @return string $content ad content prepared for frontend output
 	 * @since 1.0.0
 	 */
-	public function prepare_output($ad) {
+	public function prepare_output( $ad ) {
 		global $gadsense;
 
 		$content = json_decode( stripslashes( $ad->content ) );
@@ -179,6 +201,28 @@ class Advanced_Ads_Ad_Type_Adsense extends Advanced_Ads_Ad_Type_Abstract {
 			return '';
 		}
 
+		$is_static_normal_content = ! in_array( $content->unitType, array( 'responsive', 'link-responsive', 'matched-content', 'in-article', 'in-feed' ) );
+
+		if ( Advanced_Ads_Utils::is_iframe() ) {
+			$attrs = array(
+				'style' => array(
+					'width' => ( $is_static_normal_content && $ad->width ) ? $ad->width . 'px' : '300px',
+					'height' => ( $is_static_normal_content && $ad->height ) ? $ad->height . 'px' : '125px',
+					'text-align' => 'center',
+					'display' => 'flex',
+					'align-items' => 'center',
+					'justify-content' => 'center',
+					'background' => '#cccccc',
+					'color' => '#64655D'
+				)
+			);
+
+			return '<div ' . Advanced_Ads_Utils::build_html_attributes( $attrs ) . '>'
+				// translators: we replace AdSense code with a dummy ad code in the Customizer and Elementor since AdSense could cause them to break. This is the text within that dummy ad.
+				. __( 'This will be an AdSense ad on your live site.', 'advanced-ads' )
+				. '</div>';
+		}
+
 		$output = apply_filters( 'advanced-ads-gadsense-output', false, $ad, $pub_id, $content );
 		if ( $output !== false ) {
 			return $output;
@@ -190,7 +234,7 @@ class Advanced_Ads_Ad_Type_Adsense extends Advanced_Ads_Ad_Type_Abstract {
 		$output = '';
 
 		// build static normal content ads first
-		if ( ! in_array( $content->unitType, array( 'responsive', 'link-responsive', 'matched-content', 'in-article', 'in-feed' ) ) ) {
+		if ( $is_static_normal_content ) {
 			$output .= '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>' . "\n";
 			$output .= '<ins class="adsbygoogle" ';
 			$output .= 'style="display:inline-block;width:' . $ad->width . 'px;height:' . $ad->height . 'px;" ' . "\n";
@@ -223,10 +267,21 @@ class Advanced_Ads_Ad_Type_Adsense extends Advanced_Ads_Ad_Type_Abstract {
 
 		}
 
-
 		return $output;
 	}
 
+    /**
+     * Check if a string looks like an AdSense ad code.
+     * 
+     * @param string $content The string that need to be checked.
+     * 
+     * @return boolean 
+     */
+    public static function content_is_adsense( $content = '' ) {
+        return false !== stripos( $content, 'googlesyndication.com' ) &&
+                ( false !== stripos( $content, 'google_ad_client' ) || false !== stripos( $content, 'data-ad-client' ) );
+    }
+    
 	protected function append_defaut_responsive_content(&$output, $pub_id, $content) {
 		$format = '';
 		$style = 'display:block;';
@@ -239,7 +294,6 @@ class Advanced_Ads_Ad_Type_Adsense extends Advanced_Ads_Ad_Type_Abstract {
 			    break;
 			case 'in-feed' : 
 			    $format = 'fluid';
-			    $layout = $content->layout;
 			    $layout_key = $content->layout_key;
 			    break;
 			case 'in-article' : 
@@ -260,10 +314,18 @@ class Advanced_Ads_Ad_Type_Adsense extends Advanced_Ads_Ad_Type_Abstract {
 		$output .= isset( $layout_key ) ? 'data-ad-layout-key="' . $layout_key . '"' . "\n" : '';
 		$output .= 'data-ad-format="';
 		$output .= $format;
+		
+		$options = Advanced_Ads_AdSense_Data::get_instance()->get_options();
+		$fw = !empty( $options['fullwidth-ads'] ) ? $options['fullwidth-ads'] : 'default';
+		if ( 'default'!== $fw ) {
+			$output .= 'enable' == $fw ? '" data-full-width-responsive="true' : '" data-full-width-responsive="false';
+		}
+		
 		$output .= '"></ins>' . "\n";
 		$output .= '<script> ' . "\n";
 		$output .= apply_filters( 'advanced-ads-gadsense-responsive-adsbygoogle', '(adsbygoogle = window.adsbygoogle || []).push({}); ' . "\n");
 		$output .= '</script>' . "\n";
 	}
+
 
 }

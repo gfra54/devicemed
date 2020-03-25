@@ -8,18 +8,14 @@ class Advanced_Ads_AdSense_Admin {
 	protected $notice = null;
         private $settings_page_hook = 'advanced-ads-adsense-settings-page';
 	
-	const	ADSENSE_NEW_ACCOUNT_LINK = 'https://www.google.com/adsense/start/?utm_source=AdvancedAdsPlugIn&utm_medium=partnerships&utm_campaign=AdvancedAdsPartner';
+	const	ADSENSE_NEW_ACCOUNT_LINK = 'https://www.google.com/adsense/start/?utm_source=AdvancedAdsPlugIn&utm_medium=partnerships&utm_campaign=AdvancedAdsPartner1';
 
 	private function __construct() {
 		$this->data = Advanced_Ads_AdSense_Data::get_instance();
-		add_action( 'advanced-ads-settings-init', array($this, 'settings_init') );
-		// add_action( 'advanced-ads-additional-settings-form', array($this, 'settings_init') );
-                add_filter('advanced-ads-setting-tabs', array($this, 'setting_tabs'));
 
 		add_action( 'admin_enqueue_scripts', array($this, 'enqueue_scripts') );
 		add_action( 'admin_print_scripts', array($this, 'print_scripts') );
 		add_filter( 'advanced-ads-list-ad-size', array($this, 'ad_details_column'), 10, 2 );
-		add_filter( 'advanced-ads-ad-settings-pre-save', array($this, 'sanitize_ad_settings') );
 		add_filter( 'advanced-ads-ad-notices', array($this, 'ad_notices'), 10, 3 );
 	}
 
@@ -62,15 +58,7 @@ class Advanced_Ads_AdSense_Admin {
 				('post-new.php' == $pagenow && Advanced_Ads::POST_TYPE_SLUG == $post_type) ||
 				('post.php' == $pagenow && Advanced_Ads::POST_TYPE_SLUG == $post_type && isset($_GET['action']) && 'edit' == $_GET['action'])
 		) {
-			$default_script = array(
-				'path' => GADSENSE_BASE_URL . 'admin/assets/js/new-ad.js',
-				'dep' => array('jquery'),
-				'version' => null,
-			);
-
-			$scripts = array(
-				'gadsense-new-ad' => $default_script,
-			);
+			$scripts = array();
 
 			// Allow modifications of script files to enqueue
 			$scripts = apply_filters( 'advanced-ads-gadsense-ad-param-script', $scripts );
@@ -112,282 +100,6 @@ class Advanced_Ads_AdSense_Admin {
 			self::$instance = new self;
 		}
 		return self::$instance;
-	}
-
-	public function settings_init() {
-
-                // get settings page hook
-		$hook = $this->settings_page_hook;
-		
-                register_setting( ADVADS_SLUG . '-adsense', ADVADS_SLUG . '-adsense', array($this, 'sanitize_settings') );
-		
-		// add new section
-		add_settings_section(
-                        'advanced_ads_adsense_setting_section',
-                        '', //__( 'AdSense', 'advanced-ads' ),
-                        array($this, 'render_settings_section_callback'),
-                        $hook
-		);
-
-		// add setting field to disable ads
-		add_settings_field(
-			'adsense-id',
-			__( 'AdSense account', 'advanced-ads' ),
-			array($this, 'render_settings_adsense_id'),
-			$hook,
-			'advanced_ads_adsense_setting_section'
-		);		
-
-		// activate AdSense verification code and Auto ads (previously Page-Level ads)
-		add_settings_field(
-			'adsense-page-level',
-			__( 'Verification code & Auto ads', 'advanced-ads' ),
-			array($this, 'render_settings_adsense_page_level'),
-			$hook,
-			'advanced_ads_adsense_setting_section'
-		);
-		
-		// add setting field for adsense limit
-		// deprecated of January, 2019; will be removed one year later
-		$limit_per_page = $this->data->get_limit_per_page();
-		if( $limit_per_page ){
-			add_settings_field(
-				'adsense-limit',
-				__( 'Limit to 3 ads', 'advanced-ads' ),
-				array($this, 'render_settings_adsense_limit'),
-				$hook,
-				'advanced_ads_adsense_setting_section'
-			);
-		};
-
-		// disable AdSense violation warnings
-		add_settings_field(
-			'adsense-warnings-disable',
-			__( 'Disable violation warnings', 'advanced-ads' ),
-			array($this, 'render_settings_adsense_warnings_disable'),
-			$hook,
-			'advanced_ads_adsense_setting_section'
-		);
-
-		add_settings_field(
-			'adsense-background',
-			__( 'Transparent background', 'advanced-ads' ),
-			array( $this, 'render_settings_adsense_background' ),
-			$hook,
-			'advanced_ads_adsense_setting_section'
-		);
-		
-		$adsense_id = $this->data->get_adsense_id();
-		
-		// if ( !empty( $adsense_id ) ) {
-		
-			// add_settings_field(
-				// 'adsense-mapi',
-				// __( 'Google AdSense Management API', 'advanced-ads' ),
-				// array( $this, 'render_settings_management_api' ),
-				// $hook,
-				// 'advanced_ads_adsense_setting_section'
-			// );
-
-		// }
-		// hook for additional settings from add-ons
-		do_action( 'advanced-ads-adsense-settings-init', $hook );
-		
-		add_settings_field(
-			'adsense-support',
-			__( 'Support', 'advanced-ads' ),
-			array( $this, 'render_settings_adsense_support' ),
-			$hook,
-			'advanced_ads_adsense_setting_section'
-		);
-	}
-
-        /**
-	 * render adsense settings section
-	 *
-	 * @since 1.5.1
-	 */
-	public function render_settings_section_callback(){
-		// for whatever purpose there might come
-	}
-
-	/**
-	 * render adsense management api setting 
-	 */
-	public function render_settings_management_api() {
-		require_once GADSENSE_BASE_PATH . 'admin/views/mapi-settings.php';
-	}
-	
-	/**
-	 * render adsense id setting
-	 *
-	 * @since 1.5.1
-	 */
-	public function render_settings_adsense_id(){
-		require_once GADSENSE_BASE_PATH . 'admin/views/adsense-account.php';
-	}
-
-	/**
-	 * render adsense limit setting
-	 *
-	 * @since 1.5.1
-	 * @deprecated January, 2019 – let’s give users one year until we remove the whole logic completely
-	 */
-	public function render_settings_adsense_limit(){
-                $limit_per_page = $this->data->get_limit_per_page();
-		
-                ?><label><input type="checkbox" name="<?php echo GADSENSE_OPT_NAME; ?>[limit-per-page]" value="1" <?php checked( $limit_per_page ); ?> />
-		<?php printf( __( 'Limit to %d AdSense ads', 'advanced-ads' ), 3 ); ?></label>
-                <p class="description">
-		<?php
-			printf(
-				__( 'There is no explicit limit for AdSense ads anymore, but you can still use this setting to prevent too many AdSense ads to show accidentally on your site.', 'advanced-ads' ),
-				esc_url( 'https://www.google.com/adsense/terms' )
-			); ?></p>
-		<?php if( defined( 'AAP_VERSION' ) ) : /* give warning when cache-busting in Pro is active */ ?>
-		<p class="advads-error-message"><?php _e( 'Due to technical restrictions, the limit does not work on placements with cache-busting enabled.', 'advanced-ads' ); ?></p>
-		<?php endif;
-	}
-
-	/**
-	 * render page-level ads setting
-	 *
-	 * @since 1.6.9
-	 */
-	public function render_settings_adsense_page_level(){
-                $options = $this->data->get_options();
-                $page_level = $options['page-level-enabled'];
-
-                ?><label><input type="checkbox" name="<?php echo GADSENSE_OPT_NAME; ?>[page-level-enabled]" value="1" <?php checked( $page_level ); ?> />
-		<?php esc_attr_e( 'Insert the AdSense header code used for verification and the Auto Ads feature.', 'advanced-ads' ); 
-		if( !empty( $options['adsense-id'] ) ) :
-		    ?>&nbsp;<a href="https://www.google.com/adsense/new/u/0/<?php echo $options['adsense-id']; ?>/myads/auto-ads" target="_blank"><?php /**
-		    * translators: this is the text for a link to a sub-page in an AdSense account
-		    */
-		   esc_attr_e( 'Adjust Auto ads options', 'advanced-ads' ); ?></a>
-		<?php endif; ?>
-                </label><p class="description"><?php printf(__( 'Please read <a href="%s" target="_blank">this article</a> if <strong>ads appear in random places</strong>.', 'advanced-ads' ), ADVADS_URL . 'adsense-in-random-positions-auto-ads/#utm_source=advanced-ads&utm_medium=link&utm_campaign=backend-autoads-ads' ); ?></p>
-                <p class="description"><a href="<?php echo ADVADS_URL . 'adsense-auto-ads-wordpress/#Display_Auto_Ads_only_on_specific_pages'; ?>" target="_blank"><?php esc_attr_e( 'Display Auto ads only on specific pages', 'advanced-ads' ); ?></a></p>
-                <p class="description"><a href="<?php echo ADVADS_URL . 'adsense-auto-ads-wordpress/#AMP_Auto_Ads'; ?>" target="_blank"><?php esc_attr_e( 'Auto ads on AMP pages', 'advanced-ads' ); ?></a></p><?php
-	}
-
-	/**
-	 * render AdSense violation warnings setting
-	 *
-	 * @since 1.6.9
-	 */
-	public function render_settings_adsense_warnings_disable(){
-                $options = $this->data->get_options();
-                $disable_violation_warnings = isset( $options['violation-warnings-disable'] ) ? 1 : 0;
-
-                ?><label><input type="checkbox" name="<?php echo GADSENSE_OPT_NAME; ?>[violation-warnings-disable]" value="1" <?php checked( 1, $disable_violation_warnings ); ?> />
-		<?php _e( 'Disable warnings about potential violations of the AdSense terms.', 'advanced-ads' ); ?></label>
-		<p class="description"><?php printf(__( 'Our <a href="%s" target="_blank">Ad Health</a> feature monitors if AdSense is implemented correctly on your site. It also considers ads not managed with Advanced Ads. Enable this option to remove these checks', 'advanced-ads' ), ADVADS_URL . 'manual/ad-health/#utm_source=advanced-ads&utm_medium=link&utm_campaign=backend-autoads-ads' ); ?></p><?php
-	}
-
-	/**
-	 * Render transparent background setting.
-	 */
-	public function render_settings_adsense_background() {
-		$options = $this->data->get_options();
-		$background = $options['background'];
-
-		?><label><input type="checkbox" name="<?php echo GADSENSE_OPT_NAME; ?>[background]" value="1" <?php checked( $background ); ?> />
-		<?php _e( 'Enable this option in case your theme adds an unfortunate background color to AdSense ads.', 'advanced-ads' ); ?></label><?php
-	}	
-
-	/**
-	 * Render support info for AdSense
-	 */
-	public function render_settings_adsense_support() {
-		?><p class="advanced-ads-adsense-support"><span class="advanced-ads-adsense-support-text"><?php _e( 'Faster than the AdSense support!', 'advanced-ads' ); ?></span>
-		    <br/>
-		    <span class="dashicons dashicons-star-filled"></span>
-		    <span class="dashicons dashicons-star-filled"></span>
-		    <span class="dashicons dashicons-star-filled"></span>
-		    <span class="dashicons dashicons-star-filled"></span>
-		    <span class="dashicons dashicons-star-filled"></span>
-		</p>
-		<p><a href="<?php echo Advanced_Ads_Plugin::support_url( '#utm_source=advanced-ads&utm_medium=link&utm_campaign=adsense-tab-support' )?>" target="_blank"><?php 
-			    _e( 'reach out for help', 'advanced-ads' ); ?></a></p><?php
-	}	
-
-        /**
-         * sanitize adsense settings
-         *
-         * @since 1.5.1
-         * @param array $options all the options
-         */
-        public function sanitize_settings($options){
-
-            // sanitize whatever option one wants to sanitize
-            if(isset($options['adsense-id']) && $options['adsense-id'] != ''){
-		// remove "ca-" prefix if it was added by the user
-		if( 0 === strpos( $options['adsense-id'], 'ca-' ) ){
-		    $options['adsense-id'] = str_replace( 'ca-', '', $options['adsense-id'] );
-		}
-		
-		if( 0 !== strpos( $options['adsense-id'], 'pub-' ) ){
-                    // add settings error
-                    add_settings_error(
-                            'adsense-limit',
-                            'settings_updated',
-                            __( 'The Publisher ID has an incorrect format. (must start with "pub-")', 'advanced-ads' ));
-                }
-		// trim publisher id
-		$options['adsense-id'] = trim($options['adsense-id']);
-            }
-
-            return $options;
-        }
-
-        /**
-         * add adsense setting tab
-         *
-         * @since 1.5.1
-         * @param arr $tabs existing setting tabs
-         * @return arr $tabs setting tabs with AdSense tab attached
-         */
-        public function setting_tabs(array $tabs){
-
-            $tabs['adsense'] = array(
-                'page' => $this->settings_page_hook,
-                'group' => ADVADS_SLUG . '-adsense',
-                'tabid' => 'adsense',
-                'title' => __( 'AdSense', 'advanced-ads' )
-            );
-
-            return $tabs;
-        }
-
-	/**
-	 * sanitize ad settings
-	 *  save publisher id from new ad unit if not given in main options
-	 *
-	 * @since 1.6.2
-	 * @param arr $ad_settings_post
-	 * @return arr $ad_settings_post
-	 */
-	public function sanitize_ad_settings( array $ad_settings_post ){
-
-	    // check ad type
-	    if( ! isset( $ad_settings_post['type'] ) ||  'adsense' !== $ad_settings_post['type'] ){
-		return $ad_settings_post;
-	    }
-
-	    // save AdSense publisher ID if there is no one stored yet
-	    if ( ! empty($ad_settings_post['output']['adsense-pub-id']) ) {
-		    // get options
-		    $adsense_options = get_option( 'advanced-ads-adsense', array() );
-			
-			if ( empty( $adsense_options['adsense-id'] ) ) {
-				$adsense_options['adsense-id'] = $ad_settings_post['output']['adsense-pub-id'];
-				update_option( 'advanced-ads-adsense', $adsense_options );
-			}
-	    }
-	    unset( $ad_settings_post['output']['adsense-pub-id'] );
-
-	    return $ad_settings_post;
 	}
 	
 	/**
@@ -478,6 +190,15 @@ class Advanced_Ads_AdSense_Admin {
      * @param type $hide_idle Whether to hide idle ads.
      */
     public static function get_mapi_ad_selector( $hide_idle_ads = true ) {
-        require_once GADSENSE_BASE_PATH . 'admin/views/mapi-ad-selector.php';
+        global $closeable, $use_dashicons, $network, $ad_units, $unsupported_ad_type_link, $display_slot_id;
+        $closeable = true;
+        $use_dashicons = false;
+        $network = Advanced_Ads_Network_Adsense::get_instance();
+        $ad_units = $network->get_external_ad_units();
+        $unsupported_ad_type_link = Advanced_Ads_AdSense_MAPI::UNSUPPORTED_TYPE_LINK;
+        $display_slot_id = true;
+
+        require_once GADSENSE_BASE_PATH . 'admin/views/external-ads-list.php';
+        require_once GADSENSE_BASE_PATH . 'admin/views/external-ads-adsense.php';
     }
 }

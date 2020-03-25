@@ -68,6 +68,7 @@ class Advanced_Ads_Privacy
 	 * @return bool
 	 */
 	public function can_display_by_consent( $can_display, Advanced_Ads_Ad $ad, $check_options ) {
+
 		if ( ! $can_display ) {
 			return $can_display;
 		}
@@ -104,6 +105,10 @@ class Advanced_Ads_Privacy
 	 */
 	public function get_state() {
 		if ( empty ( $this->options['enabled'] ) ) {
+			return 'not_needed';
+		}
+
+		if ( advads_is_amp() ) {
 			return 'not_needed';
 		}
 

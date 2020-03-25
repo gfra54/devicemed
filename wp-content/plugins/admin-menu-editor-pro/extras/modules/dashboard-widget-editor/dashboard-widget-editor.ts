@@ -15,6 +15,9 @@ interface WidgetEditorSettings {
 		version: string
 	},
 	widgets: Array<WidgetPropertyMap>;
+	welcomePanel: {
+		grantAccess: AmeDictionary<boolean>
+	},
 	siteComponentHash: string;
 }
 
@@ -23,6 +26,8 @@ class AmeDashboardWidgetEditor {
 	private static autoCleanupEnabled: boolean = true;
 
 	widgets: KnockoutObservableArray<AmeDashboardWidget>;
+
+	private welcomePanel: AmeWelcomeWidget;
 
 	actorSelector: AmeActorSelector;
 	selectedActor: KnockoutComputed<string>;
@@ -33,9 +38,9 @@ class AmeDashboardWidgetEditor {
 	public isExportButtonEnabled: KnockoutObservable<boolean>;
 
 	private initialWidgetSettings: WidgetEditorSettings;
-	private isMultisite: boolean = false;
+	private readonly isMultisite: boolean = false;
 
-	private static customIdPrefix = 'ame-custom-html-widget-';
+	private static customIdPrefix = 'ame-custom-widget-';
 	private newWidgetCounter = 0;
 
 	private importDialog: JQuery;
@@ -53,7 +58,7 @@ class AmeDashboardWidgetEditor {
 		this.actorSelector = new AmeActorSelector(AmeActors, true);
 
 		//Wrap the selected actor in a computed observable so that it can be used with Knockout.
-		var _selectedActor = ko.observable(this.actorSelector.selectedActor);
+		let _selectedActor = ko.observable(this.actorSelector.selectedActor);
 		this.selectedActor = ko.computed<string>({
 			read: function () {
 				return _selectedActor();
@@ -92,7 +97,10 @@ class AmeDashboardWidgetEditor {
 		const _ = AmeDashboardWidgetEditor._;
 		this.widgets.removeAll();
 
-		for (var i = 0; i < widgetSettings.widgets.length; i++) {
+		this.welcomePanel = new AmeWelcomeWidget(_.get(widgetSettings, 'welcomePanel', {}), this);
+		this.widgets.push(this.welcomePanel);
+
+		for (let i = 0; i < widgetSettings.widgets.length; i++) {
 			let properties = widgetSettings.widgets[i],
 				widget = null;
 
@@ -100,6 +108,8 @@ class AmeDashboardWidgetEditor {
 				widget = new AmeStandardWidgetWrapper(properties, this);
 			} else if (_.get(properties, 'widgetType') === 'custom-html') {
 				widget = new AmeCustomHtmlWidget(properties, this);
+			} else if (_.get(properties, 'widgetType') === 'custom-rss') {
+				widget = new AmeCustomRssWidget(properties, this);
 			} else {
 				throw {message: 'Unknown widget type', widgetProperties: properties};
 			}
@@ -125,16 +135,18 @@ class AmeDashboardWidgetEditor {
 		this.initialWidgetSettings = widgetSettings;
 	}
 
+	// noinspection JSUnusedGlobalSymbols Used in Knockout templates.
 	removeWidget(widget: AmeDashboardWidget, event) {
 		jQuery(event.target).closest('.ame-dashboard-widget').slideUp(300, () => {
 			this.widgets.remove(widget);
 		});
 	}
 
+	// noinspection JSUnusedGlobalSymbols Used in Knockout templates.
 	addHtmlWidget() {
 		this.newWidgetCounter++;
 
-		var widget = new AmeCustomHtmlWidget({
+		let widget = new AmeCustomHtmlWidget({
 			id: AmeDashboardWidgetEditor.customIdPrefix + this.newWidgetCounter,
 			title: 'New Widget ' + this.newWidgetCounter
 		}, this);
@@ -142,9 +154,38 @@ class AmeDashboardWidgetEditor {
 		//Expand the new widget.
 		widget.isOpen(true);
 
-		this.widgets.unshift(widget);
+		this.insertAfterWelcomePanel(widget);
 	}
 
+	// noinspection JSUnusedGlobalSymbols Used in Knockout templates.
+	addRssWidget() {
+		this.newWidgetCounter++;
+
+		let widget = new AmeCustomRssWidget({
+			id: AmeDashboardWidgetEditor.customIdPrefix + this.newWidgetCounter,
+			title: 'New RSS Widget ' + this.newWidgetCounter
+		}, this);
+
+		//Expand the new widget.
+		widget.isOpen(true);
+
+		this.insertAfterWelcomePanel(widget);
+	}
+
+	private insertAfterWelcomePanel(widget: AmeDashboardWidget) {
+		//The "Welcome" panel is always first, so we can cheat for performance.
+		if (this.widgets.indexOf(this.welcomePanel) === 0) {
+			let welcomePanel = this.widgets.shift();
+			this.widgets.unshift(widget);
+			this.widgets.unshift(welcomePanel);
+		} else {
+			//But just in case it's not first for some odd reason,
+			//let's fall back to inserting the widget at the beginning.
+			this.widgets.unshift(widget);
+		}
+	}
+
+	// noinspection JSUnusedGlobalSymbols Used in Knockout templates.
 	saveChanges() {
 		let settings = this.getCurrentSettings();
 
@@ -158,23 +199,32 @@ class AmeDashboardWidgetEditor {
 
 	protected getCurrentSettings(): WidgetEditorSettings {
 		const collectionFormatName = 'Admin Menu Editor dashboard widgets';
-		const collectionFormatVersion = '1.0';
+		const collectionFormatVersion = '1.1';
+		const _ = AmeDashboardWidgetEditor._;
 
-		var settings: WidgetEditorSettings = {
+		let settings: WidgetEditorSettings = {
 			format: {
 				name: collectionFormatName,
 				version: collectionFormatVersion
 			},
 			widgets: [],
+			welcomePanel: {
+				grantAccess: _.pick(this.welcomePanel.grantAccess.getAll(), function(hasAccess, actorId) {
+					//Remove "allow" settings for actors that can't actually see the panel.
+					return AmeActors.hasCapByDefault(actorId, 'edit_theme_options') || !hasAccess;
+
+				}),
+			},
 			siteComponentHash: this.initialWidgetSettings.siteComponentHash
 		};
-		AmeDashboardWidgetEditor._.forEach(this.widgets(), function (widget) {
+		_.forEach(_.without(this.widgets(), this.welcomePanel), function (widget) {
 			settings.widgets.push(widget.toPropertyMap());
 		});
 
 		return settings;
 	}
 
+	// noinspection JSUnusedGlobalSymbols Used in Knockout templates.
 	exportWidgets() {
 		//Temporarily disable the export button to prevent accidental repeated clicks.
 		this.isExportButtonEnabled(false);
@@ -235,7 +285,7 @@ class AmeDashboardWidgetEditor {
 			beforeSubmit: (formData) => {
 
 				//Check if the user has selected a file
-				for (var i = 0; i < formData.length; i++) {
+				for (let i = 0; i < formData.length; i++) {
 					if ( formData[i].name === 'widget_file' ){
 						if ( (typeof formData[i].value === 'undefined') || !formData[i].value){
 							alert('Select a file first!');
@@ -289,6 +339,7 @@ class AmeDashboardWidgetEditor {
 		});
 	}
 
+	// noinspection JSUnusedGlobalSymbols Used in Knockout templates.
 	openImportDialog() {
 		this.importDialog.dialog('open');
 	}

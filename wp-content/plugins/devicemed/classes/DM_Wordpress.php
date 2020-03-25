@@ -1,4 +1,5 @@
 <?php
+
 class DM_Wordpress
 {
 	static private $title = array();

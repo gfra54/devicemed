@@ -17,7 +17,7 @@ class Advanced_Ads_AdSense_Data {
 		// starting version 1.7.9, the default limit setting was changed from true to false due to AdSense policy change
 		$options['limit-per-page'] = false;
 
-		update_option(GADSENSE_OPT_NAME, $options);
+		update_option( 'GADSENSE_OPT_NAME', $options);
 	}
 
 	if (!isset($options['limit-per-page'])) {
@@ -52,7 +52,7 @@ class Advanced_Ads_AdSense_Data {
 		if ( ! empty( $ad ) ) {
 			if ( isset( $ad->is_ad ) && true === $ad->is_ad && 'adsense' === $ad->type ) {
 				$ad_content = json_decode( $ad->content );
-				if ( $ad_content && isset( $ad_content->pubId ) ) {
+				if ( $ad_content && isset( $ad_content->pubId ) && !empty( $ad_content->pubId ) ) {
 					return $ad_content->pubId;
 				}
 			}
@@ -82,5 +82,14 @@ class Advanced_Ads_AdSense_Data {
      */
     public function is_page_level_enabled() {
 	return $this->options['page-level-enabled'];
+    }
+    public function is_setup(){
+    	if (isset($this->options) && is_array($this->options) && isset($this->options['adsense-id']) && $this->options['adsense-id']){
+            $adsense_id = $this->get_adsense_id();
+            if ($adsense_id) {
+                return Advanced_Ads_AdSense_MAPI::has_token($adsense_id);
+            }
+        };
+        return false;
     }
 }

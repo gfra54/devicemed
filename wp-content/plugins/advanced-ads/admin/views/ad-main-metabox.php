@@ -22,6 +22,7 @@
 <?php endif; ?>
 <script>
 jQuery( document ).on('change', '#advanced-ad-type input', function () {
+    AdvancedAdsAdmin.AdImporter.onChangedAdType();
 	advads_update_ad_type_headline();
 });
 
@@ -29,7 +30,11 @@ jQuery( document ).on('change', '#advanced-ad-type input', function () {
 advads_main_metabox_title = jQuery('#ad-main-box h2').text();
 function advads_update_ad_type_headline(){
 	var advads_selected_type = jQuery('#advanced-ad-type input:checked + label').text();
+	var advads_selected_id = jQuery('#advanced-ad-type input:checked').attr('id');
 	jQuery('#ad-main-box h2').html( advads_main_metabox_title + ': ' + advads_selected_type );
+	// if (advads_selected_id === "advanced-ad-type-adsense") jQuery('#advads-gadsense-box').show();
+    // else jQuery('#advads-gadsense-box').hide();
+    jQuery('#advads-gadsense-box').hide();
 }
 advads_update_ad_type_headline();
 </script>

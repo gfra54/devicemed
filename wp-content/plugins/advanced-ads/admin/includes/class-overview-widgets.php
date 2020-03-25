@@ -7,7 +7,19 @@
  * @since 1.4.3
  */
 class Advanced_Ads_Overview_Widgets_Callbacks {
-
+	/**
+	 * in case one wants to inject several dashboards into a page, we will prevent executing redundant javascript 
+	 * with the help of this little bool
+	 */
+	private static $processed_adsense_stats_js = false;
+	
+	/**
+	 * when doing ajax request (refreshing the dashboard), we need to have a nonce. 
+	 * one is enough, that's why we need to remember it.
+	 */
+	private static $gadsense_dashboard_nonce = false;
+	
+	
 	/**
 	 * register the plugin overview widgets
 	 *
@@ -26,7 +38,7 @@ class Advanced_Ads_Overview_Widgets_Callbacks {
 		
 		// show errors
 		if( Advanced_Ads_Ad_Health_Notices::notices_enabled()
-                && Advanced_Ads_Ad_Health_Notices::get_instance()->has_notices() ){
+                && count( Advanced_Ads_Ad_Health_Notices::get_instance()->displayed_notices ) ){
 		        self::add_meta_box('advads_overview_notices', false, 'full', 'render_notices' );
         }
 
@@ -34,6 +46,10 @@ class Advanced_Ads_Overview_Widgets_Callbacks {
 		    'render_next_steps');
 		self::add_meta_box('advads_overview_support', __( 'Manual and Support', 'advanced-ads' ), 'right',
 		    'render_support' );
+		if (Advanced_Ads_AdSense_Data::get_instance()->is_setup()){
+			self::add_meta_box('advads_overview_adsense_stats', __( 'AdSense Earnings', 'advanced-ads' ), 'full',
+				'render_adsense_stats' );
+		}
 
 		// add widgets for pro add ons
 		self::add_meta_box('advads_overview_addons', __( 'Add-Ons', 'advanced-ads' ), 'full', 'render_addons' );
@@ -61,9 +77,11 @@ class Advanced_Ads_Overview_Widgets_Callbacks {
 	 * @since 1.11.x
 	 */
 	public static function render_notices(){
-	    
-		?><span class="advads-loader"></span>
-		<script>jQuery( document ).ready( function(){ advads_display_ad_health_notices(); });</script><?php
+
+		/*?><span class="advads-loader"></span>
+		<script>jQuery( document ).ready( function(){ advads_display_ad_health_notices(); });</script><?php*/
+		Advanced_Ads_Ad_Health_Notices::get_instance()->render_widget();
+		?><script>jQuery( document ).ready( function(){ advads_ad_health_maybe_remove_list(); });</script><?php
 		
 	}
 	
@@ -151,11 +169,182 @@ class Advanced_Ads_Overview_Widgets_Callbacks {
 		?><ul>
             <li><?php printf( __( '<a href="%s" target="_blank">Manual</a>', 'advanced-ads' ), ADVADS_URL . 'manual/#utm_source=advanced-ads&utm_medium=link&utm_campaign=overview-manual' ); ?></li>
             <li><?php printf( __( '<a href="%s" target="_blank">FAQ and Support</a>', 'advanced-ads' ), ADVADS_URL . 'support/#utm_source=advanced-ads&utm_medium=link&utm_campaign=overview-support' ); ?></li>
-            <li><?php printf( __( 'Thank the developer with a &#9733;&#9733;&#9733;&#9733;&#9733; review on <a href="%s" target="_blank">wordpress.org</a>', 'advanced-ads' ), 'https://wordpress.org/support/plugin/advanced-ads/reviews/?filter=5#new-post' ); ?></li>
+            <li><?php printf( __( 'Thank the developer with a &#9733;&#9733;&#9733;&#9733;&#9733; review on <a href="%s" target="_blank">wordpress.org</a>', 'advanced-ads' ), 'https://wordpress.org/support/plugin/advanced-ads/reviews/#new-post' ); ?></li>
         </ul><?php
-	
+
+		$ignored_count = count( Advanced_Ads_Ad_Health_Notices::get_instance()->ignore );
+		$displayed_count = count( Advanced_Ads_Ad_Health_Notices::get_instance()->displayed_notices );
+		if( !$displayed_count && $ignored_count ){
+			// translators: %s includes a number and markup like <span class="count">6</span>.
+			?><p><span class="dashicons dashicons-warning"></span>&nbsp;<a href="<?php echo wp_nonce_url( admin_url( 'admin.php?page=advanced-ads&advads-show-hidden-notices=true' ), 'advanced-ads-show-hidden-notices', 'advads_nonce' ); ?>"><?php
+			printf( __( 'Show %s hidden notices', 'advanced-ads' ), $ignored_count );
+				?></a></p><?php
+		}
+
 	do_action( 'advanced-ads-overview-below-support' );
 	
+	}
+	
+	/**
+	 * adsense stats widget
+	 */
+	public static function render_adsense_stats(){
+		$option_name = "advanced-ads-adsense-dashboard-filter";
+		$filter_value = get_option($option_name, null);
+		if (! $filter_value){
+			$filter_value = self::get_site_domain();
+		}
+		if ($filter_value === "*") $filter_value = null;
+		$advads_gadsense_options = array(
+			"dimension_name" => "DOMAIN_NAME",
+			"allow_refresh" => true,
+			"filter_value" => $filter_value
+		);
+		include(ADVADS_BASE_PATH . 'admin/views/gadsense-dashboard.php');
+	}
+	
+	public static final function adsense_stats_js($pub_id){
+		if (self::$processed_adsense_stats_js) return;
+		self::$processed_adsense_stats_js = true;
+		$nonce = self::get_adsense_dashboard_nonce();
+		?><script>
+		window.gadsenseData = window.gadsenseData || {};
+		gadsenseData['pubId'] = '<?php echo $pub_id; ?>';
+		window.Advanced_Ads_Adsense_Helper.nonce = '<?php echo $nonce;?>';
+		</script><?php
+	}
+	
+	public static final function get_adsense_dashboard_nonce(){
+		if (! self::$gadsense_dashboard_nonce){
+			self::$gadsense_dashboard_nonce = wp_create_nonce( 'advads-gadsense-dashboard' );
+		}
+		return self::$gadsense_dashboard_nonce;
+	}
+
+    /**
+     * extracts the domain from the site url
+     * @return string the domain, that was extracted from get_site_url()
+     */
+	public static function get_site_domain(){
+		$site = get_site_url();
+		preg_match("|^([\d\w]+://)?([^/]+)|", $site, $matches);
+		$domain = count($matches) > 1 ? $matches[2] : null;
+		return $domain;
+	}
+	
+	/**
+	 * this method should be used, if you want to render a dashboard summary.
+	 * it takes an associative options array as parameter to create a summary object,
+	 * which can be used to create a json or html response. 
+	 * @param array $options
+	 * @return Advanced_Ads_AdSense_Dashboard_Summary
+	 */
+	public static function create_dashboard_summary($options){
+        if (! $options) $options = array();
+		$options = array_merge( array(
+			"dimension_name" => null,
+			"filter_value" => null,
+			"hide_dimensions" => false,
+			"force_refresh" => false,
+			"allow_refresh" => true,
+		), $options);
+		
+		$dimension_name = $options['dimension_name'];
+		$filter_value = $options['filter_value'];
+		$hide_dimensions = $options['hide_dimensions'];
+		$force_refresh = $options['force_refresh'];
+		$allow_refresh = $options['allow_refresh'];
+		
+		$pub_id = Advanced_Ads_AdSense_Data::get_instance()->get_adsense_id();
+		$optional_dimension_names = $dimension_name == "AD_UNIT_CODE" ? Advanced_Ads_Overview_Widgets_Callbacks::get_ad_code_map($pub_id) : null;
+
+		$summary = Advanced_Ads_AdSense_Report_Builder::createDashboardSummary($dimension_name, $filter_value, "dashboard", $optional_dimension_names, $force_refresh, $allow_refresh);
+		if ($hide_dimensions){
+			$summary->dimensions = null;
+		}
+		$summary->hide_dimensions = $hide_dimensions;
+		return $summary;
+	}
+	/**
+	 * we want to display the name of the ad code insted of the code itself.
+	 * @param string $pub_id the publisher id of the adsense account
+	 * @return array an associative array with ad codes as key and their respective name as value
+	 */
+	public static function get_ad_code_map($pub_id){
+		$map = array();
+		$ad_units_opts = get_option(Advanced_Ads_AdSense_MAPI::OPTNAME);
+		if (! isset($ad_units_opts['accounts'])) return null;
+		foreach ($ad_units_opts['accounts'] as $key => $account){
+			if ($key === $pub_id && isset($account['ad_units']) && is_array($account['ad_units'])){
+				$units = $account['ad_units'];
+				foreach ($units as $unit){
+					$map[$unit['code']] = $unit['name'];
+				}
+			}
+		}
+		return $map;
+	}
+		
+	
+	/**
+	 * this method is called when the dashboard data is requested via ajax
+	 * it prints the relevant data as json, then dies.
+	 */
+	public static function ajax_gadsense_dashboard(){
+		//  retrieve our post parameters.
+		$dimension_name = isset($_POST['dimension_name']) ? $_POST['dimension_name'] : "DOMAIN_NAME";
+		$filter_value = isset($_POST['filter']) ? $_POST['filter'] : null;
+		$dimension_name = sanitize_text_field($dimension_name);
+		if ($filter_value) $filter_value = sanitize_text_field($filter_value);
+		
+		$errors = array();
+		//  check nonce and capabilities 
+		if ( ! current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_manage_options') ) ) {
+			$errors[] = "missing capability";
+		}
+		// check nonce
+		if (! check_ajax_referer( 'advads-gadsense-dashboard', 'nonce', false)){
+			$errors[] = "invalid request";
+		}
+		
+		//  when there is an error, send it right away
+		if (count($errors) > 0){
+			$r = array("summary" => array("valid" => false, "errors" => $errors));
+			header( 'Content-Type: application/json' );
+			echo wp_json_encode($r);
+			die();
+		}
+		
+		
+		$options = array(
+			"dimension_name" => $dimension_name,
+		);
+		if ($dimension_name === "DOMAIN_NAME"){
+			if ($filter_value){
+				update_option("advanced-ads-adsense-dashboard-filter", $filter_value);
+			}
+		}
+		else if ($dimension_name === "AD_UNIT_CODE"){
+			$options["hide_dimensions"] = true;
+		}
+		if ($filter_value && $filter_value === "*") $filter_value = null;
+		$options["filter_value"] = $filter_value;
+		
+		$r = array();
+		$summary = self::create_dashboard_summary($options);
+		$r['summary'] = $summary;
+		
+		header( 'Content-Type: application/json' );
+		echo wp_json_encode($r);
+		die();
+	}
+	
+	public static final function render_stats_box($title, $main, $footer){
+		?><div class="advanced-ads-stats-box flex1">
+			<?php echo $title; ?>
+			<div class="advanced-ads-stats-box-main"><?php echo $main;?></div>
+			<?php echo $footer; ?>
+		</div><?php 
 	}
 
 	/**
@@ -164,9 +353,12 @@ class Advanced_Ads_Overview_Widgets_Callbacks {
 	 * @param   bool    $hide_activated if true, hide activated add-ons
 	 */
 	public static function render_addons( $hide_activated = false ){
-	    
-	    $caching_used = Advanced_Ads_Checks::cache();
-	    
+
+		$link = ADVADS_URL . 'manual/how-to-install-an-add-on/#utm_source=advanced-ads&utm_medium=link&utm_campaign=overview-install-add-ons';
+		?><p style="text-align: right;"><a href="<?php echo esc_url( $link ); ?>" target="_blank"><?php echo esc_attr__( 'How to install and activate an add-on.', 'advanced-ads' ); ?></a></p><?php
+
+		$caching_used = Advanced_Ads_Checks::cache();
+
 	    ob_start();
 	    ?><p><?php _e( 'The solution for professional websites.', 'advanced-ads' ); ?></p><ul class='list'>
 		<li><?php 

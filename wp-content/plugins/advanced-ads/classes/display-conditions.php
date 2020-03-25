@@ -610,9 +610,9 @@ class Advanced_Ads_Display_Conditions {
 		$value = ( isset( $options['value'] ) && is_numeric( $options['value'] ) ) ? floatval( $options['value'] ) : 0;
 		?><input type="hidden" name="<?php echo $name; ?>[type]" value="<?php echo $options['type']; ?>"/>
 		<select name="<?php echo $name; ?>[operator]">
-		    <option value="older_than" <?php selected( 'older_than', $operator ); ?>><?php _e( 'older than', 'advanced-ads-pro'); ?></option>
-		    <option value="younger_than" <?php selected( 'younger_than', $operator ); ?>><?php _e( 'younger than', 'advanced-ads-pro' ); ?></option>
-		</select><input type="text" name="<?php echo $name; ?>[value]" value="<?php echo $value; ?>"/>&nbsp;<?php _e( 'days', 'advanced-ads-pro' );
+		    <option value="older_than" <?php selected( 'older_than', $operator ); ?>><?php _e( 'older than', 'advanced-ads'); ?></option>
+		    <option value="younger_than" <?php selected( 'younger_than', $operator ); ?>><?php _e( 'younger than', 'advanced-ads' ); ?></option>
+		</select><input type="text" name="<?php echo $name; ?>[value]" value="<?php echo $value; ?>"/>&nbsp;<?php _e( 'days', 'advanced-ads' );
 	}	
 
 	/**

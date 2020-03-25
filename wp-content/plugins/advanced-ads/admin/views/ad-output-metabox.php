@@ -59,7 +59,8 @@
 	if ( isset( $options['wrapper-id'] ) ) {
 		echo $options['wrapper-id']; }
 	?>"/>
-	<p class="description"><?php _e( 'Specify the id of the ad container. Leave blank for random or no id.', 'advanced-ads' ); ?></p>
+	<p class="description"><?php _e( 'Specify the id of the ad container. Leave blank for random or no id.', 'advanced-ads' ); ?>
+		&nbsp;<span class="advads-output-wrapper-id-error"><?php esc_attr_e( 'An id-like string with only letters in lower case, numbers, and hyphens.', 'advanced-ads' ); ?></span></p>
 	</div>
 	<hr  class="advads-hide-in-wizard"/>
 	<label class='label advads-hide-in-wizard' for="advads-output-wrapper-class"><?php _e( 'container classes', 'advanced-ads' ); ?></label>
@@ -68,7 +69,7 @@
 	if ( isset( $options['wrapper-class'] ) ) {
 		echo $options['wrapper-class']; }
 	?>"/>
-	<p class="description"><?php _e( 'Specify one or more classes for the container. Separate multiple classes with a space', 'advanced-ads' ); ?></p>
+	<p class="description"><?php _e( 'Specify one or more classes for the container. Separate multiple classes with a space', 'advanced-ads' ); ?>.</p>
 	</div>
 	<hr class="advads-hide-in-wizard"/>
 	<label for="advads-output-debugmode" class="label advads-hide-in-wizard"><?php _e( 'Enable debug mode', 'advanced-ads' ); ?></label>

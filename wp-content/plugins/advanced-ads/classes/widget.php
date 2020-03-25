@@ -60,7 +60,6 @@ class Advanced_Ads_Widget extends WP_Widget {
 			$instance['remove-widget-id'] = true;
 		}
 		return $instance;
-		return $instance;
 	}
 
 	function form($instance) {

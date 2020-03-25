@@ -31,23 +31,7 @@ $alerts_dismiss = __( 'dismiss', 'advanced-ads' );
 
 $connection_error_messages = Advanced_Ads_AdSense_MAPI::get_connect_error_messages();
 
-$alerts_advads_messages = array(
-    'ALERT_TYPE_ADS_TXT_UNAUTHORIZED' => __( 'One of your sites is missing the AdSense publisher ID in the ads.txt file.', 'advanced-ads' ),
-);
-
-ob_start();
-
-echo '<p style="font-weight:normal">';
-$first_alert_code = isset( $alerts['items'] ) && count( $alerts['items'] ) ? '-' . $alerts['items'][ key( $alerts['items'] ) ]["id"] : '';
-printf(
-	// translators: %1$s is a starting link, %2$s is the end
-	esc_attr__( 'Learn more about AdSense account issues %1$shere%2$s', 'advanced-ads' ),
-    '<a href="' . ADVADS_URL . 'adsense-errors/#utm_source=advanced-ads&utm_medium=link&utm_campaign=adsense-error'. $first_alert_code .'" target="_blank">',
-	'</a>'
-);
-echo '</p>';
-
-$adsense_error_page_link = ob_get_clean();
+$alerts_advads_messages = Advanced_Ads_Adsense_MAPI::get_adsense_alert_messages();
 
 ?>
 <div id="mapi-account-alerts" data-heading="<?php echo esc_attr( $alerts_heading ); ?>" data-dismiss="<?php echo esc_attr( $alerts_dismiss ); ?>">
@@ -56,40 +40,28 @@ $adsense_error_page_link = ob_get_clean();
     <ul>
         <?php foreach( $alerts['items'] as $alert_id => $alert ) : ?>
             <?php if ( isset( $alerts_advads_messages[ $alert['id'] ] ) ) : ?>
-                <li><?php echo esc_html( $alerts_advads_messages[ $alert['id'] ] ); ?>&nbsp;<a href="#" class="mapi-dismiss-alert" data-id="<?php echo esc_attr( $alert_id ); ?>"><?php echo esc_html( $alerts_dismiss ); ?></a></li>
+                <li><?php echo wp_kses( $alerts_advads_messages[ $alert['id'] ], array( 'a' => array( 'href' => true, 'target' => true, 'class' => true ) ) ); ?>&nbsp;<a href="#" class="mapi-dismiss-alert" data-id="<?php echo esc_attr( $alert_id ); ?>"><?php echo esc_html( $alerts_dismiss ); ?></a></li>
             <?php else : ?>
-                <li><?php echo esc_html( $alert['message'] ); ?>&nbsp;<a href="#" class="mapi-dismiss-alert" data-id="<?php echo esc_attr( $alert_id ); ?>"><?php echo esc_html( $alerts_dismiss ); ?></a></li>
+                <li><?php echo wp_kses( $alert['message'], array( 'a' => array( 'href' => true, 'target' => true, 'class' => true ) ) ); ?>&nbsp;<a href="#" class="mapi-dismiss-alert" data-id="<?php echo esc_attr( $alert_id ); ?>"><?php echo esc_html( $alerts_dismiss ); ?></a></li>
             <?php endif; ?>
        <?php endforeach; ?>
     </ul>
-    <?php echo $adsense_error_page_link; ?>
     <?php endif; ?>
 </div>
 <div id="mapi-connect-errors">
 <?php if ( !empty( $mapi_options['connect_error'] ) ) {
     
     echo '<p>';
-    esc_attr_e( 'Last AdSense account connection attempt failed.', 'advanced-ads' );
-    
     if ( isset( $connection_error_messages[ $mapi_options['connect_error']['reason'] ] ) ) {
-        echo ' ' . $connection_error_messages[ $mapi_options['connect_error']['reason'] ];
+        echo $connection_error_messages[ $mapi_options['connect_error']['reason'] ];
     } else {
-        echo ' ' . $connection_error_messages[ $mapi_options['connect_error']['message'] ];
+        echo $connection_error_messages[ $mapi_options['connect_error']['message'] ];
     }
     echo '<i id="dissmiss-connect-error" class="dashicons dashicons-dismiss align';
     echo is_rtl()? 'left' : 'right';
     echo '" title=" ' . esc_attr( __( 'dismiss', 'advanced-ads' ) ) . '"></i>';
     echo '</p>';
     
-    echo '<p>';
-    $alert_code = isset( $mapi_options['connect_error']['reason'] ) ? '-' . $mapi_options['connect_error']['reason'] : '';
-    printf(
-        // translators: %1$s is a starting link, %2$s is the end
-	esc_attr__( 'Learn more about AdSense account issues %1$shere%2$s', 'advanced-ads' ),
-	    '<a href="' . ADVADS_URL . 'adsense-errors/#utm_source=advanced-ads&utm_medium=link&utm_campaign=adsense-error'. $alert_code . '" target="_blank">',
-	    '</a>'
-    );
-    echo '</p>';
 }
 ?>
 </div>
@@ -107,7 +79,11 @@ $adsense_error_page_link = ob_get_clean();
     <?php if ( $mapi_account_details ) : ?>
         <p class="description"><?php esc_html_e( 'Account holder name', 'advanced-ads' ); echo ': <strong>' . esc_html( $mapi_account_details['name'] ) . '</strong>'; ?></p>
     <?php else : ?>
-        <p class="description"><?php _e( 'Your AdSense Publisher ID <em>(pub-xxxxxxxxxxxxxx)</em>', 'advanced-ads' ) ?></p>
+		<?php if ( 0 !== strpos( $adsense_id, 'pub-' ) ) : ?>
+			<p class="advads-error-message"><?php esc_html_e( 'The Publisher ID has an incorrect format. (must start with "pub-")', 'advanced-ads' ); ?></p>
+		<?php else : ?>
+			<p class="description"><?php _e( 'Your AdSense Publisher ID <em>(pub-xxxxxxxxxxxxxx)</em>', 'advanced-ads' ) ?></p>
+		<?php endif; ?>
     <?php endif; ?>
 </div>
 <?php if ( empty( $adsense_id ) ) : ?>
@@ -119,7 +95,7 @@ $adsense_error_page_link = ob_get_clean();
 	</div>
 	<div class="widget-col">
 		<h3><?php _e( "No, I still don't have an AdSense account", 'advanced-ads' ) ?></h3>
-		<a class="button button-secondary" target="_blank" href="<?php echo self::ADSENSE_NEW_ACCOUNT_LINK; ?>"><?php _e( 'Get a free AdSense account', 'advanced-ads' ); ?></a>
+		<a class="button button-secondary" target="_blank" href="<?php echo Advanced_Ads_AdSense_Admin::ADSENSE_NEW_ACCOUNT_LINK; ?>"><?php _e( 'Get a free AdSense account', 'advanced-ads' ); ?></a>
 	</div>
 </div>
 <style type="text/css">
@@ -191,7 +167,6 @@ printf(__( 'Problems with AdSense? Check out the %1$smanual%2$s or %3$sask here%
 		AdsenseMAPI = {};
 	}
 	AdsenseMAPI.alertsMsg = <?php echo json_encode( $alerts_advads_messages ) ?>;
-    AdsenseMAPI.errorPageLink = '<?php echo $adsense_error_page_link; ?>';
 </script>
 <style type="text/css">
     #adsense {

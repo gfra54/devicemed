@@ -97,7 +97,7 @@ class Advanced_Ads_Gutenberg {
 		
 		// put the inline code with the global variable right before the block's JS file
 		wp_add_inline_script( ADVADS_BASE . '/gutenberg-ad', 'var advadsGutenberg = ' . $inline_script, 'before' );
-		
+		wp_enqueue_script( ADVADS_BASE . '/gutenberg-ad' );
 	}
 	
 	/**

@@ -11,6 +11,7 @@ Author: Romain Rytter
 Version: 0.1
 Author URI: http://www.keepcom.fr
 */
+
 require_once dirname(__FILE__).'/classes/DM_Wordpress.php';
 
 /* inclure les fonctions utilitaires */
@@ -22,8 +23,8 @@ require_once(dirname(__FILE__).'/php/debug.inc.php');
 /* inclure les fonctions des pubs */
 require_once(dirname(__FILE__).'/php/pubs.inc.php');
 
-mysql_connect(DB_HOST,DB_USER,DB_PASSWORD) or die ("<font color=red>Erreur à la connexion</font>");
-mysql_select_db (DB_NAME) or die("<font color=red>Erreur à la sélection de la base</font>");
+//mysql_connect(DB_HOST,DB_USER,DB_PASSWORD) or die ("<font color=red>Erreur ÃÂ  la connexion</font>");
+//mysql_select_db (DB_NAME) or die("<font color=red>Erreur ÃÂ  la sÃÂ©lection de la base</font>");
 
 setlocale (LC_TIME, 'fr_FR.UTF-8','fr_FR.UTF8','fra'); 
 

@@ -95,12 +95,23 @@ function advads_can_display_ads(){
  * @return bool true if amp url, false otherwise
  */
 function advads_is_amp() {
-	if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+	if ( is_admin()
+		|| ( defined( 'REST_REQUEST' ) && REST_REQUEST )
+		|| ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST )
+	) {
+		return false;
+	}
+
+	if ( ! did_action( 'wp' ) ) {
+		Advanced_Ads::log( sprintf( esc_html( '%1$s was called before the %2$s action. %3$s' ),
+			'advads_is_amp()', 'wp', wp_debug_backtrace_summary() )
+		);
 		return false;
 	}
 
 	return ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() )
 	|| ( function_exists( 'is_wp_amp' ) && is_wp_amp() )
+	|| ( function_exists( 'ampforwp_is_amp_endpoint' ) && ampforwp_is_amp_endpoint() )
 	|| isset( $_GET [ 'wpamp' ] );
 }
 

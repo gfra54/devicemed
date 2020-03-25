@@ -29,6 +29,17 @@ class Advanced_Ads_AdSense_Public {
 			echo '<style>ins.adsbygoogle { background-color: transparent; padding: 0; }</style>';
 		}
 
+		if ( defined( 'ADVADS_ADS_DISABLED' ) ) {
+			return;
+		}
+		if ( advads_is_amp() ) {
+			return;
+		}
+
+		if ( Advanced_Ads_Utils::is_iframe() ) {
+			return;
+		}
+
 		$privacy_options = Advanced_Ads_Privacy::get_instance()->options();
 		$privacy_enabled = ! empty( $privacy_options['enabled'] ) && 'not_needed' !== Advanced_Ads_Privacy::get_instance()->get_state();
 		$npa_enabled = ! empty( $privacy_options['show-non-personalized-adsense'] );
@@ -51,6 +62,10 @@ class Advanced_Ads_AdSense_Public {
 			} )</script>';
 		}
 
+		if ( ! apply_filters( 'advanced-ads-can-display-ads-in-header', true ) ) {
+			return;
+		}
+
 		/**
 		 * inject page-level header code
 		 *
@@ -58,7 +73,7 @@ class Advanced_Ads_AdSense_Public {
 		 */
 		$pub_id = trim( $this->data->get_adsense_id() );
 
-		if( ! defined( 'ADVADS_ADS_DISABLED' ) && $pub_id && isset( $options['page-level-enabled'] ) && $options['page-level-enabled'] ){
+		if ( $pub_id && isset( $options['page-level-enabled'] ) && $options['page-level-enabled'] ) {
 			$pub_id = $this->data->get_adsense_id();
 			$client_id = 'ca-' . $pub_id;
 			include GADSENSE_BASE_PATH . 'public/templates/page-level.php';

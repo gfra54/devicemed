@@ -6,13 +6,13 @@
  * @since 1.6.9
  */
 class Advanced_Ads_Checks {
-    
+
 	/**
 	 * Minimum required PHP version of Advanced Ads
 	 */
-	const MINIMUM_PHP_VERSION = 5.4;
-    
-    
+	const MINIMUM_PHP_VERSION = '5.6.20';
+
+
 	/**
 	 * show the list of potential issues
 	 */
@@ -21,9 +21,9 @@ class Advanced_Ads_Checks {
 	}
 
 	/**
-	 * php version minimum 5.4
+	 * PHP version minimum
 	 *
-	 * @return bool true if 5.4 and higher
+	 * @return bool true if uses the minimum PHP version or higher
 	 */
 	 public static function php_version_minimum(){
 
@@ -72,26 +72,6 @@ class Advanced_Ads_Checks {
 	 }
 
 	 /**
-	  * any plugin updates available
-	  *
-	  * @return bool true if plugin updates are available
-	  */
-	 public static function plugin_updates_available(){
-		
-		// iterate throught the plugins and check if any of them is ours (i.e., starts with the string "advanced-ads")
-		$update_plugins = get_site_transient( 'update_plugins' );
-		if ( ! empty( $update_plugins->response ) ) {
-			foreach( $update_plugins->response as $_key => $_responsive ){
-				if( 0 === strpos( $_key, 'advanced-ads') ){
-					return true; 
-				}
-			}
-		}
-
-		return false;
-	 }
-
-	 /**
 	  * check if license keys are missing or invalid or expired
 	  *
 	  * @since 1.6.6
@@ -102,7 +82,7 @@ class Advanced_Ads_Checks {
 	public static function licenses_invalid(){
 
 	    $add_ons = apply_filters( 'advanced-ads-add-ons', array() );
-	    
+
 	    if( $add_ons === array() ) {
 		    Advanced_Ads_Ad_Health_Notices::get_instance()->remove( 'license_invalid' );
 		    return false;
@@ -110,14 +90,14 @@ class Advanced_Ads_Checks {
 
 	    foreach( $add_ons as $_add_on_key => $_add_on ){
 		    $status = Advanced_Ads_Admin_Licenses::get_instance()->get_license_status( $_add_on['options_slug'] );
-		    
+
 		    // check expiry date
 		    $expiry_date = Advanced_Ads_Admin_Licenses::get_instance()->get_license_expires( $_add_on['options_slug'] );
 
 		    if( $expiry_date && 'lifetime' !== $expiry_date && strtotime( $expiry_date ) < time() ){
 			    return true;
 		    }
-		    
+
 		    // don’t check if license is valid
 		    if( $status === 'valid' ) {
 			    continue;
@@ -137,7 +117,7 @@ class Advanced_Ads_Checks {
 	    Advanced_Ads_Ad_Health_Notices::get_instance()->remove( 'license_invalid' );
 	    return false;
 	}
-	
+
 	/**
 	 * Autoptimize plugin installed
 	 *   can change ad tags, especially inline css and scripts
@@ -153,7 +133,7 @@ class Advanced_Ads_Checks {
 
 		return false;
 	}
-	
+
 	/**
 	 * WP rocket plugin installed
 	 *
@@ -163,10 +143,10 @@ class Advanced_Ads_Checks {
 	    if( defined( 'WP_ROCKET_SLUG' ) ){
 	        return true;
 	    }
-	    
+
 	    return false;
 	}
-	
+
 	/**
 	 * checks the settings of wp rocket to find out if combining of javascript files is enabled
 	 * @return boolean true, when "Combine JavaScript files" is enabled
@@ -180,7 +160,31 @@ class Advanced_Ads_Checks {
 	    }
 	    return false;
 	}
-	
+
+	/**
+	 * Any AMP plugin enabled
+	 *
+	 * @return bool true if AMP plugin is installed
+	 */
+	public static function active_amp_plugin(){
+		// Accelerated Mobile Pages
+		if( function_exists( 'ampforwp_is_amp_endpoint' ) ){
+			return true;
+		}
+
+		// AMP plugin
+		if( function_exists( 'is_amp_endpoint' ) ){
+			return true;
+		}
+
+		// other plugins
+		if ( function_exists( 'is_wp_amp' ) ){
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * checks if the preconditions are met to wrap an ad with <!--noptimize--> comments
 	 * @return boolean
@@ -216,11 +220,11 @@ class Advanced_Ads_Checks {
 
 		return $conflicting_plugins;
 	}
-	
+
 	/**
 	 * check if any of the global hide ads options is set
 	 * ignore RSS feed setting, because it is standard
-	 * 
+	 *
 	 * @since 1.7.10
 	 * @return bool
 	 */
@@ -236,28 +240,28 @@ class Advanced_Ads_Checks {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * check for required php extensions
-	 * 
+	 *
 	 * @since 1.8.21
 	 * @return bool
 	 */
 	public static function php_extensions(){
-		
+
 		$missing_extensions = array();
-		
+
 		if( !extension_loaded('dom') ){
 		    $missing_extensions[] = 'dom';
 		}
-		
+
 		if( !extension_loaded('xml') ){
 		    $missing_extensions[] = 'xml';
 		}
-		
+
 		return $missing_extensions;
 	}
-	
+
 	/**
 	 * Get the list of Advanced Ads constant defined by the user.
 	 *
@@ -295,21 +299,35 @@ class Advanced_Ads_Checks {
 		}
 		return $result;
 	}
-	
+
+
+	/**
+	 * WP Engine hosting detected
+	 *
+	 * @return bool true if site is hosted by WP Engine
+	 */
+	public static function wp_engine_hosting(){
+		if( defined( 'WPE_APIKEY' ) ){
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * Notice for Adblocker module if assets have expired
 	 */
 	public static function assets_expired() {
 		$plugin_options = Advanced_Ads_Plugin::get_instance()->options();
 		$adblocker_options = Advanced_Ads_Ad_Blocker::get_instance()->options();
-		
+
 		return ( ! empty ( $plugin_options['use-adblocker'] ) && empty ( $adblocker_options['module_can_work'] ) );
 	}
-	
+
 	/**
 	 * check for potential jQuery errors
 	 * only script, so no return, but direct output
-	 * 
+	 *
 	 */
 	public static function jquery_ui_conflict(){
 	    ?>
@@ -321,5 +339,59 @@ class Advanced_Ads_Checks {
 		    }
 		});
 	    </script><?php
+	}
+
+	/**
+	 * Check for other ads.txt plugins
+	 *
+	 * @return array
+	 */
+	public static function ads_txt_plugins(){
+
+		$ads_txt_plugins = array();
+
+		// Ads.txt Manager
+		if( function_exists( 'tenup_display_ads_txt' ) ) {
+			$ads_txt_plugins[] = 'Ads.txt Manager';
+		}
+
+		// todo:
+		// ads-txt-admin/unveil-media-ads-txt.php
+		// simple-ads-txt/bs_ads_txt.php
+		// ads-txt-manager/adstxtmanager.php
+		// monetizemore-ads-txt/wp-ads-txt.php
+		// authorized-sellers-manager/ads-txt-publisher.php' ) ) {
+
+		return $ads_txt_plugins;
+	}
+
+	/**
+	 * Check for activated plugins that manage header or footer code
+	 *
+	 * @return array
+	 */
+	public static function header_footer_plugins(){
+
+		$plugins = array();
+
+		// Header Footer Code Manager
+		if( function_exists( 'hfcm_options_install' ) ) {
+			$plugins[] = 'Header Footer Code Manager';
+		}
+		// Head, Footer and Post Injections
+		if( function_exists( 'hefo_template_redirect' ) ) {
+			$plugins[] = 'Head, Footer and Post Injections';
+		}
+		// Insert Headers and Footers /insert-headers-and-footers/
+		if( class_exists( 'InsertHeadersAndFooters', false ) ) {
+			$plugins[] = 'Insert Headers and Footers';
+		}
+		// Header and Footer Scripts /header-and-footer-scripts/
+		if( class_exists( 'HeaderAndFooterScripts', false ) ) {
+			$plugins[] = 'Header and Footer Scripts';
+		}
+
+
+		return $plugins;
 	}
 }

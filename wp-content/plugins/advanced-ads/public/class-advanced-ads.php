@@ -73,6 +73,13 @@ class Advanced_Ads {
 	protected $internal_options = false;
 
 	/**
+	 * Whether the loop started in an inner `the_content`.
+	 *
+	 * @var bool
+	 */
+	protected $was_in_the_loop = false;
+
+	/**
 	 * List of bots and crawlers to exclude from ad impressions
 	 *
 	 * @since 1.4.9
@@ -134,6 +141,8 @@ class Advanced_Ads {
 
 		// allow add-ons to interact.
 		add_action( 'init', array( $this, 'advanced_ads_loaded' ), 9 );
+
+		add_filter( 'the_content', array( $this, 'set_was_in_the_loop' ), ~PHP_INT_MAX );
 	}
 
 	/**
@@ -183,9 +192,6 @@ class Advanced_Ads {
 
 		// register hooks and filters for auto ad injection.
 		$this->init_injection();
-
-		// manipulate sidebar widget.
-		add_filter( 'dynamic_sidebar_params', array( $this, 'manipulate_widget_output' ) );
 
 		// add meta robots noindex, nofollow to images, which are part of 'Image ad' ad type.
 		add_action( 'wp_head', array( $this, 'noindex_attachment_images' ) );
@@ -296,6 +302,7 @@ class Advanced_Ads {
 
 			if ( ! empty( $post_ad_options['disable_ads'] ) ) {
 				define( 'ADVADS_ADS_DISABLED', true );
+				return;
 			}
 		};
 
@@ -308,7 +315,27 @@ class Advanced_Ads {
 			$shop_ad_options = get_post_meta( absint( $shop_id ), '_advads_ad_settings', true );
 			if ( ! empty( $shop_ad_options['disable_ads'] ) ) {
 				define( 'ADVADS_ADS_DISABLED', true );
+				return;
 			}
+		}
+
+		if ( isset( $options['hide-for-user-role'] ) ) {
+			$hide_for_roles = Advanced_Ads_Utils::maybe_translate_cap_to_role( $options['hide-for-user-role'] );
+		} else {
+			$hide_for_roles = array();
+		}
+		$user = wp_get_current_user();
+
+		if ( $hide_for_roles && is_user_logged_in() && is_array( $user->roles ) && array_intersect( $hide_for_roles, $user->roles ) ) {
+			define( 'ADVADS_ADS_DISABLED', true );
+			return;
+		}
+
+		// check bots if option is enabled.
+		if ( ( isset( $options['block-bots'] ) && $options['block-bots']
+			&& ! $this->is_cache_bot() && $this->is_bot() ) ) {
+			define( 'ADVADS_ADS_DISABLED', true );
+			return;
 		}
 	}
 
@@ -424,16 +451,28 @@ class Advanced_Ads {
 			return $content;
 		}
 
+		if ( $this->has_many_the_content() ) {
+			if ( current_user_can( 'advanced_ads_place_ads' ) ) {
+				global $wp;
+				Advanced_Ads::log( sprintf( 'More then one `the_content` in the stack (%s): %s, %s',
+					ADVADS_URL . 'manual/ad-health/#the_content_filter_found_multiple_times',
+					isset( $wp->request ) ? $wp->request : '',
+					wp_debug_backtrace_summary() )
+				);
+			}
+			return $content;
+		}
+
 		// Check if ads are disabled in secondary queries.
 		if ( ! empty( $options['disabled-ads']['secondary'] ) ) {
+			// this function was called by ajax (in secondary query).
 			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-				// This function was called by ajax (in secondary query).
 				return $content;
 			}
-			if ( $this->has_many_the_content() ) {
-				return $content;
-			}
-
+			// get out of wp_router_page post type if ads are disabled in secondary queries.
+            if ( 'wp_router_page' === get_post_type() ) {
+                return $content;
+            }
 		}
 
 		// No need to inject ads because all tags are stripped from excepts.
@@ -458,7 +497,7 @@ class Advanced_Ads {
 		if ( ! isset( $options['content-injection-everywhere'] ) || 0 === $options['content-injection-everywhere'] ) {
 					// check if this is a singular page within the loop or an AMP page.
 					$is_amp = advads_is_amp();
-			if ( ( ! is_singular( $public_post_types ) && ! is_feed() ) || ( ! $is_amp && ! in_the_loop() ) ) {
+			if ( ( ! is_singular( $public_post_types ) && ! is_feed() ) || ( ! $is_amp && ! in_the_loop() && ! $this->was_in_the_loop ) ) {
 				return $content; }
 		} else {
 					global $wp_query;
@@ -569,19 +608,6 @@ class Advanced_Ads {
 			return false;
 		}
 
-		$see_ads_capability = isset( $options['hide-for-user-role'] ) && '' !== $options['hide-for-user-role'] ? $options['hide-for-user-role'] : false;
-
-		// check if user is logged in and if so if users with his rights can see ads.
-		if ( $see_ads_capability && is_user_logged_in() && current_user_can( $see_ads_capability ) ) {
-			return false;
-		}
-
-		// check bots if option is enabled.
-		if ( ( isset( $options['block-bots'] ) && $options['block-bots']
-			&& ! $this->is_cache_bot() && $this->is_bot() ) ) {
-			return false;
-		}
-
 		return true;
 	}
 
@@ -620,14 +646,20 @@ class Advanced_Ads {
 	 */
 	public function is_cache_bot() {
 		if ( isset( $_SERVER['HTTP_USER_AGENT'] ) && '' !== $_SERVER['HTTP_USER_AGENT'] ) {
+			$current = sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) );
 			// WP Rocket.
-			if ( false !== strpos( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ), 'wprocketbot' ) ) {
+			if ( false !== strpos( $current, 'wprocketbot' ) ) {
 				return true;
 			}
 
 			// WP Super Cache.
 			$wp_useragent = apply_filters( 'http_headers_useragent', 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ) );
-			if ( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) === $wp_useragent ) {
+			if ( $current === $wp_useragent ) {
+				return true;
+			}
+
+			// LiteSpeed Cache: `lscache_runner` and `lscache_walker` user agents.
+			if ( false !== strpos( $current, 'lscache_' ) ) {
 				return true;
 			}
 		}
@@ -762,36 +794,19 @@ class Advanced_Ads {
 	}
 
 	/**
-	 * Manipulate output of ad widget
-	 *
-	 * @since 1.6.8.2
-	 * @param arr $params widget and sidebar params.
-	 */
-	public function manipulate_widget_output( $params = array() ) {
-
-		if ( 'Advanced Ads' === $params[0]['widget_name'] ) {
-
-			$options = $this->plugin->options();
-			// hide id by default (when options are empty) or when option is enabled.
-			if ( array() === $options || ( isset( $options['remove-widget-id'] ) && $options['remove-widget-id'] ) ) {
-				$pattern                    = '#\s(id)=("|\')[^"^\']+("|\')#';
-				$params[0]['before_widget'] = preg_replace( $pattern, '', $params[0]['before_widget'] );
-			}
-		}
-
-		return $params;
-	}
-
-	/**
 	 * Add meta robots noindex, nofollow to images, which are part of 'Image ad' ad type
 	 */
 	public function noindex_attachment_images() {
 		global $post;
-		// if the image was not attached to any post.
-		if ( is_attachment() && is_object( $post ) && isset( $post->post_parent ) && 0 === $post->post_parent ) {
-			// if at least one ad contains the image.
-			if ( get_post_meta( get_the_ID(), '_advanced-ads_parent_id', true ) > 0 ) {
-				echo '<meta name="robots" content="noindex, nofollow" />';
+
+		if ( is_attachment() && is_object( $post ) && isset( $post->post_parent ) ) {
+			$post_parent = get_post( $post->post_parent );
+			$parent_is_ad = $post_parent && self::POST_TYPE_SLUG == $post_parent->post_type;
+			// if the image was not attached to any post and if at least one image ad contains the image. Needed for backward compatibility.
+			$parent_is_image_ad = ( empty( $post->post_parent ) && 0 < get_post_meta( get_the_ID(), '_advanced-ads_parent_id', true ) );
+
+			if ( $parent_is_ad || $parent_is_image_ad ) {
+				echo '<meta name="robots" content="noindex,nofollow" />';
 			}
 		}
 	}
@@ -802,7 +817,7 @@ class Advanced_Ads {
 	 * @since 1.10.8
 	 */
 	public function custom_header_code(){
-		if( current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_edit_ads') ) ){
+		if ( ! defined( 'ADVANCED_ADS_DISABLE_EDIT_BAR' ) && current_user_can( Advanced_Ads_Plugin::user_cap( 'advanced_ads_edit_ads') ) ){
 			?><style>
 			    div.advads-edit-bar{position:relative;top:0;left:0;height:0;display:none;z-index:10000;animation:advads-edit-appear 2s linear 1;}
                 @keyframes advads-edit-appear {  
@@ -913,5 +928,27 @@ class Advanced_Ads {
 			restore_current_blog();
 			self::get_instance()->get_model()->reset_placement_array();
 		}
+	}
+
+	/**
+	 * Store whether the loop started in an inner `the_content`.
+	 *
+	 * If so, let us assume that we are in the loop when we are in the outermost `the_content`.
+	 * Makes sense only when a hooked to `the_content` function that produces an inner `the_content` has
+	 * lesser priority then `$this->plugin->get_content_injection_priority()`.
+	 *
+	 * @param string Post content.
+	 * @param string Post content (unchanged).
+	 */
+	function set_was_in_the_loop( $content ) {
+		if ( Advanced_Ads::get_instance()->has_many_the_content() ) {
+			$this->was_in_the_loop = $this->was_in_the_loop || in_the_loop();
+		} else {
+			// Next top level `the_content`, forget that the loop started.
+			$this->was_in_the_loop = false;
+		}
+
+
+		return $content;
 	}
 }

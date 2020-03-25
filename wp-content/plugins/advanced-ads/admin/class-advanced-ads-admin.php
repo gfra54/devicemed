@@ -223,6 +223,17 @@ class Advanced_Ads_Admin {
 				'condition_and'          => __( 'and', 'advanced-ads' ),
 				'after_paragraph_promt'  => __( 'After which paragraph?', 'advanced-ads' ),
 				'page_level_ads_enabled' => $auto_ads_strings['enabled'],
+				'today'					 => __( 'Today', 'advanced-ads'),
+				'yesterday'				 => __( 'Yesterday', 'advanced-ads'),
+				'this_month'			 => __( 'This Month', 'advanced-ads'),
+				/* translators: 1: The number of days. */
+				'last_n_days'			 => __( 'Last %1$d days', 'advanced-ads'),
+				/* translators: 1: An error message. */
+				'error_message'			 => __( 'An error occurred: %1$s'),
+				'all'					 => __( 'All', 'advanced-ads'),
+                'no_results'			 => __( 'There were no results returned for this ad. Please make sure it is active, generating impressions and double check your ad parameters.', 'advanced-ads'),
+                'show_inactive_ads' => __( 'Show inactive ads' , 'advanced-ads' ),
+                'hide_inactive_ads' => __( 'Hide inactive ads' , 'advanced-ads' )
 			);
 
 			wp_localize_script( $this->plugin_slug . '-admin-script', 'advadstxt', $translation_array );
@@ -667,8 +678,8 @@ class Advanced_Ads_Admin {
 	public function admin_footer_text( $default_text ) {
 		if ( $this->screen_belongs_to_advanced_ads() ) {
 
-			/* translators: %s is the URL to add a new review, https://wordpress.org/support/plugin/advanced-ads/reviews/?filter=5#new-post */
-			return sprintf( __( 'Thank the developer with a &#9733;&#9733;&#9733;&#9733;&#9733; review on <a href="%s" target="_blank">wordpress.org</a>', 'advanced-ads' ), 'https://wordpress.org/support/plugin/advanced-ads/reviews/?filter=5#new-post' );
+			/* translators: %s is the URL to add a new review, https://wordpress.org/support/plugin/advanced-ads/reviews/#new-post */
+			return sprintf( __( 'Thank the developer with a &#9733;&#9733;&#9733;&#9733;&#9733; review on <a href="%s" target="_blank">wordpress.org</a>', 'advanced-ads' ), 'https://wordpress.org/support/plugin/advanced-ads/reviews/#new-post' );
 
 		}
 		return $default_text;

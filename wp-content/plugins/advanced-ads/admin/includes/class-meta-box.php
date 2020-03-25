@@ -54,6 +54,17 @@ class Advanced_Ads_Admin_Meta_Boxes {
 		add_meta_box(
 			'ad-main-box', __( 'Ad Type', 'advanced-ads' ), array($this, 'markup_meta_boxes'), $post_type, 'normal', 'high'
 		);
+		if (Advanced_Ads_AdSense_Data::get_instance()->is_setup()){
+			global $post_id;
+			if ($post_id){
+				$ad = new Advanced_Ads_Ad( $post_id );
+
+                add_meta_box(
+                    'advads-gadsense-box', __('AdSense Earnings', 'advanced-ads'), array($this, 'markup_meta_boxes'), $post_type, 'normal', 'high'
+                );
+
+			}
+		}
 		// use dynamic filter from to add close class to ad type meta box after saved first time
 		add_filter( 'postbox_classes_advanced_ads_ad-main-box', array( $this, 'close_ad_type_metabox' ) );
 
@@ -83,6 +94,7 @@ class Advanced_Ads_Admin_Meta_Boxes {
 		// register meta box ids
 		$this->meta_box_ids = array(
 		    'ad-main-box',
+			'advads-gadsense-box',
 		    'ad-parameters-box',
 		    'ad-output-box',
 		    'ad-display-box',
@@ -163,6 +175,26 @@ class Advanced_Ads_Admin_Meta_Boxes {
 				$view = 'pitch-tracking.php';
 				// $hndlelinks = '<a href="' . ADVADS_URL . 'manual/visitor-conditions#utm_source=advanced-ads&utm_medium=link&utm_campaign=edit-visitor" target="_blank">' . __('Manual', 'advanced-ads') . '</a>';
 				break;
+			case 'advads-gadsense-box':
+                $unit_code = null;
+			    if ($ad && isset($ad->type) && $ad->type === "adsense"){
+                    if (isset($ad->content)){
+                        $json_content = json_decode($ad->content);
+                        if (isset($json_content->slotId)){
+                            $unit_code = $json_content->slotId;
+                        }
+                    }
+                }
+                $advads_gadsense_options = array(
+                    "dimension_name" => "AD_UNIT_CODE",
+                    "filter_value" => $unit_code,
+                    "hide_dimensions" => true,
+                    "metabox_selector" => "#advads-gadsense-box",
+                    "hidden" => !$unit_code
+                );
+                $advads_gadsense_options['hidden'] = !$unit_code;
+                $view = 'gadsense-dashboard.php';
+				break;
 		}
 
 		if ( ! isset( $view ) ) {
@@ -207,6 +239,20 @@ class Advanced_Ads_Admin_Meta_Boxes {
 			}
 		}
 		
+        if ( 'ad-parameters-box' === $box['id'] && Advanced_Ads_Ad_Type_Adsense::content_is_adsense( $ad->content ) && in_array( $ad->type, array( 'plain', 'content' ) ) ) {
+            if ( false === strpos( $ad->content, 'enable_page_level_ads' ) ) {
+				$adsense_auto_ads = Advanced_Ads_AdSense_Data::get_instance()->is_page_level_enabled();
+				$warnings[] = array(
+					'class' => 'advads-adsense-found-in-content error',
+					'text' => sprintf( 
+						esc_html__( 'This looks like an AdSense ad. Switch the ad type to “AdSense ad” to make use of more features. %sSwitch to AdSense ad%s.', 'advanced' ),
+						'<button class="button-secondary" id="switch-to-adsense-type">',
+						'</button>'
+					)
+				);
+			}
+        }
+        
 		$warnings = apply_filters( 'advanced-ads-ad-notices', $warnings, $box, $post );
 		echo '<ul id="' .$box['id'].'-notices" class="advads-metabox-notices">';
 		foreach( $warnings as $_warning ){

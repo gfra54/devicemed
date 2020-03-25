@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * Allows plugins to use their own update API.
  *
  * @author Easy Digital Downloads
- * @version 1.6.17
+ * @version 1.6.18
  */
 class ADVADS_SL_Plugin_Updater {
 
@@ -42,9 +42,18 @@ class ADVADS_SL_Plugin_Updater {
 		$this->version     = $_api_data['version'];
 		$this->wp_override = isset( $_api_data['wp_override'] ) ? (bool) $_api_data['wp_override'] : false;
 		$this->beta        = ! empty( $this->api_data['beta'] ) ? true : false;
-		$this->cache_key   = md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
+		$this->cache_key   = 'edd_sl_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
 
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
+
+		/**
+		 * Fires after the $edd_plugin_data is setup.
+		 *
+		 * @since x.x.x
+		 *
+		 * @param array $edd_plugin_data Array of EDD SL plugin data.
+		 */
+		do_action( 'post_edd_sl_plugin_updater_setup', $edd_plugin_data );
 
 		// Set up hooks.
 		$this->init();
@@ -111,6 +120,9 @@ class ADVADS_SL_Plugin_Updater {
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
 
 				$_transient_data->response[ $this->name ] = $version_info;
+
+				// Make sure the plugin property is set to the plugin's name/location. See issue 1463 on Software Licensing's GitHub repo.
+				$_transient_data->response[ $this->name ]->plugin = $this->name;
 
 			}
 
@@ -307,6 +319,15 @@ class ADVADS_SL_Plugin_Updater {
 			$_data->icons = $this->convert_object_to_array( $_data->icons );
 		}
 
+		// Convert contributors into an associative array, since we're getting an object, but Core expects an array.
+		if ( isset( $_data->contributors ) && ! is_array( $_data->contributors ) ) {
+			$_data->contributors = $this->convert_object_to_array( $_data->contributors );
+		}
+
+		if( ! isset( $_data->plugin ) ) {
+			$_data->plugin = $this->name;
+		}
+
 		return $_data;
 	}
 	
@@ -325,7 +346,7 @@ class ADVADS_SL_Plugin_Updater {
 	private function convert_object_to_array( $data ) {
 		$new_data = array();
 		foreach ( $data as $key => $value ) {
-			$new_data[ $key ] = $value;
+			$new_data[ $key ] = is_object( $value ) ? $this->convert_object_to_array( $value ) : $value;
 		}
 
 		return $new_data;
@@ -362,7 +383,9 @@ class ADVADS_SL_Plugin_Updater {
 	private function api_request( $_action, $_data ) {
 
 		global $wp_version, $edd_plugin_url_available;
-		
+
+		$verify_ssl = $this->verify_ssl();
+
 		// Do a quick status check on this domain if we haven't already checked it.
 		$store_hash = md5( $this->api_url );
 		if ( ! is_array( $edd_plugin_url_available ) || ! isset( $edd_plugin_url_available[ $store_hash ] ) ) {
@@ -376,7 +399,7 @@ class ADVADS_SL_Plugin_Updater {
 				$edd_plugin_url_available[ $store_hash ] = false;
 			} else {
 				$test_url = $scheme . '://' . $host . $port;
-				$response = wp_remote_get( $test_url, array( 'timeout' => $this->health_check_timeout, 'sslverify' => true ) );
+				$response = wp_remote_get( $test_url, array( 'timeout' => $this->health_check_timeout, 'sslverify' => $verify_ssl ) );
 				$edd_plugin_url_available[ $store_hash ] = is_wp_error( $response ) ? false : true;
 			}
 		}
@@ -407,7 +430,6 @@ class ADVADS_SL_Plugin_Updater {
 			'beta'       => ! empty( $data['beta'] ),
 		);
 
-		$verify_ssl = $this->verify_ssl();
 		$request    = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => $verify_ssl, 'body' => $api_params ) );
 
 		if ( ! is_wp_error( $request ) ) {
@@ -423,10 +445,10 @@ class ADVADS_SL_Plugin_Updater {
 		if ( $request && isset( $request->banners ) ) {
 			$request->banners = maybe_unserialize( $request->banners );
 		}
-		
+
 		if ( $request && isset( $request->icons ) ) {
 			$request->icons = maybe_unserialize( $request->icons );
-		}		
+		}
 
 		if( ! empty( $request->sections ) ) {
 			foreach( $request->sections as $key => $section ) {

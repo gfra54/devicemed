@@ -28,6 +28,11 @@
 	//line-height: 20px !important; //Maybe, if user approves.
 }
 
+//Override icons set as background images.
+#adminmenu#adminmenu#adminmenu #{$ame-menu-prefix} .wp-menu-image {
+	background-image: none;
+}
+
 #adminmenu .ame-submenu-icon .#{$fa-css-prefix} {
 	font-size: 18px;
 }
@@ -50,4 +55,5 @@
 .ws_select_icon .icon16.#{$fa-css-prefix}::before {
 	font-family: "FontAwesome", sans-serif;
 	font-size: 18px;
+	margin-top: 2px;
 }

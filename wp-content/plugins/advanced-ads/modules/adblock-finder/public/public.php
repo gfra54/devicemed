@@ -7,6 +7,10 @@ class Advanced_Ads_Adblock_Finder {
 	}
 
 	public function print_adblock_check_js() {
+		if ( advads_is_amp() ) {
+			return;
+		}
+
 		$options = Advanced_Ads::get_instance()->options();
 
 		$pro_options = get_option( 'advanced-ads-pro' );

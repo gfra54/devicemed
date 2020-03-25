@@ -1,10 +1,3 @@
-<div class="wrap">
-	<?php echo '<', WPMenuEditor::$admin_heading_tag, ' id="ws_ame_editor_heading">'; ?>
-		<?php echo apply_filters('admin_menu_editor-self_page_title', 'Menu Editor'); ?>
-	<?php echo '</', WPMenuEditor::$admin_heading_tag, '>'; ?>
-
-	<?php do_action('admin_menu_editor-display_tabs'); ?>
-
 <div id="ame-dashboard-widget-editor">
 
 	<?php require AME_ROOT_DIR . '/modules/actor-selector/actor-selector-template.php'; ?>
@@ -28,29 +21,33 @@
 
 			<div class="ame-widget-properties">
 				<ame-widget-property params="widget: $data, label: 'Title'">
-					<input data-bind="value: title" type="text" class="ame-widget-property-value" title="Title">
+					<input data-bind="value: title, enable: canChangeTitle" type="text"
+					       class="ame-widget-property-value" title="Title">
 				</ame-widget-property>
 
 				<!-- ko template: { if: propertyTemplate, name: propertyTemplate, data: $data } --><!-- /ko -->
 
-				<ame-widget-property params="widget: $data, label: 'ID'">
-					<input data-bind="value: id" type="text" class="ame-widget-property-value" readonly title="ID">
-				</ame-widget-property>
+				<div data-bind="visible: areAdvancedPropertiesVisible">
+					<ame-widget-property params="widget: $data, label: 'ID'">
+						<input data-bind="value: id" type="text" class="ame-widget-property-value" readonly title="ID">
+					</ame-widget-property>
 
-				<ame-widget-property params="widget: $data, label: 'Location'">
-					<input data-bind="value: location" type="text" class="ame-widget-property-value" readonly title="Location">
-				</ame-widget-property>
+					<ame-widget-property params="widget: $data, label: 'Location'">
+						<input data-bind="value: location" type="text" class="ame-widget-property-value" readonly
+						       title="Location">
+					</ame-widget-property>
 
-				<ame-widget-property params="widget: $data, label: 'Priority'">
-					<select data-bind="value: priority, enable: canChangePriority"
-					        class="ame-widget-property-value" title="Priority">
-						<option value="high">high</option>
-						<option value="sorted">sorted</option>
-						<option value="core">core</option>
-						<option value="default">default</option>
-						<option value="low">low</option>
-					</select>
-				</ame-widget-property>
+					<ame-widget-property params="widget: $data, label: 'Priority'">
+						<select data-bind="value: priority, enable: canChangePriority"
+						        class="ame-widget-property-value" title="Priority">
+							<option value="high">high</option>
+							<option value="sorted">sorted</option>
+							<option value="core">core</option>
+							<option value="default">default</option>
+							<option value="low">low</option>
+						</select>
+					</ame-widget-property>
+				</div>
 
 				<div class="ame-widget-control-actions">
 					<a href="#" class="ame-close-widget" data-bind="click: toggle">Close</a>
@@ -88,12 +85,22 @@
 
 		<?php
 		submit_button(
-			'Add Widget',
+			'Add HTML Widget',
 			'secondary',
 			'ame-add-html-widget',
 			false,
 			array(
 				'data-bind' => 'click: addHtmlWidget'
+			)
+		);
+
+		submit_button(
+			'Add RSS Widget',
+			'secondary',
+			'ame-add-rss-widget',
+			false,
+			array(
+				'data-bind' => 'click: addRssWidget'
 			)
 		);
 		?>
@@ -141,32 +148,80 @@
 	<?php require dirname(__FILE__) . '/import-dialog-template.php'; ?>
 </div>
 
+<div style="display: none;">
+	<template id="ame-widget-property-template">
+		<label>
+			<!-- ko if: label -->
+				<span class="ame-widget-property-name" data-bind="text: label"></span><br>
+			<!-- /ko -->
+			<!-- ko template: { nodes: $componentTemplateNodes, data: widget } --><!-- /ko -->
+		</label>
+	</template>
+
+	<template id="ame-custom-html-widget-template">
+		<ame-widget-property params="widget: $data, label: 'Content'">
+			<textarea data-bind="value: content"
+			          class="ame-widget-property-value"
+			          title="Content"
+			          rows="10">
+			</textarea>
+		</ame-widget-property>
+
+		<ame-widget-property params="widget: $data, label: ''">
+			<input type="checkbox"
+			       data-bind="checked: filtersEnabled"
+			       class="ame-widget-property-value"
+			       title="Enable filters like automatic paragraphs, smart quotes and automatic tag balancing">
+			Apply content filters
+		</ame-widget-property>
+	</template>
+
+	<template id="ame-custom-rss-widget-template">
+		<ame-widget-property params="widget: $data, label: 'Feed URL'">
+			<input type="url"
+			       data-bind="value: feedUrl"
+			       class="ame-widget-property-value"
+			       title="The URL of the RSS feed">
+		</ame-widget-property>
+
+		<ame-widget-property params="widget: $data, label: 'Max. items to show'">
+			<input type="number"
+			       data-bind="value: maxItems"
+			       min="1"
+			       max="20"
+			       class="ame-widget-property-value"
+			       title="Max items">
+		</ame-widget-property>
+
+		<ame-widget-property params="widget: $data, label: ''">
+			<input type="checkbox"
+			       data-bind="checked: showAuthor"
+			       class="ame-widget-property-value"
+			       title="Show author">
+			Show author
+		</ame-widget-property>
+
+		<ame-widget-property params="widget: $data, label: ''">
+			<input type="checkbox"
+			       data-bind="checked: showDate"
+			       class="ame-widget-property-value"
+			       title="Show date">
+			Show date
+		</ame-widget-property>
+
+		<ame-widget-property params="widget: $data, label: ''">
+			<input type="checkbox"
+			       data-bind="checked: showSummary"
+			       class="ame-widget-property-value"
+			       title="Show summary">
+			Show summary
+		</ame-widget-property>
+	</template>
+
+	<template id="ame-welcome-widget-template">
+		<p class="howto">
+			This is a special widget. It can't be renamed or moved. Only users who have
+			the <code>edit_theme_options</code> capability can see it.
+		</p>
+	</template>
 </div>
-
-<template id="ame-widget-property-template">
-	<label>
-		<!-- ko if: label -->
-			<span class="ame-widget-property-name" data-bind="text: label"></span><br>
-		<!-- /ko -->
-		<!-- ko template: { nodes: $componentTemplateNodes, data: widget } --><!-- /ko -->
-	</label>
-</template>
-
-<template id="ame-custom-html-widget-template">
-	<ame-widget-property params="widget: $data, label: 'Content'">
-		<textarea data-bind="value: content"
-		          class="ame-widget-property-value"
-		          title="Content"
-		          rows="10">
-		</textarea>
-	</ame-widget-property>
-
-	<ame-widget-property params="widget: $data, label: ''">
-		<input type="checkbox"
-		       data-bind="checked: filtersEnabled"
-		       class="ame-widget-property-value"
-		       title="Enable filters like automatic paragraphs, smart quotes and automatic tag balancing">
-		Apply content filters
-	</ame-widget-property>
-</template>
-

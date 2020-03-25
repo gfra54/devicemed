@@ -170,14 +170,27 @@ class Advanced_Ads_Admin_Notices {
 				$this->notices[] = 'nl_free_addons';
 			}
 		}
-		// ask for a review after 5 days and when 3 ads were created and when not paused
-		if ( ! in_array( 'review', $queue ) 
+		$number_of_ads = 0;
+		// needed error handling due to a weird bug in the piklist plugin
+		try {
+				$number_of_ads = Advanced_Ads::get_number_of_ads();
+		} catch ( Exception $e ) {
+
+		}
+
+		// ask for a review after 2 days and when 3 ads were created and when not paused
+		if ( ! in_array( 'review', $queue )
                         && ! isset( $closed['review'] )
                         && ( ! isset( $paused['review'] ) || $paused['review'] <= time() )
-                        && 432000 < ( time() - $activation)
-			&& 3 <= Advanced_Ads::get_number_of_ads()
+                        && 172800 < ( time() - $activation)
+			&& 3 <= $number_of_ads
                             ) {
                             $this->notices[] = 'review';
+		} elseif ( in_array( 'review', $queue ) && 3 > $number_of_ads ){
+				$review_key = array_search( 'review', $this->notices );
+				if ( $review_key !== false ) {
+						unset( $this->notices[ $review_key ] );
+				}
 		}
 	}
 
@@ -237,7 +250,7 @@ class Advanced_Ads_Admin_Notices {
 	 *  move notice into "closed"
 	 *
 	 * @since 1.5.3
-	 * @param str $notice notice to be removed from the queue
+	 * @param string $notice notice to be removed from the queue
 	 */
 	public function remove_from_queue($notice) {
 		if ( ! isset($notice) ) {

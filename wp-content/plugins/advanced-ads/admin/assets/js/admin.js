@@ -1,8 +1,4 @@
 jQuery( document ).ready(function ($) {
-	if ( ! $.fn.accordion || ! $.fn.tooltip || ! advads_use_ui_buttonset() ) {
-		$( '.advads-jqueryui-error').show();
-	}
-
 	function advads_load_ad_type_parameter_metabox(ad_type) {
 		jQuery( '#advanced-ad-type input' ).prop( 'disabled', true );
 		$( '#advanced-ads-tinymce-wrapper' ).hide();
@@ -31,11 +27,18 @@ jQuery( document ).ready(function ($) {
 		});
 	};
 
+    $( document ).on( 'click', '#switch-to-adsense-type', function( ev ) {
+        ev.preventDefault();
+		AdvancedAdsAdmin.AdImporter.adsenseCode = Advanced_Ads_Admin.get_ad_source_editor_text();
+        $( '#advanced-ad-type-adsense' ).trigger( 'click' );
+        $( this ).closest( 'li' ).addClass( 'hidden' );
+    } );
+
 	$( document ).on('change', '#advanced-ad-type input', function () {
 		var ad_type = $( this ).val()
 		advads_load_ad_type_parameter_metabox( ad_type );
 	});
-	
+
 	// trigger for ad injection after ad creation
 	$( '#advads-ad-injection-box .advads-ad-injection-button' ).on( 'click', function(){
 		var placement_type = this.dataset.placementType, // create new placement
@@ -87,10 +90,10 @@ jQuery( document ).ready(function ($) {
 		    // jQuery( '#advanced-ad-type input').prop( 'disabled', false );
 	    });
 	});
-	
+
 	// activate general buttons
-	if ( advads_use_ui_buttonset() ) {
-		$( '.advads-buttonset' ).buttonset();
+	if ( $.fn.advads_buttonset ) {
+		$( '.advads-buttonset' ).advads_buttonset();
 	}
 	// activate accordions
 	if ( $.fn.accordion ) {
@@ -170,7 +173,7 @@ jQuery( document ).ready(function ($) {
 		    };
 		};
 	});
-	
+
 	// remove individual posts from the display conditions post list
 	$( document ).on('click', '.advads-conditions-postid-buttons .button', function(e){
 		$( this ).remove();
@@ -209,13 +212,13 @@ jQuery( document ).ready(function ($) {
 	    $(this).parents('.advads-conditions-table tr').prev('tr').remove();
 	    $(this).parents('.advads-conditions-table tr').remove();
 	});
-	
+
 	// display new ad group form
 	$( '#advads-new-ad-group-link' ).click(function(e){
 		e.preventDefault();
 		$( '#advads-new-group-form' ).show().find('input[type="text"]').focus();
 	});
-	
+
 	// display ad groups form
 	$( '#advads-ad-group-list a.edit, #advads-ad-group-list a.row-title' ).click(function(e){
 		e.preventDefault();
@@ -267,13 +270,22 @@ jQuery( document ).ready(function ($) {
 			usagediv.show();
 		}
 	});
-	/** 
+	// show warning if Container ID option contains invalid characters
+    $( '#advads-output-wrapper-id' ).keyup( function(){
+            var id_value = $( this ).val();
+            if( /^[a-z-0-9]*$/.test( id_value ) ){
+                $( '.advads-output-wrapper-id-error' ).removeClass( 'advads-error-message' );
+            } else {
+                $( '.advads-output-wrapper-id-error' ).addClass( 'advads-error-message' ).css( 'display', 'block' );
+            }
+    });
+	/**
 	 * automatically open all options and show usage link when this is the placement linked in the URL
 	 * also highlight the box with an effect for a short time
 	 */
 	if( jQuery( window.location.hash ).length ){
 		jQuery( window.location.hash ).find( '.advads-toggle-link + div, .advads-usage' ).show();
-		
+
 	}
 
 	// group page: add ad to group
@@ -323,7 +335,7 @@ jQuery( document ).ready(function ($) {
 		});
 	}
 	// set default group options for earch group
-	
+
 	advads_show_group_options( $( '.advads-ad-group-type input:checked' ) );
 	// group page: hide ads if more than 4 – than only show 3
 	$('.advads-ad-group-list-ads').each( function(){
@@ -340,15 +352,44 @@ jQuery( document ).ready(function ($) {
 	 * SETTINGS PAGE
 	 */
 
+	// automatically copy the first entered license key into all other empty fields
+    $('.advads-settings-tab-main-form .advads-license-key').blur( function(){
+            // get number of license fields
+
+            var license_key = $(this).val();
+
+            if( "" === license_key ){
+                return;
+            }
+
+            var license_fields = $('.advads-settings-tab-main-form .advads-license-key');
+            var license_fields_without_value = [];
+
+            // count license fields without value
+            license_fields.each( function( i, el ){
+                    if( "" === $( el ).val() ){
+                            license_fields_without_value.push( el );
+                    }
+            } );
+
+            // if there is only one field filled then take its content (probably a license key) and add it into the other fields
+            if( license_fields.length === ( license_fields_without_value.length + 1 ) ){
+                $.each( license_fields_without_value, function( i, el ) {
+                        $( el ).val( license_key );
+                } );
+            }
+
+
+    });
+
 	// activate licenses
 	$('.advads-license-activate').click(function(){
 
-	    var button = $(this);
-	    
+	    var button  = $(this);
+
 	    if( ! this.dataset.addon ) { return }
-	    
-	    // hide button to prevent issues with activation when people click twice
-	    button.hide();
+
+        advads_disable_license_buttons( true );
 
 	    var query = {
 		action: 'advads-activate-license',
@@ -374,6 +415,7 @@ jQuery( document ).ready(function ($) {
 		    button.fadeOut();
 		    parent.find('.advads-license-activate-active').fadeIn();
 		    parent.find('input').prop('readonly', 'readonly');
+            advads_disable_license_buttons( false );
 		} else if( r === 'ex' ){
 			var input = parent.find('input.advads-license-key');
 			var link = parent.find('a.advads-renewal-link');
@@ -384,23 +426,22 @@ jQuery( document ).ready(function ($) {
 			}
 		    parent.find('.advads-license-activate-error').remove();
 		    parent.find('.advads-license-expired-error').show();
-		    button.show();
+            advads_disable_license_buttons( false );
 		} else {
 		    parent.find('.advads-license-activate-error').show().text( r );
-		    button.show();
+            advads_disable_license_buttons( false );
 		}
 	    });
 	});
-	
+
 	// deactivate licenses
 	$('.advads-license-deactivate').click(function(){
 
 	    var button = $(this);
-	    
+
 	    if( ! this.dataset.addon ) { return }
-	    
-	    // hide button to prevent issues with double clicking
-	    button.hide();
+
+        advads_disable_license_buttons( true );
 
 	    var query = {
 		action: 'advads-deactivate-license',
@@ -424,31 +465,41 @@ jQuery( document ).ready(function ($) {
 		    button.siblings('.advads-license-activate').show();
 		    button.siblings('input').prop('readonly', false);
 		    button.fadeOut();
+            advads_disable_license_buttons( false );
 		} else if( r === 'ex' ){
 		    button.siblings('.advads-license-activate-error').hide();
 		    button.siblings('.advads-license-activate-active').hide();
 		    button.siblings('.advads-license-expired-error').show();
 		    button.siblings('input').prop('readonly', false);
 		    button.fadeOut();
+            advads_disable_license_buttons( false );
 		} else {
 		    console.log( r );
 		    button.siblings('.advads-license-activate-error').show().html( r );
 		    button.siblings('.advads-license-activate-active').hide();
-		    button.show();
+            advads_disable_license_buttons( false );
 		}
 	    });
 	});
 
+	// toggle license buttons – disable or not
+    function advads_disable_license_buttons( disable = true ) {
+        var buttons = $('button.advads-license-activate, button.advads-license-deactivate'); // all activation buttons
+        // disable all buttons to prevent issues when users try to enable multiple licenses at the same time
+        if (disable) {
+            buttons.attr('disabled', 'disabled');
+        } else {
+            buttons.removeAttr( 'disabled' );
+        }
+    }
 
-
-	
 	/**
 	* PLACEMENTS
 	*/
 	 // show image tooltips
-	if ( $.fn.tooltip ) {
-		$( ".advads-placements-new-form .advads-placement-type" ).tooltip({
-			items: "span",
+	if ( $.fn.advads_tooltip ) {
+		$( ".advads-placements-new-form .advads-placement-type" ).advads_tooltip({
+			items: "label",
 			content: function() {
 				return $( this ).parents('.advads-placement-type').find( '.advads-placement-description' ).html();
 			}
@@ -636,6 +687,14 @@ jQuery( document ).ready(function ($) {
 	if ( ad_content && ad_content.indexOf( 'enable_page_level_ads' ) !== -1 ) {
 		advads_show_adsense_auto_ads_warning();
 	}
+
+
+	//advads_ads_txt_check_third_party();
+	advads_ads_txt_find_issues();
+	
+	jQuery( '.advanced-ads-adsense-dashboard' ).each( function(key,elm) {
+		Advanced_Ads_Adsense_Helper.process_dashboard(elm);
+	});
 });
 
 
@@ -847,20 +906,105 @@ function advads_show_adsense_auto_ads_warning() {
 	});
 }
 
-// Change JQueryUI names to fix name collision with other libraries, eg. Bootstrap
-jQuery.fn.advads_button = jQuery.fn.button;
+/**
+ * Check if a third-party ads.txt file exists.
+ */
+function advads_ads_txt_find_issues() {
+	var $wrapper = jQuery( '#advads-ads-txt-notice-wrapper' );
+	var $refresh = jQuery( '#advads-ads-txt-notice-refresh' );
+
+	if ( ! $wrapper.length ) {
+		return;
+	}
+
+	if ( ! $wrapper.find( 'ul' ).length ) {
+		load();
+	}
+
+	$refresh.click( function() {
+		load();
+	} );
+
+	function load() {
+		$wrapper.empty().append( jQuery( '<span class="spinner advads-spinner"></span>' ) );
+		$refresh.hide();
+
+		jQuery.ajax( {
+			type: 'POST',
+			url: ajaxurl,
+			dataType: 'html',
+			data: {
+				action: 'advads-ads-txt',
+				nonce: advadsglobal.ajax_nonce
+			},
+		} ).done(function( response ) {
+			$wrapper.html( response );
+			$refresh.show();
+		} ).fail(function( jqXHR ) {
+			$wrapper.html( '<p class="advads-error-message">'
+				+ jQuery( '#advads-ads-txt-notice-error' ).text().replace( '%s', parseInt( jqXHR.status, 10 ) ),
+				+ '</p>'
+			);
+			$refresh.show();
+		} );
+	}
+
+}
+
+jQuery.fn.advads_tooltip = function() {
+	return _advads_apply_jqueryui_widget.call( this, 'tooltip', ['tooltip'], arguments );
+};
+
+jQuery.fn.advads_button = function() {
+	return _advads_apply_jqueryui_widget.call( this, 'button', ['button'], arguments );
+};
+
+jQuery.fn.advads_buttonset = function() {
+	return _advads_apply_jqueryui_widget.call( this, 'buttonset', ['button', 'buttonset'], arguments );
+};
 
 /**
- * check if jQueryUI button/buttonset can be used
+ * Apply jQueryUI widget.
+ *
+ * @param str name Widget name.
+ * @param arr revoke Names of Twitter Bootstrap widgets to revoke.
+ * @param arguments_ mixed Widget arguments.
  */
-var advads_use_ui_buttonset = ( function() {
-	var ret = null;
-	return function () {
-		if ( null === ret ) {
-			var needle = 'var g="string"==typeof f,h=c.call(arguments,1)'; //string from jquery-ui source code
-			ret = jQuery.fn.advads_button && jQuery.fn.buttonset && jQuery.fn.button.toString().indexOf( needle ) !== -1;
+function _advads_apply_jqueryui_widget( name, revoke, args ) {
+	var can_apply = true;
+
+	jQuery.each( revoke, function( _index, _name ) {
+		if ( jQuery.fn[ _name ].noConflict ) {
+			// Revoke Twitter Bootstrap, assign jQuery UI.
+			jQuery.fn[ _name ].noConflict();
 		}
-		return ret;
+		can_apply = _advads_can_apply_jqueryui_widget( _name );
+	});
+
+	if ( ! can_apply ) {
+		// The culprit is not Bootstrap, we haven't been able to assign jQuery UI.
+		jQuery( '.advads-jqueryui-error').show();
+		return;
+	}
+
+	var r = this[ name ].apply( this, args );
+	return r;
+}
+
+/**
+ * Check whether jQueryUI widget was overridden by another library.
+ *
+ * @param name Widget name.
+ * @return bool
+ */
+var _advads_can_apply_jqueryui_widget = ( function( name ) {
+	var r = {};
+	return function ( name ) {
+		if ( ! r.hasOwnProperty( name ) ) {
+			var needle = 'prior to initialization;'; // A string from jquery-ui source code.
+			r[ name ] = jQuery.fn[ name ].toString().indexOf( needle ) !== -1;
+		}
+		return r[ name ];
 	};
 })();
 
@@ -1015,3 +1159,439 @@ window.Advanced_Ads_Admin = window.Advanced_Ads_Admin || {
 		}
     }
 };
+
+
+if (! window.AdvancedAdsAdmin) window.AdvancedAdsAdmin = {};
+if (! window.AdvancedAdsAdmin.AdImporter) window.AdvancedAdsAdmin.AdImporter = {
+	/**
+	 * will highlight the currently selected ads in the list
+	 * @param hideInactive when true will hide inactive ad units
+	 * @returns the selector of the selected row or false if no row was selected.
+	 */
+	highlightSelectedRowInExternalAdsList: function(hideInactive){
+		if (typeof(hideInactive) == 'undefined') hideInactive = AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle;
+		const tbody = $( '#mapi-table-wrap tbody' );
+		const btn = $('#mapi-toggle-idle');
+
+		//  count the ad units to determine if there's a need for the overflow class (scrolling)
+		const nbUnits = hideInactive
+			? $( '#mapi-table-wrap tbody tr[data-active=1]' ).length
+			: $( '#mapi-table-wrap tbody tr' ).length;
+		if (nbUnits > 8) $( '#mapi-table-wrap' ).addClass('overflow');
+		else $( '#mapi-table-wrap' ).removeClass('overflow');
+
+		//  hide inactive ads, but always show the selected one (if any)
+		if (hideInactive) {
+			btn.removeClass('dashicons-hidden');
+			btn.addClass('dashicons-visibility');
+			btn.attr('title', advadstxt.show_inactive_ads);
+			tbody.find('tr[data-slotid]').each(function (k, v) {
+				v = $(v);
+				if (v.data("active")) v.show();
+				else v.hide();
+			});
+		}
+		else{
+			btn.removeClass('dashicons-visibility');
+			btn.addClass('dashicons-hidden');
+			btn.attr('title', advadstxt.hide_inactive_ads);
+			tbody.find('tr[data-slotid]').show();
+		}
+
+		const selectedRow = AdvancedAdsAdmin.AdImporter.getSelectedRow();
+		tbody.find( 'tr' ).removeClass( 'selected' );
+		if (selectedRow){
+			//make sure, it is visible before applying the zebra stripes
+			selectedRow.show();
+		}
+
+		//  make the table's rows striped.
+		const visible = tbody.find( 'tr:visible' );
+		visible.filter( ':odd' ).css('background-color', '#FFFFFF');
+		visible.filter( ':even' ).css('background-color', '#F9F9F9');
+
+		//  highlight the selected row
+		if (selectedRow){
+			//  highlight the selected row
+			selectedRow.css('background-color', '');
+			selectedRow.addClass( 'selected' );
+		}
+		return selectedRow || false;
+	},
+	getSelectedRow(){
+		const selectedId = AdvancedAdsAdmin.AdImporter.adNetwork.getSelectedId();
+		const tbody = $( '#mapi-table-wrap tbody' );
+
+		if (selectedId){
+			const selectedRows = tbody.find( 'tr[data-slotid="' + selectedId + '"]' );
+			if ( selectedRows.length ) {
+				return selectedRows;
+			}
+		}
+		return null;
+	},
+    openExternalAdsList: function(){
+		const network = AdvancedAdsAdmin.AdImporter.adNetwork;
+        network.openSelector();
+
+        $( '#mapi-insert-code' ).css( 'display', 'inline' );
+		$( '#mapi-open-selector' ).css( 'display', 'none' );
+		$( '#mapi-close-selector-link' ).css( 'display', 'inline' );
+        $( '.advads-adsense-code' ).css( 'display', 'none' );
+        $( '#remote-ad-unsupported-ad-type' ).css( 'display', 'none' );
+
+		AdvancedAdsAdmin.AdImporter.highlightSelectedRowInExternalAdsList(network.hideIdle);
+
+
+
+
+        var SNT = network.getCustomInputs();
+        SNT.css( 'display', 'none' );
+
+        $( '#mapi-wrap' ).css( 'display', 'block' );
+
+		if (! network.fetchedExternalAds){
+			network.fetchedExternalAds = true;
+			const nbUnits = $( '#mapi-table-wrap tbody tr[data-slotid]' ).length;
+			if (nbUnits == 0) {
+				//usually we start with a preloaded list.
+				//only reload, when the count is zero (true for new accounts).
+				AdvancedAdsAdmin.AdImporter.refreshAds();
+			}
+		}
+        AdvancedAdsAdmin.AdImporter.resizeAdListHeader();
+    },
+	/**
+	 * will be called every time the ad type is changed.
+	 * required for onBlur detection
+	 */
+	onChangedAdType: function(){
+		if (AdvancedAdsAdmin.AdImporter.adNetwork){
+			AdvancedAdsAdmin.AdImporter.adNetwork.onBlur();
+			AdvancedAdsAdmin.AdImporter.adNetwork = null;
+		}
+	},
+	setup: function (adNetwork) {
+		AdvancedAdsAdmin.AdImporter.adNetwork = adNetwork;
+		adNetwork.onSelected();
+		if (AdvancedAdsAdmin.AdImporter.isSetup) {
+			AdvancedAdsAdmin.AdImporter.highlightSelectedRowInExternalAdsList();
+			return;
+		}
+		AdvancedAdsAdmin.AdImporter.isSetup = true;
+
+		$( document ).on( 'click', '.prevent-default', function( ev ) { ev.preventDefault() } );
+
+		//  handle clicks for the "insert new ... code" anchor
+		$( document ).on('click', '#mapi-insert-code', function(e){
+			e.preventDefault();
+			$( '.advads-adsense-code' ).show();
+			$( '#mapi-open-selector' ).css( 'display', 'inline' );
+			$( '#mapi-close-selector-link' ).css( 'display', 'inline' );
+			$( '#mapi-wrap' ).css( 'display', 'none' );
+			var SNT = AdvancedAdsAdmin.AdImporter.adNetwork.getCustomInputs();
+			SNT.css( 'display', 'none' );
+			$( this ).hide();
+		});
+
+		//  handle clicks for the "get ad code from your linked account" anchor
+		$( document ).on( 'click', '#mapi-open-selector a', function(){
+            AdvancedAdsAdmin.AdImporter.openExternalAdsList();
+		});
+
+		//  the close button of the ad unit list
+		$( document ).on( 'click', '#mapi-close-selector,#mapi-close-selector-link', function(){
+			AdvancedAdsAdmin.AdImporter.manualSetup();
+		} );
+
+		//the individual rows of the ad units may contain elements with the mapiaction class
+		$( document ).on( 'click', '.mapiaction', function( ev ) {
+			var action = $( this ).attr( 'data-mapiaction' );
+			switch ( action ) {
+				case 'updateList':
+					AdvancedAdsAdmin.AdImporter.refreshAds();
+					break;
+				case 'getCode':
+					if ( $( this ).hasClass( 'disabled' ) ) {
+						break;
+					}
+					var slotId = $( this ).attr( 'data-slotid' );
+                    AdvancedAdsAdmin.AdImporter.adNetwork.selectAdFromList(slotId);
+					break;
+				case 'updateCode':
+					var slotId = $( this ).attr( 'data-slotid' );
+					AdvancedAdsAdmin.AdImporter.adNetwork.updateAdFromList(slotId);
+					break;
+				case 'toggleidle':
+					AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle = !AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle;
+					AdvancedAdsAdmin.AdImporter.toggleIdleAds( AdvancedAdsAdmin.AdImporter.adNetwork.hideIdle );
+					break;
+				default:
+			}
+		} );
+
+		AdvancedAdsAdmin.AdImporter.adNetwork.onDomReady();
+		// AdvancedAdsAdmin.AdImporter.openExternalAdsList();
+
+	},
+
+	/**
+	 * call this method to display the manual setup (if available for the current ad network)
+	 * this method is an equivalent to the close ad list button.
+	 */
+	manualSetup(){
+		$( '#mapi-open-selector,.advads-adsense-show-code' ).css( 'display', 'inline' );
+		$( '#mapi-insert-code' ).css( 'display', 'inline' );
+		$( '#mapi-close-selector-link' ).css( 'display', 'none' );
+		$( '#mapi-wrap' ).css( 'display', 'none' );
+
+		var SNT = AdvancedAdsAdmin.AdImporter.adNetwork.getCustomInputs();
+		SNT.css( 'display', 'block' );
+		AdvancedAdsAdmin.AdImporter.adNetwork.onManualSetup();
+	},
+
+	setRemoteErrorMessage(msg){
+		if (! msg) jQuery('#remote-ad-code-msg').empty();
+		else jQuery('#remote-ad-code-msg').html(msg);
+	},
+
+	// another legacy method
+	resizeAdListHeader: function() {
+		var th = $( '#mapi-list-header span' );
+		var tb = $( '#mapi-table-wrap tbody tr:visible' );
+		var w = [];
+
+		tb.first().find( 'td' ).each(function(){
+			w.push( $( this ).width() );
+		});
+
+		th.each(function(i){
+			if ( i != w.length - 1 ) {
+				$( this ).width( w[i] );
+			}
+		});
+	},
+
+
+
+	/**
+	 * legacy method
+	 */
+	closeAdSelector: function() {
+		// close the ad unit selector
+		setTimeout(function(){
+			$( '#mapi-wrap' ).animate(
+				{ height: 0, },
+				360,
+				function(){
+					$( '#mapi-open-selector,.advads-adsense-show-code' ).css( 'display', 'inline' );
+					$( '#mapi-close-selector-link' ).css( 'display', 'none' );
+					$( '#mapi-wrap' ).css({
+						display: 'none',
+						height: 'auto',
+					});
+					const SNT = AdvancedAdsAdmin.AdImporter.adNetwork.getCustomInputs();
+					SNT.css( 'display', 'block' );
+				}
+			);
+		}, 80);
+
+	},
+
+	/**
+	 * legacy method
+	 * updates the UI, (call if the selected unit is supported)
+	 */
+	unitIsNotSupported: function( slotID ) {
+		$( '#remote-ad-unsupported-ad-type' ).css( 'display', 'block' );
+		AdsenseMAPI.unsupportedUnits[slotID] = 1;
+		$( 'i[data-mapiaction="getCode"][data-slotid="' + slotID + '"]' ).addClass( 'disabled' );
+		$( 'tr[data-slotid="' + slotID + '"] .unitcode > span' ).addClass( 'unsupported' );
+		if ( ! $( 'tr[data-slotid="' + slotID + '"] .unittype a' ).length ) {
+			var td = $( 'tr[data-slotid="' + slotID + '"] .unittype' );
+			var content = td.text();
+			td.html( '<a target="_blank" href="' + AdsenseMAPI.unsupportedLink + '" data-type="' + content + '">' + AdsenseMAPI.unsupportedText + '</a>' );
+		}
+		if ( ! $( 'tr[data-slotid="' + slotID + '"] .unitsize a' ).length ) {
+			var td = $( 'tr[data-slotid="' + slotID + '"] .unitsize' );
+			var content = td.text();
+			td.html( '<a target="_blank" href="' + AdsenseMAPI.unsupportedLink + '" data-size="' + content + '">' + AdsenseMAPI.unsupportedText + '</a>' );
+		}
+
+	},
+
+	/**
+	 * legacy method
+	 * updates the UI, (call if the selected unit is NOT supported)
+	 */
+	unitIsSupported: function( slotID ) {
+		$( '#remote-ad-unsupported-ad-type' ).css( 'display', 'none' );
+		if ( 'undefined' != typeof AdsenseMAPI.unsupportedUnits[slotID] ) {
+			delete AdsenseMAPI.unsupportedUnits[slotID];
+		}
+		$( 'i[data-mapiaction="getCode"][data-slotid="' + slotID + '"]' ).removeClass( 'disabled' );
+		$( 'tr[data-slotid="' + slotID + '"] .unitcode > span' ).removeClass( 'unsupported' );
+		if ( $( 'tr[data-slotid="' + slotID + '"] .unittype a' ).length ) {
+			var td = $( 'tr[data-slotid="' + slotID + '"] .unittype' );
+			var content = $( 'tr[data-slotid="' + slotID + '"] .unittype a' ).attr( 'data-type' );
+			td.text( content );
+		}
+		if ( $( 'tr[data-slotid="' + slotID + '"] .unitsize a' ).length ) {
+			var td = $( 'tr[data-slotid="' + slotID + '"] .unitsize' );
+			var content = $( 'tr[data-slotid="' + slotID + '"] .unitsize a' ).attr( 'data-size' );
+			td.text( content );
+		}
+	},
+
+	/**
+	 * legacy method
+	 * updates the UI, (call if the selected unit is NOT supported)
+	 */
+	emptyMapiSelector: function( msg ) {
+		const nag = '<div class="notice notice-error" style="font-size:1.1em;padding:.6em 1em;font-weight:bold;">' + msg + '</div>';
+		$( '#mapi-loading-overlay' ).css( 'display', 'none' );
+		$( '#mapi-wrap' ).html( $( nag ) );
+	},
+
+	/**
+	 * legacy method
+	 */
+	refreshAds: function() {
+		const adNetwork = AdvancedAdsAdmin.AdImporter.adNetwork;
+		$( '#mapi-loading-overlay' ).css( 'display', 'block' );
+		$.ajax({
+			type: 'post',
+			url: ajaxurl,
+			data: adNetwork.getRefreshAdsParameters(),
+			success: function(response,status,XHR){
+				if ( 'undefined' != typeof response.html ) {
+					$( '#mapi-wrap' ).replaceWith( $( response.html ) );
+                    AdvancedAdsAdmin.AdImporter.openExternalAdsList();
+				} else if ( 'undefined' != typeof response.msg ) {
+					AdvancedAdsAdmin.AdImporter.emptyMapiSelector( response.msg );
+				}
+				if ( 'undefined' != typeof response.raw ) {
+					console.log( response.raw );
+				}
+				$( '#mapi-loading-overlay' ).css( 'display', 'none' );
+			},
+			error: function(request,status,err){
+				$( '#mapi-loading-overlay' ).css( 'display', 'none' );
+			},
+		});
+
+	},
+
+	toggleIdleAds: function ( hide ) {
+		if ( 'undefined' == typeof hide ) {
+			hide = true;
+		}
+		AdvancedAdsAdmin.AdImporter.highlightSelectedRowInExternalAdsList(hide);
+	}
+};
+
+/**
+ * The "abstract" base class for handling external ad units
+ * Every ad unit will provide you with a set of methods to control the GUI and trigger requests to the server
+ * while editing an ad that is backed by this network. The main logic takes place in admin/assets/admin.js,
+ * and the methods in this class are the ones that needed abstraction, depending on the ad network. When you
+ * need new network-dependant features in the frontend, this is the place to add new methods.
+ *
+ * An AdvancedAdsAdNetwork uses these fields:
+ * id string The identifier, that is used for this network. Must match with the one used in the PHP code of Advanced Ads
+ * units array Holds the ad units of this network.
+ * vars map These are the variables that were transmitted from the underlying PHP class (method: append_javascript_data)
+ * hideIdle Remembers, wheter idle ads should be displayed in the list;
+ * fetchedExternalAds Remembers if the external ads list has already been loaded to prevent unneccesary requests
+ */
+class AdvancedAdsAdNetwork{
+	/**
+	 * @param id string representing the id of this network. has to match the identifier of the PHP class
+	 */
+	constructor(id){
+		this.id = id;
+		this.units = [];
+		this.vars = window[id + 'AdvancedAdsJS'];
+		this.hideIdle = true;
+		this.fetchedExternalAds = false;
+	}
+
+	/**
+	 * will be called when an ad network is selected (ad type in edit ad)
+	 */
+	onSelected(){
+		console.error("Please override onSelected.");
+	}
+
+	/**
+	 * will be called when an ad network deselected (ad type in edit ad)
+	 */
+	onBlur(){
+		console.error("Please override onBlur.");
+	}
+
+	/**
+	 * opens the selector list containing the external ad units
+	 */
+	openSelector(){
+		console.error("Please override openSelector.");
+	}
+
+	/**
+	 * returns the network specific id of the currently selected ad unit
+	 */
+	getSelectedId(){
+		console.error("Please override getSelectedId.");
+	}
+
+	/**
+	 * will be called when an external ad unit has been selected from the selector list
+	 * @param slotId string the external ad unit id
+	 */
+	selectAdFromList(slotId){
+		console.error("Please override selectAdFromList.");
+	}
+
+	/**
+	 * will be called when an the update button of an external ad unit has been clicked
+	 * TODO: decide wheter to remove this method. not required anymore - the button was removed.
+	 * @param slotId string the external ad unit id
+	 */
+	updateAdFromList(slotId){
+		console.error("Please override updateAdFromList.");
+	}
+
+
+	/**
+	 * return the POST params that you want to send to the server when requesting a refresh of the external ad units
+	 * (like nonce and action and everything else that is required)
+	 */
+	getRefreshAdsParameters(){
+		console.error("Please override getRefreshAdsParameters.");
+	}
+
+	/**
+	 * return the jquery objects for all the custom html elements of this ad type
+	 */
+	getCustomInputs(){
+		console.error("Please override getCustomInputs.");
+	}
+
+	/**
+	 * what to do when the DOM is ready
+	 */
+	onDomReady(){
+		console.error("Please override onDomReady.");
+	}
+
+	/**
+	 * when you need custom behaviour for ad networks that support manual setup of ad units, override this method
+	 */
+	onManualSetup(){
+		//no console logging. this is optional
+	}
+}
+
+class AdvancedAdsExternalAdUnit{
+
+}

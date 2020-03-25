@@ -17,20 +17,12 @@
 				?>
 					</label></li>
 			<?php endif; ?>
+			<li><label><input type="radio" name="advanced_ads_disable_reason" value="ads not showing up"/><?php esc_attr_e( 'Ads are not showing up', 'advanced-ads' ); ?></label></li>
 			<li><label><input type="radio" name="advanced_ads_disable_reason" value="temporary"/><?php esc_attr_e( 'It is only temporary', 'advanced-ads' ); ?></label></li>
 			<li><label><input type="radio" name="advanced_ads_disable_reason" value="missing feature"/><?php esc_attr_e( 'I miss a feature', 'advanced-ads' ); ?></label></li>
 			<li><input type="text" name="advanced_ads_disable_text[]" value="" placeholder="<?php esc_attr_e( 'Which one?', 'advanced-ads' ); ?>"/></li>
 			<li><label><input type="radio" name="advanced_ads_disable_reason" value="stopped showing ads"/><?php esc_attr_e( 'I stopped using ads on my site.', 'advanced-ads' ); ?></label></li>
 			<li><label><input type="radio" name="advanced_ads_disable_reason" value="other plugin"/><?php esc_attr_e( 'I switched to another plugin', 'advanced-ads' ); ?></label></li>
-			<li class="advanced-ads-feedback-review"><span class="advanced-ads-feedback-review-text"><?php _e( 'Faster than the AdSense support!', 'advanced-ads' ); ?></span>
-			    <span class="dashicons dashicons-star-filled"></span>
-			    <span class="dashicons dashicons-star-filled"></span>
-			    <span class="dashicons dashicons-star-filled"></span>
-			    <span class="dashicons dashicons-star-filled"></span>
-			    <span class="dashicons dashicons-star-filled"></span>
-			    <a href="<?php echo Advanced_Ads_Plugin::support_url( '#utm_source=advanced-ads&utm_medium=link&utm_campaign=disable-support' ); ?>" target="_blank"><?php 
-				    _e( 'reach out for help', 'advanced-ads' ); ?></a>
-			</li>
 			</ul>
 			<?php if ( $from ) : ?>
 				<input type="hidden" name="advanced_ads_disable_from" value="<?php echo $from; ?>"/>

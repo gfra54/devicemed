@@ -38,9 +38,6 @@ if ( isset( $_REQUEST['advads-group-update-nonce'] ) ) {
 $last_edited_group_id = 0;
 if (isset( $_REQUEST['advads-last-edited-group'] )){
 	$last_edited_group_id = $_REQUEST['advads-last-edited-group'];
-	wp_add_inline_script(
-		'advads-ad-groups', 'alert("TEST");'
-	);
 	?>
 	<script>
 		var body = document.getElementsByTagName("body")[0];

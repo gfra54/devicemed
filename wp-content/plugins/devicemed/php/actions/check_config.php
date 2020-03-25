@@ -1,5 +1,7 @@
 <?php
 
+
+
 /* vérification de la configuration wordpress (en cas de migration) */
 function check_current_config(){
 

@@ -5,12 +5,17 @@
  */
 class ameWidgetCollection {
 	const FORMAT_NAME = 'Admin Menu Editor dashboard widgets';
-	const FORMAT_VERSION = '1.0';
+	const FORMAT_VERSION = '1.1';
 
 	/**
 	 * @var ameDashboardWidget[]
 	 */
 	private $widgets = array();
+
+	/**
+	 * @var array Settings for the special "Welcome to WordPress!" panel.
+	 */
+	private $welcomePanel = array();
 
 	/**
 	 * @var string
@@ -230,6 +235,7 @@ class ameWidgetCollection {
 				'version' => self::FORMAT_VERSION,
 			),
 			'widgets' => $widgets,
+			'welcomePanel' => $this->welcomePanel,
 			'siteComponentHash' => $this->siteComponentHash,
 		);
 
@@ -244,17 +250,23 @@ class ameWidgetCollection {
 	}
 
 	/**
-	 * @param string $json
-	 * @return self|null
+	 * Get the visibility settings for the "Welcome" panel.
+	 *
+	 * @return array [actorId => boolean]
 	 */
-	public static function fromJSON($json) {
-		$input = json_decode($json, true);
-
-		if ($input === null) {
-			throw new ameInvalidJsonException('Cannot parse widget data. The input is not valid JSON.');
+	public function getWelcomePanelVisibility() {
+		if (isset($this->welcomePanel['grantAccess']) && is_array($this->welcomePanel['grantAccess'])) {
+			return $this->welcomePanel['grantAccess'];
 		}
+		return array();
+	}
 
-		if (!is_array($input)) {
+	/**
+	 * @param array $input
+	 * @return self
+	 */
+	public static function fromArray($input) {
+		if ( !is_array($input) ) {
 			throw new ameInvalidWidgetDataException(sprintf(
 				'Failed to decode widget data. Expected type: array, actual type: %s',
 				gettype($input)
@@ -273,8 +285,8 @@ class ameWidgetCollection {
 			throw new ameInvalidWidgetDataException(sprintf(
 				"Can't import widget settings that were created by a newer version of the plugin. '.
 				'Update the plugin and try again. (Newest supported format: '%s', input format: '%s'.)",
-				$input['format']['version'],
-				self::FORMAT_VERSION
+				self::FORMAT_VERSION,
+				$input['format']['version']
 			));
 		}
 
@@ -284,9 +296,28 @@ class ameWidgetCollection {
 			$collection->widgets[$widget->getId()] = $widget;
 		}
 
-		$collection->siteComponentHash = isset($input['siteComponentHash']) ? strval($input['siteComponentHash']) : '';
+		if ( isset($input['welcomePanel'], $input['welcomePanel']['grantAccess']) ) {
+			$collection->welcomePanel = array(
+				'grantAccess' => (array)($input['welcomePanel']['grantAccess']),
+			);
+		}
 
+		$collection->siteComponentHash = isset($input['siteComponentHash']) ? strval($input['siteComponentHash']) : '';
 		return $collection;
+	}
+
+	/**
+	 * @param string $json
+	 * @return self|null
+	 */
+	public static function fromJSON($json) {
+		$input = json_decode($json, true);
+
+		if ($input === null) {
+			throw new ameInvalidJsonException('Cannot parse widget data. The input is not valid JSON.');
+		}
+
+		return self::fromArray($input);
 	}
 }
 

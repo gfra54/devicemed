@@ -70,7 +70,8 @@ jQuery( document ).ready(function () {
 	    var remove = jQuery( this ).hasClass( 'remove' );
 	    
 	    // fix height to prevent the box from going smaller first, then show the "show" link and grow again
-	    jQuery( '#advads_overview_notices' ).css( 'height', jQuery( '#advads_overview_notices' ).height() + 'px' );
+        var notice_box = jQuery( '#advads_overview_notices' );
+	    notice_box.css( 'height', notice_box.height() + 'px' );
 
 	    var query = {
 		action: 'advads-ad-health-notice-hide',
@@ -83,6 +84,8 @@ jQuery( document ).ready(function () {
 	    } else {
 		notice.hide();
 	    }
+	    // show loader
+        notice_box.find('.advads-loader' ).show();
 	    advads_ad_health_maybe_remove_list();
 	    // send query
 	    jQuery.post(ajaxurl, query, function (r) {
@@ -92,6 +95,8 @@ jQuery( document ).ready(function () {
 		    advads_ad_health_reload_show_link();
 		    // remove the fixed height
 		    jQuery( '#advads_overview_notices' ).css( 'height', '' );
+		    // remove loader
+            notice_box.find('.advads-loader' ).hide();
 	    });
 	});
 	// show all hidden notices
@@ -230,7 +235,7 @@ function advads_load_dashboard_rss_widget_content(){
 /**
  * Ad Health Notices in backend
  */
-// display notices list
+// display notices list (deprecated because we load it without AJAX now)
 function advads_display_ad_health_notices(){
 
 	var query = {
@@ -271,20 +276,25 @@ function advads_push_notice( key, attr = '' ){
 }
 // show notices of a given type again
 function advads_ad_health_show_hidden(){
-	var query = {
-	    action: 'advads-ad-health-notice-unignore',
-	    nonce: advadsglobal.ajax_nonce
-	};
-	// show all hidden
-	jQuery( document ).find( '#advads_overview_notices .advads-ad-health-notices > li:hidden' ).show();
-	// update the button
-	advads_ad_health_reload_show_link();
-	advads_ad_health_maybe_remove_list();
-	// send query
-	jQuery.post(ajaxurl, query, function (r) {
-		// update issue count
-		advads_ad_health_reload_number_in_menu();
-	});
+    var notice_box = jQuery( '#advads__overview_notices');
+    var query = {
+        action: 'advads-ad-health-notice-unignore',
+        nonce: advadsglobal.ajax_nonce
+    };
+    // show all hidden
+    jQuery( document ).find( '#advads_overview_notices .advads-ad-health-notices > li:hidden' ).show();
+    // show loader
+    notice_box.find('.advads-loader' ).show();
+    // update the button
+    advads_ad_health_reload_show_link();
+    advads_ad_health_maybe_remove_list();
+    // send query
+    jQuery.post(ajaxurl, query, function (r) {
+        // update issue count
+        advads_ad_health_reload_number_in_menu();
+        // hide loader
+        notice_box.find('.advads-loader' ).hide();
+    });
 };
 // hide list fragments if last item was hidden/removed
 function advads_ad_health_maybe_remove_list(){

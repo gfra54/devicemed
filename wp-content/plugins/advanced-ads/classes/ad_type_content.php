@@ -73,7 +73,11 @@ class Advanced_Ads_Ad_Type_Content extends Advanced_Ads_Ad_Type_Abstract{
 				'drag_drop_upload' => true
 			);
 			wp_editor( $content, 'advanced-ad-parameters-content', $args );
-		} ?><br class="clear"/> <input type="hidden" name="advanced_ad[output][allow_shortcodes]" value="1" /><?php
+		}
+        ?>
+        <br class="clear"/>
+        
+        <input type="hidden" name="advanced_ad[output][allow_shortcodes]" value="1" /><?php
 		include ADVADS_BASE_PATH . 'admin/views/ad-info-after-textarea.php';
 	}
 
@@ -127,7 +131,6 @@ class Advanced_Ads_Ad_Type_Content extends Advanced_Ads_Ad_Type_Abstract{
 		$output = wpautop( $output );
 		$output = shortcode_unautop( $output );
 		$output = $this->do_shortcode( $output, $ad );
-		$output = prepend_attachment( $output );
 		// make included images responsive, since WordPress 4.4
 		if( ! defined( 'ADVADS_DISABLE_RESPONSIVE_IMAGES' ) && function_exists( 'wp_make_content_images_responsive' ) ){
 			$output = wp_make_content_images_responsive( $output );

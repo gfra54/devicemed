@@ -24,9 +24,11 @@ do_action( 'advanced-ads-ad-params-before', $ad, $types );
 	$type = ( isset( $types[ $ad->type ] ) ) ? $types[ $ad->type ] : current( $types );
 	$type->render_parameters( $ad );
 
-	if ( 'dummy' !== $ad->type ) :
-		include ADVADS_BASE_PATH . 'admin/views/ad-parameters-size.php';
-	endif;
+    $types_without_size = array('dummy');
+    $types_without_size = apply_filters( 'advanced-ads-types-without-size', $types_without_size );
+	if ( ! in_array($ad->type, $types_without_size) ) {
+        include ADVADS_BASE_PATH . 'admin/views/ad-parameters-size.php';
+    };
 	?>
 	</div>
 <?php

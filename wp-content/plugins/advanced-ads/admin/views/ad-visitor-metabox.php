@@ -13,6 +13,7 @@ if ( ! defined( 'AAP_VERSION' ) ) {
 	$pro_conditions[] = __( 'referrer url', 'advanced-ads' );
 	$pro_conditions[] = __( 'user agent', 'advanced-ads' );
 	$pro_conditions[] = __( 'user can (capabilities)', 'advanced-ads' );
+	$pro_conditions[] = __( 'user role', 'advanced-ads' );
 }
 if ( ! defined( 'AAGT_VERSION' ) ) {
 	$pro_conditions[] = __( 'geo location', 'advanced-ads' );
@@ -157,8 +158,8 @@ jQuery( document ).ready(function ($) {
 					var connector = '<input type="checkbox" name="<?php echo Advanced_Ads_Visitor_Conditions::FORM_NAME; ?>[' + visitor_condition_index + '][connector]" value="or" id="advads-visitor-conditions-'+ visitor_condition_index +'-connector"><label for="advads-visitor-conditions-'+ visitor_condition_index +'-connector"><?php _e( 'and', 'advanced-ads' ); ?></label>';
 					var newline = '<tr class="advads-conditions-connector advads-conditions-connector-and"><td colspan="3">'+connector+'</td></tr><tr><td>' + visitor_condition_title + '</td><td>' + r + '</td><td><button type="button" class="advads-conditions-remove button">x</button></td></tr>';
 					$( '#advads-visitor-conditions table tbody' ).append( newline );
-					if ( advads_use_ui_buttonset() ) { // only used in Pro right now
-						$('#advads-visitor-conditions table tbody .advads-conditions-single.advads-buttonset').buttonset();
+					if ( jQuery.fn.advads_buttonset ) { // only used in Pro right now
+						$('#advads-visitor-conditions table tbody .advads-conditions-single.advads-buttonset').advads_buttonset();
 					}
 					if ( jQuery.fn.advads_button ) {
 						$('#advads-visitor-conditions table tbody .advads-conditions-connector input').advads_button();

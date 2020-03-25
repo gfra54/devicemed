@@ -63,7 +63,7 @@ class Advanced_Ads_Ad_Type_Image extends Advanced_Ads_Ad_Type_Abstract{
 		if( ! defined( 'AAT_VERSION' )) : ?>
 			<span class="label"><?php _e( 'URL', 'advanced-ads' ); ?></span>
 			<div>
-				<input type="text" name="advanced_ad[url]" id="advads-url" class="advads-ad-url" value="<?php echo $url; ?>" placeholder="<?php _e( 'Link to target site', 'advanced-ads' ); ?>" /></p>
+				<input type="url" name="advanced_ad[url]" id="advads-url" class="advads-ad-url" value="<?php echo $url; ?>" placeholder="<?php _e( 'Link to target site', 'advanced-ads' ); ?>" /></p>
 			</div><hr/><?php 
 		endif;
 	}

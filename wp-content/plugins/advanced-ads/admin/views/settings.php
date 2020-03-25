@@ -62,38 +62,65 @@ $setting_tabs = apply_filters(
 
 </div>
 <script>
-// menu tabs
-jQuery( '#advads-tabs' ).find( 'a' ).click(function () {
+/**
+ * There are two formats of URL supported:
+ * admin.php?page=advanced-ads-settings#top#tab_id     go to the `tab_id`
+ * admin.php?page=advanced-ads-settings#tab_id__anchor go to the `tab_id`, scroll to the `anchor`
+ */
+
+/**
+ * Extract the active tab and anchor from the URL.
+ */
+function advads_extract_tab( url ) {
+	var hash_parts = url.replace( '#top#', '' ).replace( '#', '' ).split( '__' );
+
+	return {
+		'tab': hash_parts[0] || jQuery( '.advads-tab' ).attr( 'id' ),
+		'anchor': hash_parts[1]
+	}
+}
+
+/**
+ * Set the active tab and optionally scroll to the anchor.
+ */
+function advads_set_tab( tab ) {
 	jQuery( '#advads-tabs' ).find( 'a' ).removeClass( 'nav-tab-active' );
 	jQuery( '.advads-tab' ).removeClass( 'active' );
 
-	var id = jQuery( this ).attr( 'id' ).replace( '-tab', '' );
-	jQuery( '#' + id ).addClass( 'active' );
-	jQuery( this ).addClass( 'nav-tab-active' );
+	jQuery( '#' + tab.tab ).addClass( 'active' );
+	jQuery( '#' + tab.tab + '-tab' ).addClass( 'nav-tab-active' );
+
+	if ( tab.anchor ) {
+		var anchor_offset = document.getElementById( tab.anchor ).getBoundingClientRect().top;
+		var admin_bar = 48;
+		window.scrollTo( 0, anchor_offset + window.scrollY - admin_bar );
+	}
+}
+
+// menu tabs
+jQuery( '#advads-tabs' ).find( 'a' ).click(function () {
+	var url = jQuery( this ).attr( 'href' );
+	var tab = advads_extract_tab( url );
+	advads_set_tab( tab );
+});
+
+// While user is already on the Settings page, find links (in admin menu,
+// in the Checks at the top, in the notices at the top) to particular setting tabs and open them on click.
+jQuery( document ).on( 'click', 'a[href*="page=advanced-ads-settings"]:not(.nav-tab)', function() {
+	// Already on the Settings page, so set the new tab.
+	// Extract the tab id from the url.
+	var url = jQuery( this ).attr( 'href' ).split( 'advanced-ads-settings' )[1];
+	var tab = advads_extract_tab( url );
+	advads_set_tab( tab );
 });
 
 // activate specific or first tab
 
-var active_tab = window.location.hash.replace( '#top#', '' );
-if (active_tab == '' || active_tab == '#_=_') {
-	active_tab = jQuery( '.advads-tab' ).attr( 'id' );
-}
-jQuery( '#' + active_tab ).addClass( 'active' );
-jQuery( '#' + active_tab + '-tab' ).addClass( 'nav-tab-active' );
-jQuery( '.nav-tab-active' ).click();
+var active_tab = advads_extract_tab( window.location.hash );
+advads_set_tab( active_tab );
+
 // set all tab urls
 advads_set_tab_hashes();
-
-// While user is already on the Settings page, find links (in admin menu,
-// in the Checks at the top) to particular setting tabs and open them on click.
-jQuery( '.toplevel_page_advanced-ads a[href*="#top"], .message a[href*="#top"]' ).click( function() {
-	// Already on the Settings page, so simulate another click on a tab.
-	if ( window.location.href.indexOf( 'page=advanced-ads-settings' ) ) {
-		// Extract the tab id from the url.
-		var tab = jQuery( this ).attr( 'href' ).split( 'advanced-ads-settings#top#' )[1];
-		jQuery( '#advads-tabs' ).find( 'a#' + tab + '-tab' ).click();
-	}
-});
 
 // dynamically generate the sub-menu
 jQuery( '.advads-tab-sub-menu' ).each( function( key, e ){

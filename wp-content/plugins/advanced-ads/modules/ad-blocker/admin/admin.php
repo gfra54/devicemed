@@ -147,7 +147,7 @@ class Advanced_Ads_Ad_Blocker_Admin
 		$fs_connect = Advanced_Ads_Filesystem::get_instance()->fs_connect( $this->upload_dir['basedir'] );
 
 		if ( false === $fs_connect || is_wp_error( $fs_connect ) ) {
-			$message = __( 'Unable to connect to the filesystem. Please confirm your credentials.', 'advanced-ads-pro' );
+			$message = __( 'Unable to connect to the filesystem. Please confirm your credentials.', 'advanced-ads' );
 
 			if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
 				$message = esc_html( $wp_filesystem->errors->get_error_message() );

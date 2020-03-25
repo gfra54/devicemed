@@ -125,6 +125,16 @@ class Advanced_Ads_Admin_Menu {
 			} else {
 				$submenu['advanced-ads'][1][0] .= '&nbsp;<span class="update-plugins count-' . $notices. '"><span class="update-count">' . $notices . '</span></span>';
 			}*/
+			// link to license tab if they are invalid
+			if( Advanced_Ads_Checks::licenses_invalid() ){
+				$submenu['advanced-ads'][] = array(
+					__('Licenses', 'advanced-ads' ) // title.
+						. '&nbsp;<span class="update-plugins count-1"><span class="update-count">!</span></span>',
+					Advanced_Ads_Plugin::user_cap( 'advanced_ads_manage_options'), // capability
+					admin_url( 'admin.php?page=advanced-ads-settings#top#licenses' ),
+					__('Licenses', 'advanced-ads' ), // not sure what this is, but it is in the API
+				);
+			}
 		}
 		
 

@@ -23,7 +23,6 @@
                 '<a href="#" class="mapi-dismiss-alert" data-id="' + id + '">' + $div.attr( 'data-dismiss' ) + '</a>' ) );
             }
             $div.append( $ul );
-            $div.append( $( AdsenseMAPI.errorPageLink ) );
         }
     }
 
@@ -128,6 +127,13 @@
         });
 
     } );
+
+	$( document ).on( 'click', '.mapi-create-ads-txt', function( ev ) {
+		ev.preventDefault();
+
+		var top = jQuery( '#advads-ads-txt-wrapper' ).offset().top;
+		window.scrollTo( 0, top );
+	} );
 
     $( document ).on( 'advadsMapiRefreshAlerts', function ( ev, response ) {
         if ( 'undefined' != typeof response.status && response.status && response.alerts ) {

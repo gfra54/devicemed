@@ -31,7 +31,7 @@ class Advanced_Ads_Placements {
 				'title' => __( 'Manual Placement', 'advanced-ads' ),
 				'description' => __( 'Manual placement to use as function or shortcode.', 'advanced-ads' ),
 				'image' => ADVADS_BASE_URL . 'admin/assets/img/placements/manual.png',
-				'options' => array( 'show_position' => true, 'show_lazy_load' => true )
+				'options' => array( 'show_position' => true, 'show_lazy_load' => true, 'amp' => true )
 				),
 			'header' => array(
 				'title' => __( 'Header Code', 'advanced-ads' ),
@@ -41,31 +41,32 @@ class Advanced_Ads_Placements {
 			'footer' => array(
 				'title' => __( 'Footer Code', 'advanced-ads' ),
 				'description' => __( 'Injected in Footer (before closing &lt;/body&gt; Tag).', 'advanced-ads' ),
-				'image' => ADVADS_BASE_URL . 'admin/assets/img/placements/footer.png'
+				'image' => ADVADS_BASE_URL . 'admin/assets/img/placements/footer.png',
+				'options' => array( 'amp' => true )
 				),
 			'post_top' => array(
 				'title' => __( 'Before Content', 'advanced-ads' ),
 				'description' => __( 'Injected before the post content.', 'advanced-ads' ),
 				'image' => ADVADS_BASE_URL . 'admin/assets/img/placements/content-before.png',
-				'options' => array( 'show_position' => true, 'show_lazy_load' => true, 'uses_the_content' => true )
+				'options' => array( 'show_position' => true, 'show_lazy_load' => true, 'uses_the_content' => true, 'amp' => true )
 				),
 			'post_bottom' => array(
 				'title' => __( 'After Content', 'advanced-ads' ),
 				'description' => __( 'Injected after the post content.', 'advanced-ads' ),
 				'image' => ADVADS_BASE_URL . 'admin/assets/img/placements/content-after.png',
-				'options' => array( 'show_position' => true, 'show_lazy_load' => true, 'uses_the_content' => true )
+				'options' => array( 'show_position' => true, 'show_lazy_load' => true, 'uses_the_content' => true, 'amp' => true )
 				),
 			'post_content' => array(
 				'title' => __( 'Content', 'advanced-ads' ),
 				'description' => __( 'Injected into the content. You can choose the paragraph after which the ad content is displayed.', 'advanced-ads' ),
 				'image' => ADVADS_BASE_URL . 'admin/assets/img/placements/content-within.png',
-				'options' => array( 'show_position' => true, 'show_lazy_load' => true, 'uses_the_content' => true )
+				'options' => array( 'show_position' => true, 'show_lazy_load' => true, 'uses_the_content' => true, 'amp' => true )
 				),
 			'sidebar_widget' => array(
 				'title' => __( 'Sidebar Widget', 'advanced-ads' ),
 				'description' => __( 'Create a sidebar widget with an ad. Can be placed and used like any other widget.', 'advanced-ads' ),
 				'image' => ADVADS_BASE_URL . 'admin/assets/img/placements/widget.png',
-				'options' => array( 'show_lazy_load' => true )
+				'options' => array( 'show_lazy_load' => true, 'amp' => true )
 				),
 		);
 		return apply_filters( 'advanced-ads-placement-types', $types );
@@ -475,7 +476,7 @@ class Advanced_Ads_Placements {
 
 			foreach ( $offsets as $offset ) {
 				// test ad is emtpy
-				$adContent = Advanced_Ads_Select::get_instance()->get_ad_by_method( $placement_id, 'placement', $options );
+				$adContent = Advanced_Ads_Select::get_instance()->get_ad_by_method( $placement_id, 'placement', $placement_opts );
 				if ( trim( $adContent, $whitespaces ) === '' ) {
 					continue;
 				}

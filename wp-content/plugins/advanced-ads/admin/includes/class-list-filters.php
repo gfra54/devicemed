@@ -105,15 +105,16 @@ class Advanced_Ads_Ad_List_Filters {
 			$ad_option = $this->all_ads_options[ $post->ID ];
 
 			/**
-			 * check if this particular ad belongs to a group and if so, 
+			 * Check if this particular ad belongs to a group and if so,
 			 * add the group to the list of filterable groups
 			 * skip when the group is already known
 			 */
 			foreach ( $groups_to_check as $key => $ads ) {
-				if( ! isset( $all_filters['all_groups'][ $key ] ) // skip if this group is already known
-					&& in_array( $post->ID, $ads, true ) ) {
+				if ( ! isset( $all_filters['all_groups'][ $key ] ) // skip if this group is already known.
+					&& in_array( $post->ID, $ads, true )
+					&& isset( $this->all_groups[ $key ] ) ) {
 					$all_filters['all_groups'][ $key ] = $this->all_groups[ $key ]['name'];
-					// remove groups that are already selected for the filter
+					// remove groups that are already selected for the filter.
 					unset( $groups_to_check[ $key ] );
 					continue;
 				}
@@ -185,7 +186,7 @@ class Advanced_Ads_Ad_List_Filters {
 
 		$options = array();
 		foreach ( $meta_results as $_value ) {
-			$value                         = unserialize( $_value['meta_value'] );
+			$value                         = maybe_unserialize( $_value['meta_value'] );
 			$options[ $_value['post_id'] ] = $value;
 		}
 
@@ -209,7 +210,15 @@ class Advanced_Ads_Ad_List_Filters {
 		 * which breaks the SQL, because the numbers are no longer recognised as such
 		 */
         if ( ! empty( $group_ids ) ) {
-            $term_relations = $wpdb->get_results( $wpdb->prepare( 'SELECT object_id, term_taxonomy_id FROM `' . $wpdb->prefix . 'term_relationships` WHERE `term_taxonomy_id` IN (%1$s)', implode( ',', $group_ids ) ), 'ARRAY_A' );
+            $term_relations = $wpdb->get_results(
+                $wpdb->prepare(
+                        'SELECT object_id, term_taxonomy_id FROM `' . $wpdb->prefix . 'term_relationships` WHERE `term_taxonomy_id` IN (' .
+                        'SELECT term_taxonomy_id FROM `' . $wpdb->prefix . 'term_taxonomy` WHERE `taxonomy` = %s' .
+                        ')',
+                        Advanced_Ads::AD_GROUP_TAXONOMY
+                    ),
+                    'ARRAY_A'
+            );
 		}
         foreach ( $term_relations as $value ) {
 			if ( isset( $value['term_taxonomy_id'] ) && isset( $value['object_id'] ) ) {
@@ -403,8 +412,13 @@ class Advanced_Ads_Ad_List_Filters {
             
             $term = $request['term'];
             global $wpdb;
-            $q = 'SELECT `object_id` FROM `' . $wpdb->prefix . 'term_relationships` WHERE `term_taxonomy_id` = ( SELECT `term_id` FROM `' . $wpdb->prefix . 'terms` WHERE `slug` = %s )';
-            $q = $wpdb->prepare( $q, $term );
+            $q =    'SELECT `object_id` FROM `' . $wpdb->prefix . 'term_relationships` WHERE `term_taxonomy_id` = (' .
+                        'SELECT ' . $wpdb->prefix . 'terms.term_id FROM `' . $wpdb->prefix . 'terms` INNER JOIN ' .
+                        $wpdb->prefix . 'term_taxonomy on ' . $wpdb->prefix . 'terms.term_id = ' . $wpdb->prefix . 'term_taxonomy.term_id ' .
+                        'WHERE ' . $wpdb->prefix . 'terms.slug = %s AND ' . $wpdb->prefix . 'term_taxonomy.taxonomy = %s' .
+                    ')';
+            
+            $q = $wpdb->prepare( $q, $term, Advanced_Ads::AD_GROUP_TAXONOMY );
             
             $object_ids = $wpdb->get_results( $q, 'ARRAY_A' );
             $ads_in_taxo = array();

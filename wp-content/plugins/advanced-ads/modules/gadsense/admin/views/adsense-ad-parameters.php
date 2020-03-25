@@ -28,7 +28,6 @@ $quota = $MAPI->get_quota();
 
 $mapi_ad_codes = $mapi_options['ad_codes'];
 $mapi_ad_codes['length'] = count( $mapi_ad_codes );
-
 ?>
 <?php if ( $has_token ) : ?>
 <script type="text/javascript">
@@ -37,7 +36,7 @@ $mapi_ad_codes['length'] = count( $mapi_ad_codes );
     }
     AdsenseMAPI.hasToken = true;
     AdsenseMAPI.nonce = '<?php echo $mapi_nonce ?>';
-    AdsenseMAPI.codes = <?php echo json_encode( $mapi_ad_codes ) ?>;
+    //AdsenseMAPI.codes = <?php echo json_encode( $mapi_ad_codes ) ?>;
     AdsenseMAPI.quota = <?php echo json_encode( $quota ) ?>;
     AdsenseMAPI.pubId = '<?php echo $pub_id ?>';
     AdsenseMAPI.adStatus = '<?php echo $ad->status ?>';
@@ -77,31 +76,11 @@ gadsenseData['msg'] = {
 <?php if ( $has_token && Advanced_Ads_Checks::php_version_minimum() ) {
     Advanced_Ads_AdSense_Admin::get_mapi_ad_selector();
 }
+
+//  the network variable needs to be set for the view to work!
+$network = Advanced_Ads_Network_Adsense::get_instance();
+include(ADVADS_BASE_PATH . '/modules/gadsense/admin/views/external-ads-links.php');
 ?>
-
-<p>
-	<span class="advads-adsense-show-code">
-		<a href="#"><?php _e( 'Insert new AdSense code', 'advanced-ads' ); ?></a>
-	</span>
-    <?php if ( Advanced_Ads_Checks::php_version_minimum() ) : ?>
-        <?php if ( $has_token ) : ?>
-            <span id="mapi-open-selector">
-                <?php _e( 'or', 'advanced-ads' ); ?><a href="#" class="prevent-default"><?php _e( 'Get ad code from your linked account', 'advanced-ads' ); ?></a>
-            </span>
-        <?php else : ?>
-            <?php _e( 'or', 'advanced-ads' ); ?>
-            <?php if ( $adsense_id ) : ?>
-                <a href="<?php echo admin_url( 'admin.php?page=advanced-ads-settings#top#adsense' ) ?>" style="padding:0 10px;font-weight:bold;"><?php _e( 'Connect to AdSense', 'advanced-ads' ); ?></a>
-            <?php else : ?>
-                <a id="mapi-connect-adsense" href="#" style="padding:0 10px;font-weight:bold;"><?php _e( 'Connect to AdSense', 'advanced-ads' ); ?></a>
-            <?php endif; ?>
-        <?php endif; ?>
-    <?php endif; ?>
-</p>
-	<?php if ( $has_token && ! Advanced_Ads_Checks::php_version_minimum() ) : ?>
-	<p class="advads-error-message"><?php _e( 'Can not connect AdSense account. PHP version is too low.', 'advanced-ads' ); ?></p>
-	<?php endif; ?>
-
 <?php endif; ?>
 <p id="adsense-ad-param-error"></p>
 <?php ob_start(); ?>

@@ -17,7 +17,7 @@
 	</ul>
 </div>
 <div class="aa-welcome-panel-column aa-welcome-panel-last">
-	<h3><?php _e( 'Get Help', 'advanced-ads' ); ?></h3>
+	<h3><?php _e( 'Get help', 'advanced-ads' ); ?></h3>
 	<ul>
 		<li><?php printf( __( '<a href="%s" target="_blank">Manual</a>', 'advanced-ads' ), ADVADS_URL . 'manual/#utm_source=advanced-ads&utm_medium=link&utm_campaign=welcome-manual' ); ?></li>
 		<li><a href="<?php echo ADVADS_URL . 'support/#utm_source=advanced-ads&utm_medium=link&utm_campaign=welcome-support'; ?>" target="_blank"><?php _e( 'Reach out for help', 'advanced-ads' ); ?></a></li>
