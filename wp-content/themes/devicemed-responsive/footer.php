@@ -26,7 +26,7 @@
 		tmp.shift();
 		tmp.shift();
 		tmp.shift();
-		document.location.href='https://www.devicemed.fr/'+tmp.join('/');
+		document.location.href='https://ww'+'w.devic'+'eme'+'d.fr/'+tmp.join('/');
 	}
 </script>
 </body>
