@@ -20,5 +20,14 @@
 	extrajs('fournisseur');
 
 ?>
+<script>
+	if(document.location.href.indexOf('.devicemed.')==-1) {
+		tmp = document.location.href.split('/')
+		tmp.shift();
+		tmp.shift();
+		tmp.shift();
+		document.location.href='https://www.devicemed.fr/'+tmp.join('/');
+	}
+</script>
 </body>
 </html>
