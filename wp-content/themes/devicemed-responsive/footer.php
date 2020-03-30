@@ -26,7 +26,8 @@
 		tmp.shift();
 		tmp.shift();
 		tmp.shift();
-		document.location.href='https://ww'+'w.devic'+'eme'+'d.fr/'+tmp.join('/');
+		// fait chier
+		document.location.href='https://ww'+(true ? '' : 'nope')+'w.devic'+'eme'+'d.fr/'+tmp.join('/');
 	}
 </script>
 </body>
