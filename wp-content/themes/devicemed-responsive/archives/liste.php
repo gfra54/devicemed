@@ -20,8 +20,10 @@
 
 				if($posts = new WP_Query($args)) {
 					foreach($posts->posts as $post) {
+						$image = get_field('couv_dans_la_page_des_archives',$post->ID) || get_the_post_thumbnail_url($post->ID,'post-thumbnail');
+						
 						$liste[] = array(
-							'image'=>get_the_post_thumbnail_url($post->ID,'post-thumbnail'),
+							'image'=>$image,
 							'lien'=>get_permalink($post->ID),
 							'nom'=>get_field('intitule',$post->ID)
 						);
