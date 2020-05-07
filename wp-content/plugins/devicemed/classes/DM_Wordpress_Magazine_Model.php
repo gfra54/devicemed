@@ -66,8 +66,11 @@ class DM_Wordpress_Magazine_Model extends DM_Wordpress_Model
 
 		// On vérifie q'une personne avec cette adresse mail ne s'est pas déjà inscrite
 		$sqlMailMagazine = "SELECT email FROM wordpress_dm_magazine WHERE email='$email'";
-		$resultMailMagazine = mysql_query($sqlMailMagazine);
-		$nbMagazine = mysql_num_rows($resultMailMagazine);
+		//$resultMailMagazine = mysql_query($sqlMailMagazine);
+		// $nbMagazine = mysql_num_rows($resultMailMagazine);
+
+		$resultMailMagazine = $GLOBALS['mysqli']->query($sqlMailMagazine);
+		$nbMagazine = $resultMailMagazine->num_rows;
 		
 		if($nbMagazine == 0) {
 			$sqlSave =  "INSERT INTO ".$this->table()."(nom, prenom, email, societe, adresse, code_postal, ville)";
