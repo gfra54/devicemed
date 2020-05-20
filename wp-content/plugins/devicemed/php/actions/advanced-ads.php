@@ -81,7 +81,7 @@ add_filter('advanced-ads-output-final',function($output, $ad, $output_options) {
 
 	$options = $ad->options();
 	if($condition = advanced_ads_ok_page($ad->id)) {
-		if($options['group_info']['id']==3788) { //Site - Text Ad ou bannière
+		// if($options['group_info']['id']==3788) { //Site - Text Ad ou bannière
 
 			if(get_field('afficher_en_text_ad',$ad->id)) {
 
@@ -107,7 +107,7 @@ add_filter('advanced-ads-output-final',function($output, $ad, $output_options) {
 
 			}
 
-		}
+		// }
 
 
 		$comment = 'Ad ID '.$ad->id;

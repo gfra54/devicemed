@@ -450,7 +450,7 @@ ob_start();
 if($w=='site') {
 ?>
 
-<a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank" class="home-last-posts" id="textad">
+<a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank" class="home-last-posts" id="textad" style="text-align:left">
     <span class="textad-surtitre">
     	Annonce
     </span>

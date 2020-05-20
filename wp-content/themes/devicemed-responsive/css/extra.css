@@ -335,11 +335,11 @@ section.videos .bloc-item .archives-videos {
     .salon-case {
         /*    width: 46.5%;
     float: left;
-  */
-    }
-    .salon-case:nth-child(2n+1) {
-        /*margin-right: 3.5%;*/
-    }
+    */
+}
+.salon-case:nth-child(2n+1) {
+    /*margin-right: 3.5%;*/
+}
 }
 @media (min-width: 992px) {
     .salon-case {
@@ -863,25 +863,41 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
     background: #0066b3;
     position: relative;
 }
-.textad-cover img {
+.textad-cover img { 
     width: 100%;
     display: block;
 }
 .textad-cover {
     display: block;
-    float: left;
-    width: 113px;
-    height: calc(100%);
-    margin-right: 20px;
-    overflow: hidden;
+    margin: 1em 0;
 }
-.textad-details {
-    display: block;
-    float: left;
-    width: calc(100% - 137px);
-    height: calc(100%);
-    /*max-width: 750px;*/
-    position: relative;
+
+@media all and (min-width: 700px) {
+    .textad-cover {
+        float: left;
+        width: 113px;
+        height: calc(100%);
+        margin:0;
+        margin-right: 20px;
+        overflow: hidden;
+    }
+    .textad-details {
+        display: block;
+        float: left;
+        width: calc(100% - 137px);
+        height: calc(100%);
+        /*max-width: 750px;*/
+        position: relative;
+    }
+    .header-ad #textad {
+        max-width: 750px;
+        margin: 0 auto;
+        font-size: 90%;
+    }
+    .header-ad .textad-titre {
+        font-size: 18px;
+        line-height: 20px;    
+    }
 }
 .textad-titre {
     color: white;
@@ -891,6 +907,7 @@ body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
     font-size: 25px;
     text-transform: uppercase;
 }
+
 .textad-surtitre {
     display: block;
     position: absolute;
@@ -941,21 +958,21 @@ div[id^="attachment"].wp-caption .wp-caption-text{
     font-size: 8px;
     }*/
 
-.column-sidebar section.quels-on {
-    transition: all .5s ease;
-    background-color: #b30065;
-    color: #fff;
-    padding:2.5em;
-}
-.column-sidebar section.quels-on:hover {
-    background: #b30065;
-}
-.column-sidebar section.quels-on .title {
-    font-family: 'opensans-condbold';
-    font-weight: 100;
-    font-size: 20px;
-    text-transform: uppercase;
-    margin: 0;
-    padding: 0;
-    line-height: 1em;
-}
+    .column-sidebar section.quels-on {
+        transition: all .5s ease;
+        background-color: #b30065;
+        color: #fff;
+        padding:2.5em;
+    }
+    .column-sidebar section.quels-on:hover {
+        background: #b30065;
+    }
+    .column-sidebar section.quels-on .title {
+        font-family: 'opensans-condbold';
+        font-weight: 100;
+        font-size: 20px;
+        text-transform: uppercase;
+        margin: 0;
+        padding: 0;
+        line-height: 1em;
+    }
