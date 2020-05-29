@@ -455,6 +455,20 @@ section.videos .bloc-item .archives-videos {
     column-count: 2;
     padding-top: 10px;
 }
+.legende-fournisseurs {
+    text-align: right;
+    margin-left: 50%;
+    font-size: 12px;
+}
+.fournisseur-partenaire {
+    font-weight: bold;
+    color:#0066b3;
+    color:#b30065;
+}
+/*.fournisseur_partenaire:after {
+    content:'⭐';
+    display: :inline;
+}*/
 .voir-adminbar #wpadminbar {
     display: block !important;
 }

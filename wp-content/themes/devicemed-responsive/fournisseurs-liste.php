@@ -41,7 +41,7 @@ get_header(); ?>
 		<?php if($initiale) {?>
 			<h3 class='title5'>Liste des fournisseurs dont le nom commence par <?php echo $initiale == '*' ? 'un nombre ou un symbole' : 'la lettre '.htmlspecialchars(strtoupper($initiale));?></h3>
 		<?php }else if($GLOBALS['categorie']) {?>
-			<h3 class='title5'>Résultat de recherche pour <?php echo $GLOBALS['categorie']['parent']['name'];?> > <?php echo $GLOBALS['categorie']['name'];?> :</h3>
+			<h3 class='title5'>Résultat de recherche pour <?php echo $GLOBALS['categorie']['parent']['name'];?> &laquo; <?php echo $GLOBALS['categorie']['name'];?> &raquo; :</h3>
 		<?php } else {?>
 			<h3 class='title5'>Liste alphabétique complète des fournisseurs :</h3>
 		<?php }?></h3>
@@ -67,6 +67,9 @@ get_header(); ?>
 						<input id="terme" type="text" value="<?php echo htmlspecialchars($terme);?>">
 					</label>
 
+					<div class="legende-fournisseurs">
+						<small>Les noms <span class="fournisseur-partenaire">mis en avant <img width="12" src="/wp-content/themes/devicemed-responsive/images/svg/partenaire.svg"></span> dans la liste sont ceux des fournisseurs partenaires. <a href="/nouveau-fournisseur"><u>Cliquez ici si vous voulez devenir fournisseur partenaire</u></a>.</small>
+					</div>
 				<div class="liste-fournisseurs">
 					<div id='bloc_supplier_search'>
 						<div class="lettre-groupe">
@@ -84,7 +87,7 @@ get_header(); ?>
 									<div class="lettre-fournisseur"><?php echo strtoupper($lettre);?></div>
 								<?php }?>
 								<?php if(get_field('premium',$fournisseur['ID'])) {?>
-									<div class='supplier_search'><a href="<?php echo get_permalink($fournisseur['ID']);?>"><b><?php echo $fournisseur['post_title'];?></b></a></div>
+									<div class='supplier_search fournisseur-partenaire'><a  title="Fournissezur partenaire" href="<?php echo get_permalink($fournisseur['ID']);?>"><?php echo $fournisseur['post_title'];?> <img width="16" src="/wp-content/themes/devicemed-responsive/images/svg/partenaire.svg"></a></div>
 								<?php }else {?>
 									<div class='supplier_search'><a href="<?php echo get_permalink($fournisseur['ID']);?>"><?php echo $fournisseur['post_title'];?></a></div>
 								<?php }?>
