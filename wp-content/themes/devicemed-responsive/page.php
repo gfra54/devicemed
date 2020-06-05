@@ -17,7 +17,11 @@
 			<span class="date-wrapper">Le <span class="date"><?php echo get_the_date('l d F Y'); ?></span></span>
 			<span class="author-wrapper">par <span class="author"><?php echo get_the_author(); ?></span></span>
 		</div>-->
-		<div class="content"><?php echo $post->post_content; ?></div>
+		<div class="content"><?php 
+
+echo wpautop($post->post_content, true );
+
+		?></div>
 	</article>
 </section>
 <?php endwhile; ?>

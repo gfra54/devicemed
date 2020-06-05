@@ -68,7 +68,7 @@ get_header(); ?>
 					</label>
 
 					<div class="legende-fournisseurs">
-						<small>Les noms <span class="fournisseur-partenaire">mis en avant <img width="12" src="/wp-content/themes/devicemed-responsive/images/svg/partenaire.svg"></span> dans la liste sont ceux des fournisseurs partenaires. <a href="/nouveau-fournisseur"><u>Cliquez ici si vous voulez devenir fournisseur partenaire</u></a>.</small>
+						<small>Les noms <span class="fournisseur-partenaire">mis en avant <img width="12" src="/wp-content/themes/devicemed-responsive/images/svg/partenaire.svg"></span> dans la liste sont ceux des fournisseurs partenaires. <a href="/devenez-fournisseur-partenaire"><u>Cliquez ici si vous voulez devenir fournisseur partenaire</u></a>.</small>
 					</div>
 				<div class="liste-fournisseurs">
 					<div id='bloc_supplier_search'>

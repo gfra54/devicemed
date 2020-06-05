@@ -17,7 +17,7 @@ function filtrer_liens_connexes( $content ) {
 add_filter( 'mce_buttons', 'liens_connexes_register_buttons' );
 
 function liens_connexes_register_buttons( $buttons ) {
-	$buttons = array_values(array_insert_after(array_search('unlink', $buttons),$buttons,count($buttons),'liens_connexes'));
+	$buttons = array_values(array_insert_after(array_search('alignright', $buttons),$buttons,count($buttons),'liens_connexes'));
 //   array_push( $buttons, 'separator', 'liens_connexes' );
    return $buttons;
 }
