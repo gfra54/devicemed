@@ -465,6 +465,9 @@ section.videos .bloc-item .archives-videos {
     color:#0066b3;
     color:#b30065;
 }
+.fournisseur-partenaire a{
+    font-size: 110%;
+}
 /*.fournisseur_partenaire:after {
     content:'⭐';
     display: :inline;
