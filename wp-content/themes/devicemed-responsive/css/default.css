@@ -2984,7 +2984,7 @@ section.posts article .categories .sous_category {
   float: left;
   width: 35%;
 }
-.page-members .column-main .form-fieldset .form-row .form-field input[type=text], .page-members .column-main .form-fieldset .form-row .form-field input[type=password] {
+.page-members .column-main .form-fieldset .form-row .form-field input[type=text], .page-members .column-main .form-fieldset .form-row .form-field input[type=email], .page-members .column-main .form-fieldset .form-row .form-field input[type=password] {
   width: 100%;
   border: none;
   background: #eee;

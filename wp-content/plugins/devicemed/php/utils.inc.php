@@ -1,5 +1,8 @@
 <?php
 
+// function is_email($email) {
+// 	return filter_var($email, FILTER_VALIDATE_EMAIL);
+// }
 function get_the_user_ip() {
 	if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
 //check ip from share internet
