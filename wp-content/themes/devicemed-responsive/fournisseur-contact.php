@@ -9,7 +9,7 @@ if($contact = check('contact')) {
 	if(is_email($contact['email'])) {
 		$nom  = $contact['nom'].' '.($contact['societe'] ? '('.$contact['societe'].')' : '');
 		$to =array('laurence.jaffeux@devicemed.fr ','jilfransoi@gmail.com','evelyne.gisselbrecht@devicemed.fr');
-		$to =array('jilfransoi+test@gmail.com');
+		// $to =array('jilfransoi+test@gmail.com');
 		$subject='Demande de contact / '.$nom.'';
 
 		$message='Une demande de contact vous a été envoyée.'.PHP_EOL.'Voici les détails de la demande ci-dessous : <pre>';
