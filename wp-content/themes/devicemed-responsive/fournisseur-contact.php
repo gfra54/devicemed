@@ -14,7 +14,7 @@ if($contact = check('contact')) {
 
 		$message='Une demande de contact vous a été envoyée.'.PHP_EOL.'Voici les détails de la demande ci-dessous : <pre>';
 		foreach($contact as $k=>$v) {
-			$message.='<b>'.ucfirst($k).'</b>'.PHP_EOL.nl2br($v).PHP_EOL.PHP_EOL;
+			$message.='<b>'.ucfirst($k).'</b>'.PHP_EOL.nl2br(stripslashes($v)).PHP_EOL.PHP_EOL;
 		}
 		$message.='</pre>'.PHP_EOL.'Pour contacter cette personne, vous pouvez directement répondre à ce message.';
 
@@ -90,7 +90,7 @@ get_header(); ?>
 					</div>
 				</form>
 				<br><br>
-				<p>Vous pouvez aussi nous contactez par téléphone au 04 73 61 95 57 ou par e-mail à <a href="mailto:info@devicemed.fr"><u>info@devicemed.fr</u></a> !
+				<p>Vous pouvez aussi nous contacter par téléphone au 04 73 61 95 57 ou par e-mail à <a href="mailto:info@devicemed.fr"><u>info@devicemed.fr</u></a> !
 				</article>
 			</section>
 		</div>
