@@ -14,7 +14,9 @@
 				<span class="city"><?php echo esc_html($fournisseur['ville']); ?></span><br />
 				<span class="country"><?php echo esc_html($fournisseur['pays']); ?></span>
 			</div><br />
-			<?php link_cond($fournisseur['url'],false,'<div>','</div><br >');?>
+			<?php 
+			$lib = current(explode('?',$fournisseur['url']));
+			link_cond($fournisseur['url'],$lib,'<div>','</div><br >');?>
 			<p class="about">
 			<?php 
 			foreach(array('blog','facebook','twitter','youtube','googleplus','linkedin') as $site) {
