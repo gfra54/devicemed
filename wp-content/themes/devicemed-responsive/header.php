@@ -58,7 +58,8 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 			if(!a.getAttribute('href').includes('devicemed.fr')) {
 				a.addEventListener('click',function(e) {
 					e.preventDefault();
-					captureOutboundLink(e.target.getAttribute('href'));
+					let href = e.target.getAttribute('href') || e.target.closest('a').getAttribute('href');
+					captureOutboundLink(href);
 					return false;
 				});
 			}
