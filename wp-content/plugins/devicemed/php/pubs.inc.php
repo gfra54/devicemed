@@ -445,15 +445,17 @@ function pub_metrics($pub) {
 */
 
 
-function render_textad($ad,$w='newsletter') {
+function render_textad($ad,$w='newsletter',$annonce=true) {
 ob_start();
 if($w=='site') {
 ?>
 
 <a <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank" class="home-last-posts" id="textad" style="text-align:left">
+  	<?php if($annonce) {?>
     <span class="textad-surtitre">
     	Annonce
     </span>
+  	<?php }?>
     <span class="textad-cover">
         <img src="<?php echo $ad['image'];?>">
     </span>
@@ -473,11 +475,13 @@ if($w=='site') {
 	?>
 	<center>
   <table border="0" cellspacing="0" width="480">
+  	<?php if($annonce) {?>
     <tr>
         <td valign=top align="left" style="text-align:left">
         <font size=1 color=#999 face="sans-serif">Annonce</font>
 		</td>
 	</tr>
+  	<?php }?>
 	<tr>
 		<td style="border:1px solid #333">
 				<table cellspacing=0 cellpadding="0">

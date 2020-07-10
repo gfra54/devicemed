@@ -103,7 +103,7 @@ add_filter('advanced-ads-output-final',function($output, $ad, $output_options) {
 
 				];
 
-				$output = render_textad($params,'site');
+				$output = render_textad($params,'site',false);
 
 			}
 
