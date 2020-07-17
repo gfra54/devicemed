@@ -2,7 +2,11 @@
 		<div class='info_supplier'>
 			<?php if($fournisseur['logo'] && $fournisseur['premium']) { ?>
 				<div class='logo_supplier'>
-					<img src='<?php echo $fournisseur['logo']; ?>' />
+					<?php if($fournisseur['url_logo']) {?>
+						<a target="_blank" href="<?php echo $fournisseur['url_logo'];?>"><img src='<?php echo $fournisseur['logo']; ?>' /></a>
+					<?php } else {?>
+						<img src='<?php echo $fournisseur['logo']; ?>' />
+					<?php }?>
 				</div>
 			<?php } ?>
 			<div class="address">
