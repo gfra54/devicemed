@@ -511,9 +511,12 @@ function fournisseur_sections($fournisseur) {
 		}
 	}
 }
+function afficher_nouveautes($fournisseur) {
+	return $fournisseur['afficher_nouveautes'] && (empty($fournisseur['expiration_nouveautes']) || $fournisseur['expiration_nouveautes'] > date('Ymd'));
+}
 function fournisseur_menu($fournisseur) {
 	$nouveautes=[];
-	if ($fournisseur['afficher_nouveautes'] && (empty($fournisseur['expiration_nouveautes']) || $fournisseur['expiration_nouveautes'] > date('Ymd'))) {
+	if (afficher_nouveautes($fournisseur)) {
 		if($fournisseur['categories_nouveautes'] && !is_array($fournisseur['categories_nouveautes'])) {
 			$fournisseur['categories_nouveautes'] = unserialize($fournisseur['categories_nouveautes']);
 		}
@@ -922,6 +925,9 @@ function case_logo_fournisseur($fournisseur,$css) {
 }
 $GLOBALS['fournisseur_mis_en_avant']=[];
 function fournisseur_mis_en_avant($fournisseur) {
+	if(afficher_nouveautes($fournisseur)) {
+		return 'Nouveau';
+	}
 	if(isset($GLOBALS['fournisseur_mis_en_avant'][$fournisseur['ID']])) {
 		return $GLOBALS['fournisseur_mis_en_avant'][$fournisseur['ID']];
 	} else {
