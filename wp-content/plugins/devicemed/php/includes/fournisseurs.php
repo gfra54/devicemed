@@ -512,7 +512,8 @@ function fournisseur_sections($fournisseur) {
 	}
 }
 function fournisseur_menu($fournisseur) {
-	if ($fournisseur['nouveautes'] && $fournisseur['expiration_nouveautes'] > date('Ymd')) {
+	$nouveautes=[];
+	if ($fournisseur['afficher_nouveautes'] && (empty($fournisseur['expiration_nouveautes']) || $fournisseur['expiration_nouveautes'] > date('Ymd'))) {
 		if($fournisseur['categories_nouveautes'] && !is_array($fournisseur['categories_nouveautes'])) {
 			$fournisseur['categories_nouveautes'] = unserialize($fournisseur['categories_nouveautes']);
 		}
