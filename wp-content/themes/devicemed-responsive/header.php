@@ -151,7 +151,7 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 <div class="bloc_top_header">
 	<div class='vogel_logo'><img src='/wp-content/themes/devicemed-responsive/images/vogel_logo_2019.png' /></div>
 	<div class='contenu_droit'>
-		<?php if ($session = DM_Wordpress_Members::session()): ?>
+		<?php /*if ($session = DM_Wordpress_Members::session()): ?>
 			<div class="links">
 				<a href="<?php echo site_url('/members/profile'); ?>">Profil de "<?php echo esc_html($session['user_nicename']); ?>"</a>
 			</div>
@@ -162,11 +162,11 @@ header( 'Cache-Control: max-age=604800' ); ?><!DOCTYPE html>
 			<div class="links">
 				<a href="<?php echo site_url('/members/login'); ?>">Se connecter</a>
 			</div>
-		<?php endif; ?>
-<!-- 		<div class='links'>
-			<a href='/newsletter/inscription'>Archives de la newsletter</a>
+		<?php endif; */?>
+		<div class='links'>
+			<a href='/magazine/abonnement'>S'abonner au magazine</a>
 		</div>
- -->
+
 			<div class="links social-link">
 				<a href="https://twitter.com/DeviceMedFr"><img src="<?php echo get_template_directory_uri(); ?>/images/twitter.png"></a>
 			</div>

@@ -12,6 +12,7 @@
 			</a>
 		</div>
 	</section>
+	<?php fournisseur_nouveautes($fournisseur);?>
 	<?php fournisseur_menu($fournisseur);?>
 	<?php fournisseur_sections($fournisseur);?>
 

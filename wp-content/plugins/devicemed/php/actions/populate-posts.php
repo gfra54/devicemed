@@ -15,12 +15,32 @@
 
 add_filter('acf/load_field/name=textad', 'acf_load_textad');*/
 
+
+function acf_load_categories_nouveautes( $field ) {
+
+    // reset choices
+    $field['choices'] = array(0=>'');
+
+        foreach($GLOBALS['MENU_FOURNISSEURS'] as $menu) {
+            $field['choices'][$menu['anchor']]=$menu['titre'];
+        }
+
+    asort($field['choices']);
+
+    return $field;
+    
+}
+
+add_filter('acf/load_field/name=categories_nouveautes', 'acf_load_categories_nouveautes');
+
+
 function acf_load_bannieres_verticales( $field ) {
 
     // reset choices
     $field['choices'] = array(0=>'');
 
     $posts = get_pubs('newsletter-droite');
+    // me($posts);
     if($posts) {
         foreach($posts as $post) {
             $field['choices'][$post['ID']]=$post['post_title'];

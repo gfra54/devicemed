@@ -229,44 +229,59 @@ add_filter('pre_get_posts','fournisseurs_filtre');
 $GLOBALS['MENU_FOURNISSEURS'] = array(
 	array(
 		'titre'=>'Coordonnées',
-		'anchor'=>'coordonnees'
+		'anchor'=>'coordonnees',
+		'pronom'=>'les'
 	),
 	array(
 		'titre'=>'Activités',
 		'anchor'=>'activites',
+		'pronom'=>'les'
 	),
 	array(
 		'titre'=>'Présentation',
 		'anchor'=>'presentation',
+		'pronom'=>'la',
 		'premium'=>true
 	),
 	array(
 		'titre'=>'Articles',
 		'anchor'=>'articles',
+		'pronom'=>'les',
 		'premium'=>true
 	),
 	array(
 		'titre'=>'Photos',
 		'anchor'=>'photos',
+		'pronom'=>'les',
 		'premium'=>true
 	),
 	array(
 		'titre'=>'Vidéos',
 		'anchor'=>'videos',
+		'pronom'=>'les',
 		'premium'=>true
 	),
 	array(
 		'titre'=>'Evénements',
 		'anchor'=>'evenements',
+		'pronom'=>'les',
 		'premium'=>true
 	),
 	array(
 		'titre'=>'Documentation',
 		'anchor'=>'documentation',
+		'pronom'=>'la',
 		'premium'=>true
 	),
 );
 
+function fournisseurs_menu_pronom($anchor) {
+	foreach($GLOBALS['MENU_FOURNISSEURS'] as $menu) {
+		if($menu['anchor'] == $anchor) {
+			return $menu['pronom'].' '.mb_strtolower($menu['titre']);
+		}
+	}
+}
 function fournisseurs_filtre_lettres() {
 	$initiale = check('initiale');
 	$lettres = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
@@ -472,6 +487,9 @@ function fournisseur_categorie_simple($cat,$cats,$niveau=1) {
 	}
 	return $cat_tmp;
 }
+function fournisseur_nouveautes($fournisseur) {
+	include get_template_directory().'/single-fournisseur-nouveautes.php';
+}
 function fournisseur_sections($fournisseur) {
 	$page = check('page');
 	foreach($GLOBALS['MENU_FOURNISSEURS'] as $item) {
@@ -494,6 +512,14 @@ function fournisseur_sections($fournisseur) {
 	}
 }
 function fournisseur_menu($fournisseur) {
+	if ($fournisseur['nouveautes'] && $fournisseur['expiration_nouveautes'] > date('Ymd')) {
+		if($fournisseur['categories_nouveautes'] && !is_array($fournisseur['categories_nouveautes'])) {
+			$fournisseur['categories_nouveautes'] = unserialize($fournisseur['categories_nouveautes']);
+		}
+		$nouveautes = $fournisseur['categories_nouveautes'];
+	}
+
+
 	$page = check('page');
 	$ret='<input type=hidden name=page value="'.htmlspecialchars($page).'">';
 	if(!$page) {
@@ -507,8 +533,13 @@ function fournisseur_menu($fournisseur) {
 		}else {
 			$class='';
 		}
+		$attrs="";
+		if(in_array($item['anchor'], $nouveautes)!==false) {
+			$class.=' nouveau';
+			$attrs='data-lib_mea="Nouveau"';
+		}
 		if(!$item['premium'] || $fournisseur['premium']) {
-			$ret.='<a href="'.$fournisseur['premalink'].'?page='.$item['anchor'].'" data-id="'.$item['anchor'].'" class="button menu-item '.$class.'">'.$item['titre'].'</a>';
+			$ret.='<a href="'.$fournisseur['premalink'].'?page='.$item['anchor'].'" data-id="'.$item['anchor'].'" class="button menu-item '.$class.'" '.$attrs.'>'.$item['titre'].'</a>';
 		} else {
 			$ret.='<span class="button details_supplier_disabled">'.$item['titre'].'</span>';
 		}

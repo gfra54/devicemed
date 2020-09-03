@@ -12,11 +12,11 @@ iframe[src*="youtube.com"] {
     color: #0066B3;
     background: white;
 }
-.case-fournisseur-logo.mis-en-avant, .logo_supplier.mis-en-avant {
+section:not(.menu-floating) .button.menu-item.nouveau, .case-fournisseur-logo.mis-en-avant, .logo_supplier.mis-en-avant {
     position: relative;
     overflow: visible;
 }
-.case-fournisseur-logo.mis-en-avant::after, .logo_supplier.mis-en-avant::after {
+section:not(.menu-floating) .button.menu-item.nouveau::after, .case-fournisseur-logo.mis-en-avant::after, .logo_supplier.mis-en-avant::after {
     /*content: 'mis à jour';*/
     content: attr(data-lib_mea);
     text-transform: uppercase;
@@ -28,6 +28,11 @@ iframe[src*="youtube.com"] {
     color: white;
     padding: 0 5px;
     font-family: 'opensans-condbold'
+}
+section:not(.menu-floating) .button.menu-item.nouveau::after {
+    bottom: -4px;
+    right: -4px;
+    font-size: 9px;
 }
 #sidebar-fiches .logo_supplier {
     float: left;
