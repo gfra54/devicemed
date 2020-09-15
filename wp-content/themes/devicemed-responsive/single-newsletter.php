@@ -399,8 +399,10 @@ if(!empty($_GET['brut'])) {
         foreach($fournisseurs as $fournisseur) {
           $nom = wp_trim_words($fournisseur['post_title'],2,'');
           $nom = str_replace('Composites','Comp.',$nom);
-          $nom = str_replace('Medical','Med.',$nom);
-          $nom = str_replace('Medical','Med.',$nom);
+          if(strstr($nom, 'MIP Medical')==false && strstr($nom, 'Teleflex Medical')==false) {
+            // $nom = str_replace('Medical','Med.',$nom);
+            $nom = str_replace('Medical','Med.',$nom);
+          }
           $nom = str_replace('Balzers','',$nom);
           $nom = str_replace('Technologies','Tech.',$nom);
           $data_fournisseurs[$fournisseur['ID']]=array('nom'=>$nom,'url'=>$fournisseur['permalink'],'lib_mea'=>fournisseur_mis_en_avant($fournisseur));
