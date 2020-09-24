@@ -72,8 +72,8 @@ class DM_Wordpress_Magazine
 			if(!$errors) {
 				if($magazine->save($data)) {
 					$success['general'] = 'Votre demande a été prise en compte. Vous recevrez le dernier numéro gratuitement dès que possible.';
-				}else {
-					$errors['general'] = 'Votre email est déjà abonné au magazine.';
+				// }else {
+				// 	$errors['general'] = 'Votre email est déjà abonné au magazine.';
 				}
 			}
 		}

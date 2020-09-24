@@ -75,23 +75,26 @@ class DM_Wordpress_Magazine_Model extends DM_Wordpress_Model
 		if($nbMagazine == 0) {
 			$sqlSave =  "INSERT INTO ".$this->table()."(nom, prenom, email, societe, adresse, code_postal, ville)";
 			$sqlSave .= " VALUES ('$nom','$prenom', '$email', '$societe', '$adresse', '$codePostal', '$ville')";
-		}else {
-			return false;
+			$wpdb->query($sqlSave);
+		// }else {
+		// 	return false;
 		}
 		
-		if($wpdb->query($sqlSave)) {
-			$to = "info@devicemed.fr";
+		if(true) {
+			if(isLocal()) {
+				$to = "jilfransoi@gmail.com";
+			} else {
+				$to = "info@devicemed.fr";
+			}
 			$subject = 'Abonnement au magazine';
 			$message = "Bonjour,<br /><br />Un membre vient de s'abonner au magazine. Voici ses coordonnées :<br /><br />Nom complet : $prenom $nom<br />email : $email<br />société : $societe<br />Adresse : $adresse<br />Ville : $ville $codePostal";
 			$headers  = 'MIME-Version: 1.0' . "\r\n";
 			$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
 			$headers .= "From: \"DeviceMed\"<info@devicemed.fr>";
 
-			if(mail($to, $subject, $message, $headers)) {
-				return true;
-			}else {
-				return false;
-			}
+//			me($to, $subject, $message, $headers);
+			mail($to, $subject, $message, $headers); 
+			return true;
 		}else {
 			return false;
 		}
