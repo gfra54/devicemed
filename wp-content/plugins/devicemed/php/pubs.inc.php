@@ -474,7 +474,7 @@ if($w=='site') {
 } else {
 	?>
 	<center>
-  <table border="0" cellspacing="0" width="480">
+  <table border="0" cellspacing="0" width="90%">
   	<?php if($annonce) {?>
     <tr>
         <td valign=top align="left" style="text-align:left">
@@ -510,7 +510,7 @@ if($w=='site') {
 
 									<a style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?> target="_blank"><span style="font-size:16px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;color:black;"><?php echo $ad['title'];?></span></a>
 
-
+										<div style="height:8px"></div>
 									<div>
 									<font size=2 face="sans-serif" color="#333"><?php echo $ad['text'];?></font><a target="_blank" style="text-decoration:none;" <?php echo $ad['url'] ? 'href="'.$ad['url'].'"' : '';?>><font face="sans-serif" size=2 color="#005ea8"><?php echo !empty($ad['lien']) ? $ad['lien'] : 'Lire la suite';?>.</font></a>
 									</font>
