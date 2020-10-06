@@ -11,9 +11,8 @@ function save_post_action($post_id) {
 		    file_get_contents("https://waf.sucuri.net/api?v2&k=a1691d9eb844117a444359abb20b72ee&s=8ce3581bca2880c3bd31354222325762&a=clear_cache");
 		}
 
-    if ($post->post_type == 'salons'){
-		delete_transients('salons');		
-
+    if ($post->post_type == 'salons' || $post->post_type == 'post'){
+		delete_transients('salons');
 	} else if ($post->post_type == 'fournisseur'){
 		fournisseur_enrichir($post,true);
 
