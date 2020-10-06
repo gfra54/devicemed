@@ -8,7 +8,7 @@
 		<header>
 			<h2 class="title"><?php echo toUpperSpecial($post->post_title); ?></h2>
 		</header>
-		<p class="excerpt"><?php echo devicemed_get_post_excerpt(); ?></p>
+		<p class="excerpt"><?php echo get_the_excerpt(); ?></p>
 		<a class="more" href="<?php echo get_permalink($post->ID); ?>">Lire la suite</a>
 	</a>
 </article>

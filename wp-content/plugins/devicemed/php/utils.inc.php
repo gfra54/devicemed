@@ -2,7 +2,6 @@
 
 
 function toUpperSpecial($title) {
-	$title.='µ';
 	$title = mb_strtoupper($title);
 	$chars = ['Μ'=>'µ'];
 	foreach($chars as $s => $r) {
