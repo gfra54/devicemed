@@ -87,7 +87,7 @@
 
 #menu_mobile {
   float: left;
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-size: 15px;
   background: #ddd;
   width: 100%;
@@ -379,7 +379,7 @@ form[name='search_suppliers'] {
 }
 
 .aucun_fournisseurs {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #000;
   text-align: center;
@@ -387,7 +387,7 @@ form[name='search_suppliers'] {
 }
 
 .aucun_article {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   font-size: 15px;
   text-transform: uppercase;
@@ -588,7 +588,7 @@ a, a:hover {
   margin-bottom: 15px;
 }
 .page-errors .column-main section .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   text-transform: uppercase;
   color: #0066b3;
@@ -958,7 +958,7 @@ DIV.search {
 #menu {
   background-image: url('/wp-content/uploads/main_menu_bg.png');
   font-size: 15px;
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   overflow: auto;
   clear: both;
   background-repeat: repeat-x;
@@ -1079,7 +1079,7 @@ footer#footer .credits {
   text-align: left;
 }
 #sidebar-annual-guide .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   text-transform: uppercase;
   color: #0066b3;
@@ -1108,7 +1108,7 @@ footer#footer .credits {
   text-align: left;
 }
 #sidebar-issues header .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   font-size: 20px;
   text-transform: uppercase;
@@ -1135,7 +1135,7 @@ footer#footer .credits {
   text-align: left;
 }
 #sidebar-fiches header .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   font-size: 20px;
   text-transform: uppercase;
@@ -1378,7 +1378,7 @@ footer#footer .credits {
   text-align: left;
 }
 #sidebar-supplier-registration header .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   text-transform: uppercase;
   color: #0066b3;
@@ -1416,7 +1416,7 @@ footer#footer .credits {
   margin-bottom: 15px;
 }
 #sidebar-video header .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;
@@ -1444,7 +1444,7 @@ footer#footer .credits {
   text-align: left;
 }
 #sidebar-agenda header .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;
@@ -1455,7 +1455,7 @@ footer#footer .credits {
 }
 
 .title2 {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   font-size: 15px;
   color: #0066b3;
@@ -1465,7 +1465,7 @@ footer#footer .credits {
 }
 
 .title22 {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   font-size: 15px;
   color: #0066b3;
@@ -1496,7 +1496,7 @@ footer#footer .credits {
 }
 
 .title3 {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   font-size: 13px;
   color: #0066b3;
@@ -1654,7 +1654,7 @@ footer#footer .credits {
   }
 }
 #last-posts-featured article .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   color: #0066b3;
   margin: 0;
@@ -1710,7 +1710,7 @@ footer#footer .credits {
   overflow: hidden;
 }
 .home-last-posts .section-header .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   text-transform: uppercase;
   color: #0066b3;
@@ -1745,7 +1745,7 @@ footer#footer .credits {
   padding: 10px 0 10px 0;
 }
 .home-last-posts article .title, .home-last-posts .ad .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   color: #0066b3;
   margin: 0;
@@ -1754,7 +1754,7 @@ footer#footer .credits {
   font-size: 16px;
 }
 #sidebar-issues article .title2 {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   color: #0066b3;
   margin: 0;
@@ -1841,7 +1841,7 @@ section.home-gallery2 .section-header {
   border-bottom: solid 2px #0066b3;
 }
 section.home-gallery2 .section-header .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;
@@ -1961,7 +1961,7 @@ section.home-gallery .section-header {
   overflow: hidden;
 }
 section.home-gallery .section-header .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   text-transform: uppercase;
   color: #0066b3;
@@ -2044,7 +2044,7 @@ section.home-subscribe .section-header {
   overflow: hidden;
 }
 section.home-subscribe .section-header .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   text-transform: uppercase;
   color: #0066b3;
@@ -2070,7 +2070,7 @@ section.home-subscribe .title {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 16px;
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
 }
 section.home-subscribe .section-magazine {
   float: right;
@@ -2184,7 +2184,7 @@ section.home-subscribe .section-newsletter .icon {
   margin: 0;
   padding: 0;
   color: #0066b3;
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   margin-bottom: 15px;
   max-width: 90%;
 }
@@ -2193,7 +2193,7 @@ section.home-subscribe .section-newsletter .icon {
   margin: 0;
   padding: 0;
   color: #0066b3;
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   line-height: 1em;
   margin-bottom: 15px;
 }
@@ -2209,7 +2209,7 @@ section.home-subscribe .section-newsletter .icon {
   padding-bottom: 0px;
 }
 .page-single .column-main section.article article .categories .category {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;
@@ -2218,7 +2218,7 @@ section.home-subscribe .section-newsletter .icon {
   font-size: 1.1em;
 }
 .page-single .column-main section.article article .categories .category_principal {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   text-transform: uppercase;
@@ -2286,7 +2286,7 @@ section.home-subscribe .section-newsletter .icon {
   }
 }
 .page-single .column-main section.related-articles .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   text-transform: uppercase;
   color: #0066b3;
@@ -2300,7 +2300,7 @@ section.home-subscribe .section-newsletter .icon {
   }
 }
 .page-single .column-main section.related-category-articles .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   text-transform: uppercase;
   color: #0066b3;
@@ -2314,7 +2314,7 @@ section.home-subscribe .section-newsletter .icon {
   }
 }
 .page-single .column-main section.comments .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   text-transform: uppercase;
   color: #0066b3;
@@ -2376,7 +2376,7 @@ section.home-subscribe .section-newsletter .icon {
   margin-bottom: 15px;
 }
 .page-search .column-main section.results > .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   text-transform: uppercase;
   color: #0066b3;
@@ -2413,7 +2413,7 @@ section.home-subscribe .section-newsletter .icon {
   display: block;
 }
 .page-search .column-main section.results article .categories .category {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;
@@ -2423,7 +2423,7 @@ section.home-subscribe .section-newsletter .icon {
 }
 
 .page-search .column-main section.results article .categories .category_principal {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   text-transform: uppercase;
   color: #0066b3;
@@ -2434,7 +2434,7 @@ section.home-subscribe .section-newsletter .icon {
 }
 
 .page-search .column-main section.results article .categories .sous_category {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;
@@ -2444,7 +2444,7 @@ section.home-subscribe .section-newsletter .icon {
 }
 
 section.posts article .categories .category {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;
@@ -2508,7 +2508,7 @@ section.posts article .categories .category {
   text-align: left;
 }
 #sidebar-tag header .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   font-size: 20px;
   text-transform: uppercase;
@@ -2520,7 +2520,7 @@ section.posts article .categories .category {
 }
 
 section.posts article .categories .category_principal {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;
@@ -2531,7 +2531,7 @@ section.posts article .categories .category_principal {
 }
 
 section.posts article .categories .sous_category {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;
@@ -2541,7 +2541,7 @@ section.posts article .categories .sous_category {
 }
 
 .page-search .column-main section.results article .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   text-transform: uppercase;
   color: #0066b3;
@@ -2575,7 +2575,7 @@ section.posts article .categories .sous_category {
   margin-bottom: 15px;
 }
 .page-category .column-main section.results > .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   text-transform: uppercase;
   color: #0066b3;
@@ -2613,7 +2613,7 @@ section.posts article .categories .sous_category {
   display: block;
 }
 .page-category .column-main section.results article .categories .category {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;
@@ -2622,7 +2622,7 @@ section.posts article .categories .sous_category {
   font-size: 1em;
 }
 .page-category .column-main section.results article .categories .category_principal {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;
@@ -2632,7 +2632,7 @@ section.posts article .categories .sous_category {
   text-transform: uppercase;
 }
 .page-category .column-main section.results article .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;
@@ -2803,7 +2803,7 @@ section.posts article .categories .sous_category {
 }
 .page-category .column-main section.results .navigation .previous, .page-category .column-main section.results .navigation .next {
   width: 50%;
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   text-transform: uppercase;
   color: #0066b3;
@@ -2832,7 +2832,7 @@ section.posts article .categories .sous_category {
   margin: 0;
   padding: 0;
   color: #0066b3;
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   line-height: 1em;
   margin-bottom: 15px;
 }
@@ -2912,7 +2912,7 @@ section.posts article .categories .sous_category {
   margin-bottom: 15px;
 }
 .page-members .column-main section .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   color: #0066b3;
   margin: 0;
@@ -2921,7 +2921,7 @@ section.posts article .categories .sous_category {
   margin-bottom: 25px;
 }
 .page-members .column-main section .title4 {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   font-size: 20px;
   color: #0066b3;
@@ -2931,7 +2931,7 @@ section.posts article .categories .sous_category {
   margin-bottom: 25px;
 }
 .page-members .column-main section .title42 {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   font-size: 20px;
   color: #0066b3;
@@ -2942,7 +2942,7 @@ section.posts article .categories .sous_category {
 }
 
 .title_supplier {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   text-transform: uppercase;
   font-size: 20px;
@@ -2954,7 +2954,7 @@ section.posts article .categories .sous_category {
 }
 
 .title_supplier a {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   text-transform: uppercase;
   font-size: 20px;
@@ -2971,7 +2971,7 @@ section.posts article .categories .sous_category {
 .page-members .column-main .form-fieldset .form-row .form-label {
   float: left;
   width: 25%;
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   text-transform: uppercase;
   color: #0066b3;
@@ -3103,7 +3103,7 @@ section.posts article .categories .sous_category {
   margin-bottom: 15px;
 }
 .page-suppliers-posts-edit .column-main section .title, .page-suppliers-products-edit .column-main section .title, .page-suppliers-galleries-edit .column-main section .title, .page-suppliers-videos-edit .column-main section .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   color: #0066b3;
   margin: 0;
@@ -3119,7 +3119,7 @@ section.posts article .categories .sous_category {
   margin-bottom: 25px;
 }
 .page-suppliers-posts-edit .column-main section .form-fieldset .form-label, .page-suppliers-products-edit .column-main section .form-fieldset .form-label, .page-suppliers-galleries-edit .column-main section .form-fieldset .form-label, .page-suppliers-videos-edit .column-main section .form-fieldset .form-label {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   text-transform: uppercase;
   color: #0066b3;
@@ -3267,7 +3267,7 @@ section.posts article .categories .sous_category {
   margin-bottom: 15px;
 }
 .page-supplier .column-main section .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   font-size: 20px;
   color: #0066b3;
@@ -3347,7 +3347,7 @@ section.posts article .categories .sous_category {
   display: none;
 }
 .page-supplier .column-main section.events article .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: 100;
   color: #0066b3;
   margin: 0;
@@ -3439,7 +3439,7 @@ section.article .metas {
   display: none;
 }
 .page-supplier .column-main section.posts article .title {
-  font-family: 'opensans-condbold';
+  font-family: var(--main-font);
   font-weight: bold;
   color: #0066b3;
   margin: 0;

@@ -1,3 +1,6 @@
+:root {
+    --main-font : 'opensans-condbold', 'Arial black';
+}
 iframe[src*="youtube.com"] {
     max-width: 100%;
 }
@@ -27,7 +30,7 @@ section:not(.menu-floating) .button.menu-item.nouveau::after, .case-fournisseur-
     background: red;
     color: white;
     padding: 0 5px;
-    font-family: 'opensans-condbold'
+    font-family: var(--main-font)
 }
 section:not(.menu-floating) .button.menu-item.nouveau::after {
     bottom: -4px;
@@ -48,7 +51,7 @@ section:not(.menu-floating) .button.menu-item.nouveau::after {
     transition: all 0.3s ease;
     color: #0066b3;
     padding-top: 16px;
-    font-family: 'opensans-condbold';
+    font-family: var(--main-font);
     text-transform: uppercase;
 }
 #sidebar-fiches .logo_supplier[title="Pierre Fabre Médicament - Supercritical Fluids Division"] {
@@ -187,7 +190,7 @@ a.link:hover {
     display: table;
     height: 100%;
     width: 100%;
-    font-family: 'opensans-condbold';
+    font-family: var(--main-font);
     color: #0066b3;
     font-size: 25px;
 }
@@ -203,9 +206,8 @@ section.videos #sidebar-issues article {
     float: none;
 }
 section h2.title {
-    font-family: 'opensans-condbold';
+    font-family: var(--main-font);
     font-weight: bold;
-    text-transform: uppercase;
     color: #0066b3;
     margin: 0;
     padding: 0;
@@ -283,7 +285,7 @@ section.videos .bloc-item .archives-videos {
     border: 0;
     color: #214f8e;
     font-size: 1.5em;
-    font-family: 'opensans-condbold';
+    font-family: var(--main-font);
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+15&0+0,1+33 */
     background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.45) 15%, rgba(255, 255, 255, 1) 33%);
     /* FF3.6-15 */
@@ -446,7 +448,7 @@ section.videos .bloc-item .archives-videos {
     font-size: 30px;
     color: black;
     font-weight: bold;
-    font-family: 'opensans-condbold';
+    font-family: var(--main-font);
     border-bottom: 1px solid black;
     width: 33%;
     margin-top: 10px;
@@ -502,7 +504,7 @@ section.videos .bloc-item .archives-videos {
     }
     .entry-exergue h2 {
         color: #0066b3;
-        font-family: 'opensans-condbold';
+        font-family: var(--main-font);
         margin: 0;
         border-bottom: 2px solid white;
         padding-bottom: 11px;
@@ -594,7 +596,7 @@ section.videos .bloc-item .archives-videos {
         bottom: 0;
         left: 0;
         color: white;
-        font-family: 'opensans-condbold';
+        font-family: var(--main-font);
         text-transform: uppercase;
         font-size: 15px;
         padding: 10px;
@@ -641,7 +643,7 @@ section.videos .bloc-item .archives-videos {
         margin: 25px 0;
         padding-left: 100px;
         color: #0066b3;
-        font-family: 'opensans-condbold';
+        font-family: var(--main-font);
         text-decoration: none;
         border: 1px solid #0066b3;
         background: white;
@@ -672,7 +674,7 @@ section.videos .bloc-item .archives-videos {
     }
     body .container .article .content a.lien-fournisseur.lien-fournisseur-premium {
         color: rgba(0, 102, 179, 1);
-        font-family: 'opensans-condbold';
+        font-family: var(--main-font);
         letter-spacing: 0.5px;
     }
     .contenu_droit .links:nth-child(1) {
@@ -731,7 +733,7 @@ section.videos .bloc-item .archives-videos {
         color: white;
     }
     .magazine-titre {
-        font-family: 'opensans-condbold';
+        font-family: var(--main-font);
         font-weight: 200;
         color: white;
         font-size: 30px;
@@ -739,7 +741,7 @@ section.videos .bloc-item .archives-videos {
     }
     .magazine-surtitre {}
     .magazine-texte {
-        font-family: 'opensans-condbold';
+        font-family: var(--main-font);
         font-size: 20px;
     }
     .magazine-boutons {
@@ -856,7 +858,7 @@ section.videos .bloc-item .archives-videos {
     }
     .agenda-salon a {
         display: block;
-        font-family: 'opensans-condbold';
+        font-family: var(--main-font);
         font-weight: 100;
         color: #0066b3;
         line-height: 1em;
@@ -924,7 +926,7 @@ section.videos .bloc-item .archives-videos {
     .textad-titre {
         color: white;
         display: block;
-        font-family: 'opensans-condbold';
+        font-family: var(--main-font);
         font-weight: 200;
         font-size: 25px;
         text-transform: uppercase;
@@ -990,7 +992,7 @@ div[id^="attachment"].wp-caption .wp-caption-text{
         background: #b30065;
     }
     .column-sidebar section.quels-on .title {
-        font-family: 'opensans-condbold';
+        font-family: var(--main-font);
         font-weight: 100;
         font-size: 20px;
         text-transform: uppercase;

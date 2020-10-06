@@ -1,5 +1,15 @@
 <?php
 
+
+function toUpperSpecial($title) {
+	$title.='µ';
+	$title = mb_strtoupper($title);
+	$chars = ['Μ'=>'µ'];
+	foreach($chars as $s => $r) {
+		$title = str_replace($s,$r,$title);
+	}
+	return $title;
+}
 // function is_email($email) {
 // 	return filter_var($email, FILTER_VALIDATE_EMAIL);
 // }
