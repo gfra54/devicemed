@@ -9,6 +9,8 @@
 
 </div><!-- .container -->
 <?php wp_footer(); ?>
+<?php the_ad_group(HABILLAGES);?>
+
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <?php include_external('js/bootstrap.min.js');?>
 <?php include_external('js/jquery.bxslider.min.js');?>

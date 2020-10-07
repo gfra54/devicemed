@@ -78,7 +78,9 @@ document.write('<script src="/textad?'+Math.random()+'"></'+'script>');
  -->
 <?php
 sommaire_magazine_home();
-?>
+
+
+mea_mediakit_home();?>
 		
 		
 <?php

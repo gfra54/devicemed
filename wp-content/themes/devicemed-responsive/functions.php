@@ -1,4 +1,28 @@
 <?php
+function mea_mediakit_home() {
+	$test = isset($_GET['test_mea']);
+	if($page = get_page_by_path('publicite')) {
+		if($test || get_field('activer_mea',$page->ID)) {
+			$cover = get_field('illustration_mea',$page->ID); 
+			$url = get_permalink($page->ID);
+			$code = '<section class="home-last-posts" id="sommaire-magazine">';
+			if($cover) {
+				$code.= '<div class="magazine-cover"><a href="'.$url.'"><img src="'.$cover.'"></a></div>';
+			}
+			$code.= '<div class="magazine-details">';
+			
+			$code.='<div class="magazine-titre"><a href="'.$url.'">'.get_field('titre_mea',$page->ID).'</a></div>';
+			$code.='<div class="magazine-texte">'.get_field('texte_mea',$page->ID).'</div>';
+			$code.='<div class="magazine-boutons">';
+			$code.='<a href="'.$url.'" class="">'.get_field('cta_mea',$page->ID).'</a>';
+			$code.= '</div>';
+			$code.= '</section>';
+			echo $code;
+		}
+	}
+}
+
+
 function sommaire_magazine_home() {
 	$sommaire_magazine_home = get_transient('sommaire_magazine_home');
 	if($sommaire_magazine_home) {
@@ -11,13 +35,13 @@ function sommaire_magazine_home() {
 			'category_name'=> 'magazine',
 			'post__in'		=> get_option( 'sticky_posts' ),
 			'date_query' => array(
-			    'after' => date('Y-m-d', strtotime('-13 days')) 
+				'after' => date('Y-m-d', strtotime('-13 days')) 
 			)
-	    );
+		);
 		if($posts = new WP_Query($args)) {
 			foreach($posts->posts as $post) {
-	        	$cover = get_the_post_thumbnail_url($post->ID,'full'); 
-	        	$url = get_permalink($post->ID);
+				$cover = get_the_post_thumbnail_url($post->ID,'full'); 
+				$url = get_permalink($post->ID);
 				$code = '<section class="home-last-posts" id="sommaire-magazine">';
 				$code.= '<div class="magazine-cover"><a href="'.$url.'"><img src="'.$cover.'"></a></div>';
 				$code.= '<div class="magazine-details">';
