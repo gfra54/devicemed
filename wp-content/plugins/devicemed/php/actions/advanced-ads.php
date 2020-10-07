@@ -2,206 +2,211 @@
 
 add_filter('advanced-ads-ad-select-override-by-group', function ($nope, $adgroup, $ordered_ad_ids) {
 
-    $ads = $adgroup->get_all_ads();
+	$ads = $adgroup->get_all_ads();
 
-    $final = array();
+	$final = array();
 
-    $prioritaire = false;
+	$prioritaire = false;
 
-    if (is_array($ordered_ad_ids)) {
+	if (is_array($ordered_ad_ids)) {
 
-        foreach ($ordered_ad_ids as $id) {
+		foreach ($ordered_ad_ids as $id) {
 
-            $ad = $ads[$id];
+			$ad = $ads[$id];
 
-            if ($condition = advanced_ads_ok_page($ad->ID)) {
+			if ($condition = advanced_ads_ok_page($ad->ID)) {
 
-                if (!$prioritaire && get_field('pub_prioritaire', $ad->ID)) {
+				if (!$prioritaire && get_field('pub_prioritaire', $ad->ID)) {
 
-                    $prioritaire = $id;
+					$prioritaire = $id;
 
-                }
+				}
 
-                $final[] = $id;
+				$final[] = $id;
 
-            }
+			}
 
-        }
+		}
 
-    }
+	}
 
-    if ($prioritaire) {
+	if ($prioritaire) {
 
-        $final = array($prioritaire);
+		$final = array($prioritaire);
 
-    }
+	}
 
-    return $adgroup->output($final);
+	return $adgroup->output($final);
 
 }, 10, 3);
 
 function advanced_ads_ok_page($id)
 {
 
-    $condition = false;
+	$condition = false;
 
-    if ($pages = get_field('pages', $id)) {
+	if ($pages = get_field('pages', $id)) {
 
-        if ($pages == 'urls') {
+		if ($pages == 'urls') {
 
-            if ($ciblage = get_field('urls_cibles', $id)) {
+			if ($ciblage = get_field('urls_cibles', $id)) {
 
-                if (count($ciblage)) {
+				if (count($ciblage)) {
 
-                    if (is_array($ciblage)) {
+					if (is_array($ciblage)) {
 
-                        $ok = false;
+						$ok = false;
 
-                        foreach ($ciblage as $cible) {
+						foreach ($ciblage as $cible) {
 
-                            if (!$ok && $cible['url']) {
+							if (!$ok && $cible['url']) {
 
-                                if ($cible['condition'] == 'contient') {
+								if ($cible['condition'] == 'contient') {
 
-                                    if ($cible['url'] == 'home') {
+									if ($cible['url'] == 'home') {
 
-                                        $ok = $_SERVER['REQUEST_URI'] == '/';
+										$ok = $_SERVER['REQUEST_URI'] == '/';
 
-                                    } else {
+									} else {
 
-                                        $ok = strstr($_SERVER['REQUEST_URI'], $cible['url']) !== false;
+										$ok = strstr($_SERVER['REQUEST_URI'], $cible['url']) !== false;
 
-                                    }
+									}
 
-                                } else {
+								} else {
 
-                                    if ($cible['url'] == 'home') {
+									if ($cible['url'] == 'home') {
 
-                                        $ok = $_SERVER['REQUEST_URI'] != '/';
+										$ok = $_SERVER['REQUEST_URI'] != '/';
 
-                                    } else {
+									} else {
 
-                                        $ok = strstr($_SERVER['REQUEST_URI'], $cible['url']) === false;
+										$ok = strstr($_SERVER['REQUEST_URI'], $cible['url']) === false;
 
-                                    }
+									}
 
-                                }
+								}
 
-                                if (!$condition && $ok) {
+								if (!$condition && $ok) {
 
-                                    $condition = print_r($cible, true);
+									$condition = print_r($cible, true);
 
-                                }
+								}
 
-                            }
+							}
 
-                        }
+						}
 
-                        if (!$ok) {
+						if (!$ok) {
 
-                            return false;
+							return false;
 
-                        }
+						}
 
-                    }
+					}
 
-                }
+				}
 
-            }
+			}
 
-        } else if ($pages == 'all') {
+		} else if ($pages == 'all') {
 
-            $condition = 'all';
+			$condition = 'all';
 
-        } else if ($pages == 'home') {
+		} else if ($pages == 'home') {
 
-            if (is_home() || $GLOBALS['ADVANCED_ADS_PAGE'] == 'home' || $GLOBALS['ADVANCED_ADS_PAGE'] == 'all') {
+			if (is_home() || $GLOBALS['ADVANCED_ADS_PAGE'] == 'home' || $GLOBALS['ADVANCED_ADS_PAGE'] == 'all') {
 
-                $condition = 'is_home';
+				$condition = 'is_home';
 
-            } else {
+			} else {
 
-                return false;
+				return false;
 
-            }
+			}
 
-        }
+		}
 
-    }
+	}
 
-    return $condition;
+	return $condition;
 
 }
 
 add_filter('advanced-ads-output-final', function ($output, $ad, $output_options) {
 
-    $options = $ad->options();
+	$options = $ad->options();
 
-    if ($condition = advanced_ads_ok_page($ad->id)) {
-        if ($options['group_info']['id'] == HABILLAGES) {
+	if ($condition = advanced_ads_ok_page($ad->id)) {
+		if ($options['group_info']['id'] == HABILLAGES) {
             //Habillages
-            $url = $ad->url;
-        	$image = get_field('illustration_habillage',$ad->id);
-        	$hauteur = get_field('hauteur_arche',$ad->id);
-        	$couleur = get_field('couleur_habillage',$ad->id);
+			$url = $ad->url;
+			$image = get_field('illustration_habillage',$ad->id);
+			$hauteur = get_field('hauteur_arche',$ad->id);
+			$couleur = get_field('couleur_habillage',$ad->id);
 
-            ?>
-            <style>
-            	body {
-            		background: <?php echo $couleur;?> url(<?php echo $image;?>) no-repeat top center !important;
-            		cursor: pointer;
-            	}
-            	body > * {
-            		cursor: default;
-            	}
-            	body > .container {
-            		margin-top: 0;
-            	}
-            	body:before {
-            		content:'';
-            		display: block;
-            		height: <?php echo $hauteur;?>px;
-            	}
-            </style>
-            <script>
-            	$(document).on('click',function(e) {
-            		if(e.target == document.body) {
-            			window.open('<?php echo $url;?>','_blank');
-            		}
-            	})
-            </script>
-        	<?php
-        } else if (get_field('afficher_en_text_ad', $ad->id)) {
+			?>
+			<style>
+				@media (min-width:768px){
+					body {
+						background: <?php echo $couleur;?> url(<?php echo $image;?>) no-repeat top center !important;
+						cursor: pointer;
+					}
+					body > * {
+						cursor: default;
+					}
+					body > .container {
+						margin-top: 0;
+					}
+					body:before {
+						content:'';
+						display: block;
+						height: <?php echo $hauteur;?>px;
+					}
+				}
+			</style>
+			<script>
+				$(document).on('click',function(e) {
+					let mq = window.matchMedia( '( min-width: 768px )' );
+					if(mq.matches) {
+						if(e.target == document.body) {
+							window.open('<?php echo $url;?>','_blank');
+						}
+					}
+				})
+			</script>
+			<?php
+		} else if (get_field('afficher_en_text_ad', $ad->id)) {
 
-            $url = getHtmlVal('href="', '"', $output);
+			$url = getHtmlVal('href="', '"', $output);
 
-            $image = getHtmlVal('src=\'', '\'', $output);
+			$image = getHtmlVal('src=\'', '\'', $output);
 
-            $params = [
+			$params = [
 
-                'image' => $image,
+				'image' => $image,
 
-                'title' => get_field('titre_de_la_text_ad', $ad->id),
+				'title' => get_field('titre_de_la_text_ad', $ad->id),
 
-                'text'  => nl2br(get_field('texte_de_la_pub', $ad->id)),
+				'text'  => nl2br(get_field('texte_de_la_pub', $ad->id)),
 
-                'lien'  => get_field('libelle_du_lien', $ad->id),
+				'lien'  => get_field('libelle_du_lien', $ad->id),
 
-                'url'   => $url,
+				'url'   => $url,
 
-            ];
+			];
 
-            $output = render_textad($params, 'site', false);
+			$output = render_textad($params, 'site', false);
 
-        } else if (get_field('pub_video', $ad->id)) {
-            $embed_video = get_field('embed_video', $ad->id);
-            if (!$embed_video) {
-                $tmp         = explode('v=', $ad->url);
-                $code        = current(explode('&', $tmp[1]));
-                $embed_video = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . $code . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-            }
-            $titre_video = get_field('titre_video', $ad->id);
-            $output      = '
+		} else if (get_field('pub_video', $ad->id)) {
+			$embed_video = get_field('embed_video', $ad->id);
+			if (!$embed_video) {
+				$tmp         = explode('v=', $ad->url);
+				$code        = current(explode('&', $tmp[1]));
+				$embed_video = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . $code . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+			}
+			$titre_video = get_field('titre_video', $ad->id);
+			$output      = '
 			<section id="sidebar-tag">
 			<header>
 			<div class="right-side">
@@ -236,20 +241,20 @@ add_filter('advanced-ads-output-final', function ($output, $ad, $output_options)
 			}
 			</style>';
 
-        }
+		}
 
-        $comment = 'Ad ID ' . $ad->id;
+		$comment = 'Ad ID ' . $ad->id;
 
-        if ($condition) {
+		if ($condition) {
 
-            $comment .= PHP_EOL . $condition;
+			$comment .= PHP_EOL . $condition;
 
-        }
+		}
 
-        $output = '<!-- ' . PHP_EOL . $comment . PHP_EOL . ' -->' . $output;
+		$output = '<!-- ' . PHP_EOL . $comment . PHP_EOL . ' -->' . $output;
 
-        return $output;
+		return $output;
 
-    }
+	}
 
 }, 10, 3);
