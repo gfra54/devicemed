@@ -157,6 +157,8 @@ add_filter('advanced-ads-output-final', function ($output, $ad, $output_options)
 					}
 					body > .container {
 						margin-top: 0;
+						background: white;
+						box-shadow: 0 -10px 0px white, -10px -10px 0px white, 10px -10px 0px white;
 					}
 					body:before {
 						content:'';
