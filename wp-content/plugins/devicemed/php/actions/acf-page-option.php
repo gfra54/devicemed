@@ -7,5 +7,12 @@ if( function_exists('acf_add_options_page') ) {
 		'update_button' => 'Enregistrer',
 		'icon_url' => 'dashicons-grid-view'
 	]);
+
+	acf_add_options_page([
+		'page_title'=>'Page d\'accueil',
+		'update_button' => 'Enregistrer',
+		'icon_url' => 'dashicons-admin-home'
+	]);
+	
 	
 }

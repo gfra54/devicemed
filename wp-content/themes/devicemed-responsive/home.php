@@ -86,17 +86,18 @@ mea_mediakit_home();?>
 <?php
 
 $deja = array();
-$categories = array(5,8,7,6,4,3,9);
-
-foreach(wp_get_nav_menu_items('page-daccueil') as $menuitem):
-	$category_id = $menuitem->object_id;
+//$categories = array(5,8,7,6,4,3,9);
+$categories = get_field('categories_home', 'option');
+foreach($categories as $item):
+	$category_id = $item['categorie'];
 	$category = get_category($category_id);
 	$posts = devicemed_home_get_last_posts_by_category($category_id, 6);
+	$titre = $item['titre'] ? $item['titre'] : $category->name;
 	// $posts_per_column = floor(count($posts) / 2);
 ?>
 <section class="home-last-posts">
 	<div class="section-header">
-		<h1 class="title"><a href="<?php echo get_category_link($category->cat_ID); ?>"><?php echo $category->name; ?></a></h1>
+		<h1 class="title"><a href="<?php echo get_category_link($category->cat_ID); ?>"><?php echo $titre ?></a></h1>
 	</div>
 	<div class="section-column-left">
 <?php
