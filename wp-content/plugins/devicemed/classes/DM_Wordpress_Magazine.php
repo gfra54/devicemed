@@ -78,6 +78,11 @@ class DM_Wordpress_Magazine
 			}
 		}
 		
+		me([
+			'data' => $data,
+			'errors' => $errors,
+			'success' => $success
+		]);
 		DM_Wordpress::title(array('magazine', 'Abonnement au magazine'));
 		DM_Wordpress_Template::theme('magazine/abonnement', array(
 			'data' => $data,

@@ -86,15 +86,19 @@ class DM_Wordpress_Magazine_Model extends DM_Wordpress_Model
 			} else {
 				$to = "info@devicemed.fr";
 			}
+
 			$subject = 'Abonnement au magazine';
 			$message = "Bonjour,<br /><br />Un membre vient de s'abonner au magazine. Voici ses coordonnées :<br /><br />Nom complet : $prenom $nom<br />email : $email<br />société : $societe<br />Adresse : $adresse<br />Ville : $ville $codePostal";
 			$headers  = 'MIME-Version: 1.0' . "\r\n";
 			$headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-			$headers .= "From: \"DeviceMed\"<info@devicemed.fr>";
+			$headers .= "From: \"DeviceMed\"<info@devicemed.fr>" . "\r\n";
+			$headers .= 'Cc: web@device-med.fr' . "\r\n";
+			if(!isLocal()) {
+				$headers .= 'Cc: laurence.jaffeux@devicemed.fr' . "\r\n";
+				$headers .= 'Cc: evelyne.gisselbrecht@devicemed.fr' . "\r\n";
+			}
 
-//			me($to, $subject, $message, $headers);
-			mail($to, $subject, $message, $headers); 
-			return true;
+			return wp_mail($to, $subject, $message, $headers); 
 		}else {
 			return false;
 		}
