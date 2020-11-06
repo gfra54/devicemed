@@ -242,7 +242,6 @@ function get_the_guid( $post = 0 ) {
  */
 function the_content( $more_link_text = null, $strip_teaser = false ) {
 	$content = get_the_content( $more_link_text, $strip_teaser );
-
 	/**
 	 * Filters the post content.
 	 *

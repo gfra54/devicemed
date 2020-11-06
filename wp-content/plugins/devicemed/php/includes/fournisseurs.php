@@ -3,6 +3,7 @@
 $GLOBALS['b64']=array();
 function fournisseur_parse_liens($id, $content) {
 	$GLOBALS['b64']=array();
+	$content_orig=$content;
 	$content_parsed=false;
 	$content_parsed = get_post_meta( $id, 'content_parsed', true );
 	if(true || empty($content_parsed) || isLocal()) {
@@ -25,6 +26,9 @@ function fournisseur_parse_liens($id, $content) {
 
 
 		$content_parsed = $content;
+		if($content_orig && !$content_parsed) {
+			$content_parsed = $content_orig;
+		}
 		update_post_meta($id,'content_parsed',$content_parsed);
 	}
 	$GLOBALS['b64']=array();
