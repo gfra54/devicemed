@@ -1143,3 +1143,13 @@ function http_build_url($url, $parts=array(), $flags=HTTP_URL_REPLACE, &$new_url
 	;
 }
 }
+
+function hoursandmins($time, $format = '%02d:%02d')
+{
+    if ($time < 1) {
+        return;
+    }
+    $hours = floor($time / 60);
+    $minutes = ($time % 60);
+    return sprintf($format, $hours, $minutes);
+}

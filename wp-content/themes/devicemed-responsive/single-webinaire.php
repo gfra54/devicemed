@@ -49,7 +49,7 @@ get_header();?>
 							<b>Webinaire planifié le <?php echo date('d/m/Y', strtotime($post->date)); ?> à <?php echo date('H:i', strtotime($post->date)); ?></b>
 						<?php }?>
 						<?php if ($post->duree) {?>
-							/ Durée : <?php echo $post->duree?>
+							/ Durée : <?php echo hoursandmins($post->duree)?>
 						<?php }?>
 
 						<?php if ($post->places_disponibles) {?>
