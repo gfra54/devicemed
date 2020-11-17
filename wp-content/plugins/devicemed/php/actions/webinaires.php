@@ -3,7 +3,7 @@
 add_filter('acf/load_field/name=contenu_mail', function ($field) {
 	if (!$field['default_value']) {
 		$field['default_value'] = 'Bonjour,
-		Vous venez de vous inscrire au webinaire "{{titre}}".
+		Vous venez de vous inscrire au webinaire &laquo; <b>{{titre}}</b> &raquo;.
 		Ce Webinaire aura lieu le {{date}} à {{heure}} et durera {{duree}}.
 
 		Pour accéder au webinaire vous êtes invité à rejoindre la visioconférence à la date et heure indiquée en cliquant sur le bouton ci-dessous
@@ -137,18 +137,21 @@ function envoyerMailWebinaire($participant, $webinaire)
 	];
 
 	foreach ($champs as $champ => $valeur) {
+		$subject = str_replace('{{' . $champ . '}}', $valeur, $subject);
 		$message = str_replace('{{' . $champ . '}}', $valeur, $message);
 	}
+	$message
+ = '<table width="100%" style="max-width:800px"><td>'.$message.'</td></table>';
 
 	$headers[] = 'MIME-Version: 1.0';
 	$headers[] = 'Content-type: text/html; charset=UTF-8';
+	$headers[] = 'From: DeviceMed <info@devicemed.fr>';
 	$headers[] = 'Bcc: jilfransoi@gmail.com';
 	if(strstr($to, 'jilfransoi')==false) {
 		$headers[] = 'Bcc: laurence.jaffeux@devicemed.fr';
 		$headers[] = 'Bcc: evelyne.gisselbrecht@devicemed.fr';
 	}
-
-	return wp_mail($to, $subject, $message, $headers);
+	return wp_mail($to, $subject, $message, $header);
 }
 
 function webinairePlaces($post)

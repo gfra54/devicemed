@@ -2,7 +2,7 @@
 
 $messages = [
 	'inscriptionOk' => 'Votre inscription à ce webinaire a été enregistrée. Vous receverez prochainement des informations détaillées par e-mail.',
-	'dejaParticipanrt' => 'Vous êtes déjà inscrit à ce webinaire. En cas de questions, contactez <a href="mailto:info@devicemed.fr">info@devicemed.fr</a>.'
+	'dejaParticipant' => 'Vous êtes déjà inscrit à ce webinaire. En cas de questions, contactez <a href="mailto:info@devicemed.fr">info@devicemed.fr</a>.'
 ];
 
 $champs   = [
