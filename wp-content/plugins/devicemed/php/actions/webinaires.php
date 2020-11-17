@@ -44,7 +44,7 @@ add_action('init', function () {
 
 		if($post = get_post($id)) {
 			require_once plugin_dir_path( __FILE__ ).'../ics.php';
-			$fin = date('Y-m-d H:i:s',strtotime($post->date)+($post->duree*3600));
+			$fin = date('Y-m-d H:i:s',strtotime($post->date)+($post->duree*60*3600));
 			$url = get_the_permalink($post);
 			$ics = new ICS(array(
 				'location'    => $post->visio,
