@@ -1144,12 +1144,24 @@ function http_build_url($url, $parts=array(), $flags=HTTP_URL_REPLACE, &$new_url
 }
 }
 
-function hoursandmins($time, $format = '%02d:%02d')
+function hoursandmins($time)
 {
-    if ($time < 1) {
-        return;
-    }
-    $hours = floor($time / 60);
-    $minutes = ($time % 60);
-    return sprintf($format, $hours, $minutes);
+	if ($time < 1) {
+		return;
+	}
+	$hours = intval(floor($time / 60));
+	$minutes = intval($time % 60);
+
+	$ret='';
+	if($hours) {
+		$ret.= $hours.' heure'.($hours>1 ? 's' : '');
+		if($minutes) {
+			$ret.=' et ';
+		}
+	}
+	if($minutes) {
+		$ret.= $minutes.' minute'.($minutes>1 ? 's' : '');
+	}
+	
+	return $ret;
 }
