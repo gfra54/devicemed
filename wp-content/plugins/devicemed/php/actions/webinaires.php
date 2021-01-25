@@ -1,5 +1,24 @@
 <?php
 
+add_action('admin_bar_menu', function ($admin_bar) {
+	global $post;
+	if ($post->post_type == 'webinaire') {
+		$liens = [
+			'?telecharger_calendrier=' . $post->ID   => 'Télécharger évènement pour calendrier',
+			'?telecharger_participants=' . $post->ID => 'Télécharger la liste des participants',
+		];
+
+		foreach($liens as $url => $lib) {
+			$admin_bar->add_menu(array(
+				'id'    => sanitize_title($lib),
+				'title' => $lib,
+				'href'  => $url
+			));
+		}
+	}
+
+}, 100);
+
 add_filter('acf/load_field/name=contenu_mail', function ($field) {
 	if (!$field['default_value']) {
 		$field['default_value'] = 'Bonjour,
@@ -123,13 +142,12 @@ function envoyerMailWebinaire($participant, $webinaire)
 	$to      = $participant['email'];
 	$subject = $webinaire->titre_mail;
 
-	$message = get_field('contenu_mail',$webinaire->ID);
-
+	$message = get_field('contenu_mail', $webinaire->ID);
 
 	$champs = [
 		'titre' => $webinaire->post_title,
-		'date' => date('d/m/Y',strtotime($webinaire->date)),
-		'heure' => date('h:i',strtotime($webinaire->date)),
+		'date'  => date('d/m/Y', strtotime($webinaire->date)),
+		'heure' => date('h:i', strtotime($webinaire->date)),
 		'duree' => hoursandmins($webinaire->duree),
 		'visio' => $webinaire->visio,
 		'ics'   => site_url() . '?telecharger_calendrier=' . $webinaire->ID,
@@ -141,13 +159,13 @@ function envoyerMailWebinaire($participant, $webinaire)
 		$message = str_replace('{{' . $champ . '}}', $valeur, $message);
 	}
 	$message
- = '<table width="100%" style="max-width:800px"><td>'.$message.'</td></table>';
+	= '<table width="100%" style="max-width:800px"><td>' . $message . '</td></table>';
 
 	$headers[] = 'MIME-Version: 1.0';
 	$headers[] = 'Content-type: text/html; charset=UTF-8';
 	$headers[] = 'From: DeviceMed <info@devicemed.fr>';
 	$headers[] = 'Bcc: jilfransoi@gmail.com';
-	if(strstr($to, 'jilfransoi')==false) {
+	if (strstr($to, 'jilfransoi') == false) {
 		$headers[] = 'Bcc: laurence.jaffeux@devicemed.fr';
 		$headers[] = 'Bcc: evelyne.gisselbrecht@devicemed.fr';
 	}

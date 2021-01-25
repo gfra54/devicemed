@@ -4,8 +4,11 @@
 
 		<section class="results">
 			<h2 class="title"><?php echo single_cat_title('', false); ?></h2>
-<?php if (have_posts()): ?>
-<?php while (have_posts()): the_post(); ?>
+<?php if (have_posts()): $cpt=0?>
+<?php while (have_posts()): the_post(); $cpt++;?>
+	<?php if($cpt == 3) {?>
+		<div class="pub-dans-liste-articles"><?php the_ad_group(4623); ?></div>
+	<?php }?>
 				<article>
 					<a href="<?php echo get_permalink($post->ID); ?>">
 						<span class="left">
@@ -24,42 +27,21 @@
 								<?php
 									$items = array();
 
-									// On récupére les catégories
-									$arrayCategorie = array();
-									$sqlCategories = "SELECT * FROM menu_site";
-									$resultCategories = mysql_query($sqlCategories);
-
-									while($rowCategories = mysql_fetch_array($resultCategories)) {
-										$nomCategorie = $rowCategories['nom_menu'];
-
-										array_push($arrayCategorie, $nomCategorie);
-									}
-									
-									$nbCategoriesTab = sizeOf($categories);
-
 									foreach ($categories as $category)
 									{
 										$nomCategorieTemp = $category->cat_name;
 											
-										if(!in_array($nomCategorieTemp, $arrayCategorie)) {
-											/*if($nbCategoriesTab == 1) {
-												$items[] = '<span class="category_principal">'.$category->cat_name.'</span>';
-											}
-										}else {*/
-											// On récupére la catégorie parente
-											$parentcat = $category->category_parent;
-											$nomCatParent = get_cat_name($parentcat);
+										$parentcat = $category->category_parent;
+										$nomCatParent = get_cat_name($parentcat);
 
-											if($nomCatParent != 'Dossiers') {
-												if($nomCatParent) {
-													$items[] = '<span class="category_principal">'.$nomCatParent.' &gt; </span><span class="category">'.$category->cat_name.'</span>';
-												} else {
-													$items[] = '<span class="category_principal">'.$category->cat_name.'';
-												}
-											}/*else {
-												$items[] = '<span class="category">'.$category->cat_name.'</span>';
-											}*/
+										if($nomCatParent != 'Dossiers') {
+											if($nomCatParent) {
+												$items[] = '<span class="category_principal">'.$nomCatParent.' &gt; </span><span class="category">'.$category->cat_name.'</span>';
+											} else {
+												$items[] = '<span class="category_principal">'.$category->cat_name.'';
+											}
 										}
+										
 									}
 									
 									echo implode(' / ', $items);

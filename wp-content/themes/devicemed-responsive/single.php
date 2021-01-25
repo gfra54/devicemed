@@ -162,6 +162,9 @@
 			</div>
 		</section>
 
+	<div class="pub-en-bas-des-articles"><?php the_ad_group(4622); ?></div>
+
+
 	<?php if(strstr($_SERVER['REQUEST_URI'], 3671)===false) { ?>
 		
 		<?php
