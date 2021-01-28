@@ -97,7 +97,6 @@ class Advanced_Ads_Select {
 			return ;
 		}
 		$args = $this->get_ad_arguments( $method, $id, $args );
-
 		return call_user_func( $methods[ $method ], $args );
 	}
 

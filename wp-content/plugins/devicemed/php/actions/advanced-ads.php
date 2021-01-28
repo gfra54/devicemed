@@ -1,8 +1,18 @@
 <?php
 
+add_filter( 'advanced-ads-group-output-array', function($output, $adgroup ) {
+    if($previewAd = getPreviewAd($adgroup)) {
+        return [$previewAd->output()];
+    } else {
+        return $output;
+    }
+}, 10, 3);
+
+
 add_filter('advanced-ads-ad-select-override-by-group', function ($nope, $adgroup, $ordered_ad_ids) {
 
     $ads = $adgroup->get_all_ads();
+
 
     $final = array();
 
@@ -35,8 +45,8 @@ add_filter('advanced-ads-ad-select-override-by-group', function ($nope, $adgroup
         $final = array($prioritaire);
 
     }
-
     return $adgroup->output($final);
+    
 
 }, 10, 3);
 
@@ -142,124 +152,156 @@ add_filter('advanced-ads-output-final', function ($output, $ad, $output_options)
             //Habillages
             $url = $ad->url;
 
-			$url = site_url().'/linkout/'.$ad->id;
+            $url = site_url().'/linkout/'.$ad->id;
 
             $image   = get_field('illustration_habillage', $ad->id);
             $hauteur = get_field('hauteur_arche', $ad->id);
             $couleur = get_field('couleur_habillage', $ad->id);
 
             ?>
-			<style>
-				@media (min-width:768px){
-					body {
-						background: <?php echo $couleur; ?> url(<?php echo $image; ?>) no-repeat top center !important;
-						cursor: pointer;
-					}
-					body > * {
-						cursor: default;
-					}
-					body > .container {
-						margin-top: 0;
-						background: white;
-						box-shadow: 0 -10px 0px white, -10px -10px 0px white, 10px -10px 0px white;
-					}
-					body:before {
-						content:'';
-						display: block;
-						height: <?php echo $hauteur; ?>px;
-					}
-				}
-			</style>
-			<script>
-				$(document).on('click',function(e) {
-					let mq = window.matchMedia( '( min-width: 768px )' );
-					if(mq.matches) {
-						if(e.target == document.body) {
-							window.open('<?php echo $url; ?>','_blank');
-						}
-					}
-				})
-			</script>
-			<?php
-} else if (get_field('afficher_en_text_ad', $ad->id)) {
+            <style>
+                @media (min-width:768px){
+                   body {
+                      background: <?php echo $couleur; ?> url(<?php echo $image; ?>) no-repeat top center !important;
+                      cursor: pointer;
+                  }
+                  body > * {
+                      cursor: default;
+                  }
+                  body > .container {
+                      margin-top: 0;
+                      background: white;
+                      box-shadow: 0 -10px 0px white, -10px -10px 0px white, 10px -10px 0px white;
+                  }
+                  body:before {
+                      content:'';
+                      display: block;
+                      height: <?php echo $hauteur; ?>px;
+                  }
+              }
+          </style>
+          <script>
+            $(document).on('click',function(e) {
+               let mq = window.matchMedia( '( min-width: 768px )' );
+               if(mq.matches) {
+                  if(e.target == document.body) {
+                     window.open('<?php echo $url; ?>','_blank');
+                 }
+             }
+         })
+     </script>
+     <?php
+ } else if (get_field('afficher_en_text_ad', $ad->id)) {
 
-            $url = getHtmlVal('href="', '"', $output);
+    $url = getHtmlVal('href="', '"', $output);
 
-            $image = getHtmlVal('src=\'', '\'', $output);
+    $image = getHtmlVal('src=\'', '\'', $output);
 
-            $params = [
+    $params = [
 
-                'image' => $image,
+        'image' => $image,
 
-                'title' => get_field('titre_de_la_text_ad', $ad->id),
+        'title' => get_field('titre_de_la_text_ad', $ad->id),
 
-                'text'  => nl2br(get_field('texte_de_la_pub', $ad->id)),
+        'text'  => nl2br(get_field('texte_de_la_pub', $ad->id)),
 
-                'lien'  => get_field('libelle_du_lien', $ad->id),
+        'lien'  => get_field('libelle_du_lien', $ad->id),
 
-                'url'   => $url,
+        'url'   => $url,
 
-            ];
+    ];
 
-            $output = render_textad($params, 'site', false);
+    $output = render_textad($params, 'site', false);
 
-        } else if (get_field('pub_video', $ad->id)) {
-            $embed_video = get_field('embed_video', $ad->id);
-            if (!$embed_video) {
-                $tmp         = explode('v=', $ad->url);
-                $code        = current(explode('&', $tmp[1]));
-                $embed_video = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . $code . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-            }
-            $titre_video = get_field('titre_video', $ad->id);
-            $output      = '
-			<section id="sidebar-tag">
-			<header>
-			<div class="right-side">
-			<h1 class="title">' . $titre_video . '</h1>
-			</div>
-			</header>
-			<article>
-
-
-			<div class="cadre-video">
-
-			' . $embed_video . '
-
-			</div>
-			<br>
-			</article>
-			</section>
-			<br>
-			<style>
-			.cadre-video  {
-				position:relative;
-				width:100%;
-				height:0;
-				padding-bottom:60%;
-			}
-			.cadre-video  > * {
-				position:absolute;
-				width:100%;
-				height:100%;
-				top:0;
-				left:0;
-			}
-			</style>';
-
-        }
-
-        $comment = 'Ad ID ' . $ad->id;
-
-        if ($condition) {
-
-            $comment .= PHP_EOL . $condition;
-
-        }
-
-        $output = '<!-- ' . PHP_EOL . $comment . PHP_EOL . ' -->' . $output;
-
-        return $output;
-
+} else if (get_field('pub_video', $ad->id)) {
+    $embed_video = get_field('embed_video', $ad->id);
+    if (!$embed_video) {
+        $tmp         = explode('v=', $ad->url);
+        $code        = current(explode('&', $tmp[1]));
+        $embed_video = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . $code . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
     }
+    $titre_video = get_field('titre_video', $ad->id);
+    $output      = '
+    <section id="sidebar-tag">
+    <header>
+    <div class="right-side">
+    <h1 class="title">' . $titre_video . '</h1>
+    </div>
+    </header>
+    <article>
+
+
+    <div class="cadre-video">
+
+    ' . $embed_video . '
+
+    </div>
+    <br>
+    </article>
+    </section>
+    <br>
+    <style>
+    .cadre-video  {
+        position:relative;
+        width:100%;
+        height:0;
+        padding-bottom:60%;
+    }
+    .cadre-video  > * {
+        position:absolute;
+        width:100%;
+        height:100%;
+        top:0;
+        left:0;
+    }
+    </style>';
+
+}
+
+$comment = 'Ad ID ' . $ad->id;
+
+if ($condition) {
+
+    $comment .= PHP_EOL . $condition;
+
+}
+
+$output = '<!-- ' . PHP_EOL . $comment . PHP_EOL . ' -->' . $output;
+
+return $output;
+
+}
 
 }, 10, 3);
+
+
+
+
+$GLOBALS['getPreviewAd']=null;
+function getPreviewAd($adgroup)
+{
+    if (isset($_GET['preview-ad'])) {
+        $id = $_GET['preview-ad'];
+        if(is_null($GLOBALS['getPreviewAd'])) {
+
+            $GLOBALS['getPreviewAd'] = new Advanced_Ads_Ad($id);
+
+/*            $args = [
+                'p' => $id,
+                'post_status' => 'any',
+                'post_type' => 'advanced_ads'
+            ];
+
+            $query = new WP_Query();
+            if($posts = $query->query( $args )) {
+                $GLOBALS['getPreviewAd'] = current($posts);
+                $GLOBALS['getPreviewAd']->preview=true;
+            }*/
+        }
+        if($GLOBALS['getPreviewAd']) {
+            if(has_term($adgroup->id,'advanced_ads_groups',$id)) {
+                return $GLOBALS['getPreviewAd'];
+            }
+        }
+    }
+}
