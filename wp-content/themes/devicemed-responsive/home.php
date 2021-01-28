@@ -82,7 +82,12 @@ sommaire_magazine_home();
 mea_webinaire();
 
 
-mea_mediakit_home();?>
+mea_mediakit_home();
+
+
+the_ad_group(4624); 
+
+?>
 		
 		
 <?php
