@@ -1,5 +1,6 @@
 <?php
 
+
 add_filter( 'advanced-ads-group-output-array', function($output, $adgroup ) {
     if($previewAd = getPreviewAd($adgroup)) {
         return [$previewAd->output()];
@@ -12,6 +13,10 @@ add_filter( 'advanced-ads-group-output-array', function($output, $adgroup ) {
 add_filter('advanced-ads-ad-select-override-by-group', function ($nope, $adgroup, $ordered_ad_ids) {
 
     $ads = $adgroup->get_all_ads();
+
+    if($previewAd = getPreviewAd($adgroup)) {
+        return $previewAd->output();
+    }
 
 
     $final = array();
@@ -283,7 +288,6 @@ function getPreviewAd($adgroup)
     if (isset($_GET['preview-ad'])) {
         $id = $_GET['preview-ad'];
         if(is_null($GLOBALS['getPreviewAd'])) {
-
             $GLOBALS['getPreviewAd'] = new Advanced_Ads_Ad($id);
 
 /*            $args = [
